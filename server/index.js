@@ -92,11 +92,48 @@ app.get('/api/quiz-status', (req, res) => {
     res.json({ started: sessionState.isQuizStarted });
 });
 
+// Admin: Generate Test Data (for production testing)
+app.post('/api/generate-test-data', (req, res) => {
+    const disciplines = ['munitions', 'agc', 'genie'];
+    const grades = ['EOA', 'Cpl', 'Sgt', 'Adj', 'Asp'];
+    const firstNames = ['Ahmed', 'Sami', 'Karim', 'Mohamed', 'Youssef', 'Omar', 'Khaled', 'Walid', 'Nabil', 'Hassan'];
+    const lastNames = ['Ben Ali', 'Mansouri', 'Zoughi', 'Tounsi', 'Dridi', 'Belhaj', 'Rezgui', 'Jlassi', 'Fekih', 'Mebarki'];
+
+    // Generate 10 random results
+    for (let i = 0; i < 10; i++) {
+        const randomGrade = grades[Math.floor(Math.random() * grades.length)];
+        const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+        const randomLastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+        const randomDiscipline = disciplines[Math.floor(Math.random() * disciplines.length)];
+        const randomScore = Math.floor(Math.random() * 16) + 5; // Score between 5 and 20
+
+        const testResult = {
+            discipline: randomDiscipline,
+            student: {
+                grade: randomGrade,
+                name: `${randomFirstName} ${randomLastName}`,
+                matricule: `MAT${1000 + i}`,
+                classe: 'LASM 3'
+            },
+            answers: new Array(20).fill(null).map(() => Math.floor(Math.random() * 4)),
+            score: (randomScore / 20) * 100,
+            scoreOn20: randomScore,
+            totalQuestions: 20,
+            correctCount: randomScore,
+            timeElapsed: Math.floor(Math.random() * 3600),
+            timestamp: Date.now() - i * 1000
+        };
+
+        sessionState.results.push(testResult);
+    }
+
+    res.json({ success: true, message: `Generated 10 test results` });
+});
+
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 const fs = require('fs');
-app.use((req, res) => {
-    console.log("CWD:", process.cwd());
+app.get('*', (req, res) => {
     const indexPath = path.join(process.cwd(), 'client', 'dist', 'index.html');
     console.log("Serving index.html from:", indexPath);
     if (fs.existsSync(indexPath)) {
