@@ -246,7 +246,23 @@ const AdminDashboard: React.FC = () => {
 
             <div className="max-w-7xl mx-auto p-6">
 
-                <div className="flex justify-end mb-4">
+                <div className="flex justify-end gap-3 mb-4">
+                    <button
+                        onClick={async () => {
+                            try {
+                                const response = await fetch('/api/generate-test-data', { method: 'POST' });
+                                const data = await response.json();
+                                alert(data.message || 'Données de test générées !');
+                                fetchSessionData(); // Refresh the data
+                            } catch (error) {
+                                alert('Erreur lors de la génération des données de test');
+                            }
+                        }}
+                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition flex items-center shadow-sm"
+                    >
+                        <Users className="w-4 h-4 mr-2" />
+                        Générer Données Test
+                    </button>
                     <button
                         onClick={() => navigate('/admin/certificates')}
                         className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center shadow-sm"
