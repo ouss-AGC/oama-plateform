@@ -253,7 +253,7 @@ const AdminDashboard: React.FC = () => {
                                 const response = await fetch('/api/generate-test-data', { method: 'POST' });
                                 const data = await response.json();
                                 alert(data.message || 'Données de test générées !');
-                                fetchSessionData(); // Refresh the data
+                                fetchSessionStatus(); // Refresh the data
                             } catch (error) {
                                 alert('Erreur lors de la génération des données de test');
                             }
