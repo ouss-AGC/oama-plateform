@@ -1,0 +1,634 @@
+{
+  "quizTitle": "Devoir de Contrôle - Généralités sur les Munitions LASM 3 - 2025/2026",
+  "creator": "Lt Col Oussama Atoui - Instructeur Armes et Munitions",
+  "module": "Généralités Munitions",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Qu'est-ce qu'une munition ?",
+      "options": [
+        "Un dispositif contenant une charge explosive uniquement",
+        "Un ensemble destiné à être tiré par une arme pour produire un effet",
+        "Une arme de petit calibre",
+        "Un système de propulsion pour missiles"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 2,
+      "question": "Parmi les éléments suivants, lequel N'EST PAS une munition ?",
+      "options": [
+        "Cartouche",
+        "Grenade à main",
+        "Lance-mortier",
+        "Obus d'artillerie"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "id": 3,
+      "question": "Quel est le calibre du pistolet COLT M1911 utilisé par l'armée tunisienne ?",
+      "options": [
+        "9x19 mm",
+        "7.62x51 mm",
+        "11.43x22 mm (.45 ACP)",
+        "5.56x45 mm"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "id": 4,
+      "question": "Comment désigner correctement une munition ?",
+      "options": [
+        "Nomenclature, lotissement et identifiant unique",
+        "Nomenclature, lotissement, code situation et identifiant unique",
+        "Nomenclature, code national et lotissement",
+        "Calibre, effet et modèle uniquement"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 5,
+      "question": "Qu'est-ce qu'un lotissement de munition ?",
+      "options": [
+        "Un groupe de munitions produites sous les mêmes conditions de fabrication",
+        "Le lieu de stockage des munitions",
+        "La distance de tir d'une munition",
+        "Le calibre standard d'une munition"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "id": 6,
+      "question": "On peut classer les munitions par emballage en trois catégories. Lesquelles ?",
+      "options": [
+        "Inerte, à blanc et réelle",
+        "Encartouchée, semi-encartouchée et à gargousse",
+        "Anti-personnelle, anti-char, anti-aérienne",
+        "Sécurité, instruction, en dépôt"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 7,
+      "question": "Qu'est-ce qu'une munition encartouchée ?",
+      "options": [
+        "Une munition dont la charge propulsive est dans un sac séparé",
+        "Une munition dont toutes les parties sont regroupées dans un même étui",
+        "Une munition sans charge propulsive",
+        "Une munition pour canon antichar"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 8,
+      "question": "Une nomenclature complète de munition doit contenir au moins :",
+      "options": [
+        "Nature, calibre et effet uniquement",
+        "Nature, calibre, effet et modèle",
+        "Calibre et effet uniquement",
+        "Dimension, code situation et lotissement"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 9,
+      "question": "Qu'est-ce qu'un matériau énergétique ?",
+      "options": [
+        "Un matériau conducteur d'électricité",
+        "Une substance capable de libérer une grande quantité d'énergie",
+        "Un composant électronique",
+        "Un carburant pour véhicules militaires"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 10,
+      "question": "Parmi ces matériaux, lequel est un explosif ?",
+      "options": [
+        "Acier renforcé",
+        "TNT (Trinitrotoluène)",
+        "Aluminium",
+        "Cuivre"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 11,
+      "question": "Une chaîne pyrotechnique est composée de :",
+      "options": [
+        "Explosif secondaire et explosif primaire uniquement",
+        "Amorce, détonateur et charge principale",
+        "Amorce, détonateur, charge amplificatrice et charge principale",
+        "Détonateur et charge principale uniquement"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "id": 12,
+      "question": "Quel est le rôle de l'amorce dans une chaîne pyrotechnique ?",
+      "options": [
+        "Produire l'effet destructeur final",
+        "Recevoir l'énergie de déclenchement initiale",
+        "Amplifier l'onde de choc",
+        "Propulser le projectile"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 13,
+      "question": "Quelle arme utilise des munitions à gargousse ?",
+      "options": [
+        "Char M60A3 calibre 105 mm",
+        "Fusil d'assaut",
+        "Obusier M198 calibre 155 mm",
+        "Pistolet automatique"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "id": 14,
+      "question": "Quel est l'avantage principal des munitions à gargousse ?",
+      "options": [
+        "Elles sont moins chères",
+        "Elles permettent d'ajuster la portée en modulant la charge propulsive",
+        "Elles sont plus légères",
+        "Elles sont plus précises"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 15,
+      "question": "Que signifie le calibre d'une munition ?",
+      "options": [
+        "La longueur totale de la munition",
+        "Le poids de la munition",
+        "Le diamètre interne du tube de l'arme",
+        "La vitesse du projectile"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "id": 16,
+      "question": "Quelle est la cartouche standard de l'OTAN pour les fusils d'assaut ?",
+      "options": [
+        "7.62x51 mm",
+        "5.56x45 mm",
+        "9x19 mm",
+        "12.7x99 mm"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 17,
+      "question": "Que contient une boîte de munitions M80 selon le marquage standard ?",
+      "options": [
+        "100 cartouches",
+        "200 cartouches",
+        "500 cartouches",
+        "1000 cartouches"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 18,
+      "question": "Qu'est-ce qu'une munition de type balistique ?",
+      "options": [
+        "Une munition à effet explosif",
+        "Une munition à balle pleine dont le rôle principal est l'attaque à distance",
+        "Une munition fumigène",
+        "Une munition perforante"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 19,
+      "question": "Quel est l'effet principal d'une grenade à main explosive ?",
+      "options": [
+        "Incendie",
+        "Fumigène",
+        "Fragmentation",
+        "Éclairage"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "id": 20,
+      "question": "Comment fonctionne le déclenchement d'une grenade à main ?",
+      "options": [
+        "Par télécommande",
+        "Par une amorce et un retardateur pyrotechnique",
+        "Par impact uniquement",
+        "Par minuterie électronique"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 21,
+      "question": "Qu'indiquent les couleurs orange et rouge sur un obus ?",
+      "options": [
+        "La date de fabrication",
+        "La composition ou la fonctionnalité de la charge",
+        "Le pays de fabrication",
+        "Le niveau de dangerosité"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 22,
+      "question": "Qu'est-ce qu'un obus de calibre 105 mm ?",
+      "options": [
+        "Un obus antichar ou à tête creuse",
+        "Un obus pour mortier",
+        "Un obus pour fusil",
+        "Un obus pour lance-roquettes"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "id": 23,
+      "question": "Quel est l'effet d'un obus perforant ?",
+      "options": [
+        "Produire de la fumée",
+        "Percer les blindages de véhicules blindés ou de tanks",
+        "Éclairer le champ de bataille",
+        "Créer un effet sonore"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 24,
+      "question": "Que signifie le marquage 'M2002' sur un obus ?",
+      "options": [
+        "L'année de fabrication",
+        "La version ou la production spécifique de la munition",
+        "Le numéro de série",
+        "Le code du fabricant"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 25,
+      "question": "Qu'est-ce qu'un propergol ?",
+      "options": [
+        "Un type d'explosif",
+        "Un matériau énergétique utilisé pour générer une poussée",
+        "Un système de visée",
+        "Un dispositif de sécurité"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 26,
+      "question": "Quelle est la différence entre un explosif primaire et un explosif secondaire ?",
+      "options": [
+        "L'explosif primaire est plus stable",
+        "L'explosif primaire est très sensible et initie la détonation",
+        "L'explosif secondaire est plus puissant mais moins stable",
+        "Il n'y a pas de différence"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 27,
+      "question": "Que signifie 'HE' dans la nomenclature d'un obus ?",
+      "options": [
+        "High Energy",
+        "High Explosive (Hautement Explosif)",
+        "Heavy Equipment",
+        "High Efficiency"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 28,
+      "question": "Qu'est-ce qu'une munition inerte ?",
+      "options": [
+        "Une munition avec charge explosive réduite",
+        "Une munition sans charge explosive, utilisée pour l'instruction",
+        "Une munition périmée",
+        "Une munition à blanc"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 29,
+      "question": "Qu'est-ce qu'une munition à blanc ?",
+      "options": [
+        "Une munition sans projectile, utilisée pour l'entraînement",
+        "Une munition de couleur blanche",
+        "Une munition sans amorce",
+        "Une munition pour tir de nuit"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "id": 30,
+      "question": "Pourquoi le lotissement est-il important pour les munitions ?",
+      "options": [
+        "Pour faciliter le transport",
+        "Pour assurer la traçabilité et le contrôle qualité",
+        "Pour réduire les coûts",
+        "Pour améliorer la précision"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 31,
+      "question": "Qu'est-ce que le RDX (Hexogène) ?",
+      "options": [
+        "Un propergol liquide",
+        "Un explosif secondaire très puissant",
+        "Un matériau pyrotechnique",
+        "Un détonateur"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 32,
+      "question": "Quelle est la fonction d'un détonateur ?",
+      "options": [
+        "Propulser le projectile",
+        "Amplifier l'énergie reçue de l'amorce et générer une onde de choc",
+        "Guider la munition vers la cible",
+        "Protéger la charge principale"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 33,
+      "question": "Qu'est-ce qu'une charge amplificatrice dans une chaîne pyrotechnique ?",
+      "options": [
+        "La charge principale de la munition",
+        "Une charge intermédiaire qui intensifie l'onde de choc",
+        "L'amorce initiale",
+        "Le propergol"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 34,
+      "question": "Quelle est la munition standard pour le fusil FN FAL ?",
+      "options": [
+        "5.56x45 mm",
+        "7.62x51 mm NATO",
+        "9x19 mm",
+        "12.7x99 mm"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 35,
+      "question": "Qu'est-ce qu'une munition anti-personnelle ?",
+      "options": [
+        "Une munition conçue pour neutraliser des cibles humaines",
+        "Une munition pour détruire des véhicules",
+        "Une munition pour l'entraînement",
+        "Une munition fumigène"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "id": 36,
+      "question": "Qu'est-ce qu'une munition anti-char ?",
+      "options": [
+        "Une munition légère pour infanterie",
+        "Une munition conçue pour percer les blindages de véhicules",
+        "Une munition à effet de souffle",
+        "Une munition incendiaire"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 37,
+      "question": "Que signifie le code 'LOT TW L18564 A143' sur une caisse de munitions ?",
+      "options": [
+        "Le poids total de la caisse",
+        "La référence de production spécifique pour assurer la traçabilité",
+        "Le nombre de munitions dans la caisse",
+        "La date d'expiration"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 38,
+      "question": "Qu'est-ce que la poudre sans fumée ?",
+      "options": [
+        "Une poudre à base de nitrocellulose utilisée comme propergol",
+        "Une poudre noire moderne",
+        "Un explosif primaire",
+        "Un matériau pyrotechnique"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "id": 39,
+      "question": "Quelle est la différence entre une grenade défensive et une grenade offensive ?",
+      "options": [
+        "La grenade défensive a plus de fragments et nécessite une protection",
+        "La grenade offensive est plus lourde",
+        "La grenade défensive est à retardement",
+        "Il n'y a pas de différence"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "id": 40,
+      "question": "Qu'est-ce qu'un obus à tête creuse ?",
+      "options": [
+        "Un obus vide pour l'entraînement",
+        "Un obus antichar utilisant un jet de métal en fusion",
+        "Un obus fumigène",
+        "Un obus éclairant"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 41,
+      "question": "Pourquoi les munitions sont-elles classées par effet ?",
+      "options": [
+        "Pour faciliter le stockage",
+        "Pour identifier rapidement leur usage tactique (explosif, perforant, fumigène, etc.)",
+        "Pour réduire les coûts de production",
+        "Pour améliorer la précision"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 42,
+      "question": "Qu'est-ce que le PETN (Tétranitrate de pentaérythritol) ?",
+      "options": [
+        "Un propergol solide",
+        "Un explosif secondaire très sensible et puissant",
+        "Un détonateur électrique",
+        "Une poudre propulsive"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 43,
+      "question": "Quelle est la fonction d'une fusée de munition ?",
+      "options": [
+        "Propulser la munition",
+        "Déclencher la charge explosive au moment approprié",
+        "Guider la munition vers la cible",
+        "Protéger la munition pendant le transport"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 44,
+      "question": "Qu'est-ce qu'une munition semi-encartouchée ?",
+      "options": [
+        "Une munition dont le projectile et la charge propulsive sont partiellement intégrés",
+        "Une munition sans amorce",
+        "Une munition à moitié chargée",
+        "Une munition pour armes légères"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "id": 45,
+      "question": "Pourquoi utilise-t-on des charges modulaires dans l'artillerie ?",
+      "options": [
+        "Pour réduire le poids",
+        "Pour ajuster la portée et la puissance de tir",
+        "Pour faciliter le chargement",
+        "Pour améliorer la précision uniquement"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 46,
+      "question": "Qu'est-ce qu'une munition fumigène ?",
+      "options": [
+        "Une munition qui produit de la fumée pour masquer ou signaler",
+        "Une munition défectueuse",
+        "Une munition à effet explosif",
+        "Une munition incendiaire"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "id": 47,
+      "question": "Qu'est-ce qu'une munition éclairante ?",
+      "options": [
+        "Une munition qui illumine le champ de bataille",
+        "Une munition de couleur claire",
+        "Une munition légère",
+        "Une munition pour tir de jour"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "id": 48,
+      "question": "Qu'est-ce que la balistique intérieure ?",
+      "options": [
+        "L'étude du projectile en vol",
+        "L'étude du comportement de la munition dans le tube de l'arme",
+        "L'étude de l'impact sur la cible",
+        "L'étude des effets météorologiques"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 49,
+      "question": "Qu'est-ce que la balistique extérieure ?",
+      "options": [
+        "L'étude du projectile pendant son vol",
+        "L'étude de la munition dans le canon",
+        "L'étude de l'impact final",
+        "L'étude du stockage des munitions"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "id": 50,
+      "question": "Qu'est-ce que la balistique terminale ?",
+      "options": [
+        "L'étude du vol du projectile",
+        "L'étude du comportement de la munition au moment de l'impact",
+        "L'étude de la fabrication des munitions",
+        "L'étude du stockage à long terme"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 51,
+      "question": "Pourquoi les munitions doivent-elles être stockées dans des conditions contrôlées ?",
+      "options": [
+        "Pour réduire les coûts",
+        "Pour éviter la dégradation et garantir la sécurité",
+        "Pour faciliter le transport",
+        "Pour améliorer la précision"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 52,
+      "question": "Qu'est-ce que le marquage visible sur une munition ?",
+      "options": [
+        "Des inscriptions indiquant le type, le lot de fabrication et les caractéristiques",
+        "Une décoration",
+        "Un code secret",
+        "Une publicité du fabricant"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "id": 53,
+      "question": "Qu'est-ce qu'un explosif brisant ?",
+      "options": [
+        "Un explosif qui se brise facilement",
+        "Un explosif qui produit une onde de choc puissante pour détruire des structures",
+        "Un explosif à combustion lente",
+        "Un explosif liquide"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 54,
+      "question": "Qu'est-ce qu'une munition traçante ?",
+      "options": [
+        "Une munition qui laisse une trace visible pour observer la trajectoire",
+        "Une munition pour suivre les cibles",
+        "Une munition GPS",
+        "Une munition pour l'entraînement"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "id": 55,
+      "question": "Qu'est-ce que le PSSM (Physical Security and Stockpile Management) ?",
+      "options": [
+        "Un type de munition",
+        "Un système de gestion de la sécurité physique et des stocks de munitions",
+        "Un explosif",
+        "Un protocole de tir"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 56,
+      "question": "Pourquoi est-il crucial de respecter les procédures de manipulation des munitions ?",
+      "options": [
+        "Pour accélérer les opérations",
+        "Pour éviter les accidents et garantir la sécurité du personnel",
+        "Pour réduire les coûts",
+        "Pour impressionner les supérieurs"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 57,
+      "question": "Qu'est-ce qu'une munition guidée ?",
+      "options": [
+        "Une munition qui suit automatiquement sa cible grâce à un système de guidage",
+        "Une munition qui nécessite un guide humain",
+        "Une munition avec un manuel d'utilisation",
+        "Une munition pour l'instruction"
+      ],
+      "correctAnswer": 0
+    }
+  ]
+}

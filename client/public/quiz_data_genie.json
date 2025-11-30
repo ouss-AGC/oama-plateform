@@ -1,0 +1,205 @@
+{
+    "quizTitle": "Test Genie Militaire 4 LASM 2 - 2025/2026",
+    "creator": "Lt Col Oussama Atoui - Instructeur Armes et Munitions",
+    "module": "Genie Militaire",
+    "questions": [
+        {
+            "id": 1,
+            "question": "Quelle est la principale différence entre une déflagration et une détonation dans le cadre des explosions chimiques ?",
+            "options": [
+                "La déflagration se propage à une vitesse subsonique, tandis que la détonation se propage à une vitesse supersonique.",
+                "La déflagration nécessite un front de choc, tandis que la détonation ne le nécessite pas.",
+                "La déflagration est caractérisée par un auto-échauffement, tandis que la détonation est basée sur un transfert de chaleur.",
+                "La déflagration concerne uniquement les explosifs brisants, tandis que la détonation concerne uniquement les poudres militaires."
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 2,
+            "question": "Qu'est-ce qui distingue principalement un explosif primaire d'un explosif secondaire ?",
+            "options": [
+                "Les explosifs primaires nécessitent une initiation par des explosifs secondaires.",
+                "Les explosifs primaires sont plus sensibles et détonent plus facilement que les explosifs secondaires.",
+                "Les explosifs secondaires détonent spontanément à température ambiante, contrairement aux explosifs primaires.",
+                "Les explosifs primaires sont utilisés uniquement dans des applications militaires, contrairement aux explosifs secondaires."
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 3,
+            "question": "Quel mécanisme explique la formation d'un front de choc à partir d'une onde de pression initiale lors d'une explosion ?",
+            "options": [
+                "La propagation uniforme des gaz à une vitesse constante.",
+                "La superposition des fronts d'onde causée par la variation locale de la vitesse du son.",
+                "L'interaction entre la phase positive et la phase négative de l'onde.",
+                "L'effet des forces d'inertie, qui empêchent la propagation uniforme."
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 4,
+            "question": "Parmi les affirmations suivantes concernant le phénomène de souffle et son interaction avec les structures, laquelle est correcte ?",
+            "options": [
+                "Le souffle est uniquement composé des produits de l'explosion transportés par l'onde de choc.",
+                "Le souffle est un vent provoqué par le déplacement des molécules d'air suite au passage de l'onde de choc.",
+                "Le souffle n'a aucun impact sur les structures de surface, quel que soit le type d'explosion.",
+                "Lors de la phase de succion, le souffle continue à se propager dans le même sens que l'onde de choc."
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 5,
+            "question": "Parmi les affirmations suivantes concernant l'utilisation du TNT comme référence pour les explosifs, laquelle est correcte ?",
+            "options": [
+                "Le TNT est utilisé comme référence car il est l'explosif le plus puissant disponible.",
+                "L'équivalent TNT d'un explosif est déterminé uniquement en fonction de son poids.",
+                "Le TNT est utilisé comme référence car ses propriétés énergétiques sont bien documentées et stables.",
+                "Tous les explosifs ont le même facteur de conversion par rapport au TNT."
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 6,
+            "question": "Quels sont les facteurs qui influencent directement la propagation des ondes de choc ?",
+            "options": [
+                "La température et la vitesse du vent",
+                "La forme de la charge, la symétrie de la charge et la nature du terrain",
+                "La forme de la charge, l'hétérogénéité du milieu transmetteur, et la nature de la source d'énergie",
+                "La vitesse du vent, l'humidité relative et la végétation"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 7,
+            "question": "Parmi les facteurs suivants, lequel n'influence pas de manière significative la magnitude de l'onde de choc ?",
+            "options": [
+                "La symétrie de la charge dans le cas des charges sphériques ou ponctuelles",
+                "La forme de la charge dans le cas des charges cylindriques ou parallélépipédiques",
+                "Les circonstances atmosphériques comme la température et l'humidité relative",
+                "La masse de l'explosif utilisé, indépendamment de sa forme"
+            ],
+            "correctAnswer": 3
+        },
+        {
+            "id": 8,
+            "question": "Dans le cas d'une structure non ventilée remplie d'un mélange air-gaz stœchiométrique, quel facteur influence directement le pic de pression Pmax ?",
+            "options": [
+                "La densité du gaz utilisé",
+                "La capacité calorifique Cv du gaz",
+                "L'énergie dégagée par le mélange stœchiométrique",
+                "Le volume total de la structure"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 9,
+            "question": "Quelle affirmation est correcte concernant la mesure de la violence d'une explosion dans une structure non ventilée ?",
+            "options": [
+                "La violence de l'explosion est déterminée uniquement par l'énergie dégagée par le mélange stœchiométrique.",
+                "Une vitesse de montée de pression (dp/dt)max plus élevée indique une explosion plus lente.",
+                "La violence est mesurée par le maximum de la vitesse de montée de pression (dp/dt)max.",
+                "Le temps de montée de la pression (rise-time) est négligeable pour caractériser la vitesse d'explosion."
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 10,
+            "question": "Quelle est la fonction principale du module piézoélectrique K dans un capteur de pression?",
+            "options": [
+                "Déterminer la force exercée sur le capteur en fonction de la charge électrique mesurée.",
+                "Convertir la charge électrique en une tension proportionnelle au temps.",
+                "Amplifier le signal électrique généré par le cristal.",
+                "Générer une charge électrique en réponse à une force ou une pression appliquée."
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 11,
+            "question": "Quelle est la différence essentielle entre les capteurs « side-on » et « face-on » dans la mesure de pression ?",
+            "options": [
+                "Les capteurs « side-on » mesurent la pression réfléchie, tandis que les capteurs « face-on » mesurent la pression incidente.",
+                "Les capteurs « side-on » mesurent l'onde de choc incidente, tandis que les capteurs « face-on » mesurent la pression réfléchie.",
+                "Les capteurs « face-on » sont utilisés exclusivement pour les mesures avec des oscilloscopes.",
+                "Les capteurs « side-on » intègrent une microélectronique ICP pour convertir la charge en tension, contrairement aux capteurs « face-on »."
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 12,
+            "question": "Quelle est la caractéristique principale du design d'un capteur « side-on » qui le rend adapté pour mesurer la pression en champ libre ?",
+            "options": [
+                "La membrane en invar située sur le côté pour minimiser les perturbations de l'onde.",
+                "Le corps métallique en acier inoxydable permettant une fixation solide au ras de la surface.",
+                "Le design en forme d'aiguille mince et allongée pour minimiser l'interférence avec la propagation de l'onde.",
+                "L'utilisation d'une pièce auxiliaire pour assurer une mesure précise."
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 13,
+            "question": "Pourquoi utilise-t-on généralement une pièce auxiliaire (« interface ») avec les capteurs « face-on » ?",
+            "options": [
+                "Pour réduire les perturbations de l'onde incidente en champ libre.",
+                "Pour fixer le capteur au ras de la surface et mesurer la pression réfléchie avec précision.",
+                "Pour protéger la membrane en invar contre les surcharges de pression.",
+                "Pour permettre des mesures à incidence oblique uniquement."
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 14,
+            "question": "Dans la méthode d'intégration temporelle directe, quelle est la différence clé entre les procédures explicites et implicites ?",
+            "options": [
+                "Les procédures explicites nécessitent des schémas de différences finies, tandis que les procédures implicites utilisent des schémas analytiques.",
+                "Les procédures explicites dépendent uniquement des informations jusqu'à l'instant tn, tandis que les procédures implicites utilisent également des informations à l'instant tn+1.",
+                "Les procédures explicites nécessitent un pas de temps plus grand Δt pour assurer la convergence, tandis que les procédures implicites fonctionnent mieux avec un Δt plus petit.",
+                "Les procédures explicites et implicites diffèrent uniquement par leur application aux phénomènes linéaires ou non linéaires."
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 15,
+            "question": "Quel est l'avantage principal des procédures implicites par rapport aux procédures explicites dans la méthode d'intégration temporelle directe ?",
+            "options": [
+                "Elles permettent de calculer des solutions plus rapidement grâce à leur extrapolation pure.",
+                "Elles sont toujours plus précises car elles ne dépendent pas du choix du pas de temps Δt.",
+                "Elles sont plus stables pour des systèmes rigides ou des phénomènes rapides nécessitant un petit Δt.",
+                "Elles permettent une meilleure approximation des forces externes à l'instant tn."
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 16,
+            "question": "Dans un spectre de réponse, que représente le facteur de chargement dynamique (Dynamic Load Factor, DLF) ?",
+            "options": [
+                "Le rapport entre la déformation maximale et la charge dynamique appliquée.",
+                "Le rapport entre la déformation dynamique maximale et la déformation statique maximale.",
+                "La réponse maximale du système pour une fréquence donnée de la force extérieure.",
+                "Le rapport entre la masse du système M et son déplacement maximal xmax."
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 17,
+            "question": "Que permet d'évaluer principalement le spectre de réponse d'un système mécanique ?",
+            "options": [
+                "La fréquence naturelle du système en fonction de la masse M.",
+                "L'impact des variations de la masse M sur le déplacement statique xmax.",
+                "La réponse maximale du système en fonction des paramètres caractéristiques du système ou de la force extérieure.",
+                "La résistance du système à des charges statiques appliquées de manière progressive."
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 18,
+            "question": "Dans le cas d'une sollicitation impulsionnelle due à une explosion, quelle conclusion est correcte concernant la déformation maximale xmax d'un système SDOF ?",
+            "options": [
+                "La déformation maximale xmax dépend uniquement de la constante de raideur K et de la masse M, mais pas de l'impulsion I.",
+                "La déformation maximale xmax est proportionnelle à la durée de la sollicitation T.",
+                "La déformation maximale xmax dépend uniquement de l'impulsion I et non de la forme de la sollicitation.",
+                "La déformation maximale xmax peut être réduite en diminuant la rigidité K et la masse M."
+            ],
+            "correctAnswer": 2
+        }
+    ]
+}

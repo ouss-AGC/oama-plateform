@@ -1,0 +1,634 @@
+{
+    "quizTitle": "Test de révision AGC LASM 2 - 2025/2026",
+    "creator": "Lt Col Oussama Atoui - Armes and Ammunitions instructor",
+    "module": "Arme et Mun3",
+    "questions": [
+        {
+            "id": 1,
+            "question": "Quelle est la composition chimique exacte de la poudre noire, telle que décrite par Roger Bacon ?",
+            "options": [
+                "75% Salpêtre, 15% Soufre, 10% Carbone",
+                "75% Salpêtre, 15% Carbone, 10% Soufre",
+                "75% Carbone, 15% Salpêtre, 10% Soufre",
+                "65% Salpêtre, 20% Carbone, 15% Soufre"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 2,
+            "question": "Outre la poudre noire, quelle fut la deuxième invention majeure essentielle au développement des armes à feu ?",
+            "options": [
+                "L'imprimerie",
+                "L'astrolabe",
+                "La métallurgie",
+                "L'arc composite"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 3,
+            "question": "En quelle année la première représentation européenne d'un canon, le \"pot de fer\", est-elle apparue ?",
+            "options": [
+                "1327",
+                "1537",
+                "1881",
+                "1644"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 4,
+            "question": "Le \"Great Turkish Bombard\" est un canon célèbre utilisé lors de quel événement historique majeur ?",
+            "options": [
+                "La bataille de Castillon",
+                "La fin de l'ère des samouraïs au Japon",
+                "Le siège de Constantinople",
+                "La guerre de l'Opium"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 5,
+            "question": "Parmi les armes suivantes, laquelle n'est PAS élastique ?",
+            "options": [
+                "Le trébuchet",
+                "La catapulte",
+                "La flèche",
+                "L'onagre"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 6,
+            "question": "À partir de quel siècle la poudre noire a-t-elle commencé à être utilisée comme agent propulsif dans les armes à feu ?",
+            "options": [
+                "17ème siècle",
+                "13ème siècle",
+                "14ème siècle",
+                "16ème siècle"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 7,
+            "question": "Quel est l'ordre de grandeur de la vitesse initiale d'un projectile tiré par une arbalète ?",
+            "options": [
+                "0–135 m/s",
+                "0–200 m/s",
+                "200–283 m/s",
+                "Supérieur à 300 m/s"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 8,
+            "question": "Quelle est la tendance de l'évolution logique des armes à feu ?",
+            "options": [
+                "Moins de portée pour plus de cadence",
+                "Moins de technologie pour plus de charge humaine",
+                "Plus de portée, plus de précision, plus de cadence et moins de charge humaine directe",
+                "Plus de précision au détriment de la portée"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 9,
+            "question": "Une arme est classée \"gros calibre\" si son calibre est :",
+            "options": [
+                "Supérieur ou égal à 20 mm",
+                "Strictement supérieur à 20 mm",
+                "Égal à 20 mm",
+                "Supérieur à 12,7 mm"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 10,
+            "question": "Qu'est-ce qu'une \"bouche à feu\" ?",
+            "options": [
+                "L'ensemble des systèmes d'armes d'artillerie",
+                "Uniquement le tube du canon",
+                "L'ensemble composé du tube et de la culasse",
+                "L'extrémité du canon par où sort le projectile"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 11,
+            "question": "Laquelle des propositions suivantes n'est PAS l'une des trois branches principales de la science balistique ?",
+            "options": [
+                "Balistique intérieure",
+                "Balistique extérieure",
+                "Balistique transitoire",
+                "Balistique terminale"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 12,
+            "question": "La définition juridique d'une munition est :",
+            "options": [
+                "Un ensemble destiné à charger une arme à feu",
+                "Tout projectile, charge de poudre ou fusée",
+                "Tout article approvisionné par la Division de munition de la direction générale de munition et armement",
+                "Une cartouche complète incluant la douille et l'amorce"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 13,
+            "question": "Quelle est la différence fondamentale de mode de chargement entre un mortier et un obusier ?",
+            "options": [
+                "Les deux se chargent par la culasse.",
+                "Le mortier se charge par la bouche, l'obusier par la culasse.",
+                "Le mortier se charge par la culasse, l'obusier par la bouche.",
+                "Les deux se chargent par la bouche."
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 14,
+            "question": "Parmi les termes suivants, lequel étudie les phénomènes se produisant à l'intérieur de l'arme, de la percussion de l'amorce jusqu'à la sortie du projectile ?",
+            "options": [
+                "La balistique terminale",
+                "La balistique extérieure",
+                "La pyrotechnie",
+                "La balistique intérieure"
+            ],
+            "correctAnswer": 3
+        },
+        {
+            "id": 15,
+            "question": "Le système porteur d'une bouche à feu est principalement composé de:",
+            "options": [
+                "La culasse et le système moteur",
+                "Le tube et le mécanisme de mise à feu",
+                "L'affût et le lien élastique",
+                "Le système d'alimentation et le tube porte-amorce"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 16,
+            "question": "La typologie évolutive des armes suit quel ordre chronologique ?",
+            "options": [
+                "Arme à feu -> Arme primitive mécanique -> Arme électromagnétique",
+                "Arme primitive mécanique -> Arme à feu -> Arme électromagnétique",
+                "Arme électromagnétique -> Arme à feu -> Arme primitive mécanique",
+                "Arme à feu -> Arme électromagnétique -> Arme primitive mécanique"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 17,
+            "question": "Quel est le calibre exact de la mitrailleuse lourde \"12.7 Chinoix\" ?",
+            "options": [
+                "12.7x99 mm",
+                "12.7x108 mm",
+                "7.62x51 mm",
+                "12.7x77 mm"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 18,
+            "question": "Parmi les armes suivantes, laquelle n'est PAS un canon sans recul ?",
+            "options": [
+                "Carl Gustav 84 mm",
+                "Canon sans recul 106 mm",
+                "Obusier d'AC 155 mm",
+                "Canon sans recul 57 mm"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 19,
+            "question": "La munition du MILAN est classée dans la catégorie :",
+            "options": [
+                "Munition de petit calibre",
+                "Munition de gros calibre",
+                "Munition électromagnétique",
+                "Munition auto-propulsée"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 20,
+            "question": "Quel est le calibre de l'arme de poing Colt ?",
+            "options": [
+                "11.43x22 mm",
+                "9x19 mm",
+                "5.56x45 mm",
+                "7.62x39 mm"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 21,
+            "question": "Le fusil de précision SSG utilise des munitions de calibre :",
+            "options": [
+                "12.7x99 mm",
+                "5.56x45 mm",
+                "7.62x51 (.308)",
+                "7.62x39 mm"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 22,
+            "question": "Lequel de ces systèmes est un canon anti-aérien ?",
+            "options": [
+                "Canon de 20 mm",
+                "Mortier de 60 mm",
+                "Obusier M198",
+                "Lance-roquette STRIM"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 23,
+            "question": "Le char M60A3 est équipé d'un canon principal de :",
+            "options": [
+                "155 mm",
+                "120 mm",
+                "105 mm",
+                "90 mm"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 24,
+            "question": "L'arme de bord du char AML90 est une mitrailleuse de type",
+            "options": [
+                "M2HB",
+                "M85",
+                "AA52",
+                "M249"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 25,
+            "question": "La pièce d'artillerie M198 est un système d'arme tirant :",
+            "options": [
+                "Des missiles TOW",
+                "Des obus de 105 mm",
+                "Des obus de 155 mm",
+                "Des missiles RBS70"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 26,
+            "question": "Parmi ces armes, laquelle est définie comme une mitrailleuse légère ?",
+            "options": [
+                "M2HB",
+                "12.7 Chinoix",
+                "M249",
+                "Barette"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 27,
+            "question": "L'objectif de la balistique intérieure est d'atteindre une vitesse à la bouche (Vb) souhaitée tout en veillant à ce que :",
+            "options": [
+                "La pression à la bouche (Pb) soit maximale",
+                "Le point de fin de combustion (E) soit situé hors du tube",
+                "La pression maximale (Pmax) ne dépasse pas la limite d'élasticité du tube",
+                "La trajectoire soit parfaitement parabolique"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 28,
+            "question": "La balistique extérieure s'intéresse principalement à l'étude de :",
+            "options": [
+                "La déformation du projectile à l'impact",
+                "La montée en pression dans la chambre",
+                "La trajectoire du projectile dans l'air",
+                "L'usure du tube du canon"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 29,
+            "question": "Que représente le point maximal sur le graphique pression/temps de la balistique intérieure ?",
+            "options": [
+                "Le moment de l'allumage de l'amorce",
+                "Le pic de pression maximale (Pmax)",
+                "Le moment où le projectile quitte le canon",
+                "Le point de fin de combustion de la poudre propulsive"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 30,
+            "question": "Laquelle de ces forces n'est PAS un facteur dominant étudié en balistique extérieure ?",
+            "options": [
+                "La gravité",
+                "La résistance de l'air",
+                "La force de Coriolis (implicite pour les tirs à longue distance)",
+                "La pression des gaz à l'intérieur du canon"
+            ],
+            "correctAnswer": 3
+        },
+        {
+            "id": 31,
+            "question": "La balistique terminale étudie les phénomènes qui se déroulent :",
+            "options": [
+                "Au moment de la mise à feu",
+                "Pendant le vol libre du projectile",
+                "À l'impact sur la cible",
+                "Lors du stockage des munitions"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 32,
+            "question": "Quelle est la différence entre l'acier et la fonte?",
+            "options": [
+                "Le pourcentage en Carbonne",
+                "Le pourcentage en chrome",
+                "La composition chimique principale",
+                "La présence de fer ou son absence dans le matériau"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 33,
+            "question": "Quelle est la différence entre la munition de la mitrailleuse MG et la mitrailleuse M60 :",
+            "options": [
+                "La longueur de la cartouche",
+                "Le calibre de la cartouche",
+                "La quantité de la poudre propulsive dans la cartouche",
+                "Le type de bande utilisé"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 34,
+            "question": "Quel est le calibre de la munition tirée par la mitrailleuse M30 :",
+            "options": [
+                "7.62x51",
+                "7.62x54",
+                "7.62x63",
+                "7.62x39"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 35,
+            "question": "Quel composant d'une munition la plus sensible?",
+            "options": [
+                "La fusée",
+                "Le projectile",
+                "L'amorce",
+                "La charge propulsive"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 36,
+            "question": "Quel est le principal défaut de la poudre noire qui a conduit à son remplacement ?",
+            "options": [
+                "Son coût de fabrication élevé",
+                "Sa faible densité énergétique",
+                "La production de résidus solides et d'une fumée intense",
+                "Son instabilité chimique lors du stockage"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 37,
+            "question": "Laquelle de ces catégories n'est PAS un type de poudre sans fumée ?",
+            "options": [
+                "Simple base",
+                "Double base",
+                "Triple base",
+                "Base composite"
+            ],
+            "correctAnswer": 3
+        },
+        {
+            "id": 38,
+            "question": "Une munition dite \"à gargousse\" signifie que :",
+            "options": [
+                "Le projectile et la charge propulsive sont assemblés dans une douille métallique",
+                "Le projectile est chargé séparément de la charge propulsive contenue dans des sacs",
+                "La munition est entièrement inerte pour la manipulation",
+                "La douille est partiellement combustible"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 39,
+            "question": "Pourquoi a-t-on besoin d'une munition à gargousse:",
+            "options": [
+                "Faciliter le tir",
+                "Augmenter le cadence de tir",
+                "Changer la portée de tir",
+                "Améliorer la mobilité de tir"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 40,
+            "question": "Comment peut on assurer l'obturation dans les armes à feu gros calibre à gargousse?",
+            "options": [
+                "La fusée",
+                "Les rayures de l'âme du canon",
+                "La culasse",
+                "La douille"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 41,
+            "question": "Le salpêtre, composant majoritaire de la poudre noire, est le nom commun du :",
+            "options": [
+                "Charbon de bois",
+                "Soufre en poudre",
+                "Nitrate de potassium",
+                "Carbonate de potassium"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 42,
+            "question": "Pourquoi la poudre moderne est-elle qualifiée de \"sans fumée\" ?",
+            "options": [
+                "Elle ne produit aucune signature thermique",
+                "Ses produits de combustion sont principalement gazeux",
+                "Elle brûle à une température plus basse que la poudre noire",
+                "Elle est transparente avant combustion"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 43,
+            "question": "Comment peut on diminuer le recul des armes à feu gros calibre ?",
+            "options": [
+                "Ame du canon",
+                "Canon sans recul",
+                "Obturation",
+                "Lien élastique"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 44,
+            "question": "Dans une cartouche, quel élément assure l'étanchéité des gaz dans la chambre ?",
+            "options": [
+                "Le projectile",
+                "L'amorce",
+                "La culasse",
+                "La douille"
+            ],
+            "correctAnswer": 3
+        },
+        {
+            "id": 45,
+            "question": "Quelle force fondamentale est utilisée par un canon électromagnétique (railgun) pour propulser un projectile ?",
+            "options": [
+                "La force de combustion chimique",
+                "La force de Lorentz",
+                "L'expansion pneumatique",
+                "La force gravitationnelle"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 46,
+            "question": "Quelle est la plage de vitesse à la bouche d'un projectile de railgun expérimental ?",
+            "options": [
+                "500 m/s à 1000 m/s",
+                "1250 m/s à 1500 m/s",
+                "2000 m/s à 3500 m/s",
+                "Supérieure à 5000 m/s"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 47,
+            "question": "Quels sont les deux défis technologiques majeurs pour les railguns ?",
+            "options": [
+                "La précision et la portée",
+                "Le recul et le bruit",
+                "Les batteries et les besoins énergétiques",
+                "Le poids du projectile et la cadence de tir"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 48,
+            "question": "Dans un scénario où un obusier (500 m/s) tire sur une cible à 20 km, quel est le temps de vol de l'obusier (en négligeant les autres facteurs) ?",
+            "options": [
+                "4 secondes",
+                "20 secondes",
+                "40 secondes",
+                "80 secondes"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 49,
+            "question": "Donner ordre de grandeur de la température dans une arme à feu petit calibre:",
+            "options": [
+                "100-500 C°",
+                "500-1000 C°",
+                "1000-2000 C°",
+                "2000-3500 C°"
+            ],
+            "correctAnswer": 3
+        },
+        {
+            "id": 50,
+            "question": "Pour engager une cible légèrement retranchée à 2500 m, quel système d'arme est le plus adapté pour un tir direct ?",
+            "options": [
+                "L'obusier M198 (155 mm)",
+                "Le mortier de 81 mm",
+                "Le canon de char M60A3 (105 mm)",
+                "Aucun des systèmes proposés n'est adapté"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 51,
+            "question": "Donner ordre de grandeur de la pression maximale dans une arme à feu petit calibre:",
+            "options": [
+                "100-500 bar",
+                "500-1000 bar",
+                "1000-2000 bar",
+                "2000-3500 bar"
+            ],
+            "correctAnswer": 3
+        },
+        {
+            "id": 52,
+            "question": "Le char Abrams M1 américain contient un équipage de :",
+            "options": [
+                "3 personnes",
+                "4 personnes",
+                "5 personnes",
+                "6 personnes"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 53,
+            "question": "Le char Abrams M1 américain possède une bàf :",
+            "options": [
+                "Tube lisse de 105 mm",
+                "Tube rayé de 105 mm",
+                "Tube lisse de 120 mm",
+                "Tube rayé de 120 mm"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 54,
+            "question": "Le canon sans recul 106 mm possède un tube réducteur au-dessus du canon utilisé pour :",
+            "options": [
+                "Tirer des munitions de réglage",
+                "Viser la cible",
+                "Améliorer le tir",
+                "Piston à gaz"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 55,
+            "question": "L'obusier Automas 2000:",
+            "options": [
+                "Tube lisse de 105 mm",
+                "Tube rayé de 105 mm",
+                "Tube lisse de 120 mm",
+                "Tube rayé de 120 mm"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 56,
+            "question": "La stabilisation d'un obus d'artillerie de campagne est réalisée par:",
+            "options": [
+                "effet de rotation",
+                "effet de vitesse",
+                "effet de résistance",
+                "effet des ailettes"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 57,
+            "question": "L'obusier Nora B52 est un obusier:",
+            "options": [
+                "Tracté",
+                "Fixé",
+                "Motorisé",
+                "Autopropulsé"
+            ],
+            "correctAnswer": 3
+        }
+    ]
+}
