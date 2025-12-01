@@ -73,38 +73,14 @@ const Home: React.FC = () => {
         setTimeout(() => {
             speakIntro();
         }, 500);
-
-        return () => clearTimeout(timer);
-    }, []);
-
-    if (showIntro) {
-        return (
-            <div className="fixed inset-0 z-50 bg-gray-900 flex flex-col items-center justify-center overflow-hidden">
-                {/* Background with blur */}
-                <div
-                    className="absolute inset-0 bg-cover bg-center opacity-30 blur-sm"
-                    style={{ backgroundImage: "url('/academy-bg.jpg')" }}
-                ></div>
-
-                {/* Rotating Golden Stamp */}
-                <div className="relative z-10 animate-spin-slow">
-                    <img
-                        src="/golden_stamp.png"
-                        alt="Welcome Stamp"
-                        className="w-64 h-64 md:w-96 md:h-96 drop-shadow-2xl"
-                    />
-                </div>
-
-                <style>{`
-                    @keyframes spin-slow {
                         from { transform: rotate(0deg) scale(0.5); opacity: 0; }
-                        10% { transform: rotate(36deg) scale(1); opacity: 1; }
+        10 % { transform: rotate(36deg) scale(1); opacity: 1; }
                         to { transform: rotate(360deg) scale(1); opacity: 1; }
-                    }
-                    .animate-spin-slow {
-                        animation: spin-slow 5s ease-out forwards;
-                    }
-                `}</style>
+    }
+                    .animate - spin - slow {
+        animation: spin - slow 5s ease - out forwards;
+    }
+    `}</style>
             </div>
         );
     }
@@ -135,15 +111,15 @@ const Home: React.FC = () => {
                 </div>
 
                 <style>{`
-                    @keyframes bounce-custom {
-                        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-                        40% { transform: translateY(-20px); }
-                        60% { transform: translateY(-10px); }
-                    }
-                    .animate-bounce-custom {
-                        animation: bounce-custom 3s infinite;
-                    }
-                `}</style>
+    @keyframes bounce - custom {
+        0 %, 20 %, 50 %, 80 %, 100 % { transform: translateY(0); }
+        40 % { transform: translateY(-20px); }
+        60 % { transform: translateY(-10px); }
+    }
+                    .animate - bounce - custom {
+    animation: bounce - custom 3s infinite;
+}
+`}</style>
 
                 {/* Header - Top Center */}
                 <div className="flex flex-col items-center mt-4 md:mt-8 mb-auto w-full">
@@ -159,19 +135,20 @@ const Home: React.FC = () => {
                             <button
                                 key={disc.id}
                                 onClick={() => setSelectedDiscipline(disc.id)}
-                                className={`p-6 rounded-xl border-2 transition-all duration-300 transform hover:-translate-y-2 flex flex-col items-center text-center backdrop-blur-md
-                  ${selectedDiscipline === disc.id
-                                        ? 'bg-military-green/90 border-military-beige scale-105 shadow-2xl'
-                                        : 'bg-gray-800/60 border-gray-600 hover:bg-gray-700/80 text-gray-300'
-                                    }`}
+                                className={`p - 6 rounded - xl border - 2 transition - all duration - 300 transform hover: -translate - y - 2 flex flex - col items - center text - center backdrop - blur - md
+                  ${
+    selectedDiscipline === disc.id
+    ? 'bg-military-green/90 border-military-beige scale-105 shadow-2xl'
+    : 'bg-gray-800/60 border-gray-600 hover:bg-gray-700/80 text-gray-300'
+} `}
                             >
-                                <div className={`p-3 rounded-full mb-4 ${selectedDiscipline === disc.id ? 'bg-white text-military-green' : 'bg-gray-700'}`}>
+                                <div className={`p - 3 rounded - full mb - 4 ${ selectedDiscipline === disc.id ? 'bg-white text-military-green' : 'bg-gray-700' } `}>
                                     {disc.icon}
                                 </div>
-                                <h3 className={`text-lg font-bold mb-2 ${selectedDiscipline === disc.id ? 'text-white' : 'text-white'}`}>
+                                <h3 className={`text - lg font - bold mb - 2 ${ selectedDiscipline === disc.id ? 'text-white' : 'text-white' } `}>
                                     {disc.title}
                                 </h3>
-                                <p className={`text-sm ${selectedDiscipline === disc.id ? 'text-gray-100' : 'text-gray-400'}`}>
+                                <p className={`text - sm ${ selectedDiscipline === disc.id ? 'text-gray-100' : 'text-gray-400' } `}>
                                     {disc.description}
                                 </p>
                             </button>
@@ -183,11 +160,12 @@ const Home: React.FC = () => {
                         <button
                             onClick={handleStart}
                             disabled={!selectedDiscipline}
-                            className={`px-10 py-4 rounded-full font-bold text-lg flex items-center mx-auto transition-all duration-300 shadow-xl
-                ${selectedDiscipline
-                                    ? 'bg-military-beige text-military-green hover:bg-white hover:scale-105 cursor-pointer'
-                                    : 'bg-gray-700 text-gray-500 cursor-not-allowed opacity-50'
-                                }`}
+                            className={`px - 10 py - 4 rounded - full font - bold text - lg flex items - center mx - auto transition - all duration - 300 shadow - xl
+                ${
+    selectedDiscipline
+        ? 'bg-military-beige text-military-green hover:bg-white hover:scale-105 cursor-pointer'
+        : 'bg-gray-700 text-gray-500 cursor-not-allowed opacity-50'
+} `}
                         >
                             Commencer le Quiz
                             <ChevronRight className="ml-2 w-6 h-6" />
