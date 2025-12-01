@@ -62,10 +62,12 @@ export const generateCertificate = async (result: QuizResult) => {
     let logoDataUrl = '';
     let bgImageDataUrl = '';
     let signatureDataUrl = '';
+    let stampDataUrl = '';
     try {
         logoDataUrl = await loadImage('/academy-logo.png');
         bgImageDataUrl = await loadImage('/cert_background.png');
         signatureDataUrl = await loadImage('/signature.png');
+        stampDataUrl = await loadImage('/golden_stamp.png');
     } catch (err) {
         console.error('Failed to load images:', err);
     }
@@ -119,58 +121,63 @@ export const generateCertificate = async (result: QuizResult) => {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(36);
     doc.setTextColor(...colors.primary);
-    doc.text("CERTIFICAT DE RÉUSSITE", 148.5, 70, { align: "center" });
+    doc.text("CERTIFICAT DE RÉUSSITE", 148.5, 65, { align: "center" });
 
     doc.setFontSize(14);
     doc.setTextColor(100, 100, 100);
-    doc.text("ACADÉMIE MILITAIRE - OAMA", 148.5, 80, { align: "center" });
+    doc.text("ACADÉMIE MILITAIRE - OAMA", 148.5, 75, { align: "center" });
 
     doc.setFont("times", "italic");
     doc.setFontSize(16);
     doc.setTextColor(80, 80, 80);
-    doc.text("Décerné à", 148.5, 95, { align: "center" });
+    doc.text("Décerné à", 148.5, 90, { align: "center" });
 
     doc.setFont("times", "bolditalic");
     doc.setFontSize(32);
     doc.setTextColor(0, 0, 0);
-    doc.text(`${result.student.grade} ${result.student.name}`, 148.5, 110, { align: "center" });
+    doc.text(`${result.student.grade} ${result.student.name}`, 148.5, 105, { align: "center" });
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(14);
     doc.setTextColor(80, 80, 80);
-    doc.text("Pour avoir complété avec succès l'évaluation de :", 148.5, 125, { align: "center" });
+    doc.text("Pour avoir complété avec succès l'évaluation de :", 148.5, 120, { align: "center" });
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(24);
     doc.setTextColor(...colors.primary);
-    doc.text(disciplineName, 148.5, 140, { align: "center" });
+    doc.text(disciplineName, 148.5, 135, { align: "center" });
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(18);
     doc.setTextColor(0, 0, 0);
-    doc.text(`Score obtenu : ${result.scoreOn20.toFixed(1)}/20`, 148.5, 155, { align: "center" });
+    doc.text(`Score obtenu : ${result.scoreOn20.toFixed(1)}/20`, 148.5, 150, { align: "center" });
 
     const date = new Date(result.timestamp).toLocaleDateString('fr-FR');
     doc.setFont("helvetica", "bold");
     doc.setFontSize(12);
     doc.setTextColor(60, 60, 60);
-    doc.text(`Fait le ${date}`, 60, 178, { align: "center" });
+    doc.text(`Fait le ${date}`, 60, 175, { align: "center" });
 
-    // Handwritten signature image ABOVE name
+    // Handwritten signature image ABOVE name (Moved UP and Resized)
     if (signatureDataUrl) {
-        doc.addImage(signatureDataUrl, 'PNG', 200, 160, 40, 20);
+        doc.addImage(signatureDataUrl, 'PNG', 200, 155, 50, 25); // Increased size, moved up
     }
 
-    // Signature text
+    // Golden Stamp (New)
+    if (stampDataUrl) {
+        doc.addImage(stampDataUrl, 'PNG', 133.5, 158, 30, 30); // Centered at bottom
+    }
+
+    // Signature text (Moved UP)
     doc.setFont("helvetica", "bold");
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
-    doc.text("Lt Col Oussama Atoui", 220, 184, { align: "center" });
+    doc.text("Lt Col Oussama Atoui", 225, 182, { align: "center" });
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
     doc.setTextColor(80, 80, 80);
-    doc.text("Instructeur Armes et Munitions", 220, 189, { align: "center" });
+    doc.text("Instructeur Armes et Munitions", 225, 187, { align: "center" });
 
     doc.save(`Certificat_${result.student.name.replace(/\s+/g, '_')}.pdf`);
 };
@@ -200,11 +207,14 @@ export const generateVisualCertificate = async (result: QuizResult): Promise<str
     const sigImg = new Image();
     sigImg.src = '/signature.png';
 
+    const stampImg = new Image();
+    stampImg.src = '/golden_stamp.png';
+
     await new Promise<void>((resolve) => {
         let loaded = 0;
         const checkLoaded = () => {
             loaded++;
-            if (loaded >= 3) resolve();
+            if (loaded >= 4) resolve();
         };
 
         logoImg.onload = checkLoaded;
@@ -213,6 +223,8 @@ export const generateVisualCertificate = async (result: QuizResult): Promise<str
         bgImg.onerror = checkLoaded;
         sigImg.onload = checkLoaded;
         sigImg.onerror = checkLoaded;
+        stampImg.onload = checkLoaded;
+        stampImg.onerror = checkLoaded;
 
         setTimeout(() => resolve(), 2000);
     });
@@ -298,17 +310,22 @@ export const generateVisualCertificate = async (result: QuizResult): Promise<str
 
     // Handwritten signature ABOVE name
     if (sigImg.complete && sigImg.naturalHeight !== 0) {
-        ctx.drawImage(sigImg, canvas.width - 380, 590, 150, 75);
+        ctx.drawImage(sigImg, canvas.width - 380, 580, 180, 90); // Larger
+    }
+
+    // Golden Stamp
+    if (stampImg.complete && stampImg.naturalHeight !== 0) {
+        ctx.drawImage(stampImg, canvas.width / 2 - 60, 580, 120, 120);
     }
 
     ctx.textAlign = 'center';
     ctx.font = 'bold 16px Arial';
     ctx.fillStyle = '#000';
-    ctx.fillText('Lt Col Oussama Atoui', canvas.width - 305, 685);
+    ctx.fillText('Lt Col Oussama Atoui', canvas.width - 290, 685);
 
     ctx.font = '14px Arial';
     ctx.fillStyle = '#555';
-    ctx.fillText('Instructeur Armes et Munitions', canvas.width - 305, 705);
+    ctx.fillText('Instructeur Armes et Munitions', canvas.width - 290, 705);
 
     return canvas.toDataURL('image/png');
 };

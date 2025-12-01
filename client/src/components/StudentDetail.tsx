@@ -110,10 +110,12 @@ const StudentDetail: React.FC = () => {
 
         // Load score circle image
         let scoreCircleDataUrl = '';
+        let stampDataUrl = '';
         try {
             scoreCircleDataUrl = await loadImage('/score_circle.png');
+            stampDataUrl = await loadImage('/golden_stamp.png');
         } catch (err) {
-            console.error('Failed to load score circle:', err);
+            console.error('Failed to load assets:', err);
         }
 
         // Header with handwritten score circle and signature
@@ -127,14 +129,19 @@ const StudentDetail: React.FC = () => {
         }
 
         doc.setFontSize(22); // Slightly smaller to fit in circle
-        doc.setFont("helvetica", "bold"); // Keep bold for readability
+        doc.setFont("times", "italic"); // Handwritten style
         doc.setTextColor(200, 0, 0); // Red
         // Position text roughly in the center/left of the circle image (160 + 15, 15 + 25)
         doc.text(`${result.scoreOn20.toFixed(1)}/20`, 180, 42, { align: "center", angle: 15 }); // Added slight angle for handwritten feel
 
         // Add signature on the left
         if (signatureDataUrl) {
-            doc.addImage(signatureDataUrl, 'PNG', 20, 30, 40, 20);
+            doc.addImage(signatureDataUrl, 'PNG', 20, 25, 50, 25); // Larger and adjusted
+        }
+
+        // Add Golden Stamp
+        if (stampDataUrl) {
+            doc.addImage(stampDataUrl, 'PNG', 60, 25, 30, 30);
         }
 
         doc.setFontSize(8);
@@ -143,9 +150,14 @@ const StudentDetail: React.FC = () => {
         doc.text("Instructeur Armes et Munitions", 40, 57, { align: "center" });
 
         // Student information
+        // Student information
         doc.setFontSize(14);
-        doc.setTextColor(0);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(200, 0, 0); // Red Name
         doc.text(`Nom: ${result.student.grade} ${result.student.name}`, 20, 70);
+
+        doc.setTextColor(0); // Reset to black
+        doc.setFont("helvetica", "normal");
         doc.text(`Classe: ${result.student.className}`, 20, 78);
         doc.text(`Matricule: ${result.student.matricule}`, 20, 86);
 
