@@ -130,6 +130,32 @@ app.post('/api/generate-test-data', (req, res) => {
     res.json({ success: true, message: `Generated 10 test results` });
 });
 
+// Student: Get Class Stats (Aggregate only)
+app.get('/api/stats', (req, res) => {
+    const { discipline } = req.query;
+    if (!discipline) {
+        return res.status(400).json({ error: "Discipline required" });
+    }
+
+    const disciplineResults = sessionState.results.filter(r => r.discipline === discipline);
+
+    if (disciplineResults.length === 0) {
+        return res.json({ average: 0, max: 0, min: 0, count: 0 });
+    }
+
+    const scores = disciplineResults.map(r => r.scoreOn20);
+    const average = scores.reduce((a, b) => a + b, 0) / scores.length;
+    const max = Math.max(...scores);
+    const min = Math.min(...scores);
+
+    res.json({
+        average,
+        max,
+        min,
+        count: disciplineResults.length
+    });
+});
+
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 // The "catchall" handler: for any request that doesn't

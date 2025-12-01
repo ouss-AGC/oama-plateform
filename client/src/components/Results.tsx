@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Download, Home, Award, Trophy, AlertTriangle } from 'lucide-react';
+import { Download, Home, Award, Trophy, AlertTriangle, BarChart as BarChartIcon, FileText, BookOpen, CheckCircle, XCircle, TrendingUp } from 'lucide-react';
 import { generateCertificate, generateVisualCertificate } from '../utils/certificateGenerator';
+import jsPDF from 'jspdf';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
+
+interface Question {
+    id: number;
+    question: string;
+    options: string[];
+    correctAnswer: number;
+}
 
 interface QuizResult {
     student: {
@@ -17,12 +26,15 @@ interface QuizResult {
     timeElapsed: number;
     discipline: string;
     timestamp: number;
+    answers: number[];
 }
 
 const Results: React.FC = () => {
     const navigate = useNavigate();
     const [result, setResult] = useState<QuizResult | null>(null);
     const [visualCertificate, setVisualCertificate] = useState<string>('');
+    const [classStats, setClassStats] = useState({ average: 0, max: 0, min: 0 });
+    const [quizQuestions, setQuizQuestions] = useState<Question[]>([]);
 
     useEffect(() => {
         const loadResult = async () => {
@@ -34,7 +46,25 @@ const Results: React.FC = () => {
             const parsedResult = JSON.parse(lastResult);
             setResult(parsedResult);
 
-            // Generate visual certificate for scores ≤ 15
+            // Fetch Class Stats
+            try {
+                const statsRes = await fetch(`/api/stats?discipline=${parsedResult.discipline}`);
+                const statsData = await statsRes.json();
+                setClassStats(statsData);
+            } catch (error) {
+                console.error("Failed to load class stats:", error);
+            }
+
+            // Fetch Questions for Report
+            try {
+                const questionsRes = await fetch(`/quiz_data_${parsedResult.discipline}.json`);
+                const questionsData = await questionsRes.json();
+                setQuizQuestions(questionsData.questions);
+            } catch (error) {
+                console.error("Failed to load questions:", error);
+            }
+
+            // Generate visual certificate for scores <= 15
             if (parsedResult.scoreOn20 <= 15) {
                 const certImage = await generateVisualCertificate(parsedResult);
                 setVisualCertificate(certImage);
@@ -43,6 +73,120 @@ const Results: React.FC = () => {
 
         loadResult();
     }, [navigate]);
+
+    const generateReport = async () => {
+        if (!result) return;
+        const doc = new jsPDF();
+
+        // Load signature image
+        const loadImage = (src: string): Promise<string> => {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    if (ctx) {
+                        ctx.drawImage(img, 0, 0);
+                        resolve(canvas.toDataURL('image/png'));
+                    } else {
+                        reject(new Error('Canvas context not available'));
+                    }
+                };
+                img.onerror = reject;
+                img.src = src;
+            });
+        };
+
+        let signatureDataUrl = '';
+        try {
+            signatureDataUrl = await loadImage('/signature.png');
+        } catch (err) {
+            console.error('Failed to load signature:', err);
+        }
+
+        // Load score circle image
+        let scoreCircleDataUrl = '';
+        try {
+            scoreCircleDataUrl = await loadImage('/score_circle.png');
+        } catch (err) {
+            console.error('Failed to load score circle:', err);
+        }
+
+        // Header with handwritten score circle and signature
+        doc.setFontSize(22);
+        doc.setTextColor(45, 80, 22);
+        doc.text("RAPPORT INDIVIDUEL", 105, 20, { align: "center" });
+
+        // Large RED handwritten score at TOP RIGHT with Circle Image
+        if (scoreCircleDataUrl) {
+            doc.addImage(scoreCircleDataUrl, 'PNG', 160, 15, 40, 40);
+        }
+
+        doc.setFontSize(22); // Slightly smaller to fit in circle
+        doc.setFont("helvetica", "bold"); // Keep bold for readability
+        doc.setTextColor(200, 0, 0); // Red
+        // Position text roughly in the center/left of the circle image (160 + 15, 15 + 25)
+        doc.text(`${result.scoreOn20.toFixed(1)}/20`, 180, 42, { align: "center", angle: 15 }); // Added slight angle for handwritten feel
+
+        // Add signature on the left
+        if (signatureDataUrl) {
+            doc.addImage(signatureDataUrl, 'PNG', 20, 30, 40, 20);
+        }
+
+        doc.setFontSize(8);
+        doc.setTextColor(100);
+        doc.text("Lt Col Oussama Atoui", 40, 53, { align: "center" });
+        doc.text("Instructeur Armes et Munitions", 40, 57, { align: "center" });
+
+        // Student information
+        doc.setFontSize(14);
+        doc.setTextColor(0);
+        doc.text(`Nom: ${result.student.grade} ${result.student.name}`, 20, 70);
+        doc.text(`Classe: ${result.student.className}`, 20, 78);
+        doc.text(`Matricule: ${result.student.matricule}`, 20, 86);
+
+        doc.text(`Discipline: ${result.discipline.toUpperCase()}`, 140, 70);
+        doc.text(`Score: ${result.scoreOn20.toFixed(2)}/20`, 140, 78);
+        doc.text(`Date: ${new Date(result.timestamp).toLocaleDateString()}`, 140, 86);
+
+        let yPos = 100;
+        doc.setFontSize(16);
+        doc.text("Détail des réponses", 20, yPos);
+        yPos += 10;
+
+        doc.setFontSize(10);
+        quizQuestions.forEach((q, index) => {
+            if (yPos > 270) {
+                doc.addPage();
+                yPos = 20;
+            }
+
+            const userAnswer = result.answers[index];
+            const isCorrect = userAnswer === q.correctAnswer;
+
+            doc.setTextColor(0);
+            doc.setFont("helvetica", "bold");
+            doc.text(`Q${index + 1}: ${q.question}`, 20, yPos, { maxWidth: 170 });
+            yPos += 5;
+
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(isCorrect ? 0 : 200, isCorrect ? 100 : 0, 0);
+            doc.text(`Réponse: ${q.options[userAnswer]} ${isCorrect ? '(Correct)' : '(Incorrect)'}`, 25, yPos, { maxWidth: 165 });
+
+            if (!isCorrect) {
+                yPos += 5;
+                doc.setTextColor(0, 100, 0);
+                doc.text(`Correction: ${q.options[q.correctAnswer]}`, 25, yPos, { maxWidth: 165 });
+            }
+
+            yPos += 10;
+        });
+
+        doc.save(`Rapport_${result.student.name}.pdf`);
+    };
 
     if (!result) return null;
 
@@ -57,11 +201,18 @@ const Results: React.FC = () => {
     const isPass = result.scoreOn20 >= 10;
     const canDownloadCertificate = result.scoreOn20 > 15;
 
+    // Chart Data
+    const performanceData = [
+        { name: 'Vous', score: result.scoreOn20, fill: '#4F46E5' },
+        { name: 'Moyenne', score: classStats.average, fill: '#10B981' },
+        { name: 'Max', score: classStats.max, fill: '#F59E0B' },
+    ];
+
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4"
             style={{ backgroundImage: "url('/academy-bg.png')", backgroundSize: 'cover', backgroundBlendMode: 'overlay', backgroundColor: 'rgba(255,255,255,0.9)' }}>
 
-            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden transform transition-all hover:scale-[1.01]">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden transform transition-all hover:scale-[1.01]">
                 <div className={`p-8 text-center ${isPass ? 'bg-military-green' : 'bg-red-600'} text-white`}>
                     {medal ? (
                         <div className="flex justify-center mb-4 animate-bounce">
@@ -82,36 +233,65 @@ const Results: React.FC = () => {
                 </div>
 
                 <div className="p-8">
-                    <div className="grid grid-cols-2 gap-6 mb-8">
-                        <div className="text-center p-4 bg-gray-50 rounded-lg border border-gray-200">
-                            <p className="text-gray-500 text-sm uppercase tracking-wide">Score Final</p>
-                            <p className={`text-3xl font-bold ${isPass ? 'text-military-green' : 'text-red-600'}`}>
-                                {result.scoreOn20.toFixed(1)}/20
-                            </p>
-                            <p className="text-sm text-gray-400">{result.correctCount} sur {result.totalQuestions} correctes</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        {/* Score & Time */}
+                        <div className="space-y-6">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="text-center p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                    <p className="text-gray-500 text-sm uppercase tracking-wide">Score Final</p>
+                                    <p className={`text-3xl font-bold ${isPass ? 'text-military-green' : 'text-red-600'}`}>
+                                        {result.scoreOn20.toFixed(1)}/20
+                                    </p>
+                                    <p className="text-sm text-gray-400">{result.correctCount} sur {result.totalQuestions} correctes</p>
+                                </div>
+
+                                <div className="text-center p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                    <p className="text-gray-500 text-sm uppercase tracking-wide">Temps</p>
+                                    <p className="text-3xl font-bold text-gray-800">
+                                        {Math.floor(result.timeElapsed / 60)}:{(result.timeElapsed % 60).toString().padStart(2, '0')}
+                                    </p>
+                                    <p className="text-sm text-gray-400">minutes</p>
+                                </div>
+                            </div>
+
+                            {/* Student Info */}
+                            <div className="space-y-2 bg-gray-50 p-4 rounded-lg border border-gray-100">
+                                <div className="flex justify-between items-center border-b border-gray-200 pb-2">
+                                    <span className="text-gray-600">Nom</span>
+                                    <span className="font-semibold">{result.student.grade} {result.student.name}</span>
+                                </div>
+                                <div className="flex justify-between items-center border-b border-gray-200 pb-2">
+                                    <span className="text-gray-600">Classe</span>
+                                    <span className="font-semibold">{result.student.className}</span>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-gray-600">Matricule</span>
+                                    <span className="font-semibold">{result.student.matricule}</span>
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="text-center p-4 bg-gray-50 rounded-lg border border-gray-200">
-                            <p className="text-gray-500 text-sm uppercase tracking-wide">Temps</p>
-                            <p className="text-3xl font-bold text-gray-800">
-                                {Math.floor(result.timeElapsed / 60)}:{(result.timeElapsed % 60).toString().padStart(2, '0')}
-                            </p>
-                            <p className="text-sm text-gray-400">minutes</p>
-                        </div>
-                    </div>
-
-                    <div className="space-y-4">
-                        <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                            <span className="text-gray-600">Nom</span>
-                            <span className="font-semibold">{result.student.grade} {result.student.name}</span>
-                        </div>
-                        <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                            <span className="text-gray-600">Classe</span>
-                            <span className="font-semibold">{result.student.className}</span>
-                        </div>
-                        <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                            <span className="text-gray-600">Matricule</span>
-                            <span className="font-semibold">{result.student.matricule}</span>
+                        {/* Comparative Chart */}
+                        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                            <h3 className="text-sm font-bold text-gray-800 mb-4 flex items-center">
+                                <BarChartIcon className="w-4 h-4 mr-2 text-blue-600" />
+                                Analyse Comparative
+                            </h3>
+                            <div className="h-48">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={performanceData} layout="vertical">
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis type="number" domain={[0, 20]} />
+                                        <YAxis dataKey="name" type="category" width={60} tick={{ fontSize: 12 }} />
+                                        <Tooltip />
+                                        <Bar dataKey="score" fill="#8884d8" radius={[0, 4, 4, 0]}>
+                                            {performanceData.map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={entry.fill} />
+                                            ))}
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
                         </div>
                     </div>
 
@@ -120,9 +300,7 @@ const Results: React.FC = () => {
                         <div className="mt-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 rounded-lg p-6 shadow-md">
                             <div className="flex items-start">
                                 <div className="flex-shrink-0">
-                                    <svg className="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                    </svg>
+                                    <TrendingUp className="h-8 w-8 text-blue-500" />
                                 </div>
                                 <div className="ml-4 flex-1">
                                     <h3 className="text-lg font-bold text-blue-900 mb-3">
@@ -130,32 +308,29 @@ const Results: React.FC = () => {
                                     </h3>
                                     <div className="text-blue-800 space-y-3">
                                         <p className="leading-relaxed">
-                                            <strong>Ne vous découragez pas !</strong> L'apprentissage est un processus continu et chaque évaluation est une opportunité de progresser.
+                                            <strong>Ne vous découragez pas !</strong> L'apprentissage est un processus continu.
                                         </p>
                                         <p className="leading-relaxed">
-                                            Votre score actuel de <strong>{result.scoreOn20.toFixed(1)}/20</strong> indique que vous devez approfondir vos connaissances dans cette matière.
+                                            Votre score de <strong>{result.scoreOn20.toFixed(1)}/20</strong> montre qu'il faut approfondir vos connaissances.
                                         </p>
                                         <div className="bg-white bg-opacity-60 rounded-lg p-4 mt-4">
-                                            <p className="font-semibold text-blue-900 mb-2">📚 Recommandations :</p>
+                                            <p className="font-semibold text-blue-900 mb-2 flex items-center">
+                                                <BookOpen className="w-4 h-4 mr-2" />
+                                                Recommandations :
+                                            </p>
                                             <ul className="list-disc list-inside space-y-2 text-sm">
                                                 <li>Revoyez attentivement le cours et vos notes</li>
-                                                <li>Identifiez les sujets où vous avez eu des difficultés</li>
-                                                <li>Consultez <strong>Lt Col Oussama Atoui</strong>, votre instructeur Armes et Munitions</li>
-                                                <li>Demandez des explications détaillées sur vos réponses incorrectes</li>
-                                                <li>Pratiquez avec des exercices supplémentaires</li>
-                                                <li>N'hésitez pas à poser des questions en classe</li>
+                                                <li>Consultez <strong>Lt Col Oussama Atoui</strong></li>
+                                                <li>Demandez des explications sur vos erreurs</li>
                                             </ul>
                                         </div>
-                                        <p className="leading-relaxed font-semibold text-blue-900 mt-4">
-                                            💪 Vous avez les capacités de réussir ! Avec du travail et de la détermination, vous améliorerez certainement vos résultats.
-                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     )}
 
-                    {/* Visual Certificate for scores ≤ 15 */}
+                    {/* Visual Certificate for scores <= 15 */}
                     {isPass && !canDownloadCertificate && visualCertificate && (
                         <div className="mt-8">
                             <h3 className="text-center text-lg font-bold text-gray-700 mb-4">Votre Certificat</h3>
@@ -177,7 +352,15 @@ const Results: React.FC = () => {
                             Retour à l'accueil
                         </button>
 
-                        {/* Download button only for scores > 15 */}
+                        <button
+                            onClick={generateReport}
+                            className="px-6 py-3 rounded-lg bg-gray-800 text-white font-bold hover:bg-gray-900 flex items-center justify-center shadow-md transition-colors"
+                        >
+                            <FileText className="w-5 h-5 mr-2" />
+                            Télécharger Rapport PDF
+                        </button>
+
+                        {/* Download Certificate button only for scores > 15 */}
                         {isPass && canDownloadCertificate && (
                             <button
                                 onClick={async () => {
