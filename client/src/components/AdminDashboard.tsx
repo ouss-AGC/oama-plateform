@@ -312,7 +312,7 @@ const AdminDashboard: React.FC = () => {
                                         <p className="text-xs font-bold text-gray-500 mb-2 px-2">Liste des participants :</p>
                                         {participants.map((p, idx) => (
                                             <div key={idx} className="text-sm text-gray-700 px-2 py-1 hover:bg-gray-50 rounded flex justify-between">
-                                                <span>{p.grade} {p.fullName}</span>
+                                                <span>{p.grade} {p.name || p.fullName}</span>
                                                 <span className="text-gray-400 text-xs">{p.className}</span>
                                             </div>
                                         ))}

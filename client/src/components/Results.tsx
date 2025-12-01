@@ -180,7 +180,14 @@ const Results: React.FC = () => {
                         {/* Download button only for scores > 15 */}
                         {isPass && canDownloadCertificate && (
                             <button
-                                onClick={() => generateCertificate(result)}
+                                onClick={async () => {
+                                    try {
+                                        await generateCertificate(result);
+                                    } catch (error) {
+                                        console.error("Certificate generation failed:", error);
+                                        alert("Erreur lors de la génération du certificat. Veuillez réessayer.");
+                                    }
+                                }}
                                 className="px-6 py-3 rounded-lg bg-military-beige text-military-green font-bold hover:bg-yellow-200 flex items-center justify-center shadow-md transition-colors"
                             >
                                 <Download className="w-5 h-5 mr-2" />
