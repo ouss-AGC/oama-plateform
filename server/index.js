@@ -132,8 +132,10 @@ app.post('/api/generate-test-data', (req, res) => {
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
 const fs = require('fs');
-app.get('*', (req, res) => {
+app.get(/.*/, (req, res) => {
     const indexPath = path.join(process.cwd(), 'client', 'dist', 'index.html');
     console.log("Serving index.html from:", indexPath);
     if (fs.existsSync(indexPath)) {
