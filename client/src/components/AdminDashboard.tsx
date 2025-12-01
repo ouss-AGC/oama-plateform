@@ -155,17 +155,25 @@ const AdminDashboard: React.FC = () => {
             });
         };
 
+        // Load signature and stamp
         let signatureDataUrl = '';
+        let stampDataUrl = '';
         try {
             signatureDataUrl = await loadImage('/signature.png');
+            stampDataUrl = await loadImage('/golden_stamp.png');
         } catch (err) {
-            console.error('Failed to load signature:', err);
+            console.error('Failed to load assets:', err);
         }
 
         // Header with signature
         doc.setFontSize(20);
         doc.setTextColor(45, 80, 22);
         doc.text("LISTE COMPLÈTE DES RÉSULTATS", 105, 20, { align: "center" });
+
+        // Add Golden Stamp (Top Right)
+        if (stampDataUrl) {
+            doc.addImage(stampDataUrl, 'PNG', 160, 10, 30, 30);
+        }
 
         const disciplineNames: { [key: string]: string } = {
             'all': 'TOUTES',

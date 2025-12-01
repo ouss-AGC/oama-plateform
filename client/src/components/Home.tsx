@@ -57,6 +57,22 @@ const Home: React.FC = () => {
                     <img src="/academy-logo.png" alt="Logo" className="w-20 md:w-24 h-auto drop-shadow-lg" />
                 </div>
 
+                {/* Golden Stamp - Absolute Top Right with Bounce Animation */}
+                <div className="absolute top-4 right-4 md:top-8 md:right-8 animate-bounce-custom">
+                    <img src="/golden_stamp.png" alt="Golden Stamp" className="w-24 h-24 md:w-32 md:h-32 drop-shadow-xl" />
+                </div>
+
+                <style>{`
+                    @keyframes bounce-custom {
+                        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+                        40% { transform: translateY(-20px); }
+                        60% { transform: translateY(-10px); }
+                    }
+                    .animate-bounce-custom {
+                        animation: bounce-custom 3s infinite;
+                    }
+                `}</style>
+
                 {/* Header - Top Center */}
                 <div className="flex flex-col items-center mt-4 md:mt-8 mb-auto w-full">
                     <h1 className="text-4xl md:text-6xl font-extrabold text-white tracking-wider uppercase text-center drop-shadow-2xl">
