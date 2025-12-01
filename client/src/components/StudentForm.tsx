@@ -33,7 +33,7 @@ const StudentForm: React.FC = () => {
         if (validateForm()) {
             const studentData = {
                 grade,
-                fullName,
+                name: fullName,
                 className: classNameInput,
                 matricule
             };
