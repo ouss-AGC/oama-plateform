@@ -74,12 +74,9 @@ export const generateCertificate = async (result: QuizResult) => {
     doc.setFillColor(252, 248, 240);
     doc.rect(0, 0, 297, 210, 'F');
 
-    // Add decorative background with transparency
+    // Add decorative background (transparency removed for stability)
     if (bgImageDataUrl) {
-        doc.saveGraphicsState();
-        doc.setGState({ opacity: 0.70 });
         doc.addImage(bgImageDataUrl, 'PNG', 0, 0, 297, 210);
-        doc.restoreGraphicsState();
     }
 
     // Borders
