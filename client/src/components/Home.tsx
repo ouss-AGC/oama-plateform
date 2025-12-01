@@ -37,6 +37,78 @@ const Home: React.FC = () => {
         }
     };
 
+    const [showIntro, setShowIntro] = useState(true);
+
+    React.useEffect(() => {
+        // Timer to hide intro after 5 seconds
+        const timer = setTimeout(() => {
+            setShowIntro(false);
+        }, 5000);
+
+        // Text-to-Speech Logic
+        const speakIntro = () => {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance("Welcome to the Military academy OAMA plateform, enjoy your QUIZ");
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9; // Slightly slower for clarity
+                utterance.pitch = 1.1; // Slightly higher pitch for a more feminine tone
+
+                // Try to select a female voice
+                const voices = window.speechSynthesis.getVoices();
+                const femaleVoice = voices.find(v =>
+                    v.name.includes('Female') ||
+                    v.name.includes('Zira') ||
+                    v.name.includes('Google US English')
+                );
+                if (femaleVoice) {
+                    utterance.voice = femaleVoice;
+                }
+
+                window.speechSynthesis.speak(utterance);
+            }
+        };
+
+        // Attempt to speak immediately (might be blocked by browser autoplay policy)
+        // We add a small delay to ensure voices are loaded
+        setTimeout(() => {
+            speakIntro();
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (showIntro) {
+        return (
+            <div className="fixed inset-0 z-50 bg-gray-900 flex flex-col items-center justify-center overflow-hidden">
+                {/* Background with blur */}
+                <div
+                    className="absolute inset-0 bg-cover bg-center opacity-30 blur-sm"
+                    style={{ backgroundImage: "url('/academy-bg.jpg')" }}
+                ></div>
+
+                {/* Rotating Golden Stamp */}
+                <div className="relative z-10 animate-spin-slow">
+                    <img
+                        src="/golden_stamp.png"
+                        alt="Welcome Stamp"
+                        className="w-64 h-64 md:w-96 md:h-96 drop-shadow-2xl"
+                    />
+                </div>
+
+                <style>{`
+                    @keyframes spin-slow {
+                        from { transform: rotate(0deg) scale(0.5); opacity: 0; }
+                        10% { transform: rotate(36deg) scale(1); opacity: 1; }
+                        to { transform: rotate(360deg) scale(1); opacity: 1; }
+                    }
+                    .animate-spin-slow {
+                        animation: spin-slow 5s ease-out forwards;
+                    }
+                `}</style>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen relative bg-gray-900 overflow-hidden flex flex-col">
 
