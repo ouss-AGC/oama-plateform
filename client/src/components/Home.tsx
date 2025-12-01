@@ -92,7 +92,7 @@ const Home: React.FC = () => {
                 <style>{`
                     @keyframes coin-flip {
                         0% { transform: rotateY(0deg); }
-                        100% { transform: rotateY(1440deg); } /* 4 full spins in 5 seconds */
+                        100% { transform: rotateY(360deg); } /* 1 full spin in 5 seconds */
                     }
                     .animate-coin-flip {
                         animation: coin-flip 5s ease-out forwards;
