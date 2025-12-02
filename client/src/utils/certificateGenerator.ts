@@ -67,7 +67,7 @@ export const generateCertificate = async (result: QuizResult) => {
         logoDataUrl = await loadImage('/academy-logo.png');
         bgImageDataUrl = await loadImage('/cert_background.png');
         signatureDataUrl = await loadImage('/signature.png');
-        stampDataUrl = await loadImage('/golden_stamp.png');
+        stampDataUrl = await loadImage('/golden_stamp_pdf.png'); // PDF-specific stamp
     } catch (err) {
         console.error('Failed to load images:', err);
     }

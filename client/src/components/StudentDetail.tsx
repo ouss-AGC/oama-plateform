@@ -113,7 +113,7 @@ const StudentDetail: React.FC = () => {
         let stampDataUrl = '';
         try {
             scoreCircleDataUrl = await loadImage('/score_circle.png');
-            stampDataUrl = await loadImage('/golden_stamp.png');
+            stampDataUrl = await loadImage('/golden_stamp_pdf.png'); // PDF-specific stamp
         } catch (err) {
             console.error('Failed to load assets:', err);
         }
