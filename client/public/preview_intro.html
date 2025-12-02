@@ -13,19 +13,20 @@
             margin: 0;
             padding: 0;
             background-color: #000;
-            /* Pure black for movie feel */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             overflow: hidden;
             perspective: 1500px;
-            /* Deeper perspective */
+            cursor: pointer;
+            /* Indicate clickable */
         }
 
         .scene {
-            width: 60vh;
-            height: 60vh;
+            width: 85vh;
+            /* Much larger (was 60vh) */
+            height: 85vh;
             position: relative;
             transform-style: preserve-3d;
             animation: rotate-coin 7s linear infinite;
@@ -38,7 +39,6 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            /* Cuts off white corners */
             backface-visibility: visible;
         }
 
@@ -47,118 +47,207 @@
             height: 100%;
             object-fit: contain;
             border-radius: 50%;
-            /* Ensures image is clipped */
-            /* Optional: slight scale to trim edge artifacts */
             transform: scale(0.98);
         }
 
         /* 
-           Stacking layers to create 3D thickness (The "Coin" Effect) 
-           We create 20 layers from -10px to +10px
+           DOUBLED THICKNESS & DENSITY
+           40 Layers spreading from -15px to +15px (Total 30px thickness)
         */
         .layer-1 {
-            transform: translateZ(-5px);
-            filter: brightness(0.5);
+            transform: translateZ(-15px);
+            filter: brightness(0.4);
         }
 
         .layer-2 {
-            transform: translateZ(-4.5px);
-            filter: brightness(0.55);
+            transform: translateZ(-14.2px);
+            filter: brightness(0.42);
         }
 
         .layer-3 {
-            transform: translateZ(-4px);
-            filter: brightness(0.6);
+            transform: translateZ(-13.4px);
+            filter: brightness(0.44);
         }
 
         .layer-4 {
-            transform: translateZ(-3.5px);
-            filter: brightness(0.65);
+            transform: translateZ(-12.6px);
+            filter: brightness(0.46);
         }
 
         .layer-5 {
+            transform: translateZ(-11.8px);
+            filter: brightness(0.48);
+        }
+
+        .layer-6 {
+            transform: translateZ(-11px);
+            filter: brightness(0.5);
+        }
+
+        .layer-7 {
+            transform: translateZ(-10.2px);
+            filter: brightness(0.52);
+        }
+
+        .layer-8 {
+            transform: translateZ(-9.4px);
+            filter: brightness(0.54);
+        }
+
+        .layer-9 {
+            transform: translateZ(-8.6px);
+            filter: brightness(0.56);
+        }
+
+        .layer-10 {
+            transform: translateZ(-7.8px);
+            filter: brightness(0.58);
+        }
+
+        .layer-11 {
+            transform: translateZ(-7px);
+            filter: brightness(0.6);
+        }
+
+        .layer-12 {
+            transform: translateZ(-6.2px);
+            filter: brightness(0.62);
+        }
+
+        .layer-13 {
+            transform: translateZ(-5.4px);
+            filter: brightness(0.64);
+        }
+
+        .layer-14 {
+            transform: translateZ(-4.6px);
+            filter: brightness(0.66);
+        }
+
+        .layer-15 {
+            transform: translateZ(-3.8px);
+            filter: brightness(0.68);
+        }
+
+        .layer-16 {
             transform: translateZ(-3px);
             filter: brightness(0.7);
         }
 
-        .layer-6 {
-            transform: translateZ(-2.5px);
-            filter: brightness(0.75);
+        .layer-17 {
+            transform: translateZ(-2.2px);
+            filter: brightness(0.72);
         }
 
-        .layer-7 {
-            transform: translateZ(-2px);
-            filter: brightness(0.8);
+        .layer-18 {
+            transform: translateZ(-1.4px);
+            filter: brightness(0.74);
         }
 
-        .layer-8 {
-            transform: translateZ(-1.5px);
-            filter: brightness(0.85);
+        .layer-19 {
+            transform: translateZ(-0.6px);
+            filter: brightness(0.76);
         }
 
-        .layer-9 {
-            transform: translateZ(-1px);
-            filter: brightness(0.9);
-        }
-
-        .layer-10 {
-            transform: translateZ(-0.5px);
-            filter: brightness(0.95);
-        }
-
-        .layer-11 {
+        .layer-20 {
             transform: translateZ(0px);
         }
 
-        /* Center - Main Face */
-        .layer-12 {
-            transform: translateZ(0.5px);
-            filter: brightness(0.95);
+        /* Center */
+
+        .layer-21 {
+            transform: translateZ(0.6px);
+            filter: brightness(0.76);
         }
 
-        .layer-13 {
-            transform: translateZ(1px);
-            filter: brightness(0.9);
+        .layer-22 {
+            transform: translateZ(1.4px);
+            filter: brightness(0.74);
         }
 
-        .layer-14 {
-            transform: translateZ(1.5px);
-            filter: brightness(0.85);
+        .layer-23 {
+            transform: translateZ(2.2px);
+            filter: brightness(0.72);
         }
 
-        .layer-15 {
-            transform: translateZ(2px);
-            filter: brightness(0.8);
-        }
-
-        .layer-16 {
-            transform: translateZ(2.5px);
-            filter: brightness(0.75);
-        }
-
-        .layer-17 {
+        .layer-24 {
             transform: translateZ(3px);
             filter: brightness(0.7);
         }
 
-        .layer-18 {
-            transform: translateZ(3.5px);
-            filter: brightness(0.65);
+        .layer-25 {
+            transform: translateZ(3.8px);
+            filter: brightness(0.68);
         }
 
-        .layer-19 {
-            transform: translateZ(4px);
+        .layer-26 {
+            transform: translateZ(4.6px);
+            filter: brightness(0.66);
+        }
+
+        .layer-27 {
+            transform: translateZ(5.4px);
+            filter: brightness(0.64);
+        }
+
+        .layer-28 {
+            transform: translateZ(6.2px);
+            filter: brightness(0.62);
+        }
+
+        .layer-29 {
+            transform: translateZ(7px);
             filter: brightness(0.6);
         }
 
-        .layer-20 {
-            transform: translateZ(4.5px);
-            filter: brightness(0.55);
+        .layer-30 {
+            transform: translateZ(7.8px);
+            filter: brightness(0.58);
         }
 
-        .layer-21 {
-            transform: translateZ(5px);
+        .layer-31 {
+            transform: translateZ(8.6px);
+            filter: brightness(0.56);
+        }
+
+        .layer-32 {
+            transform: translateZ(9.4px);
+            filter: brightness(0.54);
+        }
+
+        .layer-33 {
+            transform: translateZ(10.2px);
+            filter: brightness(0.52);
+        }
+
+        .layer-34 {
+            transform: translateZ(11px);
             filter: brightness(0.5);
+        }
+
+        .layer-35 {
+            transform: translateZ(11.8px);
+            filter: brightness(0.48);
+        }
+
+        .layer-36 {
+            transform: translateZ(12.6px);
+            filter: brightness(0.46);
+        }
+
+        .layer-37 {
+            transform: translateZ(13.4px);
+            filter: brightness(0.44);
+        }
+
+        .layer-38 {
+            transform: translateZ(14.2px);
+            filter: brightness(0.42);
+        }
+
+        .layer-39 {
+            transform: translateZ(15px);
+            filter: brightness(0.4);
         }
 
 
@@ -171,13 +260,33 @@
                 transform: rotateY(360deg);
             }
         }
+
+        #start-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: sans-serif;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
     </style>
 </head>
 
 <body>
 
+    <div id="start-overlay">Click to Start Preview</div>
+
     <div class="scene">
-        <!-- Stack of layers to simulate thickness -->
         <div class="coin-layer layer-1"><img src="/golden_stamp.png" class="coin-img"></div>
         <div class="coin-layer layer-2"><img src="/golden_stamp.png" class="coin-img"></div>
         <div class="coin-layer layer-3"><img src="/golden_stamp.png" class="coin-img"></div>
@@ -199,7 +308,57 @@
         <div class="coin-layer layer-19"><img src="/golden_stamp.png" class="coin-img"></div>
         <div class="coin-layer layer-20"><img src="/golden_stamp.png" class="coin-img"></div>
         <div class="coin-layer layer-21"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-22"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-23"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-24"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-25"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-26"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-27"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-28"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-29"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-30"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-31"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-32"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-33"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-34"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-35"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-36"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-37"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-38"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-39"><img src="/golden_stamp.png" class="coin-img"></div>
     </div>
+
+    <script>
+        document.body.addEventListener('click', () => {
+            const overlay = document.getElementById('start-overlay');
+            if (overlay) overlay.style.display = 'none';
+
+            if ('speechSynthesis' in window) {
+                // Cancel any ongoing speech
+                window.speechSynthesis.cancel();
+
+                const utterance = new SpeechSynthesisUtterance("Welcome to the Military academy OAMA plateform, enjoy your evaluation test");
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                utterance.pitch = 1.1;
+
+                // Try to find a good female voice
+                const voices = window.speechSynthesis.getVoices();
+                // Prioritize voices that sound good
+                const femaleVoice = voices.find(v =>
+                    v.name.includes('Google US English') ||
+                    v.name.includes('Zira') ||
+                    v.name.includes('Female')
+                );
+
+                if (femaleVoice) {
+                    utterance.voice = femaleVoice;
+                }
+
+                window.speechSynthesis.speak(utterance);
+            }
+        });
+    </script>
 
 </body>
 
