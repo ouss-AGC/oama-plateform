@@ -163,9 +163,9 @@ export const generateCertificate = async (result: QuizResult) => {
         doc.addImage(signatureDataUrl, 'PNG', 200, 155, 75, 38); // 50% larger
     }
 
-    // Golden Stamp (Top Right - Safe position)
+    // Golden Stamp (Below score - Center)
     if (stampDataUrl) {
-        doc.addImage(stampDataUrl, 'PNG', 245, 10, 35, 35); // Top right corner
+        doc.addImage(stampDataUrl, 'PNG', 123.5, 155, 50, 50); // Centered below score, larger
     }
 
     // Signature text (Moved UP)
@@ -313,9 +313,9 @@ export const generateVisualCertificate = async (result: QuizResult): Promise<str
         ctx.drawImage(sigImg, canvas.width - 380, 580, 270, 135); // 50% larger
     }
 
-    // Golden Stamp (Top Right - Safe position)
+    // Golden Stamp (Below score - Center)
     if (stampImg.complete && stampImg.naturalHeight !== 0) {
-        ctx.drawImage(stampImg, canvas.width - 150, 20, 120, 120); // Top right corner
+        ctx.drawImage(stampImg, (canvas.width / 2) - 100, 520, 200, 200); // Centered below score, larger
     }
 
     ctx.textAlign = 'center';
