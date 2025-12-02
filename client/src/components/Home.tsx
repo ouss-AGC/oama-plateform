@@ -174,8 +174,8 @@ const Home: React.FC = () => {
             <div className="relative z-10 flex flex-col h-full w-full max-w-7xl mx-auto px-4 py-6">
 
                 {/* Logo - Absolute Top Left */}
-                <div className="absolute top-4 left-4 md:top-8 md:left-8 rounded-full overflow-hidden shadow-lg bg-transparent">
-                    <img src="/academy-logo.png" alt="Logo" className="w-20 md:w-24 h-auto object-cover transform scale-105" />
+                <div className="absolute top-4 left-4 md:top-8 md:left-8 rounded-xl overflow-hidden shadow-lg bg-transparent">
+                    <img src="/academy-logo.png" alt="Logo" className="w-20 md:w-24 h-auto object-contain" />
                 </div>
 
                 {/* Golden Stamp - Absolute Top Right with Bounce Animation */}
