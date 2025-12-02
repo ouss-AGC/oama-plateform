@@ -38,65 +38,120 @@ const Home: React.FC = () => {
     };
 
     const [showIntro, setShowIntro] = useState(true);
+    const [introStarted, setIntroStarted] = useState(false);
 
-    React.useEffect(() => {
-        // Timer to hide intro after 5 seconds
-        const timer = setTimeout(() => {
-            setShowIntro(false);
-        }, 5000);
+    const startExperience = () => {
+        setIntroStarted(true);
 
         // Text-to-Speech Logic
-        const speakIntro = () => {
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance("Welcome to the Military academy OAMA plateform, enjoy your QUIZ");
-                utterance.lang = 'en-US';
-                utterance.rate = 0.9; // Slightly slower for clarity
-                utterance.pitch = 1.1; // Slightly higher pitch for a more feminine tone
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance("Welcome to the Military academy OAMA plateform, enjoy your evaluation test");
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            utterance.pitch = 1.1;
 
-                // Try to select a female voice
-                const voices = window.speechSynthesis.getVoices();
-                const femaleVoice = voices.find(v =>
-                    v.name.includes('Female') ||
-                    v.name.includes('Zira') ||
-                    v.name.includes('Google US English')
-                );
-                if (femaleVoice) {
-                    utterance.voice = femaleVoice;
-                }
-
-                window.speechSynthesis.speak(utterance);
+            const voices = window.speechSynthesis.getVoices();
+            const femaleVoice = voices.find(v =>
+                v.name.includes('Google US English') ||
+                v.name.includes('Zira') ||
+                v.name.includes('Female')
+            );
+            if (femaleVoice) {
+                utterance.voice = femaleVoice;
             }
-        };
 
-        // Attempt to speak immediately (might be blocked by browser autoplay policy)
-        // We add a small delay to ensure voices are loaded
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Timer to hide intro after 15 seconds (duration of animation)
         setTimeout(() => {
-            speakIntro();
-        }, 500);
-
-        return () => clearTimeout(timer);
-    }, []);
+            setShowIntro(false);
+        }, 15000);
+    };
 
     if (showIntro) {
+        // Generate 40 layers for 3D thickness
+        // Range -15px to +15px
+        const layers = Array.from({ length: 40 }, (_, i) => {
+            const z = -15 + (i * (30 / 39)); // Distribute from -15 to 15
+            // Brightness gradient: darker at edges, lighter at center
+            const brightness = 0.4 + (0.6 * (1 - Math.abs(z) / 15));
+            return { z, brightness };
+        });
+
         return (
-            <div className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden">
-                {/* Rotating Golden Stamp - 3D Coin Flip */}
-                <div className="relative z-10 animate-coin-flip">
-                    <img
-                        src="/golden_stamp.png"
-                        alt="Welcome Stamp"
-                        className="h-[80vh] w-auto object-contain drop-shadow-2xl"
-                    />
+            <div className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-black font-sans">
+
+                {!introStarted && (
+                    <div
+                        onClick={startExperience}
+                        className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/80 text-white cursor-pointer hover:bg-black/70 transition-colors"
+                    >
+                        <div className="text-4xl font-bold uppercase tracking-widest mb-4">Click to Start</div>
+                        <div className="text-gray-400">(Turn up your volume)</div>
+                    </div>
+                )}
+
+                <div className="scene">
+                    {layers.map((layer, i) => (
+                        <div
+                            key={i}
+                            className="coin-layer"
+                            style={{
+                                transform: `translateZ(${layer.z}px)`,
+                                filter: `brightness(${layer.brightness})`
+                            }}
+                        >
+                            <img src="/golden_stamp.png" alt="" className="coin-img" />
+                            {/* Add shine to the front-most layer (approx index 39) and back-most? 
+                                Actually, let's add it to the center-ish front-facing layer for effect.
+                                Index 20 is center (0px). Let's put it on the very front (index 39) and very back (index 0)?
+                                The preview had it on layer 21 (center). Let's stick to that.
+                            */}
+                            {i === 20 && <div className="shine"></div>}
+                        </div>
+                    ))}
                 </div>
 
                 <style>{`
-                    @keyframes coin-flip {
-                        0% { transform: rotateY(0deg); }
-                        100% { transform: rotateY(360deg); } /* 1 full spin in 5 seconds */
+                    .scene {
+                        width: 85vh;
+                        height: 85vh;
+                        position: relative;
+                        transform-style: preserve-3d;
+                        animation: rotate-coin 15s linear infinite;
                     }
-                    .animate-coin-flip {
-                        animation: coin-flip 5s ease-out forwards;
-                        perspective: 1000px;
+                    .coin-layer {
+                        position: absolute;
+                        top: 0; left: 0; width: 100%; height: 100%;
+                        border-radius: 50%;
+                        backface-visibility: visible;
+                        background-color: #DAA520; /* Gold background */
+                        border: 1px solid #B8860B; /* Gold border */
+                    }
+                    .coin-img {
+                        width: 100%; height: 100%;
+                        object-fit: cover;
+                        border-radius: 50%;
+                        transform: scale(1.05); /* Crop white edges */
+                    }
+                    .shine {
+                        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                        border-radius: 50%;
+                        background: linear-gradient(135deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 70%);
+                        background-size: 200% 200%;
+                        animation: shine-sweep 3s ease-in-out infinite;
+                        pointer-events: none;
+                        z-index: 10;
+                    }
+                    @keyframes shine-sweep {
+                        0% { background-position: 200% 200%; }
+                        100% { background-position: -100% -100%; }
+                    }
+                    @keyframes rotate-coin {
+                        0% { transform: rotateY(0deg); }
+                        100% { transform: rotateY(360deg); }
                     }
                 `}</style>
             </div>
