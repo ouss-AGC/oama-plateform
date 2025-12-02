@@ -139,15 +139,15 @@ const StudentDetail: React.FC = () => {
             doc.addImage(signatureDataUrl, 'PNG', 20, 25, 75, 38); // 50% larger
         }
 
-        // Add Golden Stamp (Top Left - Below title, safe position)
-        if (stampDataUrl) {
-            doc.addImage(stampDataUrl, 'PNG', 20, 65, 35, 35); // Moved down to avoid overlap
-        }
-
         doc.setFontSize(8);
         doc.setTextColor(100);
-        doc.text("Lt Col Oussama Atoui", 57, 85, { align: "center" }); // Adjusted for new stamp position
-        doc.text("Instructeur Armes et Munitions", 57, 89, { align: "center" });
+        doc.text("Lt Col Oussama Atoui", 57, 68, { align: "center" });
+        doc.text("Instructeur Armes et Munitions", 57, 72, { align: "center" });
+
+        // Add Golden Stamp (Right side, below score circle)
+        if (stampDataUrl) {
+            doc.addImage(stampDataUrl, 'PNG', 155, 60, 50, 50); // Right side, larger, below score
+        }
 
         // Student information
         // Student information

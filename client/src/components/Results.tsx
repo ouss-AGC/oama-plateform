@@ -112,7 +112,7 @@ const Results: React.FC = () => {
         let stampDataUrl = '';
         try {
             scoreCircleDataUrl = await loadImage('/score_circle.png');
-            stampDataUrl = await loadImage('/golden_stamp.png');
+            stampDataUrl = await loadImage('/golden_stamp_pdf.png'); // PDF-specific stamp
         } catch (err) {
             console.error('Failed to load assets:', err);
         }
@@ -133,20 +133,20 @@ const Results: React.FC = () => {
         // Position text roughly in the center/left of the circle image (160 + 15, 15 + 25)
         doc.text(`${result.scoreOn20.toFixed(1)}/20`, 180, 42, { align: "center", angle: 15 }); // Added slight angle for handwritten feel
 
-        // Add signature on the left
+        // Add signature on the left (Larger for visibility)
         if (signatureDataUrl) {
-            doc.addImage(signatureDataUrl, 'PNG', 20, 25, 50, 25); // Larger and adjusted
-        }
-
-        // Add Golden Stamp
-        if (stampDataUrl) {
-            doc.addImage(stampDataUrl, 'PNG', 60, 25, 30, 30);
+            doc.addImage(signatureDataUrl, 'PNG', 20, 25, 75, 38); // 50% larger
         }
 
         doc.setFontSize(8);
         doc.setTextColor(100);
-        doc.text("Lt Col Oussama Atoui", 40, 53, { align: "center" });
-        doc.text("Instructeur Armes et Munitions", 40, 57, { align: "center" });
+        doc.text("Lt Col Oussama Atoui", 57, 68, { align: "center" });
+        doc.text("Instructeur Armes et Munitions", 57, 72, { align: "center" });
+
+        // Add Golden Stamp (Right side, below score circle)
+        if (stampDataUrl) {
+            doc.addImage(stampDataUrl, 'PNG', 155, 60, 50, 50); // Right side, larger, below score
+        }
 
         // Student information
         doc.setFontSize(14);
