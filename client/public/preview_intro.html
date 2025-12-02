@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<!DOCTYPE html>
-<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -17,26 +15,94 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+        }
+    </style>
+</head>
 
-            if ('speechSynthesis' in window) {
-                // Cancel any ongoing speech
-                window.speechSynthesis.cancel();
+<body>
+    <div id="start-overlay">
+        <div>Click to Start Preview</div>
+        <div style="font-size: 1rem; margin-top: 10px; color: #888;">(Turn up your volume)</div>
+    </div>
 
-                const utterance=new SpeechSynthesisUtterance("Welcome to the Military academy OAMA plateform, enjoy your evaluation test");
-                utterance.lang='en-US';
-                utterance.rate=0.9;
-                utterance.pitch=1.1;
+    <!-- Debug/Loading Text -->
+    <div id="loading-text" style="position: absolute; color: white; top: 20px; left: 20px; z-index: 50;">
+        Loading Scene... <br>
+        <span style="font-size: 0.8rem; color: #aaa;">If you see this but no coin, the image failed to load.</span>
+    </div>
 
-                // Try to find a good female voice
-                const voices=window.speechSynthesis.getVoices();
-                // Prioritize voices that sound good
-                const femaleVoice=voices.find(v=> v.name.includes('Google US English') || v.name.includes('Zira') || v.name.includes('Female'));
+    <div class="scene">
+        <div class="coin-layer layer-1"><img src="./golden_stamp.png" class="coin-img"
+                onerror="this.style.border='2px solid red'"></div>
+        <div class="coin-layer layer-2"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-3"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-4"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-5"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-6"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-7"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-8"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-9"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-10"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-11"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-12"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-13"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-14"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-15"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-16"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-17"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-18"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-19"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-20"><img src="./golden_stamp.png" class="coin-img"></div>
 
-                if (femaleVoice) {
-                    utterance.voice=femaleVoice;
-                }
+        <!-- Front Face with Shine -->
+        <div class="coin-layer layer-21">
+            <img src="./golden_stamp.png" class="coin-img"
+                onload="document.getElementById('loading-text').style.display='none'">
+            <div class="shine"></div>
+        </div>
 
-                window.speechSynthesis.speak(utterance);
+        <div class="coin-layer layer-22"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-23"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-24"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-25"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-26"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-27"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-28"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-29"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-30"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-31"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-32"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-33"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-34"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-35"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-36"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-37"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-38"><img src="./golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-39"><img src="./golden_stamp.png" class="coin-img"></div>
+    </div>
+
+    <script>
+        if ('speechSynthesis' in window) {
+            // Cancel any ongoing speech
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance("Welcome to the Military academy OAMA plateform, enjoy your evaluation test");
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            utterance.pitch = 1.1;
+
+            // Try to find a good female voice
+            const voices = window.speechSynthesis.getVoices();
+            // Prioritize voices that sound good
+            const femaleVoice = voices.find(v => v.name.includes('Google US English') || v.name.includes('Zira') || v.name.includes('Female'));
+
+            if (femaleVoice) {
+                utterance.voice = femaleVoice;
             }
-        });
-        </script></body></html>
+
+            window.speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+
+</html>
