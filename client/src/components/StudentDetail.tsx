@@ -134,9 +134,9 @@ const StudentDetail: React.FC = () => {
         // Position text roughly in the center/left of the circle image (160 + 15, 15 + 25)
         doc.text(`${result.scoreOn20.toFixed(1)}/20`, 180, 42, { align: "center", angle: 15 }); // Added slight angle for handwritten feel
 
-        // Add signature on the left (Larger for visibility)
+        // Add signature on the left (Reduced size)
         if (signatureDataUrl) {
-            doc.addImage(signatureDataUrl, 'PNG', 20, 25, 75, 38); // 50% larger
+            doc.addImage(signatureDataUrl, 'PNG', 20, 25, 60, 30); // Smaller signature
         }
 
         doc.setFontSize(8);
