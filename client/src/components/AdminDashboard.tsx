@@ -160,7 +160,7 @@ const AdminDashboard: React.FC = () => {
         let stampDataUrl = '';
         try {
             signatureDataUrl = await loadImage('/signature.png');
-            stampDataUrl = await loadImage('/golden_stamp.png');
+            stampDataUrl = await loadImage('/golden_stamp_pdf.png'); // PDF-specific stamp
         } catch (err) {
             console.error('Failed to load assets:', err);
         }

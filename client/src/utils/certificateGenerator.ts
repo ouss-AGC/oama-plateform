@@ -208,7 +208,7 @@ export const generateVisualCertificate = async (result: QuizResult): Promise<str
     sigImg.src = '/signature.png';
 
     const stampImg = new Image();
-    stampImg.src = '/golden_stamp.png';
+    stampImg.src = '/golden_stamp_pdf.png'; // PDF-specific stamp
 
     await new Promise<void>((resolve) => {
         let loaded = 0;
