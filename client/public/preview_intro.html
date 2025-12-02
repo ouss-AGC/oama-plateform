@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -10,53 +12,157 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #111827;
-            /* gray-900 */
+            background-color: #000;
+            /* Pure black for movie feel */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             overflow: hidden;
-            perspective: 1000px;
-            /* Essential for 3D effect */
+            perspective: 1500px;
+            /* Deeper perspective */
         }
 
-        .coin-container {
+        .scene {
+            width: 60vh;
+            height: 60vh;
             position: relative;
-            width: 80vh;
-            height: 80vh;
             transform-style: preserve-3d;
-            animation: flip-slow 7s linear infinite;
-            /* 7 seconds, continuous for preview */
+            animation: rotate-coin 7s linear infinite;
         }
 
-        .coin-face {
+        .coin-layer {
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            border-radius: 50%;
+            /* Cuts off white corners */
             backface-visibility: visible;
-            /* Let's see it from both sides */
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .coin-img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            filter: drop-shadow(0 25px 25px rgb(0 0 0 / 0.5));
+            border-radius: 50%;
+            /* Ensures image is clipped */
+            /* Optional: slight scale to trim edge artifacts */
+            transform: scale(0.98);
         }
 
         /* 
-           The user asked for "Z axis" but described a "flip".
-           - RotateY is a standard coin flip (spinning on vertical axis).
-           - RotateZ is a wheel spin (spinning on center).
-           
-           Given "coin turning over a table", RotateY is the most likely intent.
-           I will implement RotateY.
+           Stacking layers to create 3D thickness (The "Coin" Effect) 
+           We create 20 layers from -10px to +10px
         */
-        @keyframes flip-slow {
+        .layer-1 {
+            transform: translateZ(-5px);
+            filter: brightness(0.5);
+        }
+
+        .layer-2 {
+            transform: translateZ(-4.5px);
+            filter: brightness(0.55);
+        }
+
+        .layer-3 {
+            transform: translateZ(-4px);
+            filter: brightness(0.6);
+        }
+
+        .layer-4 {
+            transform: translateZ(-3.5px);
+            filter: brightness(0.65);
+        }
+
+        .layer-5 {
+            transform: translateZ(-3px);
+            filter: brightness(0.7);
+        }
+
+        .layer-6 {
+            transform: translateZ(-2.5px);
+            filter: brightness(0.75);
+        }
+
+        .layer-7 {
+            transform: translateZ(-2px);
+            filter: brightness(0.8);
+        }
+
+        .layer-8 {
+            transform: translateZ(-1.5px);
+            filter: brightness(0.85);
+        }
+
+        .layer-9 {
+            transform: translateZ(-1px);
+            filter: brightness(0.9);
+        }
+
+        .layer-10 {
+            transform: translateZ(-0.5px);
+            filter: brightness(0.95);
+        }
+
+        .layer-11 {
+            transform: translateZ(0px);
+        }
+
+        /* Center - Main Face */
+        .layer-12 {
+            transform: translateZ(0.5px);
+            filter: brightness(0.95);
+        }
+
+        .layer-13 {
+            transform: translateZ(1px);
+            filter: brightness(0.9);
+        }
+
+        .layer-14 {
+            transform: translateZ(1.5px);
+            filter: brightness(0.85);
+        }
+
+        .layer-15 {
+            transform: translateZ(2px);
+            filter: brightness(0.8);
+        }
+
+        .layer-16 {
+            transform: translateZ(2.5px);
+            filter: brightness(0.75);
+        }
+
+        .layer-17 {
+            transform: translateZ(3px);
+            filter: brightness(0.7);
+        }
+
+        .layer-18 {
+            transform: translateZ(3.5px);
+            filter: brightness(0.65);
+        }
+
+        .layer-19 {
+            transform: translateZ(4px);
+            filter: brightness(0.6);
+        }
+
+        .layer-20 {
+            transform: translateZ(4.5px);
+            filter: brightness(0.55);
+        }
+
+        .layer-21 {
+            transform: translateZ(5px);
+            filter: brightness(0.5);
+        }
+
+
+        @keyframes rotate-coin {
             0% {
                 transform: rotateY(0deg);
             }
@@ -70,16 +176,29 @@
 
 <body>
 
-    <!-- 
-        PREVIEW NOTE:
-        This animation takes exactly 7 seconds to complete one full 360° rotation.
-        It uses the Y-axis (vertical axis) to simulate a "coin flip".
-    -->
-
-    <div class="coin-container">
-        <div class="coin-face">
-            <img src="/golden_stamp.png" alt="Golden Stamp" class="coin-img">
-        </div>
+    <div class="scene">
+        <!-- Stack of layers to simulate thickness -->
+        <div class="coin-layer layer-1"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-2"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-3"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-4"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-5"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-6"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-7"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-8"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-9"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-10"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-11"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-12"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-13"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-14"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-15"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-16"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-17"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-18"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-19"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-20"><img src="/golden_stamp.png" class="coin-img"></div>
+        <div class="coin-layer layer-21"><img src="/golden_stamp.png" class="coin-img"></div>
     </div>
 
 </body>
