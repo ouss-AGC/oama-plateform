@@ -172,7 +172,7 @@ const AdminDashboard: React.FC = () => {
 
         // Add Golden Stamp (Top Right)
         if (stampDataUrl) {
-            doc.addImage(stampDataUrl, 'PNG', 160, 10, 30, 30);
+            doc.addImage(stampDataUrl, 'PNG', 160, 10, 35, 35);
         }
 
         const disciplineNames: { [key: string]: string } = {

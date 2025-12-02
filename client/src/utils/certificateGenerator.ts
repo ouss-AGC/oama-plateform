@@ -158,15 +158,14 @@ export const generateCertificate = async (result: QuizResult) => {
     doc.setTextColor(60, 60, 60);
     doc.text(`Fait le ${date}`, 60, 175, { align: "center" });
 
-    // Handwritten signature image ABOVE name (Moved UP and Resized)
+    // Handwritten signature image ABOVE name (Larger for visibility)
     if (signatureDataUrl) {
-        doc.addImage(signatureDataUrl, 'PNG', 200, 155, 50, 25); // Increased size, moved up
+        doc.addImage(signatureDataUrl, 'PNG', 200, 155, 75, 38); // 50% larger
     }
 
-    // Golden Stamp (Moved to above date - Bottom Left - Larger)
+    // Golden Stamp (Top Right - Safe position)
     if (stampDataUrl) {
-        // x=40, y=135 (Moved up slightly to accommodate larger size without hitting bottom text)
-        doc.addImage(stampDataUrl, 'PNG', 40, 135, 40, 40);
+        doc.addImage(stampDataUrl, 'PNG', 245, 10, 35, 35); // Top right corner
     }
 
     // Signature text (Moved UP)
@@ -309,15 +308,14 @@ export const generateVisualCertificate = async (result: QuizResult): Promise<str
     ctx.textAlign = 'left';
     ctx.fillText(`Fait le ${date}`, 180, 680);
 
-    // Handwritten signature ABOVE name
+    // Handwritten signature ABOVE name (Larger for visibility)
     if (sigImg.complete && sigImg.naturalHeight !== 0) {
-        ctx.drawImage(sigImg, canvas.width - 380, 580, 180, 90); // Larger
+        ctx.drawImage(sigImg, canvas.width - 380, 580, 270, 135); // 50% larger
     }
 
-    // Golden Stamp (Moved to above date - Bottom Left - Larger)
+    // Golden Stamp (Top Right - Safe position)
     if (stampImg.complete && stampImg.naturalHeight !== 0) {
-        // Adjusted coordinates for larger size (160x160)
-        ctx.drawImage(stampImg, 100, 520, 160, 160);
+        ctx.drawImage(stampImg, canvas.width - 150, 20, 120, 120); // Top right corner
     }
 
     ctx.textAlign = 'center';

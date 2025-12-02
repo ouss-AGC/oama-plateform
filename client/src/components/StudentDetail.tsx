@@ -134,20 +134,20 @@ const StudentDetail: React.FC = () => {
         // Position text roughly in the center/left of the circle image (160 + 15, 15 + 25)
         doc.text(`${result.scoreOn20.toFixed(1)}/20`, 180, 42, { align: "center", angle: 15 }); // Added slight angle for handwritten feel
 
-        // Add signature on the left
+        // Add signature on the left (Larger for visibility)
         if (signatureDataUrl) {
-            doc.addImage(signatureDataUrl, 'PNG', 20, 25, 50, 25); // Larger and adjusted
+            doc.addImage(signatureDataUrl, 'PNG', 20, 25, 75, 38); // 50% larger
         }
 
-        // Add Golden Stamp
+        // Add Golden Stamp (Top Left - Below title, safe position)
         if (stampDataUrl) {
-            doc.addImage(stampDataUrl, 'PNG', 60, 25, 30, 30);
+            doc.addImage(stampDataUrl, 'PNG', 20, 65, 35, 35); // Moved down to avoid overlap
         }
 
         doc.setFontSize(8);
         doc.setTextColor(100);
-        doc.text("Lt Col Oussama Atoui", 40, 53, { align: "center" });
-        doc.text("Instructeur Armes et Munitions", 40, 57, { align: "center" });
+        doc.text("Lt Col Oussama Atoui", 57, 85, { align: "center" }); // Adjusted for new stamp position
+        doc.text("Instructeur Armes et Munitions", 57, 89, { align: "center" });
 
         // Student information
         // Student information
