@@ -174,13 +174,13 @@ const Home: React.FC = () => {
             <div className="relative z-10 flex flex-col h-full w-full max-w-7xl mx-auto px-4 py-6">
 
                 {/* Logo - Absolute Top Left */}
-                <div className="absolute top-4 left-4 md:top-8 md:left-8">
-                    <img src="/academy-logo.png" alt="Logo" className="w-20 md:w-24 h-auto drop-shadow-lg" />
+                <div className="absolute top-4 left-4 md:top-8 md:left-8 rounded-full overflow-hidden shadow-lg bg-transparent">
+                    <img src="/academy-logo.png" alt="Logo" className="w-20 md:w-24 h-auto object-cover transform scale-105" />
                 </div>
 
                 {/* Golden Stamp - Absolute Top Right with Bounce Animation */}
-                <div className="absolute top-4 right-4 md:top-8 md:right-8 animate-bounce-custom">
-                    <img src="/golden_stamp.png" alt="Golden Stamp" className="w-24 h-24 md:w-32 md:h-32 drop-shadow-xl" />
+                <div className="absolute top-4 right-4 md:top-8 md:right-8 animate-bounce-custom rounded-full overflow-hidden shadow-xl bg-transparent">
+                    <img src="/golden_stamp.png" alt="Golden Stamp" className="w-24 h-24 md:w-32 md:h-32 object-cover transform scale-105" />
                 </div>
 
                 <style>{`
@@ -253,6 +253,13 @@ const Home: React.FC = () => {
                             Accès Administrateur
                         </button>
                     </div>
+                </div>
+
+                {/* Copyright Footer */}
+                <div className="mt-auto py-4 text-center">
+                    <p className="text-gray-500 text-xs md:text-sm font-medium tracking-wide">
+                        © {new Date().getFullYear()} All copyrights reserved to <span className="text-military-beige">Assistant Professor Oussama Atoui</span>
+                    </p>
                 </div>
 
             </div>
