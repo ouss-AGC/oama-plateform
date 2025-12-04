@@ -145,8 +145,8 @@ const Results: React.FC = () => {
 
         doc.setFontSize(8);
         doc.setTextColor(100);
-        doc.text("Lt Col Oussama Atoui", 57, 66, { align: "center" }); // Directly under signature
-        doc.text("Instructeur Armes et Munitions", 57, 70, { align: "center" });
+        doc.text("Lt Col Oussama Atoui", 50, 58, { align: "center" }); // Closer to signature
+        doc.text("Instructeur Armes et Munitions", 50, 62, { align: "center" }); // Closer to signature
 
         // Add Golden Stamp (Right side, below score circle)
         if (stampDataUrl) {
