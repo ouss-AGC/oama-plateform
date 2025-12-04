@@ -21,8 +21,8 @@ const CertificatePreview: React.FC = () => {
             for (const disc of disciplines) {
                 const dummyResult = {
                     student: {
-                        name: "Jean Dupont",
-                        grade: "Sgt",
+                        name: "Flen Ben Foulen",
+                        grade: "EOA",
                         className: "B1",
                         matricule: "12345"
                     },
