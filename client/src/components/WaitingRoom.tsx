@@ -22,7 +22,15 @@ const WaitingRoom: React.FC = () => {
                 const response = await fetch('/api/quiz-status');
                 const data = await response.json();
                 if (data.started) {
-                    navigate('/quiz');
+                    // Get quiz mode from localStorage and navigate with appropriate URL
+                    const quizMode = localStorage.getItem('quizMode');
+                    const discipline = localStorage.getItem('selectedDiscipline');
+
+                    if (quizMode === 'practice') {
+                        navigate(`/quiz?discipline=${discipline}&mode=practice`);
+                    } else {
+                        navigate('/quiz');
+                    }
                 }
             } catch (error) {
                 console.error("Polling error:", error);
