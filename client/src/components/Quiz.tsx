@@ -25,6 +25,11 @@ const Quiz: React.FC = () => {
     const TIME_LIMIT = 3600; // 1 hour in seconds
 
     useEffect(() => {
+        // Get mode from URL query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const mode = urlParams.get('mode');
+        const isPractice = mode === 'practice';
+
         const discipline = localStorage.getItem('selectedDiscipline');
         const studentInfo = localStorage.getItem('studentInfo');
 
@@ -35,7 +40,9 @@ const Quiz: React.FC = () => {
 
         const fetchQuizData = async () => {
             try {
-                const response = await fetch(`/quiz_data_${discipline}.json`);
+                // Load practice questions if mode=practice, otherwise load official questions
+                const fileName = isPractice ? `${discipline}_practice.json` : `quiz_data_${discipline}.json`;
+                const response = await fetch(`/${fileName}`);
                 if (!response.ok) throw new Error('Failed to load quiz data');
                 const data = await response.json();
                 setQuizData(data);
@@ -121,6 +128,10 @@ const Quiz: React.FC = () => {
         const scoreOn20 = (correctCount / totalQuestions) * 20;
         const timeElapsed = TIME_LIMIT - timeLeft;
 
+        // Get mode from URL to determine if this is practice
+        const urlParams = new URLSearchParams(window.location.search);
+        const isPractice = urlParams.get('mode') === 'practice';
+
         const resultData = {
             discipline: localStorage.getItem('selectedDiscipline'),
             student: JSON.parse(localStorage.getItem('studentInfo') || '{}'),
@@ -130,7 +141,8 @@ const Quiz: React.FC = () => {
             totalQuestions,
             correctCount,
             timeElapsed: timeElapsed,
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            isPractice: isPractice // Add practice flag
         };
 
         localStorage.setItem('lastQuizResult', JSON.stringify(resultData));

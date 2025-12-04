@@ -1,0 +1,530 @@
+[
+    {
+        "id": 1,
+        "question": "Quel est le calibre du Colt pistolet ?",
+        "options": [
+            "9x19 mm",
+            "7.62x51 mm",
+            "5.56x45 mm",
+            "11.43x22 mm"
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "id": 2,
+        "question": "Dans la désignation d'une munition, quelle donnée ne fait pas partie de la nomenclature ?",
+        "options": [
+            "Le calibre (ex. 7.62x51)",
+            "Le lieu de fabrication (ex. FMB)",
+            "La fonction (ex. perforante)",
+            "Le modèle (ex. SS109)"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 3,
+        "question": "Dans \"6 DUM 23\", que signifie \"DUM\" ?",
+        "options": [
+            "L'année de fabrication",
+            "Le numéro de série annuel",
+            "Le lieu de fabrication",
+            "Le type de munition"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "id": 4,
+        "question": "Quelle est la différence entre un NSN et un NC ?",
+        "options": [
+            "NSN : 8 chiffres, NC : 13 chiffres",
+            "NSN : norme tunisienne, NC : norme OTAN",
+            "NSN : code OTAN à 13 chiffres, NC : code tunisien à 8 chiffres",
+            "NSN identifie le lot, NC identifie l'état technique"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "id": 5,
+        "question": "Quel élément n'est pas un critère de classification ?",
+        "options": [
+            "Effet sur la cible",
+            "Type de poudre utilisé",
+            "Emballage",
+            "Statut administratif"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 6,
+        "question": "Une munition \"semi-encartouchée\" est une classe selon :",
+        "options": [
+            "La fabrication",
+            "L'utilisation",
+            "L'emballage",
+            "L'effet"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 7,
+        "question": "Quelle arme tire du 12.7x108 mm ?",
+        "options": [
+            "Fusil de précision Barette",
+            "Mitrailleuse lourde M2HB",
+            "Mitrailleuse 12.7 chinoise",
+            "Fusil de précision SSG"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "id": 8,
+        "question": "Qu'ont en commun l'obusier HM2 et le canon M60A3 ?",
+        "options": [
+            "Calibre 105 mm",
+            "Canons sans recul",
+            "Systèmes d'artillerie de gros calibre",
+            "Utilisent uniquement APFSDS"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 9,
+        "question": "Que signifie APFSDS?",
+        "options": [
+            "Armor Piercing Fin Stabilized Discarding Shell",
+            "Armor Piercing Fire Stabilized Discarding Sabot",
+            "Armor Piercing Fin Stabilized Discarding Sabot",
+            "Anti-Personnel Fin Stabilized Discarding Sabot"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "id": 10,
+        "question": "HEAT, HEP et HESH sont des projectiles :",
+        "options": [
+            "À énergie cinétique",
+            "À charge explosive",
+            "Perforants avec sabot",
+            "À fragmentation"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 11,
+        "question": "Quel est l'objectif du traçage des munitions ?",
+        "options": [
+            "Contrôle qualité après production",
+            "Suivi contre le trafic illicite (prolifération)",
+            "Faciliter l'inventaire",
+            "Évaluer les performances balistiques"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 12,
+        "question": "Quelles sont les étapes du traçage ?",
+        "options": [
+            "Production, stockage, destruction",
+            "Identification, cartographie, vérification",
+            "Marquage, emballage, transport",
+            "Nomenclature, lotissement, identification"
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "id": 13,
+        "question": "Symbole OTAN d'un projectile à balle traçante :",
+        "options": [
+            "Triangle",
+            "T stylisé dans cercle",
+            "Cercle",
+            "Rectangle"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 14,
+        "question": "Quelle est la couleur OTAN d'une munition d'exercice inerte (TP) ?",
+        "options": [
+            "Bleu",
+            "Jaune",
+            "Bleu foncé",
+            "Blanc"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 15,
+        "question": "Une munition avec fond vert clair indique :",
+        "options": [
+            "Fumigène",
+            "Irritant ou chimique",
+            "Éclairant",
+            "Explosif"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 16,
+        "question": "Quelle couleur est commune aux munitions incendiaires OTAN",
+        "options": [
+            "Jaune",
+            "Rouge",
+            "Noir",
+            "Blanc"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 17,
+        "question": "Une munition avec fond jaune et bande rouge est :",
+        "options": [
+            "Explosive et traçante",
+            "Explosive et incendiaire",
+            "Perforante et explosive",
+            "D'exercice avec charge active"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 18,
+        "question": "Que signifie \"WP\" sur une munition ?",
+        "options": [
+            "Weapon Practice",
+            "White Phosphorus",
+            "Warhead Piercing",
+            "Weight Point"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 19,
+        "question": "Pourquoi ne pas se fier uniquement aux couleurs d'une munition ?",
+        "options": [
+            "Elles s'estompent avec le temps",
+            "Certains marquages sont non conformes",
+            "Chaque pays OTAN a son propre code",
+            "La couleur indique seulement l'emballage"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 20,
+        "question": "Juridiquement, une munition est :",
+        "options": [
+            "Tout ce qui contient une charge propulsive",
+            "Uniquement projectiles gros calibre",
+            "Tout article approvisionné par la Division des munitions",
+            "Une cartouche, un projectile ou une grenade"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "id": 21,
+        "question": "Le \"Code situation\" (X-XX) définit :",
+        "options": [
+            "Lot et année",
+            "État technique/administratif",
+            "Position géographique",
+            "Niveau de dangerosité"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 22,
+        "question": "Quelle abréviation OTAN désigne une munition auto-propulsée ?",
+        "options": [
+            "APFSDS",
+            "RKT",
+            "GM",
+            "RAP"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 23,
+        "question": "Le symbole OTAN « V » signifie :",
+        "options": [
+            "Munition auto-propulsée",
+            "Fusée électrique",
+            "Effet superficiel",
+            "Munition à charge creuse"
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "id": 24,
+        "question": "\"APERS\" désigne une munition :",
+        "options": [
+            "Perforante",
+            "Antipersonnel",
+            "Anti-aérienne",
+            "D'exercice"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 25,
+        "question": "Quelle est la principale utilité du système de lotissement ?",
+        "options": [
+            "Attribuer un identifiant unique",
+            "Spécifier la nomenclature complète",
+            "Retirer du service uniquement les munitions défectueuses",
+            "Déterminer les symboles à apposer sur l'emballage"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "id": 26,
+        "question": "Rôle principal de l'emballage d'une munition ?",
+        "options": [
+            "Indiquer date de destruction",
+            "Identifier contenu, quantité, poids, lot",
+            "Avertir par code couleur",
+            "Servir de gargousse"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 27,
+        "question": "Sur un emballage OTAN, un rectangle indique :",
+        "options": [
+            "Balle ordinaire",
+            "Munition perforante",
+            "Munition traçante",
+            "Munition incendiaire"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 28,
+        "question": "Quelle arme n'est pas un canon anti-char ?",
+        "options": [
+            "SK105",
+            "M60 A3",
+            "Mortier 4\"2",
+            "AML90"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "id": 29,
+        "question": "L'AK47 et le SSG utilisent respectivement :",
+        "options": [
+            "5.56x45 et 7.62x39 mm",
+            "7.62x39 et 7.62x51 mm",
+            "7.62x51 et 12.7x99 mm",
+            "5.56x45 et 7.62x51 mm"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 30,
+        "question": "La fonction d'une munition APFSDS est :",
+        "options": [
+            "Perforer par énergie cinétique",
+            "Perforer par énergie chimique",
+            "Libérer des sous-munitions",
+            "Illuminer une zone"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 31,
+        "question": "Quel est l'élément le plus sûr dans l'identification ?",
+        "options": [
+            "Couleur de fond",
+            "Couleur des bandes",
+            "Couleur des textes et symboles",
+            "Texte et symbole sur la munition"
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "id": 32,
+        "question": "Quelle arme à feu n'utilise pas le 7.62x51 mm ?",
+        "options": [
+            "MG",
+            "M60E3",
+            "M30",
+            "SSJ"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "id": 33,
+        "question": "Un capteur piézo-électrique indique :",
+        "options": [
+            "Une charge creuse",
+            "Guidage infrarouge",
+            "Charge propulsive additionnelle",
+            "Mécanisme d'autodestruction"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 34,
+        "question": "En quoi diffère la munition tirée par MG et M60E3 :",
+        "options": [
+            "Bande des maillons",
+            "Calibre",
+            "Longueur de la cartouche",
+            "Couleur de la cartouche"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 35,
+        "question": "Différence entre AP et APDS ?",
+        "options": [
+            "AP est explosive, APDS cinétique",
+            "APDS a un sabot détachable",
+            "AP = armes légères, APDS = artillerie",
+            "APDS toujours traçante, AP non"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 36,
+        "question": "Le PM Steyer est du calibre :",
+        "options": [
+            "5.56x45 mm",
+            "7.62x39 mm",
+            "9x19 mm",
+            "11.43x22 mm"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "id": 37,
+        "question": "En marquage OTAN, marron signifie :",
+        "options": [
+            "Charge explosive principale",
+            "Charge propulsive",
+            "Vernis protecteur neutre",
+            "Munition fumigène"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "id": 38,
+        "question": "Que signifie HEAT ?",
+        "options": [
+            "High explosive anti tank",
+            "High explosive anti troop",
+            "High explosive Armor test",
+            "High explosive Airburst technology"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "id": 39,
+        "question": "La classification \"à gargousse\" relève de :",
+        "options": [
+            "Utilisation",
+            "Fabrication",
+            "Emballage",
+            "Effet"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 40,
+        "question": "Le Carl Gustav est :",
+        "options": [
+            "Mortier 84 mm",
+            "Canon sans recul 84 mm",
+            "Obusier 84 mm",
+            "Fusil de précision 84 mm"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 41,
+        "question": "Fonction d'une munition \"à blanc\" ?",
+        "options": [
+            "Effet létal maximal",
+            "Simuler tir sans projectile",
+            "Entraînement avec projectile inerte",
+            "Signalisation lumineuse"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 42,
+        "question": "L'artillerie de campagne HM2 105 mm tires des munitions ?",
+        "options": [
+            "Encartouchées",
+            "Séparées",
+            "Semi-encartouchées",
+            "à gargousse"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "id": 43,
+        "question": "Munition avec fond bleu et symbole « TP » :",
+        "options": [
+            "Exercice avec effet pyrotechnique",
+            "Exercice avec projectile inerte",
+            "Tir de combat réel",
+            "Détruire blindages légers"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 44,
+        "question": "Quelle est la munition utilisée pour la guerre ?",
+        "options": [
+            "Code situation 152",
+            "Code situation 241",
+            "Code situation 341",
+            "Code situation 252"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 45,
+        "question": "Pourquoi a-t-on besoin de connaitre la désignation complète d'une munition :",
+        "options": [
+            "comprendre le principe de fonctionnement des munitions",
+            "pouvoir remplir les formulaires de gestion des munitions",
+            "Se protéger des munitions",
+            "Pouvoir classer les munitions"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "id": 46,
+        "question": "La classification par fabrication signifie :",
+        "options": [
+            "Energie cinétique, énergie chimique",
+            "Munition de guerre, munition d'instruction",
+            "Munition d'artillerie, munition de canon, munition d'obusier",
+            "Munition inerte, à blanc et réelle."
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "id": 47,
+        "question": "Une munition \"ILLUM\" a un fond OTAN :",
+        "options": [
+            "Vert clair",
+            "Jaune",
+            "Rouge",
+            "Blanc"
+        ],
+        "correctAnswer": 3
+    },
+    {
+        "id": 48,
+        "question": "Symbole OTAN \"parachute\" signifie :",
+        "options": [
+            "Munition éclairante",
+            "Munition charge creuse",
+            "Munition APFSDS",
+            "Munition incendiaire"
+        ],
+        "correctAnswer": 0
+    }
+]

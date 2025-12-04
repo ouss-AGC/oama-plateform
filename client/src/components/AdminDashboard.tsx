@@ -18,6 +18,7 @@ interface QuizResult {
     timeElapsed: number;
     timestamp: number;
     discipline: string;
+    isPractice?: boolean; // Flag for practice quiz
 }
 
 const AdminDashboard: React.FC = () => {

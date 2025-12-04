@@ -227,20 +227,41 @@ const Home: React.FC = () => {
                         ))}
                     </div>
 
-                    {/* Action Button */}
+                    {/* Action Buttons */}
                     <div className="text-center mb-6">
-                        <button
-                            onClick={handleStart}
-                            disabled={!selectedDiscipline}
-                            className={`px-10 py-4 rounded-full font-bold text-lg flex items-center mx-auto transition-all duration-300 shadow-xl
+                        {selectedDiscipline === 'munitions' ? (
+                            // Two buttons for Munitions: Practice and Official
+                            <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
+                                <button
+                                    onClick={() => navigate('/quiz?discipline=munitions&mode=practice')}
+                                    className="px-8 py-4 rounded-full font-bold text-lg flex items-center transition-all duration-300 shadow-xl bg-blue-600 text-white hover:bg-blue-700 hover:scale-105 cursor-pointer"
+                                >
+                                    <Target className="mr-2 w-6 h-6" />
+                                    Test d'Évaluation (Pratique)
+                                </button>
+                                <button
+                                    onClick={() => navigate('/quiz?discipline=munitions')}
+                                    className="px-8 py-4 rounded-full font-bold text-lg flex items-center transition-all duration-300 shadow-xl bg-military-beige text-military-green hover:bg-white hover:scale-105 cursor-pointer"
+                                >
+                                    Quiz Officiel
+                                    <ChevronRight className="ml-2 w-6 h-6" />
+                                </button>
+                            </div>
+                        ) : (
+                            // Single button for other disciplines
+                            <button
+                                onClick={handleStart}
+                                disabled={!selectedDiscipline}
+                                className={`px-10 py-4 rounded-full font-bold text-lg flex items-center mx-auto transition-all duration-300 shadow-xl
                 ${selectedDiscipline
-                                    ? 'bg-military-beige text-military-green hover:bg-white hover:scale-105 cursor-pointer'
-                                    : 'bg-gray-700 text-gray-500 cursor-not-allowed opacity-50'
-                                }`}
-                        >
-                            Commencer le Quiz
-                            <ChevronRight className="ml-2 w-6 h-6" />
-                        </button>
+                                        ? 'bg-military-beige text-military-green hover:bg-white hover:scale-105 cursor-pointer'
+                                        : 'bg-gray-700 text-gray-500 cursor-not-allowed opacity-50'
+                                    }`}
+                            >
+                                Commencer le Quiz
+                                <ChevronRight className="ml-2 w-6 h-6" />
+                            </button>
+                        )}
                     </div>
 
                     {/* Admin Link */}

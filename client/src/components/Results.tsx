@@ -27,6 +27,7 @@ interface QuizResult {
     discipline: string;
     timestamp: number;
     answers: number[];
+    isPractice?: boolean; // Flag for practice quiz
 }
 
 const Results: React.FC = () => {
