@@ -25,12 +25,19 @@ const Quiz: React.FC = () => {
     const TIME_LIMIT = 3600; // 1 hour in seconds
 
     useEffect(() => {
-        // Get mode from URL query parameter
+        // Get mode and discipline from URL query parameter
         const urlParams = new URLSearchParams(window.location.search);
         const mode = urlParams.get('mode');
+        const urlDiscipline = urlParams.get('discipline');
         const isPractice = mode === 'practice';
 
-        const discipline = localStorage.getItem('selectedDiscipline');
+        // Get discipline from localStorage or URL
+        let discipline = localStorage.getItem('selectedDiscipline');
+        if (!discipline && urlDiscipline) {
+            discipline = urlDiscipline;
+            localStorage.setItem('selectedDiscipline', urlDiscipline);
+        }
+
         const studentInfo = localStorage.getItem('studentInfo');
 
         if (!discipline || !studentInfo) {
