@@ -16,26 +16,6 @@ const WaitingRoom: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        // Poll for quiz start status
-        const pollInterval = setInterval(async () => {
-            try {
-                const response = await fetch('/api/quiz-status');
-                const data = await response.json();
-                if (data.started) {
-                    // Get quiz mode from localStorage and navigate with appropriate URL
-                    const quizMode = localStorage.getItem('quizMode');
-                    const discipline = localStorage.getItem('selectedDiscipline');
-
-                    if (quizMode === 'practice') {
-                        navigate(`/quiz?discipline=${discipline}&mode=practice`);
-                    } else {
-                        navigate('/quiz');
-                    }
-                }
-            } catch (error) {
-                console.error("Polling error:", error);
-            }
-        }, 2000); // Check every 2 seconds
 
         return () => clearInterval(pollInterval);
     }, [navigate]);
