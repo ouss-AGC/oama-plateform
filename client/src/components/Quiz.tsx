@@ -40,10 +40,24 @@ const Quiz: React.FC = () => {
 
         const studentInfo = localStorage.getItem('studentInfo');
 
-        if (!discipline || !studentInfo) {
+        // Debug logs
+        console.log('Quiz component - discipline:', discipline);
+        console.log('Quiz component - studentInfo:', studentInfo);
+        console.log('Quiz component - mode:', mode);
+        console.log('Quiz component - urlDiscipline:', urlDiscipline);
+
+        if (!discipline) {
+            console.error('No discipline found, redirecting to home');
             navigate('/');
             return;
         }
+
+        // Allow quiz to load even without studentInfo for debugging
+        // if (!studentInfo) {
+        //     console.error('No studentInfo found, redirecting to home');
+        //     navigate('/');
+        //     return;
+        // }
 
         const fetchQuizData = async () => {
             try {
