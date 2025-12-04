@@ -25,6 +25,7 @@ const AdminDashboard: React.FC = () => {
     const navigate = useNavigate();
     const [results, setResults] = useState<QuizResult[]>([]);
     const [selectedDiscipline, setSelectedDiscipline] = useState<string>('all');
+    const [quizTypeFilter, setQuizTypeFilter] = useState<'all' | 'official' | 'practice'>('all'); // New filter
 
     // Session Management State
     const [pin, setPin] = useState<string | null>(null);
@@ -91,9 +92,15 @@ const AdminDashboard: React.FC = () => {
         }
     };
 
-    const filteredResults = selectedDiscipline === 'all'
-        ? results
-        : results.filter(r => r.discipline === selectedDiscipline);
+    // Filter by discipline and quiz type
+    const filteredResults = results
+        .filter(r => selectedDiscipline === 'all' || r.discipline === selectedDiscipline)
+        .filter(r => {
+            if (quizTypeFilter === 'all') return true;
+            if (quizTypeFilter === 'practice') return r.isPractice === true;
+            if (quizTypeFilter === 'official') return !r.isPractice;
+            return true;
+        });
 
     const stats = {
         totalParticipants: filteredResults.length,

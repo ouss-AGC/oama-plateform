@@ -225,6 +225,13 @@ const Results: React.FC = () => {
             style={{ backgroundImage: "url('/academy-bg.png')", backgroundSize: 'cover', backgroundBlendMode: 'overlay', backgroundColor: 'rgba(255,255,255,0.9)' }}>
 
             <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden transform transition-all hover:scale-[1.01]">
+                {/* Practice Badge */}
+                {result?.isPractice && (
+                    <div className="bg-blue-600 text-white text-center py-2 px-4 font-bold text-sm">
+                        🎯 TEST D'ÉVALUATION - PRATIQUE
+                    </div>
+                )}
+
                 <div className={`p-8 text-center ${isPass ? 'bg-military-green' : 'bg-red-600'} text-white`}>
                     {medal ? (
                         <div className="flex justify-center mb-4 animate-bounce">
@@ -242,6 +249,11 @@ const Results: React.FC = () => {
                     <p className="text-xl opacity-90">
                         {isPass ? "Vous avez réussi l'évaluation." : "Vous n'avez pas atteint le score minimum."}
                     </p>
+                    {result?.isPractice && (
+                        <p className="text-sm mt-2 opacity-80">
+                            Ceci est un test de pratique. Passez le quiz officiel pour validation.
+                        </p>
+                    )}
                 </div>
 
                 <div className="p-8">
