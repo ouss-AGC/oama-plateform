@@ -58,7 +58,11 @@ const Results: React.FC = () => {
 
             // Fetch Questions for Report
             try {
-                const questionsRes = await fetch(`/quiz_data_${parsedResult.discipline}.json`);
+                // Load practice questions if this is a practice quiz
+                const fileName = parsedResult.isPractice
+                    ? `${parsedResult.discipline}_practice.json`
+                    : `quiz_data_${parsedResult.discipline}.json`;
+                const questionsRes = await fetch(`/${fileName}`);
                 const questionsData = await questionsRes.json();
                 setQuizQuestions(questionsData.questions);
             } catch (error) {
