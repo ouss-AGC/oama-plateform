@@ -40,13 +40,13 @@ const PinEntry: React.FC = () => {
             style={{ backgroundImage: "url('/academy-bg.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
             <div className="absolute inset-0 bg-black bg-opacity-70"></div>
 
-            <div className="relative z-10 bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-600">
+            <div className="relative z-10 bg-white bg-opacity-95 backdrop-blur-lg p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-300">
                 <div className="flex flex-col items-center mb-8">
                     <div className="bg-military-green p-4 rounded-full mb-4 shadow-lg">
                         <Lock className="w-8 h-8 text-white" />
                     </div>
-                    <h2 className="text-2xl font-bold text-white uppercase tracking-wider">Accès Sécurisé</h2>
-                    <p className="text-gray-300 text-sm mt-2">Veuillez entrer le code PIN de la session</p>
+                    <h2 className="text-2xl font-bold text-gray-800 uppercase tracking-wider">Accès Sécurisé</h2>
+                    <p className="text-gray-600 text-sm mt-2">Veuillez entrer le code PIN de la session</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -56,7 +56,7 @@ const PinEntry: React.FC = () => {
                             value={pin}
                             onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
                             placeholder="000000"
-                            className="w-full bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg px-4 py-4 text-center text-3xl font-bold text-white tracking-[0.5em] focus:outline-none focus:border-military-beige transition-colors placeholder-gray-700"
+                            className="w-full bg-white border-2 border-gray-300 rounded-lg px-4 py-4 text-center text-3xl font-bold text-gray-800 tracking-[0.5em] focus:outline-none focus:border-military-green transition-colors placeholder-gray-400"
                             maxLength={6}
                         />
                     </div>
