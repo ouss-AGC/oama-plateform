@@ -33,6 +33,8 @@ const Home: React.FC = () => {
     const handleStart = () => {
         if (selectedDiscipline) {
             localStorage.setItem('selectedDiscipline', selectedDiscipline);
+            // Clear quizMode for disciplines that don't have practice mode
+            localStorage.removeItem('quizMode');
             navigate('/pin');
         }
     };
