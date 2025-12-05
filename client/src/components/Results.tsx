@@ -171,9 +171,11 @@ const Results: React.FC = () => {
         let yPos = 100;
         doc.setFontSize(16);
         doc.text("Détail des réponses", 20, yPos);
-        yPos += 10;
+        yPos += 12;
 
         doc.setFontSize(10);
+        const lineHeight = 6; // Height per line of text
+
         quizQuestions.forEach((q, index) => {
             if (yPos > 270) {
                 doc.addPage();
@@ -183,22 +185,33 @@ const Results: React.FC = () => {
             const userAnswer = result.answers[index];
             const isCorrect = userAnswer === q.correctAnswer;
 
+            // Question
             doc.setTextColor(0);
             doc.setFont("helvetica", "bold");
-            doc.text(`Q${index + 1}: ${q.question}`, 20, yPos, { maxWidth: 170 });
-            yPos += 5;
+            const questionText = `Q${index + 1}: ${q.question}`;
+            const questionLines = doc.splitTextToSize(questionText, 170);
+            doc.text(questionLines, 20, yPos);
+            yPos += questionLines.length * lineHeight + 2;
 
+            // User's answer
             doc.setFont("helvetica", "normal");
             doc.setTextColor(isCorrect ? 0 : 200, isCorrect ? 100 : 0, 0);
-            doc.text(`Réponse: ${q.options[userAnswer]} ${isCorrect ? '(Correct)' : '(Incorrect)'}`, 25, yPos, { maxWidth: 165 });
+            const answerText = `Réponse: ${q.options[userAnswer]} ${isCorrect ? '(Correct)' : '(Incorrect)'}`;
+            const answerLines = doc.splitTextToSize(answerText, 165);
+            doc.text(answerLines, 25, yPos);
+            yPos += answerLines.length * lineHeight;
 
+            // Correction if incorrect
             if (!isCorrect) {
-                yPos += 5;
+                yPos += 2;
                 doc.setTextColor(0, 100, 0);
-                doc.text(`Correction: ${q.options[q.correctAnswer]}`, 25, yPos, { maxWidth: 165 });
+                const correctionText = `Correction: ${q.options[q.correctAnswer]}`;
+                const correctionLines = doc.splitTextToSize(correctionText, 165);
+                doc.text(correctionLines, 25, yPos);
+                yPos += correctionLines.length * lineHeight;
             }
 
-            yPos += 10;
+            yPos += 8; // Space between questions
         });
 
         doc.save(`Rapport_${result.student.name}.pdf`);
