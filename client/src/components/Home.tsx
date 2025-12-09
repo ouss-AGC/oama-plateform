@@ -289,7 +289,15 @@ const Home: React.FC = () => {
                 {/* Copyright Footer */}
                 <div className="mt-auto py-4 text-center">
                     <p className="text-gray-500 text-xs md:text-sm font-medium tracking-wide">
-                        © {new Date().getFullYear()} All copyrights reserved to <span className="text-military-beige">Assistant Professor Oussama Atoui</span>
+                        © {new Date().getFullYear()} All copyrights reserved to{' '}
+                        <a
+                            href="https://www.researchgate.net/profile/Oussama-Atoui-2/publications"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-military-beige hover:text-military-green transition-colors duration-200 cursor-pointer underline decoration-dotted"
+                        >
+                            Assistant Professor Oussama Atoui
+                        </a>
                     </p>
                 </div>
 
