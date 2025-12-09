@@ -225,25 +225,20 @@ const ChartCard: React.FC<{ title: string; children: React.ReactNode; fullWidth?
     );
 
 const DifficultQuestionsChart: React.FC<{ questions: any[] }> = ({ questions }) => {
-    const mockQuestions = [
-        { id: 14, rate: 35, color: 'bg-red-500' },
-        { id: 8, rate: 42, color: 'bg-orange-500' },
-        { id: 23, rate: 48, color: 'bg-yellow-500' },
-        { id: 5, rate: 55, color: 'bg-lime-500' },
-        { id: 17, rate: 61, color: 'bg-green-500' }
-    ];
-
     return (
         <div className="space-y-4">
-            {mockQuestions.map((q) => (
+            {questions.map((q) => (
                 <div key={q.id} className="flex items-center gap-4">
-                    <span className="text-white font-bold w-12">Q{q.id}</span>
-                    <div className="flex-1 bg-gray-700 rounded-full h-8 overflow-hidden">
-                        <div
-                            className={`${q.color} h-full flex items-center justify-end pr-3 text-white font-bold text-sm transition-all duration-500`}
-                            style={{ width: `${q.rate}%` }}
-                        >
-                            {q.rate}%
+                    <span className="text-white font-bold w-8 flex-shrink-0">Q{q.id}</span>
+                    <div className="flex-1">
+                        <div className="text-xs text-gray-400 mb-1 truncate" title={q.text}>{q.text}</div>
+                        <div className="bg-gray-700 rounded-full h-6 overflow-hidden">
+                            <div
+                                className={`${q.color} h-full flex items-center justify-end pr-3 text-white font-bold text-xs transition-all duration-500`}
+                                style={{ width: `${q.rate}%` }}
+                            >
+                                {q.rate}%
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -402,13 +397,57 @@ const Treemap: React.FC = () => {
 };
 
 // Helper function to calculate question difficulty from real results
-function calculateQuestionDifficulty(results: QuizResult[]) {
-    if (results.length === 0) return [];
+// Helper function to calculate question difficulty from real results
+function calculateQuestionDifficulty(results: QuizResult[], questions: Question[]) {
+    if (results.length === 0 || questions.length === 0) return [];
 
-    // We need to load the quiz questions to analyze answers
-    // For now, return empty array - would need to fetch quiz data
-    // TODO: Fetch quiz questions and calculate success rate per question
-    return [];
+    // Initialize stats for each question
+    const stats = questions.map(q => ({
+        id: q.id,
+        text: q.question,
+        correctCount: 0,
+        totalAttempts: 0,
+        rate: 0,
+        color: ''
+    }));
+
+    // Iterate through all results
+    results.forEach(result => {
+        if (!result.answers) return;
+
+        result.answers.forEach((answerIndex, qIndex) => {
+            // Ensure we don't go out of bounds if questions changed
+            if (qIndex < stats.length) {
+                stats[qIndex].totalAttempts++;
+                // Check if answer is correct
+                // Note: questions[qIndex] corresponds to the question at that index
+                // We assume the order is preserved. 
+                // Ideally we should match by ID but results usually store answers in order.
+                if (answerIndex === questions[qIndex].correctAnswer) {
+                    stats[qIndex].correctCount++;
+                }
+            }
+        });
+    });
+
+    // Calculate rates and sort by difficulty (lowest success rate first)
+    const finalStats = stats
+        .map(s => ({
+            ...s,
+            rate: s.totalAttempts > 0 ? Math.round((s.correctCount / s.totalAttempts) * 100) : 0
+        }))
+        .sort((a, b) => a.rate - b.rate) // Sort ascending (hardest first)
+        .map(s => {
+            // Assign color based on rate
+            let color = 'bg-red-500';
+            if (s.rate >= 80) color = 'bg-green-500';
+            else if (s.rate >= 60) color = 'bg-lime-500';
+            else if (s.rate >= 40) color = 'bg-yellow-500';
+            else if (s.rate >= 20) color = 'bg-orange-500';
+            return { ...s, color };
+        });
+
+    return finalStats;
 }
 
 // Helper function to calculate time distribution
