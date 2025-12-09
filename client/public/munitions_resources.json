@@ -2,17 +2,10 @@
     "practiceExams": [
         {
             "id": 1,
-            "title": "Devoir de Contrôle N°1 - Avec Correction",
-            "description": "Chapitre 1: Introduction aux munitions et nomenclature",
-            "fileUrl": "/resources/devoir1_munitions.pdf",
+            "title": "DS et Correction ARMES ET MUNITIONS 3 LASM3",
+            "description": "Devoir surveillé avec correction complète pour LASM3",
+            "fileUrl": "/resources/DS et Correction ARMES ET MUNITIONS 3 LASM3.pdf",
             "date": "2025-01-15"
-        },
-        {
-            "id": 2,
-            "title": "Devoir de Contrôle N°2 - Avec Correction",
-            "description": "Chapitre 2: Classification et marquage des munitions",
-            "fileUrl": "/resources/devoir2_munitions.pdf",
-            "date": "2025-02-10"
         }
     ],
     "videos": [
@@ -20,22 +13,8 @@
             "id": 1,
             "title": "Chapitre 1: Types de munitions",
             "description": "Explication détaillée des différents types de munitions et leur classification",
-            "videoUrl": "https://www.youtube.com/watch?v=example1",
+            "videoUrl": "https://www.youtube.com/watch?v=VOTRE_LIEN_VIDEO_ICI",
             "duration": "15:30"
-        },
-        {
-            "id": 2,
-            "title": "Chapitre 2: Marquage OTAN",
-            "description": "Comprendre le système de marquage et de codage OTAN des munitions",
-            "videoUrl": "https://www.youtube.com/watch?v=example2",
-            "duration": "12:45"
-        },
-        {
-            "id": 3,
-            "title": "Chapitre 3: Chaîne pyrotechnique",
-            "description": "Fonctionnement de la chaîne pyrotechnique et ses composants",
-            "videoUrl": "https://www.youtube.com/watch?v=example3",
-            "duration": "18:20"
         }
     ]
 }
