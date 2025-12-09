@@ -34,8 +34,10 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ results, discipli
         ? Math.round((results.filter(r => r.scoreOn20 >= 10).length / results.length) * 100)
         : 0;
 
-    // Calculate average completion time (mock for now - would need actual time data)
-    const avgTime = 25;
+    // Calculate average completion time from real data
+    const avgTime = results.length > 0
+        ? Math.round(results.reduce((acc, r) => acc + r.timeElapsed, 0) / results.length / 60) // Convert seconds to minutes
+        : 0;
 
     // Calculate question difficulty
     const questionStats = results.length > 0 ? calculateQuestionDifficulty(results) : [];
@@ -53,9 +55,7 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ results, discipli
                         Retour
                     </button>
                     <div className="flex items-center gap-3">
-                        <div className="w-14 h-14 bg-gradient-to-br from-yellow-600 to-yellow-700 rounded-full flex items-center justify-center text-xs font-bold text-center shadow-lg">
-                            OAMA<br />LOGO
-                        </div>
+                        <img src="/academy-logo.png" alt="OAMA Logo" className="w-14 h-14" />
                         <h1 className="text-3xl font-bold bg-gradient-to-r from-yellow-500 to-white bg-clip-text text-transparent">
                             Dashboard Administrateur - Statistiques Avancées
                         </h1>
