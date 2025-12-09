@@ -11,9 +11,9 @@ interface QuizResult {
     };
     score: number;
     scoreOn20: number;
-    answers: number[];
-    discipline: string;
+    timeElapsed: number;
     timestamp: number;
+    discipline: string;
     isPractice?: boolean;
 }
 
