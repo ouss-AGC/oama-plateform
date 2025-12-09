@@ -8,13 +8,5 @@
             "date": "2025-01-15"
         }
     ],
-    "videos": [
-        {
-            "id": 1,
-            "title": "Chapitre 1: Types de munitions",
-            "description": "Explication détaillée des différents types de munitions et leur classification",
-            "videoUrl": "https://www.youtube.com/watch?v=VOTRE_LIEN_VIDEO_ICI",
-            "duration": "15:30"
-        }
-    ]
+    "videos": []
 }
