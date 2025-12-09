@@ -32,6 +32,14 @@
             "videoUrl": "https://www.youtube.com/watch?v=JlKZr2lgTac",
             "duration": "15:00",
             "chapter": "Chapitre 3"
+        },
+        {
+            "id": 4,
+            "title": "Sécurité et Manipulation des Munitions",
+            "description": "Règles de sécurité essentielles et procédures de manipulation",
+            "videoUrl": "https://www.youtube.com/watch?v=Uhz3w8-PSl8",
+            "duration": "12:00",
+            "chapter": "Chapitre 4"
         }
     ]
 }
