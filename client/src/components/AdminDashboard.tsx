@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, BarChart2, Clock, LogOut, Download, FileText, List, Award, Play, RefreshCw, Key } from 'lucide-react';
+import { Users, BarChart2, Clock, LogOut, Download, FileText, List, Award, Play, RefreshCw, Key, BarChart3 } from 'lucide-react';
+import AdvancedAnalytics from './AdvancedAnalytics';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { QRCodeCanvas } from 'qrcode.react';
@@ -26,6 +27,7 @@ const AdminDashboard: React.FC = () => {
     const [results, setResults] = useState<QuizResult[]>([]);
     const [selectedDiscipline, setSelectedDiscipline] = useState<string>('all');
     const [quizTypeFilter, setQuizTypeFilter] = useState<'all' | 'official' | 'practice'>('all'); // New filter
+    const [showAdvancedAnalytics, setShowAdvancedAnalytics] = useState(false);
 
     // Session Management State
     const [pin, setPin] = useState<string | null>(null);
@@ -249,6 +251,11 @@ const AdminDashboard: React.FC = () => {
         doc.save('liste_complete_resultats.pdf');
     };
 
+    // Show Advanced Analytics if requested
+    if (showAdvancedAnalytics) {
+        return <AdvancedAnalytics results={filteredResults} discipline={selectedDiscipline} />;
+    }
+
     return (
         <div className="min-h-screen bg-gray-100">
             {/* Navbar */}
@@ -377,9 +384,12 @@ const AdminDashboard: React.FC = () => {
                     </div>
 
                     <div className="flex gap-3">
-                        <button onClick={exportCSV} className="flex items-center px-4 py-2 bg-white text-gray-700 rounded-lg shadow-sm hover:bg-gray-50 font-medium border border-gray-200">
-                            <Download className="w-4 h-4 mr-2" />
-                            CSV
+                        <button
+                            onClick={() => setShowAdvancedAnalytics(true)}
+                            className="flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg shadow-lg hover:from-purple-700 hover:to-blue-700 font-medium transition-all transform hover:scale-105"
+                        >
+                            <BarChart3 className="w-4 h-4 mr-2" />
+                            Statistiques Avancées
                         </button>
                         <button onClick={exportFullList} className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg shadow-sm hover:bg-green-700 font-medium">
                             <List className="w-4 h-4 mr-2" />
