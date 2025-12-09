@@ -79,25 +79,25 @@ const Resources: React.FC = () => {
                                 Devoirs de Contrôle avec Corrections
                             </h2>
                             <p className="text-gray-300 mb-6">
-                                Téléchargez les devoirs de contrôle avec leurs corrections pour vous préparer au quiz.
+                                Consultez les devoirs de contrôle avec leurs corrections pour vous préparer au quiz.
                             </p>
 
                             {resources.practiceExams.length > 0 ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-6">
                                     {resources.practiceExams.map((exam) => (
-                                        <div key={exam.id} className="bg-gray-800 bg-opacity-50 rounded-lg p-4 border border-gray-700 hover:border-military-beige transition-colors">
-                                            <h3 className="text-lg font-semibold text-white mb-2">{exam.title}</h3>
-                                            <p className="text-gray-400 text-sm mb-3">{exam.description}</p>
-                                            <div className="flex items-center justify-between">
+                                        <div key={exam.id} className="bg-gray-800 bg-opacity-50 rounded-lg p-4 border border-gray-700">
+                                            <div className="mb-4">
+                                                <h3 className="text-xl font-semibold text-white mb-2">{exam.title}</h3>
+                                                <p className="text-gray-400 text-sm mb-1">{exam.description}</p>
                                                 <span className="text-xs text-gray-500">{new Date(exam.date).toLocaleDateString('fr-FR')}</span>
-                                                <a
-                                                    href={exam.fileUrl}
-                                                    download
-                                                    className="flex items-center px-4 py-2 bg-military-green text-white rounded-lg hover:bg-opacity-80 transition-all"
-                                                >
-                                                    <Download className="w-4 h-4 mr-2" />
-                                                    Télécharger PDF
-                                                </a>
+                                            </div>
+                                            {/* Embedded PDF Viewer */}
+                                            <div className="w-full h-[800px] bg-white rounded-lg overflow-hidden">
+                                                <iframe
+                                                    src={exam.fileUrl}
+                                                    className="w-full h-full"
+                                                    title={exam.title}
+                                                />
                                             </div>
                                         </div>
                                     ))}
