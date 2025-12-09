@@ -259,7 +259,8 @@ const AdminDashboard: React.FC = () => {
 
     // Show Advanced Analytics if requested
     if (showAdvancedAnalytics) {
-        return <AdvancedAnalytics results={filteredResults} discipline={selectedDiscipline} />;
+        // Pass quizType to allow fetching correct questions
+        return <AdvancedAnalytics results={filteredResults} discipline={selectedDiscipline} quizType={quizTypeFilter} />;
     }
 
     return (
