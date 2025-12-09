@@ -79,6 +79,12 @@ const AdminDashboard: React.FC = () => {
             const data = await res.json();
             setPin(data.pin);
             setQuizStatus('waiting');
+
+            // Clear all previous quiz results for a fresh session
+            localStorage.removeItem('quizHistory');
+            setResults([]); // Clear results from state
+
+            console.log('✅ Nouveau PIN généré. Toutes les données de test ont été effacées.');
         } catch (err) {
             console.error("Failed to generate PIN:", err);
         }
