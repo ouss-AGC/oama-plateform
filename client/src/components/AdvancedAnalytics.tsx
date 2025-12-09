@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Users, TrendingUp, CheckCircle, Clock } from 'lucide-react';
 
@@ -15,15 +15,67 @@ interface QuizResult {
     timestamp: number;
     discipline: string;
     isPractice?: boolean;
+    answers?: (number | null)[];
 }
 
 interface AdvancedAnalyticsProps {
     results: QuizResult[];
     discipline: string;
+    quizType: string;
 }
 
-const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ results, discipline }) => {
+interface Question {
+    id: number;
+    question: string;
+    options: string[];
+    correctAnswer: number;
+}
+
+interface QuizData {
+    title: string;
+    questions: Question[];
+}
+
+const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ results, discipline, quizType }) => {
     const navigate = useNavigate();
+    const [questions, setQuestions] = useState<Question[]>([]);
+    const [loadingQuestions, setLoadingQuestions] = useState(false);
+
+    useEffect(() => {
+        const fetchQuestions = async () => {
+            if (discipline === 'all' || quizType === 'all') {
+                setQuestions([]);
+                return;
+            }
+
+            setLoadingQuestions(true);
+            try {
+                // Determine filename based on discipline and quiz type
+                // If quizType is 'official', use quiz_data_{discipline}.json
+                // If quizType is 'practice', use {discipline}_practice.json
+                // Note: This logic assumes these file naming conventions exist
+                const fileName = quizType === 'practice'
+                    ? `${discipline}_practice.json`
+                    : `quiz_data_${discipline}.json`;
+
+                const response = await fetch(`/${fileName}`);
+                if (response.ok) {
+                    const data: QuizData = await response.json();
+                    setQuestions(data.questions);
+                } else {
+                    console.error("Failed to load quiz questions");
+                    setQuestions([]);
+                }
+            } catch (error) {
+                console.error("Error fetching questions:", error);
+                setQuestions([]);
+            } finally {
+                setLoadingQuestions(false);
+            }
+        };
+
+        fetchQuestions();
+    }, [discipline, quizType]);
 
     // Calculate statistics
     const totalParticipants = results.length;
@@ -40,7 +92,9 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ results, discipli
         : 0;
 
     // Calculate question difficulty
-    const questionStats = results.length > 0 ? calculateQuestionDifficulty(results) : [];
+    const questionStats = (results.length > 0 && questions.length > 0)
+        ? calculateQuestionDifficulty(results, questions)
+        : [];
 
     // Calculate time distribution
     const timeDistribution = calculateTimeDistribution(results);
@@ -103,7 +157,17 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ results, discipli
             {/* Charts Row 1 */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 <ChartCard title="📉 Questions les Plus Difficiles">
-                    <DifficultQuestionsChart questions={questionStats.slice(0, 5)} />
+                    {(discipline === 'all' || quizType === 'all') ? (
+                        <div className="h-64 flex items-center justify-center text-center p-4 text-gray-400">
+                            <p>Veuillez sélectionner une discipline spécifique et un type de quiz (Officiel/Pratique) pour voir l'analyse détaillée par question.</p>
+                        </div>
+                    ) : loadingQuestions ? (
+                        <div className="h-64 flex items-center justify-center text-gray-400">Chargement des questions...</div>
+                    ) : questionStats.length === 0 ? (
+                        <div className="h-64 flex items-center justify-center text-gray-400">Aucune donnée disponible</div>
+                    ) : (
+                        <DifficultQuestionsChart questions={questionStats.slice(0, 5)} />
+                    )}
                 </ChartCard>
                 <ChartCard title="⏰ Analyse du Temps de Complétion">
                     <TimeAnalysisChart timeData={timeDistribution} />
