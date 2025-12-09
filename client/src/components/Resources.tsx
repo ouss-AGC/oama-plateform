@@ -53,7 +53,7 @@ const Resources: React.FC = () => {
                 {/* Header */}
                 <div className="flex items-center mb-8">
                     <button
-                        onClick={() => navigate(-1)}
+                        onClick={() => navigate('/', { state: { skipIntro: true } })}
                         className="flex items-center text-military-beige hover:text-white transition-colors mr-4"
                     >
                         <ArrowLeft className="w-6 h-6 mr-2" />

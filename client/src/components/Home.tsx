@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Shield, Target, Flame, ChevronRight, Lock, BookOpen } from 'lucide-react';
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [selectedDiscipline, setSelectedDiscipline] = useState<string | null>(null);
 
     const disciplines = [
@@ -41,6 +42,13 @@ const Home: React.FC = () => {
 
     const [showIntro, setShowIntro] = useState(true);
     const [introStarted, setIntroStarted] = useState(false);
+
+    // Skip intro if coming from Resources page
+    useEffect(() => {
+        if (location.state?.skipIntro) {
+            setShowIntro(false);
+        }
+    }, [location]);
 
     const startExperience = () => {
         setIntroStarted(true);
