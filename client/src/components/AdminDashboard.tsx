@@ -92,7 +92,7 @@ const AdminDashboard: React.FC = () => {
         }
     };
 
-    // Filter by discipline and quiz type
+    // Filter by discipline and quiz type, then sort by matricule
     const filteredResults = results
         .filter(r => selectedDiscipline === 'all' || r.discipline === selectedDiscipline)
         .filter(r => {
@@ -100,6 +100,12 @@ const AdminDashboard: React.FC = () => {
             if (quizTypeFilter === 'practice') return r.isPractice === true;
             if (quizTypeFilter === 'official') return !r.isPractice;
             return true;
+        })
+        .sort((a, b) => {
+            // Sort by matricule in ascending order (1, 2, 3, ...)
+            const matriculeA = parseInt(a.student.matricule) || 0;
+            const matriculeB = parseInt(b.student.matricule) || 0;
+            return matriculeA - matriculeB;
         });
 
     const stats = {
