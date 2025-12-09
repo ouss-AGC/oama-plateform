@@ -8,5 +8,13 @@
             "date": "2025-01-15"
         }
     ],
-    "videos": []
+    "videos": [
+        {
+            "id": 1,
+            "title": "Généralités sur les Munitions - Introduction",
+            "description": "Vidéo explicative sur les généralités des munitions",
+            "videoUrl": "https://www.youtube.com/shorts/w15p8ymX97k",
+            "duration": "1:00"
+        }
+    ]
 }
