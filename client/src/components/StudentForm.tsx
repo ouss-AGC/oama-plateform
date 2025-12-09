@@ -11,12 +11,28 @@ const StudentForm: React.FC = () => {
     const [matricule, setMatricule] = useState('');
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+    const [discipline, setDiscipline] = useState('');
+
     useEffect(() => {
-        const discipline = localStorage.getItem('selectedDiscipline');
-        if (!discipline) {
+        const storedDiscipline = localStorage.getItem('selectedDiscipline');
+        if (!storedDiscipline) {
             navigate('/');
+        } else {
+            setDiscipline(storedDiscipline);
         }
     }, [navigate]);
+
+    // Generate class options based on discipline
+    const getClassOptions = () => {
+        if (discipline === 'munitions') {
+            return Array.from({ length: 10 }, (_, i) => `LASM ${301 + i}`);
+        } else {
+            return Array.from({ length: 10 }, (_, i) => `LASM ${201 + i}`);
+        }
+    };
+
+    // Generate matricule options
+    const matriculeOptions = Array.from({ length: 32 }, (_, i) => (i + 1).toString());
 
     const validateForm = () => {
         const newErrors: { [key: string]: string } = {};
@@ -121,13 +137,18 @@ const StudentForm: React.FC = () => {
                                 <Users className="w-4 h-4 mr-2 text-military-green" />
                                 Classe
                             </label>
-                            <input
-                                type="text"
+                            <select
                                 value={classNameInput}
                                 onChange={(e) => setClassNameInput(e.target.value)}
-                                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-military-green transition-colors"
-                                placeholder="Ex: 2ème Année Info"
-                            />
+                                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-military-green transition-colors bg-white"
+                            >
+                                <option value="">Sélectionner une classe</option>
+                                {getClassOptions().map((cls) => (
+                                    <option key={cls} value={cls}>
+                                        {cls}
+                                    </option>
+                                ))}
+                            </select>
                             {errors.className && <p className="text-red-500 text-xs mt-1">{errors.className}</p>}
                         </div>
 
@@ -137,13 +158,18 @@ const StudentForm: React.FC = () => {
                                 <FileText className="w-4 h-4 mr-2 text-military-green" />
                                 Numéro (Registre)
                             </label>
-                            <input
-                                type="text"
+                            <select
                                 value={matricule}
                                 onChange={(e) => setMatricule(e.target.value)}
-                                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-military-green transition-colors"
-                                placeholder="Ex: 12345"
-                            />
+                                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-military-green transition-colors bg-white"
+                            >
+                                <option value="">Sélectionner un numéro</option>
+                                {matriculeOptions.map((num) => (
+                                    <option key={num} value={num}>
+                                        {num}
+                                    </option>
+                                ))}
+                            </select>
                             {errors.matricule && <p className="text-red-500 text-xs mt-1">{errors.matricule}</p>}
                         </div>
 
