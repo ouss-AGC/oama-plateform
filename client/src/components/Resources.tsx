@@ -16,7 +16,7 @@ interface VideoResource {
     description: string;
     videoUrl: string;
     duration: string;
-    chapter?: string;
+    category?: string;
 }
 
 interface ResourcesData {
@@ -106,14 +106,14 @@ const Resources: React.FC = () => {
                             <div className="flex items-center justify-between mb-6">
                                 <h2 className="text-3xl font-bold text-white flex items-center">
                                     <Play className="w-8 h-8 mr-3 text-red-400 animate-pulse" />
-                                    Vidéos Explicatives
+                                    Animations 3D Didactiques
                                 </h2>
                                 <span className="bg-red-500 text-white px-4 py-2 rounded-full text-sm font-bold">
                                     À VOIR ABSOLUMENT
                                 </span>
                             </div>
                             <p className="text-gray-200 mb-6 text-lg">
-                                📺 Regardez ces vidéos dans l'ordre pour une compréhension progressive du cours.
+                                🎬 Visualisations 3D pour comprendre le fonctionnement des différents types de munitions vus en classe.
                             </p>
 
                             {resources.videos.length > 0 ? (
@@ -125,8 +125,8 @@ const Resources: React.FC = () => {
                                                     {index + 1}
                                                 </div>
                                                 <div className="flex-1">
-                                                    {video.chapter && (
-                                                        <span className="text-xs text-red-400 font-semibold">{video.chapter}</span>
+                                                    {video.category && (
+                                                        <span className="text-xs text-red-400 font-semibold">{video.category}</span>
                                                     )}
                                                     <h3 className="text-xl font-bold text-white mb-1">{video.title}</h3>
                                                     <span className="text-xs text-gray-400 flex items-center">

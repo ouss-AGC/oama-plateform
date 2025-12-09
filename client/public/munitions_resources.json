@@ -11,35 +11,35 @@
     "videos": [
         {
             "id": 1,
-            "title": "Introduction - Généralités sur les Munitions",
-            "description": "Découvrez les concepts de base et la nomenclature des munitions",
+            "title": "Animation 3D - Généralités sur les Munitions",
+            "description": "Explication visuelle 3D des concepts fondamentaux des munitions",
             "videoUrl": "https://www.youtube.com/shorts/w15p8ymX97k",
             "duration": "1:00",
-            "chapter": "Chapitre 1"
+            "category": "Animation 3D"
         },
         {
             "id": 2,
-            "title": "Classification et Types de Munitions",
-            "description": "Approfondissement sur les différents types et classifications",
+            "title": "Animation 3D - Fonctionnement des Munitions d'Artillerie",
+            "description": "Visualisation 3D du mécanisme de fonctionnement des munitions d'artillerie",
             "videoUrl": "https://www.youtube.com/watch?v=-kxczGn8Puo",
             "duration": "10:00",
-            "chapter": "Chapitre 2"
+            "category": "Animation 3D"
         },
         {
             "id": 3,
-            "title": "Chaîne Pyrotechnique et Fonctionnement",
-            "description": "Comprendre le fonctionnement détaillé de la chaîne pyrotechnique",
+            "title": "Animation 3D - Chaîne Pyrotechnique",
+            "description": "Démonstration 3D détaillée de la chaîne pyrotechnique et ses composants",
             "videoUrl": "https://www.youtube.com/watch?v=JlKZr2lgTac",
             "duration": "15:00",
-            "chapter": "Chapitre 3"
+            "category": "Animation 3D"
         },
         {
             "id": 4,
-            "title": "Sécurité et Manipulation des Munitions",
-            "description": "Règles de sécurité essentielles et procédures de manipulation",
+            "title": "Animation 3D - Munitions Spéciales",
+            "description": "Explication visuelle 3D du fonctionnement des munitions spéciales",
             "videoUrl": "https://www.youtube.com/watch?v=Uhz3w8-PSl8",
             "duration": "12:00",
-            "chapter": "Chapitre 4"
+            "category": "Animation 3D"
         }
     ]
 }
