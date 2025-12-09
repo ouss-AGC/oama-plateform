@@ -11,17 +11,27 @@
     "videos": [
         {
             "id": 1,
-            "title": "Généralités sur les Munitions - Introduction",
-            "description": "Vidéo explicative sur les généralités des munitions",
+            "title": "Introduction - Généralités sur les Munitions",
+            "description": "Découvrez les concepts de base et la nomenclature des munitions",
             "videoUrl": "https://www.youtube.com/shorts/w15p8ymX97k",
-            "duration": "1:00"
+            "duration": "1:00",
+            "chapter": "Chapitre 1"
         },
         {
             "id": 2,
-            "title": "Chapitre 2 - Approfondissement",
-            "description": "Vidéo explicative approfondie sur les munitions",
+            "title": "Classification et Types de Munitions",
+            "description": "Approfondissement sur les différents types et classifications",
             "videoUrl": "https://www.youtube.com/watch?v=-kxczGn8Puo",
-            "duration": "10:00"
+            "duration": "10:00",
+            "chapter": "Chapitre 2"
+        },
+        {
+            "id": 3,
+            "title": "Chaîne Pyrotechnique et Fonctionnement",
+            "description": "Comprendre le fonctionnement détaillé de la chaîne pyrotechnique",
+            "videoUrl": "https://www.youtube.com/watch?v=JlKZr2lgTac",
+            "duration": "15:00",
+            "chapter": "Chapitre 3"
         }
     ]
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, BookOpen, Video, FileText, Download, ExternalLink } from 'lucide-react';
+import { ArrowLeft, BookOpen, Video, FileText, ExternalLink, CheckCircle, Play, Award } from 'lucide-react';
 
 interface PracticeExam {
     id: number;
@@ -16,6 +16,7 @@ interface VideoResource {
     description: string;
     videoUrl: string;
     duration: string;
+    chapter?: string;
 }
 
 interface ResourcesData {
@@ -72,14 +73,94 @@ const Resources: React.FC = () => {
                     </div>
                 ) : (
                     <div className="space-y-8">
+                        {/* Motivational Banner */}
+                        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl p-6 border-2 border-purple-400 shadow-2xl">
+                            <div className="flex items-center mb-3">
+                                <Award className="w-8 h-8 text-yellow-300 mr-3" />
+                                <h2 className="text-2xl font-bold text-white">Préparez-vous pour Réussir ! 🎯</h2>
+                            </div>
+                            <p className="text-white text-lg mb-4">
+                                Consultez ces ressources pour maximiser vos chances de succès au quiz officiel.
+                            </p>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                                <div className="bg-white bg-opacity-20 rounded-lg p-3">
+                                    <Video className="w-6 h-6 text-yellow-300 mx-auto mb-2" />
+                                    <p className="text-white font-semibold">{resources.videos.length} Vidéos</p>
+                                    <p className="text-gray-200 text-sm">Explications détaillées</p>
+                                </div>
+                                <div className="bg-white bg-opacity-20 rounded-lg p-3">
+                                    <FileText className="w-6 h-6 text-yellow-300 mx-auto mb-2" />
+                                    <p className="text-white font-semibold">{resources.practiceExams.length} Devoir</p>
+                                    <p className="text-gray-200 text-sm">Avec corrections</p>
+                                </div>
+                                <div className="bg-white bg-opacity-20 rounded-lg p-3">
+                                    <CheckCircle className="w-6 h-6 text-green-300 mx-auto mb-2" />
+                                    <p className="text-white font-semibold">100% Gratuit</p>
+                                    <p className="text-gray-200 text-sm">Accès illimité</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Videos Section - Priority */}
+                        <section className="bg-gradient-to-br from-red-900 to-red-700 bg-opacity-20 backdrop-blur-md rounded-xl p-6 border-2 border-red-500 shadow-xl">
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-3xl font-bold text-white flex items-center">
+                                    <Play className="w-8 h-8 mr-3 text-red-400 animate-pulse" />
+                                    Vidéos Explicatives
+                                </h2>
+                                <span className="bg-red-500 text-white px-4 py-2 rounded-full text-sm font-bold">
+                                    À VOIR ABSOLUMENT
+                                </span>
+                            </div>
+                            <p className="text-gray-200 mb-6 text-lg">
+                                📺 Regardez ces vidéos dans l'ordre pour une compréhension progressive du cours.
+                            </p>
+
+                            {resources.videos.length > 0 ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {resources.videos.map((video, index) => (
+                                        <div key={video.id} className="bg-gray-900 bg-opacity-70 rounded-xl p-5 border-2 border-gray-700 hover:border-red-400 transition-all transform hover:scale-105 shadow-lg">
+                                            <div className="flex items-start mb-4">
+                                                <div className="bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-3 flex-shrink-0">
+                                                    {index + 1}
+                                                </div>
+                                                <div className="flex-1">
+                                                    {video.chapter && (
+                                                        <span className="text-xs text-red-400 font-semibold">{video.chapter}</span>
+                                                    )}
+                                                    <h3 className="text-xl font-bold text-white mb-1">{video.title}</h3>
+                                                    <span className="text-xs text-gray-400 flex items-center">
+                                                        <Video className="w-3 h-3 mr-1" />
+                                                        {video.duration}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <p className="text-gray-300 text-sm mb-4">{video.description}</p>
+                                            <a
+                                                href={video.videoUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center justify-center w-full px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all font-bold shadow-lg"
+                                            >
+                                                <Play className="w-5 h-5 mr-2" />
+                                                Regarder Maintenant
+                                            </a>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-gray-400 italic">Aucune vidéo disponible pour le moment.</p>
+                            )}
+                        </section>
+
                         {/* Practice Exams Section */}
                         <section className="bg-white bg-opacity-10 backdrop-blur-md rounded-xl p-6 border border-gray-600">
                             <h2 className="text-2xl font-bold text-military-beige mb-4 flex items-center">
                                 <FileText className="w-6 h-6 mr-2" />
-                                Devoirs de Contrôle avec Corrections
+                                Devoir de Contrôle avec Correction
                             </h2>
                             <p className="text-gray-300 mb-6">
-                                Consultez les devoirs de contrôle avec leurs corrections pour vous préparer au quiz.
+                                📄 Consultez le devoir avec sa correction pour vous entraîner.
                             </p>
 
                             {resources.practiceExams.length > 0 ? (
@@ -92,7 +173,7 @@ const Resources: React.FC = () => {
                                                 <span className="text-xs text-gray-500">{new Date(exam.date).toLocaleDateString('fr-FR')}</span>
                                             </div>
                                             {/* Embedded PDF Viewer */}
-                                            <div className="w-full h-[800px] bg-white rounded-lg overflow-hidden">
+                                            <div className="w-full h-[800px] bg-white rounded-lg overflow-hidden shadow-xl">
                                                 <iframe
                                                     src={exam.fileUrl}
                                                     className="w-full h-full"
@@ -107,52 +188,19 @@ const Resources: React.FC = () => {
                             )}
                         </section>
 
-                        {/* Videos Section */}
-                        <section className="bg-white bg-opacity-10 backdrop-blur-md rounded-xl p-6 border border-gray-600">
-                            <h2 className="text-2xl font-bold text-military-beige mb-4 flex items-center">
-                                <Video className="w-6 h-6 mr-2" />
-                                Vidéos Explicatives
-                            </h2>
-                            <p className="text-gray-300 mb-6">
-                                Regardez les vidéos explicatives des chapitres vus en classe.
+                        {/* Call to Action */}
+                        <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-xl p-6 border-2 border-green-400 shadow-2xl text-center">
+                            <CheckCircle className="w-16 h-16 text-white mx-auto mb-4" />
+                            <h3 className="text-2xl font-bold text-white mb-3">Prêt à Tester Vos Connaissances ?</h3>
+                            <p className="text-white mb-6 text-lg">
+                                Après avoir consulté ces ressources, passez au test d'évaluation (pratique) pour vous entraîner, puis au quiz officiel !
                             </p>
-
-                            {resources.videos.length > 0 ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {resources.videos.map((video) => (
-                                        <div key={video.id} className="bg-gray-800 bg-opacity-50 rounded-lg p-4 border border-gray-700 hover:border-military-beige transition-colors">
-                                            <div className="flex items-start mb-3">
-                                                <div className="bg-military-green bg-opacity-20 p-2 rounded-lg mr-3">
-                                                    <Video className="w-6 h-6 text-military-beige" />
-                                                </div>
-                                                <div className="flex-1">
-                                                    <h3 className="text-lg font-semibold text-white mb-1">{video.title}</h3>
-                                                    <span className="text-xs text-gray-500">{video.duration}</span>
-                                                </div>
-                                            </div>
-                                            <p className="text-gray-400 text-sm mb-3">{video.description}</p>
-                                            <a
-                                                href={video.videoUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="flex items-center justify-center w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all"
-                                            >
-                                                <ExternalLink className="w-4 h-4 mr-2" />
-                                                Regarder la vidéo
-                                            </a>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="text-gray-400 italic">Aucune vidéo disponible pour le moment.</p>
-                            )}
-                        </section>
-
-                        {/* Info Box */}
-                        <div className="bg-blue-900 bg-opacity-30 border border-blue-500 rounded-lg p-4">
-                            <p className="text-blue-200 text-sm">
-                                💡 <strong>Conseil :</strong> Consultez ces ressources avant de passer le test d'évaluation (pratique) pour mieux vous préparer au quiz officiel.
-                            </p>
+                            <button
+                                onClick={() => navigate('/', { state: { skipIntro: true } })}
+                                className="px-8 py-4 bg-white text-green-700 rounded-full font-bold text-lg hover:bg-gray-100 transition-all shadow-lg transform hover:scale-105"
+                            >
+                                Retour aux Quiz →
+                            </button>
                         </div>
                     </div>
                 )}
@@ -162,3 +210,4 @@ const Resources: React.FC = () => {
 };
 
 export default Resources;
+
