@@ -42,6 +42,9 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ results, discipli
     // Calculate question difficulty
     const questionStats = results.length > 0 ? calculateQuestionDifficulty(results) : [];
 
+    // Calculate time distribution
+    const timeDistribution = calculateTimeDistribution(results);
+
     return (
         <div className="min-h-screen bg-gray-900 text-white p-6">
             {/* Header */}
@@ -103,7 +106,7 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ results, discipli
                     <DifficultQuestionsChart questions={questionStats.slice(0, 5)} />
                 </ChartCard>
                 <ChartCard title="⏰ Analyse du Temps de Complétion">
-                    <TimeAnalysisChart />
+                    <TimeAnalysisChart timeData={timeDistribution} />
                 </ChartCard>
             </div>
 
@@ -185,24 +188,34 @@ const DifficultQuestionsChart: React.FC<{ questions: any[] }> = ({ questions }) 
     );
 };
 
-const TimeAnalysisChart: React.FC = () => (
-    <div className="h-64 flex items-end justify-around gap-2">
-        {[
-            { time: '10min', count: 2, color: 'bg-red-500', label: 'Trop Rapide' },
-            { time: '15min', count: 3, color: 'bg-red-400', label: '' },
-            { time: '20min', count: 5, color: 'bg-green-500', label: 'Normal' },
-            { time: '25min', count: 8, color: 'bg-green-500', label: '' },
-            { time: '30min', count: 4, color: 'bg-green-400', label: '' },
-            { time: '35min', count: 3, color: 'bg-orange-500', label: 'Trop Lent' },
-            { time: '40min', count: 2, color: 'bg-orange-400', label: '' }
-        ].map((item, i) => (
-            <div key={i} className="flex flex-col items-center flex-1">
-                <div className={`${item.color} w-full rounded-t-lg transition-all duration-500`} style={{ height: `${item.count * 30}px` }}></div>
-                <span className="text-xs text-gray-400 mt-2">{item.time}</span>
+const TimeAnalysisChart: React.FC<{ timeData: any[] }> = ({ timeData }) => {
+    // Use real data if available, otherwise show empty state
+    if (timeData.length === 0) {
+        return (
+            <div className="h-64 flex items-center justify-center text-gray-400">
+                <p>Aucune donnée disponible. Les participants doivent d'abord passer le quiz.</p>
             </div>
-        ))}
-    </div>
-);
+        );
+    }
+
+    const maxCount = Math.max(...timeData.map(d => d.count));
+
+    return (
+        <div className="h-64 flex items-end justify-around gap-2">
+            {timeData.map((item, i) => (
+                <div key={i} className="flex flex-col items-center flex-1">
+                    <div
+                        className={`${item.color} w-full rounded-t-lg transition-all duration-500 flex items-end justify-center pb-1`}
+                        style={{ height: `${(item.count / maxCount) * 200}px`, minHeight: '30px' }}
+                    >
+                        <span className="text-white font-bold text-xs">{item.count}</span>
+                    </div>
+                    <span className="text-xs text-gray-400 mt-2">{item.label}</span>
+                </div>
+            ))}
+        </div>
+    );
+};
 
 const ThemesDonutChart: React.FC = () => {
     const themes = [
@@ -324,11 +337,37 @@ const Treemap: React.FC = () => {
     );
 };
 
-// Helper function to calculate question difficulty
+// Helper function to calculate question difficulty from real results
 function calculateQuestionDifficulty(results: QuizResult[]) {
-    // This would calculate actual statistics from results
-    // For now returning mock data
+    if (results.length === 0) return [];
+
+    // We need to load the quiz questions to analyze answers
+    // For now, return empty array - would need to fetch quiz data
+    // TODO: Fetch quiz questions and calculate success rate per question
     return [];
+}
+
+// Helper function to calculate time distribution
+function calculateTimeDistribution(results: QuizResult[]) {
+    if (results.length === 0) return [];
+
+    const timeRanges = [
+        { label: '< 10min', min: 0, max: 600, count: 0, color: 'bg-red-500' },
+        { label: '10-15min', min: 600, max: 900, count: 0, color: 'bg-red-400' },
+        { label: '15-20min', min: 900, max: 1200, count: 0, color: 'bg-green-500' },
+        { label: '20-25min', min: 1200, max: 1500, count: 0, color: 'bg-green-500' },
+        { label: '25-30min', min: 1500, max: 1800, count: 0, color: 'bg-green-400' },
+        { label: '30-40min', min: 1800, max: 2400, count: 0, color: 'bg-orange-500' },
+        { label: '> 40min', min: 2400, max: Infinity, count: 0, color: 'bg-orange-400' }
+    ];
+
+    results.forEach(result => {
+        const timeInSeconds = result.timeElapsed;
+        const range = timeRanges.find(r => timeInSeconds >= r.min && timeInSeconds < r.max);
+        if (range) range.count++;
+    });
+
+    return timeRanges.filter(r => r.count > 0);
 }
 
 export default AdvancedAnalytics;
