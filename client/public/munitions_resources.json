@@ -15,6 +15,13 @@
             "description": "Vidéo explicative sur les généralités des munitions",
             "videoUrl": "https://www.youtube.com/shorts/w15p8ymX97k",
             "duration": "1:00"
+        },
+        {
+            "id": 2,
+            "title": "Chapitre 2 - Approfondissement",
+            "description": "Vidéo explicative approfondie sur les munitions",
+            "videoUrl": "https://www.youtube.com/watch?v=-kxczGn8Puo",
+            "duration": "10:00"
         }
     ]
 }
