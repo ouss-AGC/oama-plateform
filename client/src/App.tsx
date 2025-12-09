@@ -8,6 +8,7 @@ import Results from './components/Results';
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
 import StudentDetail from './components/StudentDetail';
+import Resources from './components/Resources';
 
 import CertificatePreview from './components/CertificatePreview';
 
@@ -16,6 +17,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/resources" element={<Resources />} />
         <Route path="/pin" element={<PinEntry />} />
         <Route path="/register" element={<StudentForm />} />
         <Route path="/waiting-room" element={<WaitingRoom />} />

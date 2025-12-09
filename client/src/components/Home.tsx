@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Shield, Target, Flame, ChevronRight, Lock } from 'lucide-react';
+import { Shield, Target, Flame, ChevronRight, Lock, BookOpen } from 'lucide-react';
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
@@ -232,30 +232,39 @@ const Home: React.FC = () => {
                     {/* Action Buttons */}
                     <div className="text-center mb-6">
                         {selectedDiscipline === 'munitions' ? (
-                            // Two buttons for Munitions: Practice and Official
-                            <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
+                            // Three buttons for Munitions: Resources, Practice, and Official
+                            <div className="flex flex-col gap-3 justify-center items-center">
                                 <button
-                                    onClick={() => {
-                                        localStorage.setItem('selectedDiscipline', 'munitions');
-                                        localStorage.setItem('quizMode', 'practice'); // Store mode for later
-                                        navigate('/pin');
-                                    }}
-                                    className="px-8 py-4 rounded-full font-bold text-lg flex items-center transition-all duration-300 shadow-xl bg-blue-600 text-white hover:bg-blue-700 hover:scale-105 cursor-pointer"
+                                    onClick={() => navigate('/resources')}
+                                    className="px-8 py-3 rounded-full font-bold text-base flex items-center transition-all duration-300 shadow-xl bg-purple-600 text-white hover:bg-purple-700 hover:scale-105 cursor-pointer"
                                 >
-                                    <Target className="mr-2 w-6 h-6" />
-                                    Test d'Évaluation (Pratique)
+                                    <BookOpen className="mr-2 w-5 h-5" />
+                                    Ressources
                                 </button>
-                                <button
-                                    onClick={() => {
-                                        localStorage.setItem('selectedDiscipline', 'munitions');
-                                        localStorage.setItem('quizMode', 'official'); // Store mode for later
-                                        navigate('/pin');
-                                    }}
-                                    className="px-8 py-4 rounded-full font-bold text-lg flex items-center transition-all duration-300 shadow-xl bg-military-beige text-military-green hover:bg-white hover:scale-105 cursor-pointer"
-                                >
-                                    Quiz Officiel
-                                    <ChevronRight className="ml-2 w-6 h-6" />
-                                </button>
+                                <div className="flex flex-col md:flex-row gap-3 w-full justify-center">
+                                    <button
+                                        onClick={() => {
+                                            localStorage.setItem('selectedDiscipline', 'munitions');
+                                            localStorage.setItem('quizMode', 'practice');
+                                            navigate('/pin');
+                                        }}
+                                        className="px-6 py-3 rounded-full font-bold text-base flex items-center justify-center transition-all duration-300 shadow-xl bg-blue-600 text-white hover:bg-blue-700 hover:scale-105 cursor-pointer"
+                                    >
+                                        <Target className="mr-2 w-5 h-5" />
+                                        Test d'Évaluation (Pratique)
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            localStorage.setItem('selectedDiscipline', 'munitions');
+                                            localStorage.setItem('quizMode', 'official');
+                                            navigate('/pin');
+                                        }}
+                                        className="px-6 py-3 rounded-full font-bold text-base flex items-center justify-center transition-all duration-300 shadow-xl bg-military-beige text-military-green hover:bg-white hover:scale-105 cursor-pointer"
+                                    >
+                                        Quiz Officiel
+                                        <ChevronRight className="ml-2 w-5 h-5" />
+                                    </button>
+                                </div>
                             </div>
                         ) : (
                             // Single button for other disciplines
