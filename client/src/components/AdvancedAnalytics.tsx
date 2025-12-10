@@ -337,35 +337,44 @@ const RadarChartComponent: React.FC = () => {
     );
 };
 
-const ConfusionMatrix: React.FC = () => {
-    const matrix = [
-        ['', 'A', 'B', 'C', 'D'],
-        ['A', '2', '1', '0', '1'],
-        ['B ✓', '9', '9', '2', '1'],
-        ['C', '1', '0', '4', '2'],
-        ['D', '0', '1', '1', '0']
-    ];
+const AnswerDistributionChart: React.FC<{ distribution: any }> = ({ distribution }) => {
+    if (!distribution) return null;
 
-    const getCellColor = (row: number, col: number, value: string) => {
-        if (row === 0 || col === 0) return 'bg-yellow-900 bg-opacity-30 text-yellow-500';
-        if (row === 2 && col === 2) return 'bg-gradient-to-br from-green-600 to-green-700';
-        if (row === 2 && col === 1 && value === '9') return 'bg-gradient-to-br from-red-600 to-red-700';
-        if (parseInt(value) >= 2) return 'bg-gradient-to-br from-orange-600 to-orange-700';
-        return 'bg-gray-700 bg-opacity-50';
-    };
+    const options = ['A', 'B', 'C', 'D'];
+    const maxCount = Math.max(...Object.values(distribution.counts) as number[], 1);
 
     return (
-        <div className="grid grid-cols-5 gap-2 max-w-2xl mx-auto">
-            {matrix.map((row, i) =>
-                row.map((cell, j) => (
-                    <div
-                        key={`${i}-${j}`}
-                        className={`aspect-square flex items-center justify-center font-bold text-lg rounded-lg ${getCellColor(i, j, cell)}`}
-                    >
-                        {cell}
+        <div className="flex-1 flex items-end justify-around gap-4 px-4 h-64">
+            {options.map((option) => {
+                const count = distribution.counts[option] || 0;
+                const isCorrect = option === distribution.correctAnswer;
+                const percentage = Math.round((count / distribution.total) * 100) || 0;
+
+                let barColor = 'bg-gray-600';
+                if (isCorrect) barColor = 'bg-green-500';
+                else if (count > 0) barColor = 'bg-red-500';
+
+                return (
+                    <div key={option} className="flex flex-col items-center flex-1 h-full justify-end group">
+                        <div className="mb-2 text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                            {count} ({percentage}%)
+                        </div>
+                        <div
+                            className={`${barColor} w-full max-w-[60px] rounded-t-lg transition-all duration-500 relative`}
+                            style={{ height: `${(count / maxCount) * 100}%`, minHeight: count > 0 ? '20px' : '4px' }}
+                        >
+                            {isCorrect && (
+                                <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-green-400 bg-gray-900 rounded-full p-1">
+                                    <CheckCircle size={16} />
+                                </div>
+                            )}
+                        </div>
+                        <div className={`mt-3 w-8 h-8 rounded-full flex items-center justify-center font-bold ${isCorrect ? 'bg-green-900 text-green-400 border border-green-500' : 'bg-gray-800 text-gray-400 border border-gray-700'}`}>
+                            {option}
+                        </div>
                     </div>
-                ))
-            )}
+                );
+            })}
         </div>
     );
 };
