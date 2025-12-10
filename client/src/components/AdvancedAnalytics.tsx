@@ -22,6 +22,7 @@ interface AdvancedAnalyticsProps {
     results: QuizResult[];
     discipline: string;
     quizType: string;
+    onBack: () => void;
 }
 
 interface Question {
@@ -36,7 +37,7 @@ interface QuizData {
     questions: Question[];
 }
 
-const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ results, discipline, quizType }) => {
+const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ results, discipline, quizType, onBack }) => {
     const navigate = useNavigate();
     const [questions, setQuestions] = useState<Question[]>([]);
     const [loadingQuestions, setLoadingQuestions] = useState(false);
@@ -105,7 +106,7 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ results, discipli
             <div className="bg-gray-800 bg-opacity-50 rounded-xl p-6 mb-6 flex justify-between items-center">
                 <div className="flex items-center gap-4">
                     <button
-                        onClick={() => navigate('/admin/dashboard')}
+                        onClick={onBack}
                         className="flex items-center text-yellow-500 hover:text-yellow-400 transition-colors"
                     >
                         <ArrowLeft className="w-6 h-6 mr-2" />

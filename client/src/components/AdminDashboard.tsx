@@ -260,7 +260,12 @@ const AdminDashboard: React.FC = () => {
     // Show Advanced Analytics if requested
     if (showAdvancedAnalytics) {
         // Pass quizType to allow fetching correct questions
-        return <AdvancedAnalytics results={filteredResults} discipline={selectedDiscipline} quizType={quizTypeFilter} />;
+        return <AdvancedAnalytics
+            results={filteredResults}
+            discipline={selectedDiscipline}
+            quizType={quizTypeFilter}
+            onBack={() => setShowAdvancedAnalytics(false)}
+        />;
     }
 
     return (
@@ -441,7 +446,7 @@ const AdminDashboard: React.FC = () => {
                         <table className="w-full text-left">
                             <thead className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
                                 <tr>
-                                    <th className="px-6 py-3 font-medium">Rang</th>
+                                    <th className="px-6 py-3 font-medium">Matricule</th>
                                     <th className="px-6 py-3 font-medium">Grade</th>
                                     <th className="px-6 py-3 font-medium">Nom</th>
                                     <th className="px-6 py-3 font-medium">Classe</th>
@@ -459,14 +464,18 @@ const AdminDashboard: React.FC = () => {
                                     </tr>
                                 ) : (
                                     filteredResults
-                                        .sort((a, b) => b.scoreOn20 - a.scoreOn20)
+                                        .sort((a, b) => {
+                                            const matA = parseInt(a.student.matricule) || 0;
+                                            const matB = parseInt(b.student.matricule) || 0;
+                                            return matA - matB;
+                                        })
                                         .map((result, index) => (
                                             <tr
                                                 key={index}
                                                 className="hover:bg-gray-50 transition-colors cursor-pointer"
                                                 onClick={() => navigate(`/admin/student/${result.timestamp}`)}
                                             >
-                                                <td className="px-6 py-4 text-gray-500 font-mono">#{index + 1}</td>
+                                                <td className="px-6 py-4 font-bold text-gray-900">{result.student.matricule}</td>
                                                 <td className="px-6 py-4 font-medium text-gray-900">{result.student.grade}</td>
                                                 <td className="px-6 py-4 text-gray-900">{result.student.name}</td>
                                                 <td className="px-6 py-4 text-gray-600">{result.student.className}</td>
