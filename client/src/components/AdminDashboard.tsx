@@ -397,7 +397,12 @@ const AdminDashboard: React.FC = () => {
 
                     <div className="flex gap-3">
                         <button
-                            onClick={() => setShowAdvancedAnalytics(true)}
+                            onClick={() => {
+                                setShowAdvancedAnalytics(true);
+                                if (quizTypeFilter === 'all') {
+                                    setQuizTypeFilter('official');
+                                }
+                            }}
                             className="flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg shadow-lg hover:from-purple-700 hover:to-blue-700 font-medium transition-all transform hover:scale-105"
                         >
                             <BarChart3 className="w-4 h-4 mr-2" />
