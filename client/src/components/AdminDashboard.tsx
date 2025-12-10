@@ -130,18 +130,18 @@ const AdminDashboard: React.FC = () => {
     };
 
     const exportCSV = () => {
-        const headers = ["Grade", "Nom", "Classe", "Matricule", "Discipline", "Score /20", "Temps (s)", "Date"];
+        const headers = ["N° Registre", "Grade", "Nom", "Classe", "Score /20", "Temps (s)", "Date", "Discipline"];
         const csvContent = [
             headers.join(','),
             ...filteredResults.map(r => [
+                r.student.matricule,
                 r.student.grade,
                 r.student.name,
                 r.student.className,
-                r.student.matricule,
-                r.discipline,
                 r.scoreOn20.toFixed(2),
                 r.timeElapsed,
-                new Date(r.timestamp).toLocaleDateString()
+                new Date(r.timestamp).toLocaleDateString(),
+                r.discipline
             ].join(','))
         ].join('\n');
 
@@ -228,8 +228,8 @@ const AdminDashboard: React.FC = () => {
         doc.setTextColor(0);
         doc.text(`Participants: ${stats.totalParticipants} | Moyenne: ${stats.averageScore.toFixed(2)}/20 | Réussite: ${Math.round(stats.passRate)}%`, 105, 80, { align: "center" });
 
-        const tableData = filteredResults.map((r, index) => [
-            index + 1,
+        const tableData = filteredResults.map((r) => [
+            r.student.matricule,
             r.student.grade,
             r.student.name,
             r.student.className,
@@ -238,7 +238,7 @@ const AdminDashboard: React.FC = () => {
 
         autoTable(doc, {
             startY: 90,
-            head: [['#', 'Grade', 'Nom', 'Classe', 'Note /20']],
+            head: [['N° Registre', 'Grade', 'Nom', 'Classe', 'Note /20']],
             body: tableData,
             theme: 'grid',
             headStyles: { fillColor: [45, 80, 22] },
