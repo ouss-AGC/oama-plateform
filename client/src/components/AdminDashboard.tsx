@@ -494,7 +494,8 @@ const AdminDashboard: React.FC = () => {
                                                         {new Date(result.timestamp).toLocaleDateString()}
                                                     </td>
                                                 </tr>
-                                            ))
+                                            );
+                                        })
                                 )}
                             </tbody>
                         </table>
