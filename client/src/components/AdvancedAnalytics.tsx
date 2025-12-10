@@ -451,6 +451,43 @@ function calculateQuestionDifficulty(results: QuizResult[], questions: Question[
     return finalStats;
 }
 
+// Helper function to calculate answer distribution for a specific question
+function calculateAnswerDistribution(results: QuizResult[], questionId: number, questions: Question[]) {
+    const question = questions.find(q => q.id === questionId);
+    if (!question) return null;
+
+    const counts: { [key: string]: number } = { 'A': 0, 'B': 0, 'C': 0, 'D': 0 };
+    let total = 0;
+
+    // Map index to letter (0 -> A, 1 -> B, etc.)
+    const indexToLetter = ['A', 'B', 'C', 'D'];
+    const correctAnswerLetter = indexToLetter[question.correctAnswer];
+
+    results.forEach(result => {
+        if (!result.answers) return;
+
+        // Find the index of this question in the quiz (assuming order is preserved)
+        // This is tricky if we don't have the original index. 
+        // We assume questions array matches the answers array order.
+        const qIndex = questions.findIndex(q => q.id === questionId);
+
+        if (qIndex !== -1 && qIndex < result.answers.length) {
+            const answerIndex = result.answers[qIndex];
+            if (answerIndex !== null && answerIndex >= 0 && answerIndex < 4) {
+                const letter = indexToLetter[answerIndex];
+                counts[letter]++;
+                total++;
+            }
+        }
+    });
+
+    return {
+        counts,
+        total,
+        correctAnswer: correctAnswerLetter
+    };
+}
+
 // Helper function to calculate time distribution
 function calculateTimeDistribution(results: QuizResult[]) {
     if (results.length === 0) return [];

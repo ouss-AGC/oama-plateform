@@ -446,14 +446,15 @@ const AdminDashboard: React.FC = () => {
                         <table className="w-full text-left">
                             <thead className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
                                 <tr>
-                                    <th className="px-6 py-3 font-medium">Matricule</th>
-                                    <th className="px-6 py-3 font-medium">Grade</th>
-                                    <th className="px-6 py-3 font-medium">Nom</th>
-                                    <th className="px-6 py-3 font-medium">Classe</th>
-                                    <th className="px-6 py-3 font-medium">Score</th>
-                                    <th className="px-6 py-3 font-medium">Temps</th>
-                                    <th className="px-6 py-3 font-medium">Date</th>
-                                </tr>
+                                    <tr>
+                                        <th className="px-6 py-3 font-medium">N° Registre</th>
+                                        <th className="px-6 py-3 font-medium">Grade</th>
+                                        <th className="px-6 py-3 font-medium">Nom</th>
+                                        <th className="px-6 py-3 font-medium">Classe</th>
+                                        <th className="px-6 py-3 font-medium">Score</th>
+                                        <th className="px-6 py-3 font-medium">Temps</th>
+                                        <th className="px-6 py-3 font-medium">Date</th>
+                                    </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
                                 {filteredResults.length === 0 ? (
@@ -469,30 +470,32 @@ const AdminDashboard: React.FC = () => {
                                             const matB = parseInt(b.student.matricule) || 0;
                                             return matA - matB;
                                         })
-                                        .map((result, index) => (
-                                            <tr
-                                                key={index}
-                                                className="hover:bg-gray-50 transition-colors cursor-pointer"
-                                                onClick={() => navigate(`/admin/student/${result.timestamp}`)}
-                                            >
-                                                <td className="px-6 py-4 font-bold text-gray-900">{result.student.matricule}</td>
-                                                <td className="px-6 py-4 font-medium text-gray-900">{result.student.grade}</td>
-                                                <td className="px-6 py-4 text-gray-900">{result.student.name}</td>
-                                                <td className="px-6 py-4 text-gray-600">{result.student.className}</td>
-                                                <td className="px-6 py-4">
-                                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                        .map((result, index) => {
+                                            console.log(`Row ${index}:`, result.student); // Debug log
+                                            return (
+                                                <tr
+                                                    key={index}
+                                                    className="hover:bg-gray-50 transition-colors cursor-pointer"
+                                                    onClick={() => navigate(`/admin/student/${result.timestamp}`)}
+                                                >
+                                                    <td className="px-6 py-4 font-bold text-gray-900">{result.student.matricule}</td>
+                                                    <td className="px-6 py-4 font-medium text-gray-900">{result.student.grade}</td>
+                                                    <td className="px-6 py-4 text-gray-900">{result.student.name}</td>
+                                                    <td className="px-6 py-4 text-gray-600">{result.student.className}</td>
+                                                    <td className="px-6 py-4">
+                                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                               ${result.scoreOn20 >= 10 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                                                        {result.scoreOn20.toFixed(1)}/20
-                                                    </span>
-                                                </td>
-                                                <td className="px-6 py-4 text-gray-500 text-sm">
-                                                    {Math.floor(result.timeElapsed / 60)}:{(result.timeElapsed % 60).toString().padStart(2, '0')}
-                                                </td>
-                                                <td className="px-6 py-4 text-gray-400 text-sm">
-                                                    {new Date(result.timestamp).toLocaleDateString()}
-                                                </td>
-                                            </tr>
-                                        ))
+                                                            {result.scoreOn20.toFixed(1)}/20
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-gray-500 text-sm">
+                                                        {Math.floor(result.timeElapsed / 60)}:{(result.timeElapsed % 60).toString().padStart(2, '0')}
+                                                    </td>
+                                                    <td className="px-6 py-4 text-gray-400 text-sm">
+                                                        {new Date(result.timestamp).toLocaleDateString()}
+                                                    </td>
+                                                </tr>
+                                            ))
                                 )}
                             </tbody>
                         </table>
