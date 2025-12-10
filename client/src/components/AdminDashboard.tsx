@@ -446,15 +446,14 @@ const AdminDashboard: React.FC = () => {
                         <table className="w-full text-left">
                             <thead className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
                                 <tr>
-                                    <tr>
-                                        <th className="px-6 py-3 font-medium">N° Registre</th>
-                                        <th className="px-6 py-3 font-medium">Grade</th>
-                                        <th className="px-6 py-3 font-medium">Nom</th>
-                                        <th className="px-6 py-3 font-medium">Classe</th>
-                                        <th className="px-6 py-3 font-medium">Score</th>
-                                        <th className="px-6 py-3 font-medium">Temps</th>
-                                        <th className="px-6 py-3 font-medium">Date</th>
-                                    </tr>
+                                    <th className="px-6 py-3 font-medium">N° Registre</th>
+                                    <th className="px-6 py-3 font-medium">Grade</th>
+                                    <th className="px-6 py-3 font-medium">Nom</th>
+                                    <th className="px-6 py-3 font-medium">Classe</th>
+                                    <th className="px-6 py-3 font-medium">Score</th>
+                                    <th className="px-6 py-3 font-medium">Temps</th>
+                                    <th className="px-6 py-3 font-medium">Date</th>
+                                </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
                                 {filteredResults.length === 0 ? (
