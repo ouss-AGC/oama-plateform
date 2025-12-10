@@ -97,6 +97,12 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ results, discipli
         ? calculateQuestionDifficulty(results, questions)
         : [];
 
+    // Get the most difficult question for detailed analysis
+    const mostDifficultQuestion = questionStats.length > 0 ? questionStats[0] : null;
+    const answerDistribution = mostDifficultQuestion
+        ? calculateAnswerDistribution(results, mostDifficultQuestion.id, questions)
+        : null;
+
     // Calculate time distribution
     const timeDistribution = calculateTimeDistribution(results);
 
@@ -186,14 +192,23 @@ const AdvancedAnalytics: React.FC<AdvancedAnalyticsProps> = ({ results, discipli
             </div>
 
             {/* Confusion Matrix */}
-            <ChartCard title="🔍 Matrice de Confusion - Question 14" fullWidth>
-                <p className="text-gray-400 text-sm mb-4">
-                    "Dans la méthode d'intégration temporelle directe, quelle est la différence clé..."
-                </p>
-                <ConfusionMatrix />
-                <p className="mt-4 text-gray-300">
-                    💡 <strong>Insight:</strong> 35% des participants ont choisi A au lieu de B - Confusion sur les procédures implicites vs explicites
-                </p>
+            {/* Answer Distribution for Most Difficult Question */}
+            <ChartCard title={`🔍 Analyse des Réponses - Question ${mostDifficultQuestion ? mostDifficultQuestion.id : ''}`} fullWidth>
+                {!mostDifficultQuestion ? (
+                    <div className="h-64 flex items-center justify-center text-gray-400">
+                        <p>Sélectionnez une discipline pour voir l'analyse détaillée.</p>
+                    </div>
+                ) : (
+                    <div className="flex flex-col h-full">
+                        <p className="text-gray-400 text-sm mb-4 text-center">
+                            "{mostDifficultQuestion.text}"
+                        </p>
+                        <AnswerDistributionChart distribution={answerDistribution} />
+                        <p className="mt-4 text-gray-300 text-center">
+                            💡 <strong>Insight:</strong> {Math.round(100 - mostDifficultQuestion.rate)}% des participants ont échoué à cette question.
+                        </p>
+                    </div>
+                )}
             </ChartCard>
 
             {/* Treemap */}
