@@ -197,6 +197,30 @@ const Quiz: React.FC = () => {
     // For explosions: red at 20 minutes (1200s), for others: red at 5 minutes (300s)
     const warningThreshold = discipline === 'explosions' ? 1200 : 300;
     const isTimeRunningOut = timeLeft < warningThreshold;
+    // Blinking in last 10 minutes
+    const isBlinking = timeLeft < 600; // Last 10 minutes
+
+    // Show time-over modal when time reaches 0
+    if (timeLeft === 0) {
+        return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
+                <div className="bg-white rounded-2xl p-12 max-w-2xl mx-4 text-center shadow-2xl">
+                    <div className="mb-6">
+                        <Clock className="w-24 h-24 mx-auto text-red-600 animate-pulse" />
+                    </div>
+                    <h1 className="text-4xl font-bold text-gray-800 mb-4">Time is Over</h1>
+                    <p className="text-xl text-gray-600 mb-2">
+                        Your responses will be automatically submitted to your instructor for instant grading.
+                    </p>
+                    <p className="text-2xl font-bold text-military-green mt-6">Good Luck! 🍀</p>
+                    <div className="mt-8">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-military-green mx-auto"></div>
+                        <p className="text-gray-500 mt-4">Submitting your exam...</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col">
@@ -208,7 +232,8 @@ const Quiz: React.FC = () => {
                         <h1 className="font-bold text-lg hidden md:block">{quizData.title}</h1>
                     </div>
                     <div className="flex items-center space-x-6">
-                        <div className={`flex items-center px-6 py-3 rounded-full shadow-lg ${isTimeRunningOut ? 'bg-red-600 animate-pulse' : 'bg-green-800'}`}>
+                        <div className={`flex items-center px-6 py-3 rounded-full shadow-lg transition-all ${isTimeRunningOut ? 'bg-red-600' : 'bg-green-800'
+                            } ${isBlinking ? 'animate-pulse' : ''}`}>
                             <Clock className="w-6 h-6 mr-3" />
                             <span className="font-mono font-bold text-2xl">{formatTime(timeLeft)}</span>
                         </div>
@@ -321,15 +346,17 @@ const Quiz: React.FC = () => {
                         </button>
 
                         <div className="flex gap-3">
-                            {currentQuestionIndex === quizData.questions.length - 1 ? (
-                                <button
-                                    onClick={() => finishQuiz(answers)}
-                                    className="px-8 py-3 rounded-lg font-bold text-white bg-military-green hover:bg-green-800 shadow-lg flex items-center transition-all"
-                                >
-                                    Terminer le Quiz
-                                    <Save className="ml-2 w-5 h-5" />
-                                </button>
-                            ) : (
+                            {/* Submit Exam Button - Always visible */}
+                            <button
+                                onClick={() => finishQuiz(answers)}
+                                className="px-8 py-3 rounded-lg font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-lg flex items-center transition-all"
+                            >
+                                Submit Exam
+                                <Save className="ml-2 w-5 h-5" />
+                            </button>
+
+                            {/* Next button - only if not on last question */}
+                            {currentQuestionIndex < quizData.questions.length - 1 && (
                                 <button
                                     onClick={handleNext}
                                     className="px-8 py-3 rounded-lg font-bold text-white bg-military-green hover:bg-green-800 shadow-lg flex items-center transition-all"
