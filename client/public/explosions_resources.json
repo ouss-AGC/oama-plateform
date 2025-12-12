@@ -1,0 +1,12 @@
+{
+    "practiceExams": [
+        {
+            "id": 1,
+            "title": "Examen GC31 - Calcul des effets des explosions sur les structures",
+            "description": "Examen complet sur le calcul des effets des explosions avec exercices pratiques",
+            "fileUrl": "/resources/exam_explosions_gc31.pdf",
+            "date": "2025-12-12"
+        }
+    ],
+    "videos": []
+}

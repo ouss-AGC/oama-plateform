@@ -32,11 +32,19 @@ const Resources: React.FC = () => {
     useEffect(() => {
         const fetchResources = async () => {
             try {
-                const response = await fetch('/munitions_resources.json');
+                // Get the selected discipline from localStorage
+                const selectedDiscipline = localStorage.getItem('selectedDiscipline') || 'munitions';
+
+                // Map discipline to resource file
+                const resourceFile = `/${selectedDiscipline}_resources.json`;
+
+                const response = await fetch(resourceFile);
                 const data = await response.json();
                 setResources(data);
             } catch (error) {
                 console.error('Failed to load resources:', error);
+                // Fallback to empty resources if file doesn't exist
+                setResources({ practiceExams: [], videos: [] });
             } finally {
                 setLoading(false);
             }

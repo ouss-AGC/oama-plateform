@@ -28,6 +28,13 @@ const Home: React.FC = () => {
             icon: <Flame className="w-8 h-8" />,
             description: 'Explosifs, détonateurs et déminage.',
             color: 'bg-yellow-600'
+        },
+        {
+            id: 'explosions',
+            title: 'Calcul des effets des explosions sur les structures GC31',
+            icon: <Flame className="w-8 h-8" />,
+            description: 'Calcul des effets des explosions et analyse structurelle.',
+            color: 'bg-red-600'
         }
     ];
 
@@ -213,7 +220,7 @@ const Home: React.FC = () => {
 
                 {/* Discipline Selector - Bottom */}
                 <div className="w-full max-w-5xl mx-auto mt-12 mb-8">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         {disciplines.map((disc) => (
                             <button
                                 key={disc.id}
