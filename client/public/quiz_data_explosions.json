@@ -1,27 +1,30 @@
 {
-    "title": "Explosions et Artifices 2025/2026",
+    "title": "Calcul des effets des explosions sur les structures GC31",
+    "examPdfUrl": "/resources/exam_explosions_gc31.pdf",
     "questions": [
         {
             "id": 1,
-            "question": "Quel est l'explosif principal utilisé dans le C4 ?",
-            "options": [
-                "TNT",
-                "RDX",
-                "HMX",
-                "PETN"
-            ],
-            "correctAnswer": 1
+            "question": "Question 1 : Calculer la pression d'explosion",
+            "type": "open",
+            "points": 5
         },
         {
             "id": 2,
-            "question": "Quelle est la vitesse de détonation du TNT ?",
-            "options": [
-                "4000 m/s",
-                "5500 m/s",
-                "6900 m/s",
-                "8000 m/s"
-            ],
-            "correctAnswer": 2
+            "question": "Question 2 : Déterminer les effets sur la structure",
+            "type": "open",
+            "points": 5
+        },
+        {
+            "id": 3,
+            "question": "Question 3 : Analyser la résistance des matériaux",
+            "type": "open",
+            "points": 5
+        },
+        {
+            "id": 4,
+            "question": "Question 4 : Évaluer les distances de sécurité",
+            "type": "open",
+            "points": 5
         }
     ]
 }
