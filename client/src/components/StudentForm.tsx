@@ -26,6 +26,8 @@ const StudentForm: React.FC = () => {
     const getClassOptions = () => {
         if (discipline === 'munitions') {
             return Array.from({ length: 10 }, (_, i) => `LASM ${301 + i}`);
+        } else if (discipline === 'explosions') {
+            return ['GC 31'];
         } else {
             return Array.from({ length: 10 }, (_, i) => `LASM ${201 + i}`);
         }
