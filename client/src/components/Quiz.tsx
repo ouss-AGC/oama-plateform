@@ -19,11 +19,11 @@ const Quiz: React.FC = () => {
     const [quizData, setQuizData] = useState<QuizData | null>(null);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState<(number | null)[]>([]); // null = not answered
-    const [timeLeft, setTimeLeft] = useState(3600); // 1 hour = 3600 seconds
+    const [timeLeft, setTimeLeft] = useState(3600); // Default 1 hour = 3600 seconds
     const [loading, setLoading] = useState(true);
     const [studentData, setStudentData] = useState<any>(null); // Store student info at quiz start
+    const [timeLimit, setTimeLimit] = useState(3600); // Dynamic time limit based on discipline
     const timerRef = useRef<number | null>(null);
-    const TIME_LIMIT = 3600; // 1 hour in seconds
 
     useEffect(() => {
         // Get mode and discipline from URL query parameter
@@ -38,6 +38,11 @@ const Quiz: React.FC = () => {
             discipline = urlDiscipline;
             localStorage.setItem('selectedDiscipline', urlDiscipline);
         }
+
+        // Set time limit based on discipline
+        const disciplineTimeLimit = discipline === 'explosions' ? 7200 : 3600; // 2 hours for explosions, 1 hour for others
+        setTimeLimit(disciplineTimeLimit);
+        setTimeLeft(disciplineTimeLimit);
 
         const studentInfo = localStorage.getItem('studentInfo');
 
@@ -138,7 +143,7 @@ const Quiz: React.FC = () => {
         const totalQuestions = quizData?.questions.length || 0;
         const scorePercentage = (correctCount / totalQuestions) * 100;
         const scoreOn20 = (correctCount / totalQuestions) * 20;
-        const timeElapsed = TIME_LIMIT - timeLeft;
+        const timeElapsed = timeLimit - timeLeft;
 
         // Get mode from URL to determine if this is practice
         const urlParams = new URLSearchParams(window.location.search);
@@ -188,7 +193,10 @@ const Quiz: React.FC = () => {
     const answeredCount = answers.filter(a => a !== null).length;
     const progressPercentage = (answeredCount / quizData.questions.length) * 100;
     const selectedOption = answers[currentQuestionIndex];
-    const isTimeRunningOut = timeLeft < 300; // Less than 5 minutes
+    const discipline = localStorage.getItem('selectedDiscipline');
+    // For explosions: red at 20 minutes (1200s), for others: red at 5 minutes (300s)
+    const warningThreshold = discipline === 'explosions' ? 1200 : 300;
+    const isTimeRunningOut = timeLeft < warningThreshold;
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col">
@@ -200,9 +208,9 @@ const Quiz: React.FC = () => {
                         <h1 className="font-bold text-lg hidden md:block">{quizData.title}</h1>
                     </div>
                     <div className="flex items-center space-x-6">
-                        <div className={`flex items-center px-3 py-1 rounded-full ${isTimeRunningOut ? 'bg-red-600 animate-pulse' : 'bg-green-800'}`}>
-                            <Clock className="w-4 h-4 mr-2" />
-                            <span className="font-mono font-bold">{formatTime(timeLeft)}</span>
+                        <div className={`flex items-center px-6 py-3 rounded-full shadow-lg ${isTimeRunningOut ? 'bg-red-600 animate-pulse' : 'bg-green-800'}`}>
+                            <Clock className="w-6 h-6 mr-3" />
+                            <span className="font-mono font-bold text-2xl">{formatTime(timeLeft)}</span>
                         </div>
                         <div className="text-sm font-medium">
                             {answeredCount} / {quizData.questions.length} répondues
@@ -224,7 +232,9 @@ const Quiz: React.FC = () => {
                 <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 text-center">
                     <div className="flex items-center justify-center">
                         <AlertCircle className="w-5 h-5 mr-2" />
-                        <span className="font-semibold">Attention ! Il vous reste moins de 5 minutes !</span>
+                        <span className="font-semibold">
+                            Attention ! Il vous reste moins de {discipline === 'explosions' ? '20' : '5'} minutes !
+                        </span>
                     </div>
                 </div>
             )}
