@@ -1,30 +1,118 @@
 {
     "title": "Calcul des effets des explosions sur les structures GC31",
     "examPdfUrl": "/resources/exam_explosions_gc31.pdf",
-    "questions": [
+    "duration": 7200,
+    "sections": [
         {
             "id": 1,
-            "question": "Question 1 : Calculer la pression d'explosion",
-            "type": "open",
-            "points": 5
+            "title": "Partie 1 : QCM (Questions à Choix Multiples)",
+            "type": "mcq",
+            "points": 10,
+            "questions": [
+                {
+                    "id": 1,
+                    "question": "Question 1 - QCM",
+                    "options": [
+                        "Option A",
+                        "Option B",
+                        "Option C",
+                        "Option D"
+                    ],
+                    "correctAnswer": 0
+                },
+                {
+                    "id": 2,
+                    "question": "Question 2 - QCM",
+                    "options": [
+                        "Option A",
+                        "Option B",
+                        "Option C",
+                        "Option D"
+                    ],
+                    "correctAnswer": 1
+                },
+                {
+                    "id": 3,
+                    "question": "Question 3 - QCM",
+                    "options": [
+                        "Option A",
+                        "Option B",
+                        "Option C",
+                        "Option D"
+                    ],
+                    "correctAnswer": 2
+                },
+                {
+                    "id": 4,
+                    "question": "Question 4 - QCM",
+                    "options": [
+                        "Option A",
+                        "Option B",
+                        "Option C",
+                        "Option D"
+                    ],
+                    "correctAnswer": 3
+                },
+                {
+                    "id": 5,
+                    "question": "Question 5 - QCM",
+                    "options": [
+                        "Option A",
+                        "Option B",
+                        "Option C",
+                        "Option D"
+                    ],
+                    "correctAnswer": 0
+                }
+            ]
         },
         {
             "id": 2,
-            "question": "Question 2 : Déterminer les effets sur la structure",
+            "title": "Partie 2 : Exercice 1 - Calcul des effets d'explosion",
             "type": "open",
-            "points": 5
+            "displayPdf": true,
+            "points": 10,
+            "questions": [
+                {
+                    "id": 6,
+                    "question": "Exercice 1 - Question 1",
+                    "points": 3
+                },
+                {
+                    "id": 7,
+                    "question": "Exercice 1 - Question 2",
+                    "points": 3
+                },
+                {
+                    "id": 8,
+                    "question": "Exercice 1 - Question 3",
+                    "points": 4
+                }
+            ]
         },
         {
             "id": 3,
-            "question": "Question 3 : Analyser la résistance des matériaux",
+            "title": "Partie 3 : Exercice 2 - Analyse structurelle",
             "type": "open",
-            "points": 5
-        },
-        {
-            "id": 4,
-            "question": "Question 4 : Évaluer les distances de sécurité",
-            "type": "open",
-            "points": 5
+            "displayPdf": true,
+            "points": 10,
+            "questions": [
+                {
+                    "id": 9,
+                    "question": "Exercice 2 - Question 1",
+                    "points": 3
+                },
+                {
+                    "id": 10,
+                    "question": "Exercice 2 - Question 2",
+                    "points": 3
+                },
+                {
+                    "id": 11,
+                    "question": "Exercice 2 - Question 3",
+                    "points": 4
+                }
+            ]
         }
     ]
 }
