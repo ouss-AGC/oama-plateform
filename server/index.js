@@ -82,8 +82,23 @@ app.post('/api/join-session', (req, res) => {
 // Student: Submit Quiz Result
 app.post('/api/submit-quiz', (req, res) => {
     const result = req.body;
-    sessionState.results.push(result);
-    console.log(`Result received for ${result.student.name}`);
+
+    // Check if result already exists (upsert logic for manual grading or re-submissions)
+    const existingIndex = sessionState.results.findIndex(r =>
+        r.student.matricule === result.student.matricule &&
+        r.timestamp === result.timestamp
+    );
+
+    if (existingIndex !== -1) {
+        // Update existing result
+        sessionState.results[existingIndex] = result;
+        console.log(`Result UPDATED for ${result.student.name}`);
+    } else {
+        // Add new result
+        sessionState.results.push(result);
+        console.log(`Result RECEIVED for ${result.student.name}`);
+    }
+
     res.json({ success: true });
 });
 

@@ -216,38 +216,94 @@ const StudentDetail: React.FC = () => {
 
     if (!result) return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
 
-    const generateReport = () => {
+    const generateReport = async () => {
+        if (!result) return;
         const doc = new jsPDF();
-        let yPos = 20;
 
-        // Header
+        // Load images helper
+        const loadImage = (src: string): Promise<string> => {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    if (ctx) {
+                        ctx.drawImage(img, 0, 0);
+                        resolve(canvas.toDataURL('image/png'));
+                    } else {
+                        reject(new Error('Canvas context not available'));
+                    }
+                };
+                img.onerror = reject;
+                img.src = src;
+            });
+        };
+
+        // Load assets
+        let signatureDataUrl = '';
+        let scoreCircleDataUrl = '';
+        let stampDataUrl = '';
+        try {
+            signatureDataUrl = await loadImage('/signature.png');
+            scoreCircleDataUrl = await loadImage('/score_circle.png');
+            stampDataUrl = await loadImage('/golden_stamp_pdf.png');
+        } catch (err) {
+            console.error('Failed to load report assets:', err);
+        }
+
+        // --- PDF Header (High Quality) ---
         doc.setFontSize(22);
-        doc.setTextColor(46, 125, 50); // Military Green
-        doc.text("Rapport de Performance", 105, yPos, { align: "center" });
-        yPos += 15;
+        doc.setTextColor(45, 80, 22);
+        doc.text("RAPPORT INDIVIDUEL", 105, 20, { align: "center" });
 
-        // Student Info Box
-        doc.setDrawColor(200, 200, 200);
-        doc.setFillColor(245, 245, 245);
-        doc.rect(15, yPos, 180, 35, 'F');
+        // Score Circle and Value
+        if (scoreCircleDataUrl) {
+            doc.addImage(scoreCircleDataUrl, 'PNG', 160, 15, 40, 40);
+        }
+        doc.setFontSize(22);
+        doc.setFont("times", "italic");
+        doc.setTextColor(200, 0, 0);
+        doc.text(`${result.scoreOn20.toFixed(1)}/20`, 180, 42, { align: "center", angle: 15 });
 
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        doc.text(`Nom: ${result.student.grade} ${result.student.name}`, 20, yPos + 10);
-        doc.text(`Matricule: ${result.student.matricule}`, 20, yPos + 18);
-        doc.text(`Discipline: ${result.discipline}`, 20, yPos + 26);
+        // Signature
+        if (signatureDataUrl) {
+            doc.addImage(signatureDataUrl, 'PNG', 20, 25, 60, 30);
+        }
+        doc.setFontSize(8);
+        doc.setTextColor(100);
+        doc.text("Lt Col Oussama Atoui", 50, 58, { align: "center" });
+        doc.text("Instructeur Armes et Munitions", 50, 62, { align: "center" });
 
-        doc.setFontSize(16);
-        doc.setTextColor(46, 125, 50);
-        doc.text(`Note: ${result.scoreOn20.toFixed(2)}/20`, 150, yPos + 20);
+        // Stamp
+        if (stampDataUrl) {
+            doc.addImage(stampDataUrl, 'PNG', 155, 60, 50, 50);
+        }
 
-        yPos += 45;
-
-        // Content
+        // Student Box
         doc.setFontSize(14);
-        doc.setTextColor(0, 0, 0);
-        doc.text("Détail des Résultats:", 15, yPos);
-        yPos += 10;
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(200, 0, 0);
+        doc.text(`Nom: ${result.student.grade} ${result.student.name}`, 20, 70);
+
+        doc.setTextColor(0);
+        doc.setFont("helvetica", "normal");
+        doc.text(`Classe: ${result.student.className}`, 20, 78);
+        doc.text(`Matricule: ${result.student.matricule}`, 20, 86);
+
+        doc.text(`Discipline: ${result.discipline.toUpperCase()}`, 140, 70);
+        doc.text(`Score: ${result.scoreOn20.toFixed(2)}/20`, 140, 78);
+        doc.text(`Date: ${new Date(result.timestamp).toLocaleDateString()}`, 140, 86);
+
+        let yPos = 110;
+        doc.setFontSize(16);
+        doc.text("Détail des réponses et notation", 20, yPos);
+        yPos += 12;
+
+        doc.setFontSize(10);
+        const lineHeight = 6;
 
         quizQuestions.forEach((q, index) => {
             if (yPos > 270) {
@@ -256,78 +312,74 @@ const StudentDetail: React.FC = () => {
             }
 
             if (q.type === 'exercise') {
-                // Exercise Header
-                doc.setFontSize(12);
-                doc.setTextColor(0, 51, 102); // Dark Blue
-                doc.text(`Exercice: ${q.title || 'Question ' + (index + 1)}`, 15, yPos);
+                // Exercise Rendering in PDF
+                doc.setFont("helvetica", "bold");
+                doc.setTextColor(0, 51, 102);
+                const exerciseTitle = `Exercice: ${q.title || 'Question ' + (index + 1)}`;
+                doc.text(exerciseTitle, 20, yPos);
 
                 const score = manualScores[q.id] !== undefined ? manualScores[q.id] : 0;
                 const maxPoints = q.questions?.reduce((sum, sq) => sum + sq.points, 0) || 0;
-
-                doc.setFontSize(10);
                 doc.setTextColor(100, 100, 100);
-                doc.text(`Score: ${score} / ${maxPoints}`, 160, yPos);
-
+                doc.text(`${score} / ${maxPoints} pts`, 160, yPos);
                 yPos += 7;
 
-                // Sub-questions
-                doc.setFontSize(10);
-                doc.setTextColor(0, 0, 0);
-
                 const studentAnswers = result.answers[index] || {};
-
                 q.questions?.forEach(subQ => {
                     if (yPos > 270) { doc.addPage(); yPos = 20; }
-
-                    // Question Text
+                    doc.setFont("helvetica", "normal");
+                    doc.setTextColor(0);
                     const qLines = doc.splitTextToSize(`- ${subQ.question}`, 170);
-                    doc.text(qLines, 20, yPos);
-                    yPos += (qLines.length * 5);
+                    doc.text(qLines, 25, yPos);
+                    yPos += qLines.length * 5;
 
-                    // Answer
                     const answerText = studentAnswers[subQ.id] || "(Aucune réponse)";
-                    const aLines = doc.splitTextToSize(`Rep: ${answerText}`, 160);
+                    const aLines = doc.splitTextToSize(`Rép: ${answerText}`, 160);
                     doc.setTextColor(80, 80, 80);
-                    doc.text(aLines, 25, yPos);
-                    doc.setTextColor(0, 0, 0);
-                    yPos += (aLines.length * 5) + 3;
+                    doc.text(aLines, 30, yPos);
+                    yPos += aLines.length * 5 + 2;
                 });
 
-                yPos += 5;
-                doc.setDrawColor(220, 220, 220);
-                doc.line(15, yPos, 195, yPos);
-                yPos += 10;
-
+                // Show Correction Context if available
+                if (q.detailed_solution || q.solution) {
+                    doc.setTextColor(0, 100, 0);
+                    doc.setFont("courier", "normal");
+                    doc.setFontSize(9);
+                    const solutionLines = doc.splitTextToSize(`[Correction]: ${q.detailed_solution || q.solution}`, 160);
+                    doc.text(solutionLines, 30, yPos);
+                    yPos += solutionLines.length * 4 + 4;
+                    doc.setFontSize(10);
+                }
             } else {
-                // QCM (Simplified)
-                // Only showing incorrect ones to save space? Or just a summary?
-                // Let's show a compact list for QCMs
-                // Actually, let's group QCMs
+                // QCM Rendering in PDF
+                const userAnswer = result.answers[index];
+                const isCorrect = userAnswer === q.correctAnswer;
+
+                doc.setFont("helvetica", "bold");
+                doc.setTextColor(0);
+                const qText = `Q${index + 1}: ${q.question}`;
+                const qLines = doc.splitTextToSize(qText, 170);
+                doc.text(qLines, 20, yPos);
+                yPos += qLines.length * lineHeight + 2;
+
+                doc.setFont("helvetica", "normal");
+                doc.setTextColor(isCorrect ? 0 : 200, isCorrect ? 100 : 0, 0);
+                const answerText = `Réponse: ${q.options?.[userAnswer] || 'N/A'} ${isCorrect ? '(Correct 0.5/0.5)' : '(Incorrect 0/0.5)'}`;
+                const aLines = doc.splitTextToSize(answerText, 165);
+                doc.text(aLines, 25, yPos);
+                yPos += aLines.length * lineHeight;
+
+                if (!isCorrect) {
+                    yPos += 1;
+                    doc.setTextColor(0, 100, 0);
+                    doc.text(`Correction: ${q.options?.[q.correctAnswer || 0]}`, 25, yPos);
+                    yPos += lineHeight;
+                }
             }
+            yPos += 6;
         });
 
-        // QCM Summary Section
-        if (yPos > 250) { doc.addPage(); yPos = 20; }
-        const qcmCount = quizQuestions.filter(q => q.type !== 'exercise').length;
-        if (qcmCount > 0) {
-            doc.setFontSize(12);
-            doc.setTextColor(0, 51, 102);
-            doc.text(`Questions à Choix Multiple (${qcmCount})`, 15, yPos);
-            yPos += 10;
-
-            let correctQCM = 0;
-            quizQuestions.forEach((q, index) => {
-                if (q.type !== 'exercise') {
-                    if (result.answers[index] === q.correctAnswer) correctQCM++;
-                }
-            });
-
-            doc.setFontSize(10);
-            doc.setTextColor(0, 0, 0);
-            doc.text(`Score QCM: ${correctQCM} / ${qcmCount} (${(correctQCM * 0.5)} pts)`, 20, yPos);
-        }
-
-        doc.save(`Rapport_${result.student.name.replace(/\s+/g, '_')}.pdf`);
+        doc.save(`Rapport_Complet_${result.student.name.replace(/\s+/g, '_')}.pdf`);
     };
 
     // Chart Data (Keep existing)
@@ -404,19 +456,28 @@ const StudentDetail: React.FC = () => {
                 <div className="flex justify-between items-center mb-6">
                     <button
                         onClick={() => navigate('/admin/dashboard')}
-                        className="flex items-center text-gray-600 hover:text-gray-900"
+                        className="flex items-center text-gray-600 hover:text-gray-900 bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-200"
                     >
                         <ArrowLeft className="w-5 h-5 mr-2" />
-                        Retour au tableau de bord
+                        Retour
                     </button>
-                    <button
-                        onClick={saveGrading}
-                        disabled={isSaving}
-                        className="px-6 py-2 bg-military-green text-white rounded-lg hover:bg-green-800 flex items-center shadow-md disabled:opacity-50"
-                    >
-                        <Save className="w-5 h-5 mr-2" />
-                        {isSaving ? 'Enregistrement...' : 'Enregistrer la Notation'}
-                    </button>
+                    <div className="flex space-x-3">
+                        <button
+                            onClick={generateReport}
+                            className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 flex items-center shadow-md transition-colors"
+                        >
+                            <FileText className="w-5 h-5 mr-2" />
+                            Télécharger Rapport PDF
+                        </button>
+                        <button
+                            onClick={saveGrading}
+                            disabled={isSaving}
+                            className="px-6 py-2 bg-military-green text-white rounded-lg hover:bg-green-800 flex items-center shadow-md disabled:opacity-50 transition-colors"
+                        >
+                            <Save className="w-5 h-5 mr-2" />
+                            {isSaving ? 'Enregistrement...' : 'Enregistrez la Notation'}
+                        </button>
+                    </div>
                 </div>
 
                 {/* Header Card */}
@@ -425,7 +486,17 @@ const StudentDetail: React.FC = () => {
                         <div>
                             <h1 className="text-3xl font-bold">{result.student.grade} {result.student.name}</h1>
                             <p className="opacity-90 text-lg">{result.student.className} - {result.student.matricule}</p>
-                            <p className="text-sm mt-1 opacity-75">{result.discipline}</p>
+                            <div className="flex items-center mt-2 space-x-3">
+                                <span className="text-xs px-2 py-1 bg-white/20 rounded backdrop-blur-sm border border-white/30">
+                                    {result.discipline}
+                                </span>
+                                {/* QCM Score Badge for Explosions exam (18 QCMs * 0.5 = 9 pts) */}
+                                {result.discipline === 'explosions' && (
+                                    <span className="text-xs px-2 py-1 bg-yellow-400 text-yellow-900 font-bold rounded shadow-sm border border-yellow-500">
+                                        Note QCM: {(quizQuestions.filter(q => q.type !== 'exercise' && result.answers[quizQuestions.indexOf(q)] === q.correctAnswer).length * 0.5).toFixed(1)}/9
+                                    </span>
+                                )}
+                            </div>
                         </div>
                         <div className="text-right">
                             <div className="text-5xl font-bold">{result.scoreOn20.toFixed(1)}<span className="text-2xl">/20</span></div>
@@ -503,7 +574,15 @@ const StudentDetail: React.FC = () => {
                                     return (
                                         <div key={index} className="border border-blue-200 rounded-lg overflow-hidden">
                                             <div className="bg-blue-50 px-4 py-3 border-b border-blue-200 flex justify-between items-center">
-                                                <h4 className="font-bold text-blue-900">{q.title}</h4>
+                                                <div className="flex flex-col">
+                                                    <h4 className="font-bold text-blue-900">{q.title}</h4>
+                                                    <div className="flex items-center space-x-2 mt-1">
+                                                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded border border-blue-200 flex items-center">
+                                                            <CheckCircle className="w-3 h-3 mr-1" />
+                                                            Note Auto: {currentScore} / {maxPoints}
+                                                        </span>
+                                                    </div>
+                                                </div>
                                                 <div className="flex items-center space-x-2">
                                                     <span className="text-sm font-medium text-blue-800">Note:</span>
                                                     <input
@@ -584,9 +663,7 @@ const StudentDetail: React.FC = () => {
                                                         Solution Modèle
                                                     </h5>
                                                     <pre className="whitespace-pre-wrap text-sm text-green-900 font-mono bg-white p-3 rounded border border-green-100">
-                                                        <pre className="whitespace-pre-wrap text-sm text-green-900 font-mono bg-white p-3 rounded border border-green-100">
-                                                            {q.detailed_solution || q.solution}
-                                                        </pre>
+                                                        {q.detailed_solution || q.solution}
                                                     </pre>
                                                 </div>
                                             </div>
@@ -600,9 +677,14 @@ const StudentDetail: React.FC = () => {
                                     return (
                                         <div key={index} className={`p-4 rounded-lg border ${isCorrect ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
                                             <div className="flex justify-between items-start mb-2">
-                                                <span className={`font-bold text-sm px-2 py-1 rounded ${isCorrect ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
-                                                    Q{index + 1} (0.5 pt)
-                                                </span>
+                                                <div className="flex items-center space-x-2">
+                                                    <span className={`font-bold text-sm px-2 py-1 rounded ${isCorrect ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
+                                                        Q{index + 1}
+                                                    </span>
+                                                    <span className={`text-xs font-bold px-2 py-1 rounded border ${isCorrect ? 'bg-green-100 border-green-300 text-green-700' : 'bg-red-100 border-red-300 text-red-700'}`}>
+                                                        Score: {isCorrect ? '0.5' : '0'}/0.5 pt
+                                                    </span>
+                                                </div>
                                                 {isCorrect ? <CheckCircle className="w-5 h-5 text-green-600" /> : <XCircle className="w-5 h-5 text-red-600" />}
                                             </div>
                                             <p className="text-sm text-gray-800 font-medium mb-2 line-clamp-2" title={q.question}>{q.question}</p>

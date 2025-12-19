@@ -19,13 +19,15 @@ interface QuizResult {
 const disciplineColors = {
     munitions: { primary: [45, 80, 22] as [number, number, number], secondary: [212, 175, 55] as [number, number, number] },
     agc: { primary: [74, 85, 104] as [number, number, number], secondary: [212, 175, 55] as [number, number, number] },
-    genie: { primary: [192, 86, 33] as [number, number, number], secondary: [212, 175, 55] as [number, number, number] }
+    genie: { primary: [192, 86, 33] as [number, number, number], secondary: [212, 175, 55] as [number, number, number] },
+    explosions: { primary: [20, 50, 90] as [number, number, number], secondary: [212, 175, 55] as [number, number, number] }
 };
 
 const disciplineNames = {
     munitions: 'GENERALITES SUR LES MUNITIONS LASM 3',
     agc: 'ARMEMENT GROS CALIBRE (AGC) POUR LASM 2',
-    genie: 'GENIE MILITAIRE 4 LASM 2'
+    genie: 'GENIE MILITAIRE 4 LASM 2',
+    explosions: 'EXAMEN CALCUL DES EFFETS DES EXPLOSIONS SUR LES STRUCTURES'
 };
 
 export const generateCertificate = async (result: QuizResult) => {
@@ -193,7 +195,8 @@ export const generateVisualCertificate = async (result: QuizResult): Promise<str
     const colorMap = {
         munitions: { primary: '#2D5016', secondary: '#D4AF37' },
         agc: { primary: '#4A5568', secondary: '#D4AF37' },
-        genie: { primary: '#C05621', secondary: '#D4AF37' }
+        genie: { primary: '#C05621', secondary: '#D4AF37' },
+        explosions: { primary: '#14325A', secondary: '#D4AF37' }
     };
     const colors = colorMap[result.discipline as keyof typeof colorMap] || colorMap.munitions;
     const disciplineName = disciplineNames[result.discipline as keyof typeof disciplineNames] || 'DISCIPLINE INCONNUE';
