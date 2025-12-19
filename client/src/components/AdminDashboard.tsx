@@ -201,7 +201,8 @@ const AdminDashboard: React.FC = () => {
             'all': 'TOUTES',
             'munitions': 'Généralités sur les munitions',
             'agc': 'Armement Gros Calibre AGC',
-            'genie': 'Génie Militaire 4 LASM 2'
+            'genie': 'Génie Militaire 4 LASM 2',
+            'explosions': 'Examen Calcul des effets des explosions sur les structures'
         };
         const disciplineDisplay = disciplineNames[selectedDiscipline] || selectedDiscipline.toUpperCase();
 
@@ -392,7 +393,7 @@ const AdminDashboard: React.FC = () => {
                             <option value="munitions">Generalites sur les Munitions LASM 3</option>
                             <option value="agc">Armement Gros Calibre (AGC) pour LASM 2</option>
                             <option value="genie">Genie Militaire 4 LASM 2</option>
-                            <option value="explosions">Calcul des effets des explosions sur les structures GC31</option>
+                            <option value="explosions">Examen Calcul des effets des explosions sur les structures</option>
                         </select>
                     </div>
 

@@ -31,7 +31,7 @@ const Home: React.FC = () => {
         },
         {
             id: 'explosions',
-            title: 'Calcul des effets des explosions sur les structures GC31',
+            title: 'Examen Calcul des effets des explosions sur les structures',
             icon: <Bomb className="w-8 h-8" />,
             description: 'Phénomènes physiques, ondes de choc et réponse des structures.',
             color: 'bg-red-600'

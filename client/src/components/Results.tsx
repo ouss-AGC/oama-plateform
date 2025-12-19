@@ -69,7 +69,30 @@ const Results: React.FC = () => {
                     : `quiz_data_${parsedResult.discipline}.json`;
                 const questionsRes = await fetch(`/${fileName}`);
                 const questionsData = await questionsRes.json();
-                setQuizQuestions(questionsData.questions);
+
+                if (questionsData.sections) {
+                    let flat: Question[] = [];
+                    questionsData.sections.forEach((section: any) => {
+                        if (section.questions) {
+                            if (section.type === 'exercise') {
+                                // For exercises, we summarize or include the section header
+                                flat.push({
+                                    id: section.id,
+                                    question: section.title,
+                                    options: ["(Exercice de calcul)"],
+                                    correctAnswer: -1,
+                                    type: 'exercise',
+                                    detailed_solution: section.detailed_solution || section.solution
+                                } as any);
+                            } else {
+                                flat = [...flat, ...section.questions];
+                            }
+                        }
+                    });
+                    setQuizQuestions(flat);
+                } else {
+                    setQuizQuestions(questionsData.questions);
+                }
             } catch (error) {
                 console.error("Failed to load questions:", error);
             }
