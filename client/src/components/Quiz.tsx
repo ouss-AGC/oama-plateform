@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Clock, CheckCircle, ChevronRight, ChevronLeft, Save, AlertCircle, FileText, FileSearch } from 'lucide-react';
+import { Clock, CheckCircle, ChevronRight, ChevronLeft, Save, AlertCircle, FileText, FileSearch, X, ZoomIn } from 'lucide-react';
 import ExamPDFViewer from './ExamPDFViewer';
 
 
@@ -56,6 +56,7 @@ const Quiz: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [studentData, setStudentData] = useState<any>(null);
     const [timeLimit, setTimeLimit] = useState(3600); // Dynamic time limit
+    const [zoomedImage, setZoomedImage] = useState<string | null>(null);
     const timerRef = useRef<number | null>(null);
 
     useEffect(() => {
@@ -525,21 +526,37 @@ const Quiz: React.FC = () => {
                                 {(currentQuestion.image || currentQuestion.images) && (
                                     <div className="space-y-4">
                                         {currentQuestion.image && (
-                                            <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm flex justify-center">
-                                                <img
-                                                    src={currentQuestion.image}
-                                                    alt="Figure"
-                                                    className="max-w-full h-auto max-h-[400px] rounded"
-                                                />
+                                            <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm flex justify-center group relative">
+                                                <div
+                                                    className="relative cursor-zoom-in"
+                                                    onClick={() => setZoomedImage(currentQuestion.image!)}
+                                                >
+                                                    <img
+                                                        src={currentQuestion.image}
+                                                        alt="Figure"
+                                                        className="max-w-full h-auto max-h-[400px] rounded transition-transform duration-200 group-hover:scale-[1.01]"
+                                                    />
+                                                    <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <ZoomIn size={18} />
+                                                    </div>
+                                                </div>
                                             </div>
                                         )}
                                         {currentQuestion.images && currentQuestion.images.map((imgUrl: string, idx: number) => (
-                                            <div key={idx} className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm flex flex-col items-center">
-                                                <img
-                                                    src={imgUrl}
-                                                    alt={`Figure ${idx + 1}`}
-                                                    className="max-w-full h-auto max-h-[500px] rounded mb-2"
-                                                />
+                                            <div key={idx} className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm flex flex-col items-center group relative">
+                                                <div
+                                                    className="relative cursor-zoom-in"
+                                                    onClick={() => setZoomedImage(imgUrl)}
+                                                >
+                                                    <img
+                                                        src={imgUrl}
+                                                        alt={`Figure ${idx + 1}`}
+                                                        className="max-w-full h-auto max-h-[500px] rounded mb-2 transition-transform duration-200 group-hover:scale-[1.02]"
+                                                    />
+                                                    <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <ZoomIn size={18} />
+                                                    </div>
+                                                </div>
                                                 <span className="text-sm text-gray-500 font-medium">Figure {idx + 1}</span>
                                             </div>
                                         ))}
@@ -640,6 +657,31 @@ const Quiz: React.FC = () => {
                 isOpen={isPdfViewerOpen}
                 onClose={() => setIsPdfViewerOpen(false)}
             />
+
+            {/* Image Zoom Modal */}
+            {zoomedImage && (
+                <div
+                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-90 p-4 transition-all animate-in fade-in duration-200"
+                    onClick={() => setZoomedImage(null)}
+                >
+                    <button
+                        className="absolute top-6 right-6 text-white hover:text-gray-300 transition-colors bg-gray-800 bg-opacity-50 p-2 rounded-full"
+                        onClick={(e) => { e.stopPropagation(); setZoomedImage(null); }}
+                    >
+                        <X size={32} />
+                    </button>
+                    <div
+                        className="max-w-full max-h-full overflow-auto bg-white rounded-lg p-2 shadow-2xl animate-in zoom-in-95 duration-300"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <img
+                            src={zoomedImage}
+                            alt="Zoomed Figure"
+                            className="max-w-full h-auto rounded shadow-inner"
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
