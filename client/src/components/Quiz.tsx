@@ -636,7 +636,7 @@ const Quiz: React.FC = () => {
 
             {/* PDF Viewer Modal */}
             <ExamPDFViewer
-                pdfUrl="/sujet_explosions.pdf"
+                pdfUrl="/resources/exam_explosions_gc31.pdf"
                 isOpen={isPdfViewerOpen}
                 onClose={() => setIsPdfViewerOpen(false)}
             />
