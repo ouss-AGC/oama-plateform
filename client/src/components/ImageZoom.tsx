@@ -131,186 +131,205 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
 
             {isOpen && (
                 <div
-                    className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black bg-opacity-95 p-4 animate-in fade-in duration-200"
+                    className="fixed inset-0 z-[100] flex flex-row bg-black bg-opacity-95 animate-in fade-in duration-200"
                     onMouseMove={handleMouseMove}
                     onMouseUp={stopAction}
                     onMouseLeave={stopAction}
                 >
-                    {/* Header/Toolbar */}
-                    <div className="absolute top-0 left-0 right-0 p-4 flex items-center justify-between pointer-events-none">
-                        <div className="flex items-center space-x-2 bg-gray-800/90 p-2 rounded-xl border border-gray-600 pointer-events-auto shadow-2xl backdrop-blur-lg">
-                            <button
-                                onClick={() => setActiveTool('none')}
-                                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all ${activeTool === 'none' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:text-white hover:bg-gray-700'}`}
-                                title="Mode Navigation / Panoramique"
-                            >
-                                <MousePointer2 size={18} />
-                                <span className="text-xs font-bold uppercase tracking-wider">Naviguer</span>
-                            </button>
+                    {/* Vertical Sidebar Toolbar */}
+                    <div className="w-20 md:w-24 bg-gray-900 border-r border-gray-800 flex flex-col items-center py-6 space-y-4 shadow-2xl z-20 overflow-y-auto pointer-events-auto">
+                        <button
+                            onClick={() => setActiveTool('none')}
+                            className={`flex flex-col items-center justify-center p-3 rounded-xl transition-all w-16 h-16 ${activeTool === 'none' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}
+                            title="Navigation"
+                        >
+                            <MousePointer2 size={24} />
+                            <span className="text-[10px] font-bold mt-1 uppercase">Nav</span>
+                        </button>
 
-                            <div className="w-px h-8 bg-gray-700 mx-1"></div>
+                        <div className="w-10 h-px bg-gray-800 my-1"></div>
 
-                            <button
-                                onClick={() => setActiveTool('v')}
-                                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all ${activeTool === 'v' ? 'bg-cyan-500 text-black font-bold shadow-lg shadow-cyan-500/20' : 'text-cyan-400 hover:text-cyan-300 hover:bg-cyan-900/30'}`}
-                                title="Ajouter Ligne Verticale"
-                            >
-                                <MoveVertical size={18} />
-                                <span className="text-xs font-bold uppercase tracking-wider">Ligne V</span>
-                            </button>
+                        <button
+                            onClick={() => setActiveTool('v')}
+                            className={`flex flex-col items-center justify-center p-3 rounded-xl transition-all w-16 h-16 ${activeTool === 'v' ? 'bg-cyan-500 text-black font-bold shadow-lg shadow-cyan-500/20' : 'text-cyan-400 hover:text-cyan-300 hover:bg-cyan-900/30'}`}
+                            title="Ligne Verticale"
+                        >
+                            <MoveVertical size={24} />
+                            <span className="text-[10px] font-bold mt-1 uppercase">Ligne V</span>
+                        </button>
 
-                            <button
-                                onClick={() => setActiveTool('h')}
-                                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all ${activeTool === 'h' ? 'bg-pink-500 text-white font-bold shadow-lg shadow-pink-500/20' : 'text-pink-400 hover:text-pink-300 hover:bg-pink-900/30'}`}
-                                title="Ajouter Ligne Horizontale"
-                            >
-                                <MoveHorizontal size={18} />
-                                <span className="text-xs font-bold uppercase tracking-wider">Ligne H</span>
-                            </button>
+                        <button
+                            onClick={() => setActiveTool('h')}
+                            className={`flex flex-col items-center justify-center p-3 rounded-xl transition-all w-16 h-16 ${activeTool === 'h' ? 'bg-pink-500 text-white font-bold shadow-lg shadow-pink-500/20' : 'text-pink-400 hover:text-pink-300 hover:bg-pink-900/30'}`}
+                            title="Ligne Horizontale"
+                        >
+                            <MoveHorizontal size={24} />
+                            <span className="text-[10px] font-bold mt-1 uppercase">Ligne H</span>
+                        </button>
 
-                            <button
-                                onClick={() => setActiveTool(activeTool === 'loupe' ? 'none' : 'loupe')}
-                                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all ${activeTool === 'loupe' ? 'bg-yellow-500 text-black font-bold shadow-lg' : 'text-yellow-400 hover:text-yellow-300 hover:bg-yellow-900/30'}`}
-                                title="Loupe (Grossissement local)"
-                            >
-                                <ZoomIn size={18} />
-                                <span className="text-xs font-bold uppercase tracking-wider">Loupe</span>
-                            </button>
+                        <button
+                            onClick={() => setActiveTool(activeTool === 'loupe' ? 'none' : 'loupe')}
+                            className={`flex flex-col items-center justify-center p-3 rounded-xl transition-all w-16 h-16 ${activeTool === 'loupe' ? 'bg-yellow-500 text-black font-bold shadow-lg' : 'text-yellow-400 hover:text-yellow-300 hover:bg-yellow-900/30'}`}
+                            title="Loupe"
+                        >
+                            <ZoomIn size={24} />
+                            <span className="text-[10px] font-bold mt-1 uppercase">Loupe</span>
+                        </button>
 
-                            <div className="w-px h-8 bg-gray-700 mx-1"></div>
+                        <div className="w-10 h-px bg-gray-800 my-1"></div>
 
+                        {/* Zoom Controls */}
+                        <div className="flex flex-col items-center space-y-2 py-2">
                             <button
                                 onClick={() => handleZoom(0.5)}
-                                className="p-2 rounded-lg text-white hover:bg-gray-700 transition-all font-bold"
-                                title="Zoom Avant"
+                                className="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-800 text-white hover:bg-gray-700 transition-all font-bold"
                             >
-                                <ZoomIn size={20} />
+                                <ZoomIn size={18} />
                             </button>
-                            <span className="text-white text-xs font-mono w-8 text-center">{scale.toFixed(1)}x</span>
+                            <span className="text-white text-[10px] font-mono">{scale.toFixed(1)}x</span>
                             <button
                                 onClick={() => handleZoom(-0.5)}
-                                className="p-2 rounded-lg text-white hover:bg-gray-700 transition-all font-bold text-xl"
-                                title="Zoom Arrière"
+                                className="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-800 text-white hover:bg-gray-700 transition-all font-bold text-xl"
                             >
                                 -
                             </button>
-
-                            <div className="w-px h-8 bg-gray-700 mx-1"></div>
-
-                            <button
-                                onClick={() => { setLines([]); setScale(1); setOffset({ x: 0, y: 0 }); }}
-                                className="p-2 rounded-lg text-red-400 hover:bg-red-900/40 hover:text-red-300 transition-all border border-transparent hover:border-red-800/50"
-                                title="Réinitialiser Tout"
-                            >
-                                <Trash2 size={18} />
-                            </button>
                         </div>
 
+                        <div className="flex-grow"></div>
+
                         <button
-                            className="text-white hover:text-gray-300 transition-all bg-gray-800/80 rounded-full p-2.5 pointer-events-auto border border-gray-700 hover:scale-110 active:scale-95"
-                            onClick={() => setIsOpen(false)}
+                            onClick={() => { setLines([]); setScale(1); setOffset({ x: 0, y: 0 }); }}
+                            className="p-3 rounded-xl text-red-400 hover:bg-red-900/40 transition-all w-16 h-16 flex flex-col items-center justify-center"
+                            title="Reset"
                         >
-                            <X size={24} />
+                            <Trash2 size={24} />
+                            <span className="text-[10px] font-bold mt-1 uppercase">Reset</span>
                         </button>
                     </div>
 
-                    {/* Image Container with Overlay */}
-                    <div
-                        ref={containerRef}
-                        className={`relative max-h-[82vh] max-w-[95vw] overflow-hidden select-none shadow-2xl border-2 border-gray-800 rounded-lg bg-gray-900 ${activeTool === 'v' || activeTool === 'h' ? 'cursor-crosshair' : activeTool === 'loupe' ? 'cursor-none' : scale > 1 ? 'cursor-grab active:cursor-grabbing' : 'cursor-default'}`}
-                        onMouseDown={(e) => startDragOrPan(e)}
-                        onClick={handleContainerClick}
-                    >
-                        <div style={{
-                            transform: `scale(${scale}) translate(${offset.x / scale}px, ${offset.y / scale}px)`,
-                            transition: isPanning ? 'none' : 'transform 0.2s ease-out'
-                        }}>
-                            <img
-                                src={src}
-                                alt={alt}
-                                className="w-full h-full object-contain"
-                                draggable={false}
-                            />
-
-                            {/* Guideline Tool Hint Overlay */}
-                            {(activeTool === 'v' || activeTool === 'h') && lines.length === 0 && (
-                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                    <div className="bg-black/60 backdrop-blur-sm text-white px-6 py-3 rounded-full border border-white/20 animate-pulse">
-                                        Cliquez n'importe où sur l'image pour placer la ligne
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Guidelines Overlay */}
-                            {lines.map(line => (
-                                <div
-                                    key={line.id}
-                                    onMouseDown={(e) => startDragOrPan(e, line.id)}
-                                    className={`absolute group transition-shadow hover:shadow-lg ${line.type === 'v'
-                                        ? 'top-0 bottom-0 w-3 -ml-1.5 cursor-col-resize'
-                                        : 'left-0 right-0 h-3 -mt-1.5 cursor-row-resize'
-                                        }`}
-                                    style={{
-                                        left: line.type === 'v' ? `${line.position}%` : 0,
-                                        top: line.type === 'h' ? `${line.position}%` : 0,
-                                        zIndex: draggingId === line.id ? 20 : 10
-                                    }}
-                                >
-                                    {/* The visible line */}
-                                    <div className={`absolute ${line.type === 'v' ? 'left-1/2 top-0 bottom-0 w-[2px]' : 'top-1/2 left-0 right-0 h-[2px]'
-                                        } ${line.type === 'v' ? 'bg-cyan-400/80 shadow-[0_0_8px_rgba(34,211,238,0.5)]' : 'bg-pink-400/80 shadow-[0_0_8px_rgba(244,114,182,0.5)]'}`}>
-                                    </div>
-
-                                    {/* Delete button on hover */}
-                                    <button
-                                        onClick={(e) => deleteLine(e, line.id)}
-                                        className="absolute -top-6 -left-2 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity z-30 shadow-lg"
-                                    >
-                                        <Trash2 size={12} />
-                                    </button>
-                                </div>
-                            ))}
+                    {/* Main Workspace Area */}
+                    <div className="flex-1 relative flex flex-col overflow-hidden">
+                        {/* Top Bar for Close and Title */}
+                        <div className="flex items-center justify-between p-4 z-10">
+                            <h2 className="text-gray-400 text-sm font-medium tracking-widest uppercase">Analyse de graphique</h2>
+                            <button
+                                className="text-white hover:text-gray-300 transition-all bg-gray-800/80 rounded-full p-2 border border-gray-700 hover:rotate-90"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                <X size={24} />
+                            </button>
                         </div>
 
-                        {/* Loupe Effect (Outside the scaled div to avoid double-scaling) */}
-                        {activeTool === 'loupe' && (
+                        {/* Centered Image Viewport */}
+                        <div className="flex-1 relative flex items-center justify-center p-8">
                             <div
-                                className="absolute pointer-events-none rounded-full border-4 border-yellow-500 shadow-2xl overflow-hidden"
-                                style={{
-                                    left: `${mousePos.x}%`,
-                                    top: `${mousePos.y}%`,
-                                    width: '200px',
-                                    height: '200px',
-                                    transform: 'translate(-50%, -50%)',
-                                    zIndex: 100
-                                }}
+                                ref={containerRef}
+                                className={`relative max-h-full max-w-full overflow-hidden select-none shadow-2xl border border-gray-800 rounded-lg bg-gray-900 flex items-center justify-center ${activeTool === 'v' || activeTool === 'h' ? 'cursor-crosshair' : activeTool === 'loupe' ? 'cursor-none' : scale > 1 ? 'cursor-grab active:cursor-grabbing' : 'cursor-default'}`}
+                                onMouseDown={(e) => startDragOrPan(e)}
+                                onClick={handleContainerClick}
                             >
                                 <div style={{
+                                    transform: `scale(${scale}) translate(${offset.x / scale}px, ${offset.y / scale}px)`,
+                                    transition: isPanning ? 'none' : 'transform 0.2s ease-out',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
                                     width: '100%',
-                                    height: '100%',
-                                    backgroundImage: `url(${src})`,
-                                    backgroundRepeat: 'no-repeat',
-                                    backgroundSize: `${100 * 3}% ${100 * 3}%`, // 3x zoom
-                                    backgroundPosition: `${mousePos.x}% ${mousePos.y}%`
-                                }}></div>
-                                {/* Reticle */}
-                                <div className="absolute inset-0 flex items-center justify-center opacity-30">
-                                    <div className="w-full h-px bg-white"></div>
-                                    <div className="h-full w-px bg-white absolute"></div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                                    height: '100%'
+                                }}>
+                                    <img
+                                        src={src}
+                                        alt={alt}
+                                        className="max-h-full max-w-full object-contain pointer-events-none"
+                                        draggable={false}
+                                        onLoad={(e) => {
+                                            // Ensure container matches image aspect ratio if possible
+                                            const img = e.currentTarget;
+                                            if (containerRef.current) {
+                                                // We don't want to force container size, but helps with loupe calculations
+                                            }
+                                        }}
+                                    />
 
-                    {/* Tooltip */}
-                    {activeTool !== 'none' && (
-                        <div className="mt-4 text-gray-400 text-sm bg-gray-900/60 px-4 py-1.5 rounded-full border border-gray-800">
-                            {activeTool === 'loupe'
-                                ? "Deplacez la loupe sur les axes pour lire les valeurs avec précision."
-                                : `Cliquez sur le graphique pour placer une ligne ${activeTool === 'v' ? 'verticale' : 'horizontale'}. Faites glisser pour déplacer.`
-                            }
+                                    {/* Guideline Tool Hint Overlay */}
+                                    {(activeTool === 'v' || activeTool === 'h') && lines.length === 0 && (
+                                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                            <div className="bg-black/60 backdrop-blur-sm text-white px-6 py-3 rounded-full border border-white/20 animate-pulse">
+                                                Cliquez pour placer la ligne
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Guidelines Overlay */}
+                                    {lines.map(line => (
+                                        <div
+                                            key={line.id}
+                                            onMouseDown={(e) => startDragOrPan(e, line.id)}
+                                            className={`absolute group transition-shadow hover:shadow-lg ${line.type === 'v'
+                                                ? 'top-0 bottom-0 w-3 -ml-1.5 cursor-col-resize'
+                                                : 'left-0 right-0 h-3 -mt-1.5 cursor-row-resize'
+                                                }`}
+                                            style={{
+                                                left: line.type === 'v' ? `${line.position}%` : 0,
+                                                top: line.type === 'h' ? `${line.position}%` : 0,
+                                                zIndex: draggingId === line.id ? 20 : 10
+                                            }}
+                                        >
+                                            <div className={`absolute ${line.type === 'v' ? 'left-1/2 top-0 bottom-0 w-[2px]' : 'top-1/2 left-0 right-0 h-[2px]'
+                                                } ${line.type === 'v' ? 'bg-cyan-400/80 shadow-[0_0_8px_rgba(34,211,238,0.5)]' : 'bg-pink-400/80 shadow-[0_0_8px_rgba(244,114,182,0.5)]'}`}>
+                                            </div>
+                                            <button
+                                                onClick={(e) => deleteLine(e, line.id)}
+                                                className="absolute -top-6 -left-2 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity z-30 shadow-lg"
+                                            >
+                                                <Trash2 size={12} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Loupe Effect - Constrained within the container boundary */}
+                                {activeTool === 'loupe' && (
+                                    <div
+                                        className="absolute pointer-events-none rounded-full border-4 border-yellow-500 shadow-2xl overflow-hidden"
+                                        style={{
+                                            left: `${mousePos.x}%`,
+                                            top: `${mousePos.y}%`,
+                                            width: '180px',
+                                            height: '180px',
+                                            transform: 'translate(-50%, -50%)',
+                                            zIndex: 100
+                                        }}
+                                    >
+                                        <div style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            backgroundImage: `url(${src})`,
+                                            backgroundRepeat: 'no-repeat',
+                                            backgroundSize: `${100 * 4}% ${100 * 4}%`, // 4x zoom for better axis reading
+                                            backgroundPosition: `${mousePos.x}% ${mousePos.y}%`
+                                        }}></div>
+                                        <div className="absolute inset-0 flex items-center justify-center opacity-30">
+                                            <div className="w-full h-px bg-white"></div>
+                                            <div className="h-full w-px bg-white absolute"></div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                    )}
+
+                        {/* Bottom Tooltip */}
+                        <div className="p-4 flex justify-center">
+                            <div className="text-gray-400 text-xs bg-gray-900/60 px-6 py-2 rounded-full border border-gray-800 shadow-sm">
+                                {activeTool === 'none'
+                                    ? "Mode Navigation : Glissez pour déplacer l'image zoomée"
+                                    : activeTool === 'loupe'
+                                        ? "Loupe Active : Survoler les graduations pour zoomer (4x)"
+                                        : `Outil Ligne ${activeTool === 'v' ? 'V' : 'H'} : Cliquez sur le graphique pour placer`
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
         </>
