@@ -57,6 +57,7 @@ const Quiz: React.FC = () => {
     const [studentData, setStudentData] = useState<any>(null);
     const [timeLimit, setTimeLimit] = useState(3600); // Dynamic time limit
     const [zoomedImage, setZoomedImage] = useState<string | null>(null);
+    const [shouldPulseSubject, setShouldPulseSubject] = useState(false);
     const timerRef = useRef<number | null>(null);
 
     useEffect(() => {
@@ -108,7 +109,8 @@ const Quiz: React.FC = () => {
                                 context: section.context,
                                 data: section.data,
                                 questions: section.questions as any, // Sub-questions
-                                sectionTitle: section.title
+                                sectionTitle: section.title,
+                                images: (section as any).images || (section as any).image_url ? [(section as any).image_url] : []
                             });
                         } else {
                             // QCM Section: Add individual questions
@@ -130,6 +132,10 @@ const Quiz: React.FC = () => {
 
                 timerRef.current = window.setInterval(() => {
                     setTimeLeft(prev => {
+                        if (prev % 20 === 0 && prev !== timeLimit) {
+                            setShouldPulseSubject(true);
+                            setTimeout(() => setShouldPulseSubject(false), 3000); // Pulse for 3 seconds
+                        }
                         if (prev <= 1) {
                             clearInterval(timerRef.current!);
                             return 0;
@@ -393,9 +399,9 @@ const Quiz: React.FC = () => {
                     <div className="flex items-center space-x-6">
                         <button
                             onClick={() => setIsPdfViewerOpen(true)}
-                            className="bg-military-beige text-military-green px-3 py-1.5 rounded-lg flex items-center text-sm font-bold hover:bg-yellow-200 transition-colors shadow-sm mr-4"
+                            className={`bg-yellow-500 text-military-green px-6 py-3 rounded-full flex items-center shadow-lg hover:bg-yellow-400 transition-all font-bold text-2xl ${shouldPulseSubject ? 'animate-bounce ring-4 ring-yellow-300 ring-opacity-50' : ''}`}
                         >
-                            <FileSearch size={18} className="mr-1.5" />
+                            <FileSearch className="w-6 h-6 mr-3" />
                             Voir Sujet
                         </button>
                         <div className={`flex items-center px-6 py-3 rounded-full shadow-lg transition-all ${isTimeRunningOut ? 'bg-red-600' : 'bg-green-800'
