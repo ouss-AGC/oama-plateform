@@ -246,7 +246,7 @@
                     "points": 0.5,
                     "validation": {
                         "type": "numeric_set",
-                        "tolerance": 0.002,
+                        "tolerance": 0.07,
                         "parts": [
                             {
                                 "label": "ZA",
@@ -265,7 +265,7 @@
                     "points": 1.5,
                     "validation": {
                         "type": "numeric_set",
-                        "tolerance": 0.02,
+                        "tolerance": 0.07,
                         "parts": [
                             {
                                 "label": "Ps0 (A)",
@@ -292,7 +292,7 @@
                     "points": 1,
                     "validation": {
                         "type": "numeric_set",
-                        "tolerance": 0.02,
+                        "tolerance": 0.07,
                         "parts": [
                             {
                                 "label": "t0f (A)",
@@ -327,7 +327,7 @@
                     "points": 1,
                     "validation": {
                         "type": "numeric_set",
-                        "tolerance": 0.02,
+                        "tolerance": 0.07,
                         "parts": [
                             {
                                 "label": "U (A)",
@@ -413,7 +413,7 @@
                     "points": 1.0,
                     "validation": {
                         "type": "numeric_set",
-                        "tolerance": 0.01,
+                        "tolerance": 0.07,
                         "parts": [
                             {
                                 "label": "Impulsion I",
@@ -432,7 +432,7 @@
                     "points": 1.5,
                     "validation": {
                         "type": "numeric_set",
-                        "tolerance": 0.01,
+                        "tolerance": 0.07,
                         "parts": [
                             {
                                 "label": "Impulsion I",
@@ -451,7 +451,7 @@
                     "points": 1.5,
                     "validation": {
                         "type": "numeric_set",
-                        "tolerance": 0.01,
+                        "tolerance": 0.07,
                         "parts": [
                             {
                                 "label": "Impulsion I",
