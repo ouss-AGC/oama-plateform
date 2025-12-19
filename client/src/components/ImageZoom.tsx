@@ -63,7 +63,7 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
         e.stopPropagation();
         if (id !== undefined) {
             setDraggingId(id);
-        } else if (activeTool === 'none' && scale > 1) {
+        } else if (activeTool === 'none') {
             setIsPanning(true);
             setLastMousePos({ x: e.clientX, y: e.clientY });
         }
@@ -221,10 +221,10 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                         </div>
 
                         {/* Centered Image Viewport */}
-                        <div className="flex-1 relative flex items-center justify-center p-8">
+                        <div className="flex-1 relative flex items-center justify-center p-4 md:p-8">
                             <div
                                 ref={containerRef}
-                                className={`relative max-h-full max-w-full overflow-hidden select-none shadow-2xl border border-gray-800 rounded-lg bg-gray-900 flex items-center justify-center ${activeTool === 'v' || activeTool === 'h' ? 'cursor-crosshair' : activeTool === 'loupe' ? 'cursor-none' : scale > 1 ? 'cursor-grab active:cursor-grabbing' : 'cursor-default'}`}
+                                className={`relative max-h-full max-w-full overflow-hidden select-none shadow-2xl border border-gray-800 rounded-lg bg-gray-900 flex items-center justify-center ${activeTool === 'v' || activeTool === 'h' ? 'cursor-crosshair' : activeTool === 'loupe' ? 'cursor-none' : 'cursor-grab active:cursor-grabbing'}`}
                                 onMouseDown={(e) => startDragOrPan(e)}
                                 onClick={handleContainerClick}
                             >
@@ -295,8 +295,8 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                                         style={{
                                             left: `${mousePos.x}%`,
                                             top: `${mousePos.y}%`,
-                                            width: '180px',
-                                            height: '180px',
+                                            width: '200px',
+                                            height: '200px',
                                             transform: 'translate(-50%, -50%)',
                                             zIndex: 100
                                         }}
@@ -306,7 +306,7 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                                             height: '100%',
                                             backgroundImage: `url(${src})`,
                                             backgroundRepeat: 'no-repeat',
-                                            backgroundSize: `${100 * 4}% ${100 * 4}%`, // 4x zoom for better axis reading
+                                            backgroundSize: `${100 * 3}% ${100 * 3}%`, // Perfect 3x zoom for axis reading
                                             backgroundPosition: `${mousePos.x}% ${mousePos.y}%`
                                         }}></div>
                                         <div className="absolute inset-0 flex items-center justify-center opacity-30">
@@ -319,12 +319,12 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                         </div>
 
                         {/* Bottom Tooltip */}
-                        <div className="p-4 flex justify-center">
+                        <div className="p-2 md:p-4 flex justify-center">
                             <div className="text-gray-400 text-xs bg-gray-900/60 px-6 py-2 rounded-full border border-gray-800 shadow-sm">
                                 {activeTool === 'none'
-                                    ? "Mode Navigation : Glissez pour déplacer l'image zoomée"
+                                    ? "Mode Navigation : Glissez pour déplacer le graphique"
                                     : activeTool === 'loupe'
-                                        ? "Loupe Active : Survoler les graduations pour zoomer (4x)"
+                                        ? "Loupe Active (3x) : Survoler les graduations pour zoomer"
                                         : `Outil Ligne ${activeTool === 'v' ? 'V' : 'H'} : Cliquez sur le graphique pour placer`
                                 }
                             </div>
