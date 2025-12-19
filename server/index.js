@@ -11,8 +11,8 @@ app.use(express.json());
 
 // --- Session State (In-Memory) ---
 let sessionState = {
-    currentPin: null,
-    isQuizStarted: false,
+    currentPin: '123456', // Default PIN for Dev/Testing
+    isQuizStarted: true,
     participants: [],
     results: [] // Store quiz results here
 };

@@ -392,6 +392,7 @@ const AdminDashboard: React.FC = () => {
                             <option value="munitions">Generalites sur les Munitions LASM 3</option>
                             <option value="agc">Armement Gros Calibre (AGC) pour LASM 2</option>
                             <option value="genie">Genie Militaire 4 LASM 2</option>
+                            <option value="explosions">Calcul des effets des explosions sur les structures GC31</option>
                         </select>
                     </div>
 

@@ -1,14 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Clock, Calendar, CheckCircle, XCircle, FileText, TrendingUp, AlertTriangle, Award, BookOpen } from 'lucide-react';
+import { ArrowLeft, Clock, Calendar, CheckCircle, XCircle, FileText, TrendingUp, AlertTriangle, Award, BookOpen, Save } from 'lucide-react';
 import jsPDF from 'jspdf';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import ImageZoom from './ImageZoom';
+
+interface SubQuestion {
+    id: string;
+    question: string;
+    points: number;
+    validation?: {
+        type: string;
+        value?: number;
+        tolerance?: number;
+        parts?: { label?: string; value: number }[];
+        keywords?: string[];
+        values?: string[];
+        formulas?: string[];
+        results?: string[];
+        partial?: boolean;
+    };
+}
 
 interface Question {
-    id: number;
-    question: string;
-    options: string[];
-    correctAnswer: number;
+    id: number | string;
+    type?: 'qcm' | 'exercise';
+    question?: string;
+    title?: string;
+    options?: string[];
+    correctAnswer?: number;
+    questions?: SubQuestion[]; // For exercises
+    solution?: string; // For exercises
+    detailed_solution?: string; // Detailed steps
+    image_url?: string; // Context image
+    description?: string; // For exercises
+    context?: string; // For exercises
 }
 
 interface QuizResult {
@@ -23,8 +49,9 @@ interface QuizResult {
     timeElapsed: number;
     discipline: string;
     timestamp: number;
-    answers: number[];
-    isPractice?: boolean; // Flag for practice quiz
+    answers: any[]; // Can be number[] or object[]
+    isPractice?: boolean;
+    manualScores?: Record<string, number>; // Store manual scores for exercises
 }
 
 const StudentDetail: React.FC = () => {
@@ -33,6 +60,8 @@ const StudentDetail: React.FC = () => {
     const [result, setResult] = useState<QuizResult | null>(null);
     const [quizQuestions, setQuizQuestions] = useState<Question[]>([]);
     const [classStats, setClassStats] = useState({ average: 0, max: 0, min: 0 });
+    const [manualScores, setManualScores] = useState<Record<string, number>>({});
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         const isAuthenticated = localStorage.getItem('adminAuthenticated');
@@ -50,6 +79,9 @@ const StudentDetail: React.FC = () => {
 
                 if (foundResult) {
                     setResult(foundResult);
+                    if (foundResult.manualScores) {
+                        setManualScores(foundResult.manualScores);
+                    }
 
                     // Calculate class stats for this discipline
                     const disciplineResults = allResults.filter((r: QuizResult) => r.discipline === foundResult.discipline);
@@ -65,7 +97,26 @@ const StudentDetail: React.FC = () => {
                         : `quiz_data_${foundResult.discipline}.json`;
                     fetch(`/${fileName}`)
                         .then(res => res.json())
-                        .then(data => setQuizQuestions(data.questions))
+                        .then(data => {
+                            // Flatten questions if sections exist (for Explosions GC31)
+                            if (data.sections) {
+                                let flat: Question[] = [];
+                                data.sections.forEach((section: any) => {
+                                    if (section.questions) {
+                                        // If it's an exercise section, the section itself is the "question" container
+                                        if (section.type === 'exercise') {
+                                            flat.push(section);
+                                        } else {
+                                            // QCM section
+                                            flat = [...flat, ...section.questions];
+                                        }
+                                    }
+                                });
+                                setQuizQuestions(flat);
+                            } else {
+                                setQuizQuestions(data.questions);
+                            }
+                        })
                         .catch(err => console.error("Failed to load questions", err));
                 } else {
                     console.error("Student result not found for timestamp:", timestamp);
@@ -78,104 +129,125 @@ const StudentDetail: React.FC = () => {
             });
     }, [navigate, timestamp]);
 
-    if (!result) return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
+    const handleScoreChange = (questionId: string | number, score: number) => {
+        setManualScores(prev => ({
+            ...prev,
+            [questionId]: score
+        }));
+    };
 
-    const generateReport = async () => {
-        const doc = new jsPDF();
+    const saveGrading = async () => {
+        if (!result) return;
+        setIsSaving(true);
 
-        // Load signature image
-        const loadImage = (src: string): Promise<string> => {
-            return new Promise((resolve, reject) => {
-                const img = new Image();
-                img.crossOrigin = 'anonymous';
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    const ctx = canvas.getContext('2d');
-                    if (ctx) {
-                        ctx.drawImage(img, 0, 0);
-                        resolve(canvas.toDataURL('image/png'));
-                    } else {
-                        reject(new Error('Canvas context not available'));
-                    }
-                };
-                img.onerror = reject;
-                img.src = src;
-            });
+        // Recalculate total score
+        let totalPoints = 0;
+        let earnedPoints = 0;
+
+        quizQuestions.forEach((q, index) => {
+            if (q.type === 'exercise') {
+                // Exercise scoring
+                const maxPoints = q.questions?.reduce((sum, subQ) => sum + subQ.points, 0) || 0;
+                totalPoints += maxPoints; // Add to total possible points (weighted?)
+                // Actually, for mixed exams, we need to know the weight of QCM vs Exercises.
+                // Assuming QCMs are 0.5 pts each as per description in JSON.
+                // And Exercises have specific points.
+
+                // However, the current system calculates scoreOn20 based on QCM count.
+                // We need a more robust scoring system for mixed content.
+
+                // Let's assume manualScores contains the total score for the exercise
+                const exerciseScore = manualScores[q.id] || 0;
+                earnedPoints += exerciseScore;
+
+            } else {
+                // QCM scoring
+                totalPoints += 0.5; // Assuming 0.5 per QCM as per JSON
+                if (result.answers[index] === q.correctAnswer) {
+                    earnedPoints += 0.5;
+                }
+            }
+        });
+
+        // If totalPoints is 0 (shouldn't happen), avoid division by zero
+        // For the specific Explosions exam:
+        // Part 1: 18 QCM * 0.5 = 9 pts
+        // Part 2: 6 pts
+        // Part 3: 5 pts
+        // Total = 20 pts. Perfect.
+
+        const newScoreOn20 = (earnedPoints / 20) * 20; // It's already on 20 if we sum correctly
+        const newScorePercentage = (earnedPoints / 20) * 100;
+
+        const updatedResult = {
+            ...result,
+            score: newScorePercentage,
+            scoreOn20: earnedPoints, // Direct sum for this specific exam structure
+            manualScores: manualScores,
+            needsGrading: false
         };
 
-        let signatureDataUrl = '';
-        try {
-            signatureDataUrl = await loadImage('/signature.png');
-        } catch (err) {
-            console.error('Failed to load signature:', err);
-        }
+        setResult(updatedResult);
 
-        // Load score circle image
-        let scoreCircleDataUrl = '';
-        let stampDataUrl = '';
+        // Update in backend/localStorage
         try {
-            scoreCircleDataUrl = await loadImage('/score_circle.png');
-            stampDataUrl = await loadImage('/golden_stamp_pdf.png'); // PDF-specific stamp
-        } catch (err) {
-            console.error('Failed to load assets:', err);
-        }
+            // Update local storage history
+            const history = JSON.parse(localStorage.getItem('quizHistory') || '[]');
+            const updatedHistory = history.map((r: QuizResult) =>
+                r.timestamp === result.timestamp ? updatedResult : r
+            );
+            localStorage.setItem('quizHistory', JSON.stringify(updatedHistory));
 
-        // Header with handwritten score circle and signature
+            // Update server
+            await fetch('/api/submit-quiz', { // Re-submit to update
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedResult)
+            });
+
+            alert("Notation enregistrée avec succès !");
+        } catch (error) {
+            console.error("Failed to save grading:", error);
+            alert("Erreur lors de l'enregistrement.");
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    if (!result) return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
+
+    const generateReport = () => {
+        const doc = new jsPDF();
+        let yPos = 20;
+
+        // Header
         doc.setFontSize(22);
-        doc.setTextColor(45, 80, 22);
-        doc.text("RAPPORT INDIVIDUEL", 105, 20, { align: "center" });
+        doc.setTextColor(46, 125, 50); // Military Green
+        doc.text("Rapport de Performance", 105, yPos, { align: "center" });
+        yPos += 15;
 
-        // Large RED handwritten score at TOP RIGHT with Circle Image
-        if (scoreCircleDataUrl) {
-            doc.addImage(scoreCircleDataUrl, 'PNG', 160, 15, 40, 40);
-        }
+        // Student Info Box
+        doc.setDrawColor(200, 200, 200);
+        doc.setFillColor(245, 245, 245);
+        doc.rect(15, yPos, 180, 35, 'F');
 
-        doc.setFontSize(22); // Slightly smaller to fit in circle
-        doc.setFont("times", "italic"); // Handwritten style
-        doc.setTextColor(200, 0, 0); // Red
-        // Position text roughly in the center/left of the circle image (160 + 15, 15 + 25)
-        doc.text(`${result.scoreOn20.toFixed(1)}/20`, 180, 42, { align: "center", angle: 15 }); // Added slight angle for handwritten feel
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Nom: ${result.student.grade} ${result.student.name}`, 20, yPos + 10);
+        doc.text(`Matricule: ${result.student.matricule}`, 20, yPos + 18);
+        doc.text(`Discipline: ${result.discipline}`, 20, yPos + 26);
 
-        // Add signature on the left (Reduced size)
-        if (signatureDataUrl) {
-            doc.addImage(signatureDataUrl, 'PNG', 20, 25, 60, 30); // Smaller signature
-        }
-
-        doc.setFontSize(8);
-        doc.setTextColor(100);
-        doc.text("Lt Col Oussama Atoui", 50, 58, { align: "center" }); // Closer to signature
-        doc.text("Instructeur Armes et Munitions", 50, 62, { align: "center" }); // Closer to signature
-
-        // Add Golden Stamp (Right side, below score circle)
-        if (stampDataUrl) {
-            doc.addImage(stampDataUrl, 'PNG', 155, 60, 50, 50); // Right side, larger, below score
-        }
-
-        // Student information
-        // Student information
-        doc.setFontSize(14);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(200, 0, 0); // Red Name
-        doc.text(`Nom: ${result.student.grade} ${result.student.name}`, 20, 70);
-
-        doc.setTextColor(0); // Reset to black
-        doc.setFont("helvetica", "normal");
-        doc.text(`Classe: ${result.student.className}`, 20, 78);
-        doc.text(`Matricule: ${result.student.matricule}`, 20, 86);
-
-        doc.text(`Discipline: ${result.discipline.toUpperCase()}`, 140, 70);
-        doc.text(`Score: ${result.scoreOn20.toFixed(2)}/20`, 140, 78);
-        doc.text(`Date: ${new Date(result.timestamp).toLocaleDateString()}`, 140, 86);
-
-        let yPos = 100;
         doc.setFontSize(16);
-        doc.text("Détail des réponses", 20, yPos);
-        yPos += 12;
+        doc.setTextColor(46, 125, 50);
+        doc.text(`Note: ${result.scoreOn20.toFixed(2)}/20`, 150, yPos + 20);
 
-        doc.setFontSize(10);
-        const lineHeight = 6; // Height per line of text
+        yPos += 45;
+
+        // Content
+        doc.setFontSize(14);
+        doc.setTextColor(0, 0, 0);
+        doc.text("Détail des Résultats:", 15, yPos);
+        yPos += 10;
 
         quizQuestions.forEach((q, index) => {
             if (yPos > 270) {
@@ -183,50 +255,90 @@ const StudentDetail: React.FC = () => {
                 yPos = 20;
             }
 
-            const userAnswer = result.answers[index];
-            const isCorrect = userAnswer === q.correctAnswer;
+            if (q.type === 'exercise') {
+                // Exercise Header
+                doc.setFontSize(12);
+                doc.setTextColor(0, 51, 102); // Dark Blue
+                doc.text(`Exercice: ${q.title || 'Question ' + (index + 1)}`, 15, yPos);
 
-            // Question
-            doc.setTextColor(0);
-            doc.setFont("helvetica", "bold");
-            const questionText = `Q${index + 1}: ${q.question}`;
-            const questionLines = doc.splitTextToSize(questionText, 170);
-            doc.text(questionLines, 20, yPos);
-            yPos += questionLines.length * lineHeight + 2;
+                const score = manualScores[q.id] !== undefined ? manualScores[q.id] : 0;
+                const maxPoints = q.questions?.reduce((sum, sq) => sum + sq.points, 0) || 0;
 
-            // User's answer
-            doc.setFont("helvetica", "normal");
-            doc.setTextColor(isCorrect ? 0 : 200, isCorrect ? 100 : 0, 0);
-            const answerText = `Réponse: ${q.options[userAnswer]} ${isCorrect ? '(Correct)' : '(Incorrect)'}`;
-            const answerLines = doc.splitTextToSize(answerText, 165);
-            doc.text(answerLines, 25, yPos);
-            yPos += answerLines.length * lineHeight;
+                doc.setFontSize(10);
+                doc.setTextColor(100, 100, 100);
+                doc.text(`Score: ${score} / ${maxPoints}`, 160, yPos);
 
-            // Correction if incorrect
-            if (!isCorrect) {
-                yPos += 2;
-                doc.setTextColor(0, 100, 0);
-                const correctionText = `Correction: ${q.options[q.correctAnswer]}`;
-                const correctionLines = doc.splitTextToSize(correctionText, 165);
-                doc.text(correctionLines, 25, yPos);
-                yPos += correctionLines.length * lineHeight;
+                yPos += 7;
+
+                // Sub-questions
+                doc.setFontSize(10);
+                doc.setTextColor(0, 0, 0);
+
+                const studentAnswers = result.answers[index] || {};
+
+                q.questions?.forEach(subQ => {
+                    if (yPos > 270) { doc.addPage(); yPos = 20; }
+
+                    // Question Text
+                    const qLines = doc.splitTextToSize(`- ${subQ.question}`, 170);
+                    doc.text(qLines, 20, yPos);
+                    yPos += (qLines.length * 5);
+
+                    // Answer
+                    const answerText = studentAnswers[subQ.id] || "(Aucune réponse)";
+                    const aLines = doc.splitTextToSize(`Rep: ${answerText}`, 160);
+                    doc.setTextColor(80, 80, 80);
+                    doc.text(aLines, 25, yPos);
+                    doc.setTextColor(0, 0, 0);
+                    yPos += (aLines.length * 5) + 3;
+                });
+
+                yPos += 5;
+                doc.setDrawColor(220, 220, 220);
+                doc.line(15, yPos, 195, yPos);
+                yPos += 10;
+
+            } else {
+                // QCM (Simplified)
+                // Only showing incorrect ones to save space? Or just a summary?
+                // Let's show a compact list for QCMs
+                // Actually, let's group QCMs
             }
-
-            yPos += 8; // Space between questions
         });
 
-        doc.save(`Rapport_${result.student.name}.pdf`);
+        // QCM Summary Section
+        if (yPos > 250) { doc.addPage(); yPos = 20; }
+        const qcmCount = quizQuestions.filter(q => q.type !== 'exercise').length;
+        if (qcmCount > 0) {
+            doc.setFontSize(12);
+            doc.setTextColor(0, 51, 102);
+            doc.text(`Questions à Choix Multiple (${qcmCount})`, 15, yPos);
+            yPos += 10;
+
+            let correctQCM = 0;
+            quizQuestions.forEach((q, index) => {
+                if (q.type !== 'exercise') {
+                    if (result.answers[index] === q.correctAnswer) correctQCM++;
+                }
+            });
+
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Score QCM: ${correctQCM} / ${qcmCount} (${(correctQCM * 0.5)} pts)`, 20, yPos);
+        }
+
+        doc.save(`Rapport_${result.student.name.replace(/\s+/g, '_')}.pdf`);
     };
 
-    // Chart Data
+    // Chart Data (Keep existing)
     const performanceData = [
         { name: 'Étudiant', score: result.scoreOn20, fill: '#4F46E5' },
         { name: 'Moyenne Classe', score: classStats.average, fill: '#10B981' },
         { name: 'Max Classe', score: classStats.max, fill: '#F59E0B' },
     ];
 
-    const correctCount = result.answers.filter((a, i) => a === quizQuestions[i]?.correctAnswer).length;
-    const incorrectCount = result.answers.length - correctCount;
+    const correctCount = result.answers.filter((a, i) => quizQuestions[i]?.type !== 'exercise' && a === quizQuestions[i]?.correctAnswer).length;
+    const incorrectCount = result.answers.filter((a, i) => quizQuestions[i]?.type !== 'exercise' && a !== quizQuestions[i]?.correctAnswer).length;
 
     const accuracyData = [
         { name: 'Correct', value: correctCount },
@@ -234,7 +346,7 @@ const StudentDetail: React.FC = () => {
     ];
     const COLORS = ['#10B981', '#EF4444'];
 
-    // Recommendations
+    // Recommendations (Keep existing)
     const getRecommendations = () => {
         if (result.scoreOn20 < 10) {
             return {
@@ -289,13 +401,23 @@ const StudentDetail: React.FC = () => {
     return (
         <div className="min-h-screen bg-gray-100 p-6">
             <div className="max-w-7xl mx-auto">
-                <button
-                    onClick={() => navigate('/admin/dashboard')}
-                    className="flex items-center text-gray-600 hover:text-gray-900 mb-6"
-                >
-                    <ArrowLeft className="w-5 h-5 mr-2" />
-                    Retour au tableau de bord
-                </button>
+                <div className="flex justify-between items-center mb-6">
+                    <button
+                        onClick={() => navigate('/admin/dashboard')}
+                        className="flex items-center text-gray-600 hover:text-gray-900"
+                    >
+                        <ArrowLeft className="w-5 h-5 mr-2" />
+                        Retour au tableau de bord
+                    </button>
+                    <button
+                        onClick={saveGrading}
+                        disabled={isSaving}
+                        className="px-6 py-2 bg-military-green text-white rounded-lg hover:bg-green-800 flex items-center shadow-md disabled:opacity-50"
+                    >
+                        <Save className="w-5 h-5 mr-2" />
+                        {isSaving ? 'Enregistrement...' : 'Enregistrer la Notation'}
+                    </button>
+                </div>
 
                 {/* Header Card */}
                 <div className="bg-white rounded-xl shadow-md overflow-hidden mb-6">
@@ -338,54 +460,10 @@ const StudentDetail: React.FC = () => {
                                 </ResponsiveContainer>
                             </div>
                         </div>
-
-                        {/* Accuracy Chart */}
-                        <div className="bg-white p-6 rounded-xl shadow-md flex flex-col md:flex-row items-center justify-between">
-                            <div className="w-full md:w-1/2 h-64">
-                                <h3 className="text-lg font-bold text-gray-800 mb-4 text-center">Précision</h3>
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <PieChart>
-                                        <Pie
-                                            data={accuracyData}
-                                            cx="50%"
-                                            cy="50%"
-                                            innerRadius={60}
-                                            outerRadius={80}
-                                            fill="#8884d8"
-                                            paddingAngle={5}
-                                            dataKey="value"
-                                        >
-                                            {accuracyData.map((entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                            ))}
-                                        </Pie>
-                                        <Tooltip />
-                                        <Legend />
-                                    </PieChart>
-                                </ResponsiveContainer>
-                            </div>
-                            <div className="w-full md:w-1/2 p-4">
-                                <div className="grid grid-cols-2 gap-4 text-center">
-                                    <div className="p-4 bg-green-50 rounded-lg border border-green-100">
-                                        <p className="text-2xl font-bold text-green-600">{correctCount}</p>
-                                        <p className="text-sm text-green-800">Réponses Correctes</p>
-                                    </div>
-                                    <div className="p-4 bg-red-50 rounded-lg border border-red-100">
-                                        <p className="text-2xl font-bold text-red-600">{incorrectCount}</p>
-                                        <p className="text-sm text-red-800">Réponses Incorrectes</p>
-                                    </div>
-                                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-100 col-span-2">
-                                        <p className="text-2xl font-bold text-blue-600">{Math.floor(result.timeElapsed / 60)}m {result.timeElapsed % 60}s</p>
-                                        <p className="text-sm text-blue-800">Temps Total</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
-                    {/* Right Column: Recommendations & Actions */}
+                    {/* Right Column: Recommendations */}
                     <div className="space-y-6">
-                        {/* Recommendations Card */}
                         <div className={`bg-white rounded-xl shadow-md overflow-hidden border-t-4 ${recommendation.level === 'critical' ? 'border-red-500' : recommendation.level === 'warning' ? 'border-yellow-500' : 'border-green-500'}`}>
                             <div className="p-6">
                                 <div className="flex items-center mb-4">
@@ -403,30 +481,6 @@ const StudentDetail: React.FC = () => {
                                         ))}
                                     </ul>
                                 </div>
-                                <button
-                                    onClick={generateReport}
-                                    className="w-full py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors flex items-center justify-center font-bold"
-                                >
-                                    <FileText className="w-5 h-5 mr-2" />
-                                    Télécharger Rapport PDF
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Quick Stats */}
-                        <div className="bg-white p-6 rounded-xl shadow-md">
-                            <h3 className="font-bold text-gray-800 mb-4">Statistiques Rapides</h3>
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                                    <span className="text-gray-600">Rang dans la classe</span>
-                                    <span className="font-bold text-gray-900">Calcul en cours...</span>
-                                </div>
-                                <div className="flex justify-between items-center border-b border-gray-100 pb-2">
-                                    <span className="text-gray-600">Écart à la moyenne</span>
-                                    <span className={`font-bold ${result.scoreOn20 >= classStats.average ? 'text-green-600' : 'text-red-600'}`}>
-                                        {result.scoreOn20 >= classStats.average ? '+' : ''}{(result.scoreOn20 - classStats.average).toFixed(2)}
-                                    </span>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -435,35 +489,136 @@ const StudentDetail: React.FC = () => {
                 {/* Detailed Answers Section */}
                 <div className="bg-white rounded-xl shadow-md overflow-hidden">
                     <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
-                        <h3 className="font-bold text-gray-800">Détail des Réponses ({quizQuestions.length} Questions)</h3>
+                        <h3 className="font-bold text-gray-800">Détail des Réponses et Notation</h3>
                     </div>
                     <div className="p-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className="space-y-6">
                             {quizQuestions.map((q, index) => {
-                                const userAnswer = result.answers[index];
-                                const isCorrect = userAnswer === q.correctAnswer;
+                                if (q.type === 'exercise') {
+                                    // Exercise Rendering
+                                    const studentAnswers = result.answers[index] || {};
+                                    const maxPoints = q.questions?.reduce((sum, subQ) => sum + subQ.points, 0) || 0;
+                                    const currentScore = manualScores[q.id] !== undefined ? manualScores[q.id] : 0;
 
-                                return (
-                                    <div key={index} className={`p-4 rounded-lg border ${isCorrect ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
-                                        <div className="flex justify-between items-start mb-2">
-                                            <span className={`font-bold text-sm px-2 py-1 rounded ${isCorrect ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
-                                                Q{index + 1}
-                                            </span>
-                                            {isCorrect ? <CheckCircle className="w-5 h-5 text-green-600" /> : <XCircle className="w-5 h-5 text-red-600" />}
+                                    return (
+                                        <div key={index} className="border border-blue-200 rounded-lg overflow-hidden">
+                                            <div className="bg-blue-50 px-4 py-3 border-b border-blue-200 flex justify-between items-center">
+                                                <h4 className="font-bold text-blue-900">{q.title}</h4>
+                                                <div className="flex items-center space-x-2">
+                                                    <span className="text-sm font-medium text-blue-800">Note:</span>
+                                                    <input
+                                                        type="number"
+                                                        min="0"
+                                                        max={maxPoints}
+                                                        step="0.25"
+                                                        value={currentScore}
+                                                        onChange={(e) => handleScoreChange(q.id, parseFloat(e.target.value))}
+                                                        className="w-20 p-1 border border-blue-300 rounded text-center font-bold"
+                                                    />
+                                                    <span className="text-sm text-blue-800">/ {maxPoints} pts</span>
+                                                </div>
+                                            </div>
+                                            <div className="p-4 space-y-4">
+                                                <div className="bg-gray-50 p-3 rounded text-sm text-gray-700 italic border border-gray-200">
+                                                    {q.description}
+                                                    {q.image_url && (
+                                                        <div className="mt-2">
+                                                            <ImageZoom src={q.image_url} alt="Figure de référence" className="max-h-48 rounded" />
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {/* Sub Questions */}
+                                                <div className="grid grid-cols-1 gap-4">
+                                                    {q.questions?.map((subQ) => (
+                                                        <div key={subQ.id} className="border-l-4 border-gray-300 pl-4 py-2">
+                                                            <div className="flex justify-between items-start mb-1">
+                                                                <p className="font-semibold text-gray-800">{subQ.question}</p>
+                                                                <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full whitespace-nowrap">{subQ.points} pts</span>
+                                                            </div>
+
+                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                                <div className="bg-white p-3 border border-gray-200 rounded mb-2">
+                                                                    <span className="text-xs font-bold text-gray-500 uppercase block mb-1">Réponse Étudiant:</span>
+                                                                    <p className="text-gray-800 whitespace-pre-wrap font-mono text-sm">{studentAnswers[subQ.id] || "Aucune réponse"}</p>
+                                                                </div>
+
+                                                                {/* Validation Info (Admin Only) */}
+                                                                {subQ.validation && (
+                                                                    <div className="bg-blue-50 p-3 border border-blue-100 rounded mb-2 text-xs">
+                                                                        <span className="text-xs font-bold text-blue-800 uppercase block mb-1">Critères de Notation:</span>
+                                                                        {subQ.validation.type.includes('numeric') ? (
+                                                                            <div className="space-y-1">
+                                                                                <p className="text-blue-900 font-semibold">Tolérance: ±{((subQ.validation.tolerance || 0.02) * 100).toFixed(1)}%</p>
+                                                                                {subQ.validation.parts ? (
+                                                                                    <ul className="list-disc list-inside text-blue-700">
+                                                                                        {subQ.validation.parts.map((p: any, i: number) => (
+                                                                                            <li key={i}>{p.label || 'Valeur'}: <span className="font-mono font-bold">{p.value}</span></li>
+                                                                                        ))}
+                                                                                    </ul>
+                                                                                ) : (
+                                                                                    <p className="text-blue-700">Valeur attendue: <span className="font-mono font-bold">{subQ.validation.value}</span></p>
+                                                                                )}
+                                                                            </div>
+                                                                        ) : (
+                                                                            <div className="space-y-1">
+                                                                                <p className="text-blue-900 font-semibold">Mots-clés attendus:</p>
+                                                                                <div className="flex flex-wrap gap-1">
+                                                                                    {((subQ.validation.keywords || subQ.validation.values || []) as string[]).map((k: string, i: number) => (
+                                                                                        <span key={i} className="px-2 py-0.5 bg-blue-100 text-blue-800 rounded border border-blue-200">{k}</span>
+                                                                                    ))}
+                                                                                </div>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+                                                {/* Global Solution */}
+                                                <div className="mt-4 bg-green-50 p-4 rounded border border-green-200">
+                                                    <h5 className="font-bold text-green-800 mb-2 flex items-center">
+                                                        <CheckCircle className="w-4 h-4 mr-2" />
+                                                        Solution Modèle
+                                                    </h5>
+                                                    <pre className="whitespace-pre-wrap text-sm text-green-900 font-mono bg-white p-3 rounded border border-green-100">
+                                                        <pre className="whitespace-pre-wrap text-sm text-green-900 font-mono bg-white p-3 rounded border border-green-100">
+                                                            {q.detailed_solution || q.solution}
+                                                        </pre>
+                                                    </pre>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <p className="text-sm text-gray-800 font-medium mb-2 line-clamp-2" title={q.question}>{q.question}</p>
-                                        <div className="text-xs space-y-1">
-                                            <p className={`${isCorrect ? 'text-green-700' : 'text-red-700'}`}>
-                                                <span className="font-semibold">Réponse:</span> {q.options[userAnswer] || "Non répondu"}
-                                            </p>
-                                            {!isCorrect && (
-                                                <p className="text-green-700">
-                                                    <span className="font-semibold">Correct:</span> {q.options[q.correctAnswer]}
+                                    );
+                                } else {
+                                    // QCM Rendering
+                                    const userAnswer = result.answers[index];
+                                    const isCorrect = userAnswer === q.correctAnswer;
+
+                                    return (
+                                        <div key={index} className={`p-4 rounded-lg border ${isCorrect ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
+                                            <div className="flex justify-between items-start mb-2">
+                                                <span className={`font-bold text-sm px-2 py-1 rounded ${isCorrect ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
+                                                    Q{index + 1} (0.5 pt)
+                                                </span>
+                                                {isCorrect ? <CheckCircle className="w-5 h-5 text-green-600" /> : <XCircle className="w-5 h-5 text-red-600" />}
+                                            </div>
+                                            <p className="text-sm text-gray-800 font-medium mb-2 line-clamp-2" title={q.question}>{q.question}</p>
+                                            <div className="text-xs space-y-1">
+                                                <p className={`${isCorrect ? 'text-green-700' : 'text-red-700'}`}>
+                                                    <span className="font-semibold">Réponse:</span> {q.options?.[userAnswer] || "Non répondu"}
                                                 </p>
-                                            )}
+                                                {!isCorrect && (
+                                                    <p className="text-green-700">
+                                                        <span className="font-semibold">Correct:</span> {q.options?.[q.correctAnswer || 0]}
+                                                    </p>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                );
+                                    );
+                                }
                             })}
                         </div>
                     </div>

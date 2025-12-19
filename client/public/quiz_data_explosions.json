@@ -1,203 +1,469 @@
 {
-    "title": "Calcul des effets des explosions sur les structures GC31",
-    "questions": [
+    "quizTitle": "Examen - Calcul des effets des explosions sur les structures GC31",
+    "creator": "Lt Col Oussama Atoui",
+    "module": "Explosions GC31",
+    "sections": [
         {
-            "id": 1,
-            "question": "Quelle est la principale différence entre une déflagration et une détonation dans le cadre des explosions chimiques ?",
-            "options": [
-                "La déflagration se propage à une vitesse subsonique, tandis que la détonation se propage à une vitesse supersonique.",
-                "La déflagration nécessite un front de choc, tandis que la détonation ne le nécessite pas.",
-                "La déflagration est caractérisée par un auto-échauffement, tandis que la détonation est basée sur un transfert de chaleur.",
-                "La déflagration concerne uniquement les explosifs brisants, tandis que la détonation concerne uniquement les poudres militaires."
-            ],
-            "correctAnswer": 0
+            "id": "part1",
+            "title": "Partie 01 : Questions à choix multiple",
+            "description": "Choisissez la bonne réponse. (0,5 pt par question)",
+            "questions": [
+                {
+                    "id": 1,
+                    "question": "Quelle est la principale différence entre une déflagration et une détonation dans le cadre des explosions chimiques ?",
+                    "options": [
+                        "La déflagration se propage à une vitesse subsonique, tandis que la détonation se propage à une vitesse supersonique.",
+                        "La déflagration nécessite un front de choc, tandis que la détonation ne le nécessite pas.",
+                        "La détonation est plus lente que la déflagration.",
+                        "Il n'existe aucune différence fondamentale entre les deux phénomènes."
+                    ],
+                    "correctAnswer": 0,
+                    "points": 0.5
+                },
+                {
+                    "id": 2,
+                    "question": "Qu'est-ce qui distingue principalement un explosif primaire d'un explosif secondaire ?",
+                    "options": [
+                        "Les explosifs primaires sont plus puissants que les explosifs secondaires.",
+                        "Les explosifs primaires sont plus sensibles et détonent plus facilement que les explosifs secondaires.",
+                        "Les explosifs secondaires ne peuvent pas détonner sans un initiateur primaire.",
+                        "Il n'existe aucune différence chimique entre les deux catégories."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 3,
+                    "question": "Quel mécanisme explique la formation d'un front de choc à partir d'une onde de pression initiale lors d'une explosion ?",
+                    "options": [
+                        "L'accumulation de gaz à haute température derrière l'onde de pression.",
+                        "La superposition des fronts d'onde causée par la variation locale de la vitesse du son.",
+                        "La réflexion de l'onde de pression sur les obstacles environnants.",
+                        "La dissipation progressive de l'énergie de l'onde initiale."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 4,
+                    "question": "Parmi les affirmations suivantes concernant le phénomène de souffle et son interaction avec les structures, laquelle est correcte ?",
+                    "options": [
+                        "Le souffle est uniquement la pression de l'onde de choc incidente.",
+                        "Le souffle est un vent provoqué par le déplacement des molécules d'air suite au passage de l'onde de choc.",
+                        "Le souffle n'a aucun effet sur les structures légères.",
+                        "Le souffle est un phénomène purement statique."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 5,
+                    "question": "Parmi les affirmations suivantes concernant l'utilisation du TNT comme référence pour les explosifs, laquelle est correcte ?",
+                    "options": [
+                        "Le TNT est le plus puissant de tous les explosifs.",
+                        "Le TNT est le moins sensible de tous les explosifs.",
+                        "Le TNT est utilisé comme référence car ses propriétés énergétiques sont bien documentées et stables.",
+                        "Le TNT est utilisé uniquement pour les applications militaires."
+                    ],
+                    "correctAnswer": 2,
+                    "points": 0.5
+                },
+                {
+                    "id": 6,
+                    "question": "Quels sont les facteurs qui influencent directement la propagation des ondes de choc ?",
+                    "options": [
+                        "Uniquement la masse de l'explosif.",
+                        "Uniquement la distance à la source.",
+                        "La forme de la charge, l'hétérogénéité du milieu transmetteur, et la nature de la source d'énergie.",
+                        "Uniquement les conditions météorologiques."
+                    ],
+                    "correctAnswer": 2,
+                    "points": 0.5
+                },
+                {
+                    "id": 7,
+                    "question": "Parmi les facteurs suivants, lequel n'influence pas de manière significative la magnitude de l'onde de choc ?",
+                    "options": [
+                        "La distance à la source.",
+                        "La masse de l'explosif.",
+                        "La forme de la charge.",
+                        "La masse de l'explosif utilisé, indépendamment de sa forme."
+                    ],
+                    "correctAnswer": 3,
+                    "points": 0.5
+                },
+                {
+                    "id": 8,
+                    "question": "Dans le cas d'une structure non ventilée remplie d'un mélange air-gaz stœchiométrique, quel facteur influence directement le pic de pression Pmax ?",
+                    "options": [
+                        "La viscosité du gaz.",
+                        "La capacité calorifique Cv du gaz.",
+                        "La densité initiale du gaz.",
+                        "La conductivité thermique du gaz."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 9,
+                    "question": "Quelle affirmation est correcte concernant la mesure de la violence d'une explosion dans une structure non ventilée ?",
+                    "options": [
+                        "La violence est mesurée par le pic de pression Pmax.",
+                        "La violence est mesurée par l'impulsion totale.",
+                        "La violence est mesurée par le maximum de la vitesse de montée de pression (dp/dt)max.",
+                        "La violence est mesurée par la température maximale."
+                    ],
+                    "correctAnswer": 2,
+                    "points": 0.5
+                },
+                {
+                    "id": 10,
+                    "question": "Quelle est la fonction principale du module piézoélectrique K dans un capteur de pression ?",
+                    "options": [
+                        "Amplifier le signal de pression.",
+                        "Filtrer les hautes fréquences.",
+                        "Convertir la pression en chaleur.",
+                        "Générer une charge électrique en réponse à une force ou une pression appliquée."
+                    ],
+                    "correctAnswer": 3,
+                    "points": 0.5
+                },
+                {
+                    "id": 11,
+                    "question": "Quelle est la différence essentielle entre les capteurs « side-on » et « face-on » dans la mesure de pression ?",
+                    "options": [
+                        "Les capteurs « side-on » sont plus sensibles que les capteurs « face-on ».",
+                        "Les capteurs « side-on » mesurent l'onde de choc incidente, tandis que les capteurs « face-on » mesurent la pression réfléchie.",
+                        "Les capteurs « side-on » sont utilisés uniquement en laboratoire.",
+                        "Il n'existe aucune différence fonctionnelle entre les deux types."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 12,
+                    "question": "Quelle est la caractéristique principale du design d'un capteur « side-on » qui le rend adapté pour mesurer la pression en champ libre ?",
+                    "options": [
+                        "Un design robuste et épais pour résister aux chocs.",
+                        "Un design avec une grande surface de mesure.",
+                        "Le design en forme d'aiguille mince et allongée pour minimiser l'interférence avec la propagation de l'onde.",
+                        "Un design avec plusieurs éléments de mesure en parallèle."
+                    ],
+                    "correctAnswer": 2,
+                    "points": 0.5
+                },
+                {
+                    "id": 13,
+                    "question": "Pourquoi utilise-t-on généralement une pièce auxiliaire (« interface ») avec les capteurs « face-on » ?",
+                    "options": [
+                        "Pour augmenter la sensibilité du capteur.",
+                        "Pour fixer le capteur au ras de la surface et mesurer la pression réfléchie avec précision.",
+                        "Pour réduire le bruit électrique du capteur.",
+                        "Pour amplifier le signal de pression."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 14,
+                    "question": "Dans la méthode d'intégration temporelle directe, quelle est la différence clé entre les procédures explicites et implicites ?",
+                    "options": [
+                        "Les procédures explicites sont plus précises que les procédures implicites.",
+                        "Les procédures explicites dépendent uniquement des informations jusqu'à l'instant tn, tandis que les procédures implicites utilisent également des informations à l'instant tn+1.",
+                        "Les procédures implicites sont toujours plus rapides que les procédures explicites.",
+                        "Il n'existe aucune différence fondamentale entre les deux approches."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 15,
+                    "question": "Quel est l'avantage principal des procédures implicites par rapport aux procédures explicites dans la méthode d'intégration temporelle directe ?",
+                    "options": [
+                        "Elles sont plus faciles à implémenter.",
+                        "Elles nécessitent moins de calculs par pas de temps.",
+                        "Elles sont plus stables pour des systèmes rigides ou des phénomènes rapides nécessitant un petit Δt.",
+                        "Elles donnent toujours une meilleure précision."
+                    ],
+                    "correctAnswer": 2,
+                    "points": 0.5
+                },
+                {
+                    "id": 16,
+                    "question": "Dans un spectre de réponse, que représente le facteur de chargement dynamique (Dynamic Load Factor, DLF) ?",
+                    "options": [
+                        "Le rapport entre la force appliquée et la résistance maximale de la structure.",
+                        "Le rapport entre la déformation dynamique maximale et la déformation statique maximale.",
+                        "Le rapport entre l'impulsion appliquée et la masse de la structure.",
+                        "Le rapport entre la période propre et la durée de la charge."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 17,
+                    "question": "Que permet d'évaluer principalement le spectre de réponse d'un système mécanique ?",
+                    "options": [
+                        "La stabilité du système en régime permanent.",
+                        "La réponse maximale du système en fonction des paramètres caractéristiques du système ou de la force extérieure.",
+                        "L'amortissement du système.",
+                        "La fréquence naturelle du système."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 18,
+                    "question": "Dans le cas d'une sollicitation impulsionnelle due à une explosion, quelle conclusion est correcte concernant la déformation maximale xmax d'un système SDOF ?",
+                    "options": [
+                        "La déformation maximale dépend uniquement de la durée de la charge.",
+                        "La déformation maximale dépend uniquement de la forme de la charge (triangulaire, rectangulaire, etc.).",
+                        "La déformation maximale xmax dépend uniquement de l'impulsion I et non de la forme de la sollicitation.",
+                        "La déformation maximale ne dépend que de la période propre du système."
+                    ],
+                    "correctAnswer": 2,
+                    "points": 0.5
+                }
+            ]
         },
         {
-            "id": 2,
-            "question": "Qu'est-ce qui distingue principalement un explosif primaire d'un explosif secondaire ?",
-            "options": [
-                "Les explosifs primaires nécessitent une initiation par des explosifs secondaires.",
-                "Les explosifs primaires sont plus sensibles et détonent plus facilement que les explosifs secondaires.",
-                "Les explosifs secondaires détonent spontanément à température ambiante, contrairement aux explosifs primaires.",
-                "Les explosifs primaires sont utilisés uniquement dans des applications militaires, contrairement aux explosifs secondaires."
+            "id": "part2",
+            "title": "Partie 02 : Problème (07 pts)",
+            "description": "Analyse des effets d'une explosion sur une structure.",
+            "type": "exercise",
+            "context": "Charge: 26g TNT. Distance Ra=2m, Rb=2.25m. Pression atmosphérique P0=101.3 kPa.",
+            "data": {
+                "W_TNT": "26 g",
+                "Ra": "2 m",
+                "Rb": "2.25 m",
+                "a0": "343 m/s",
+                "P0": "101.3 kPa"
+            },
+            "questions": [
+                {
+                    "id": "2.1",
+                    "question": "Calculer les distances réduites ZA et ZB.",
+                    "points": 0.5,
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.002,
+                        "parts": [
+                            {
+                                "label": "ZA",
+                                "value": 6.751
+                            },
+                            {
+                                "label": "ZB",
+                                "value": 7.595
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "2.2",
+                    "question": "Calculer les pressions incidentes (Ps0) et réfléchies (Pr) pour les faces A et B.",
+                    "points": 1.5,
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.02,
+                        "parts": [
+                            {
+                                "label": "Ps0 (A)",
+                                "value": 1.534
+                            },
+                            {
+                                "label": "Ps0 (B)",
+                                "value": 1.180
+                            },
+                            {
+                                "label": "Pr (A)",
+                                "value": 3.085
+                            },
+                            {
+                                "label": "Pr (B)",
+                                "value": 2.369
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "2.3",
+                    "question": "Calculer la durée (t0f), l'impulsion incidente (is), et l'impulsion réfléchie (ir) pour A et B.",
+                    "points": 1,
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.02,
+                        "parts": [
+                            {
+                                "label": "t0f (A)",
+                                "value": 6.861
+                            },
+                            {
+                                "label": "t0f (B)",
+                                "value": 7.080
+                            },
+                            {
+                                "label": "is (A)",
+                                "value": 5.261
+                            },
+                            {
+                                "label": "is (B)",
+                                "value": 4.177
+                            },
+                            {
+                                "label": "ir (A)",
+                                "value": 10.577
+                            },
+                            {
+                                "label": "ir (B)",
+                                "value": 8.387
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "2.4",
+                    "question": "Calculer la vitesse de l'onde (U), le temps d'arrivée (ta) et la pression dynamique (q0).",
+                    "points": 1,
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.02,
+                        "parts": [
+                            {
+                                "label": "U (A)",
+                                "value": 345.2
+                            },
+                            {
+                                "label": "U (B)",
+                                "value": 344.7
+                            },
+                            {
+                                "label": "ta (A)",
+                                "value": 3.475
+                            },
+                            {
+                                "label": "ta (B)",
+                                "value": 3.578
+                            },
+                            {
+                                "label": "q0 (A)",
+                                "value": 0.00827
+                            },
+                            {
+                                "label": "q0 (B)",
+                                "value": 0.00490
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "2.5",
+                    "question": "Comparaison Analytique vs Expérimental (Pr=59.7 vs 3.085). Expliquez l'écart.",
+                    "points": 1.5,
+                    "validation": {
+                        "type": "split_criteria",
+                        "keywords": [
+                            "diffraction",
+                            "clearing",
+                            "contournement",
+                            "réflexion non idéale",
+                            "écart",
+                            "sous-estimation"
+                        ],
+                        "partial": true
+                    }
+                },
+                {
+                    "id": "2.6",
+                    "question": "Proposer 3 solutions pour renforcer la protection.",
+                    "points": 1.5,
+                    "validation": {
+                        "type": "split_criteria",
+                        "keywords": [
+                            "rigidité",
+                            "masse",
+                            "sacrificiel",
+                            "mousse",
+                            "ductilité",
+                            "acier",
+                            "renforcement"
+                        ],
+                        "partial": true
+                    }
+                }
             ],
-            "correctAnswer": 1
+            "solution": "ZA=6.751, ZB=7.595. Ps0(A)=1.534 kPa, Pr(A)=3.085 kPa. Écart dû aux effets de diffraction (clearing) sur la petite structure.",
+            "detailed_solution": "1. **Distances réduites Z**: \n   $Z = R / W^{1/3}$ \n   - $W_{TNT} = 0.026$ kg\n   - $Z_A = 2 / (0.026)^{1/3} = 6.751$ m/kg$^{1/3}$\n   - $Z_B = 2.25 / (0.026)^{1/3} = 7.595$ m/kg$^{1/3}$\n\n2. **Paramètres de l'onde (Abaques)**:\n   - Pour $Z_A=6.75$: $P_{s0} \\approx 1.53$ kPa, $P_r \\approx 3.08$ kPa\n   - Pour $Z_B=7.60$: $P_{s0} \\approx 1.18$ kPa, $P_r \\approx 2.37$ kPa\n\n3. **Comparaison (Clearing)**:\n   La valeur expérimentale $P_r$ est nettement inférieure à l'analytique ($59.7$ vs $3.085$). Cela s'explique par le phénomène de **contournement (clearing)**. L'onde de choc enveloppe rapidement la petite structure, réduisant la surpression sur la face avant plus vite que prévu par la théorie de réflexion infinie.",
+            "image_url": "/explosions_fig2.png"
         },
         {
-            "id": 3,
-            "question": "Quel mécanisme explique la formation d'un front de choc à partir d'une onde de pression initiale lors d'une explosion ?",
-            "options": [
-                "La propagation uniforme des gaz à une vitesse constante.",
-                "La superposition des fronts d'onde causée par la variation locale de la vitesse du son.",
-                "L'interaction entre la phase positive et la phase négative de l'onde.",
-                "L'effet des forces d'inertie, qui empêchent la propagation uniforme."
+            "id": "part3",
+            "title": "Partie 03 : Analyse SDOF (04 pts)",
+            "description": "Analyse de la réponse dynamique.",
+            "type": "exercise",
+            "context": "M=84.8 kg, K=5200 kN/m, Rm=156 kN, T=25 ms.",
+            "questions": [
+                {
+                    "id": "3.1",
+                    "question": "Cas 01 (P0=205 kN, t0=4.8 ms). Calculer I, xmax, et vérifier le domaine.",
+                    "points": 1.0,
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.01,
+                        "parts": [
+                            {
+                                "label": "Impulsion I",
+                                "value": 492
+                            },
+                            {
+                                "label": "xmax (mm)",
+                                "value": 23.44
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "3.2",
+                    "question": "Cas 02 (P0=200 kN, t0=24 ms). Calculer I, xmax, et vérifier le domaine.",
+                    "points": 1.5,
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.01,
+                        "parts": [
+                            {
+                                "label": "Impulsion I",
+                                "value": 2400
+                            },
+                            {
+                                "label": "xmax (mm)",
+                                "value": 114.35
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "3.3",
+                    "question": "Cas 03 (P0=150 kN, t0=40 ms). Calculer I, xmax, et vérifier le domaine.",
+                    "points": 1.5,
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.01,
+                        "parts": [
+                            {
+                                "label": "Impulsion I",
+                                "value": 3000
+                            },
+                            {
+                                "label": "xmax (mm)",
+                                "value": 142.95
+                            }
+                        ]
+                    }
+                }
             ],
-            "correctAnswer": 1
-        },
-        {
-            "id": 4,
-            "question": "Parmi les affirmations suivantes concernant le phénomène de souffle et son interaction avec les structures, laquelle est correcte ?",
-            "options": [
-                "Le souffle est uniquement composé des produits de l'explosion transportés par l'onde de choc.",
-                "Le souffle est un vent provoqué par le déplacement des molécules d'air suite au passage de l'onde de choc.",
-                "Le souffle n'a aucun impact sur les structures de surface, quel que soit le type d'explosion.",
-                "Lors de la phase de succion, le souffle continue à se propager dans le même sens que l'onde de choc."
-            ],
-            "correctAnswer": 1
-        },
-        {
-            "id": 5,
-            "question": "Parmi les affirmations suivantes concernant l'utilisation du TNT comme référence pour les explosifs, laquelle est correcte ?",
-            "options": [
-                "Le TNT est utilisé comme référence car il est l'explosif le plus puissant disponible.",
-                "L'équivalent TNT d'un explosif est déterminé uniquement en fonction de son poids.",
-                "Le TNT est utilisé comme référence car ses propriétés énergétiques sont bien documentées et stables.",
-                "Tous les explosifs ont le même facteur de conversion par rapport au TNT."
-            ],
-            "correctAnswer": 2
-        },
-        {
-            "id": 6,
-            "question": "Quels sont les facteurs qui influencent directement la propagation des ondes de choc ?",
-            "options": [
-                "La température et la vitesse du vent",
-                "La forme de la charge, la symétrie de la charge et la nature du terrain",
-                "La forme de la charge, l'hétérogénéité du milieu transmetteur, et la nature de la source d'énergie",
-                "La vitesse du vent, l'humidité relative et la végétation"
-            ],
-            "correctAnswer": 2
-        },
-        {
-            "id": 7,
-            "question": "Parmi les facteurs suivants, lequel n'influence pas de manière significative la magnitude de l'onde de choc ?",
-            "options": [
-                "La symétrie de la charge dans le cas des charges sphériques ou ponctuelles",
-                "La forme de la charge dans le cas des charges cylindriques ou parallélépipédiques",
-                "Les circonstances atmosphériques comme la température et l'humidité relative",
-                "La masse de l'explosif utilisé, indépendamment de sa forme"
-            ],
-            "correctAnswer": 3
-        },
-        {
-            "id": 8,
-            "question": "Dans le cas d'une structure non ventilée remplie d'un mélange air-gaz stœchiométrique, quel facteur influence directement le pic de pression Pmax ?",
-            "options": [
-                "La densité du gaz utilisé",
-                "La capacité calorifique Cv du gaz",
-                "L'énergie dégagée par le mélange stœchiométrique",
-                "Le volume total de la structure"
-            ],
-            "correctAnswer": 1
-        },
-        {
-            "id": 9,
-            "question": "Quelle affirmation est correcte concernant la mesure de la violence d'une explosion dans une structure non ventilée ?",
-            "options": [
-                "La violence de l'explosion est déterminée uniquement par l'énergie dégagée par le mélange stœchiométrique.",
-                "Une vitesse de montée de pression (dp/dt)max plus élevée indique une explosion plus lente.",
-                "La violence est mesurée par le maximum de la vitesse de montée de pression (dp/dt)max.",
-                "Le temps de montée de la pression (rise-time) est négligeable pour caractériser la vitesse d'explosion."
-            ],
-            "correctAnswer": 2
-        },
-        {
-            "id": 10,
-            "question": "Quelle est la fonction principale du module piézoélectrique K dans un capteur de pression ?",
-            "options": [
-                "Déterminer la force exercée sur le capteur en fonction de la charge électrique mesurée.",
-                "Convertir la charge électrique en une tension proportionnelle au temps.",
-                "Amplifier le signal électrique généré par le cristal.",
-                "Générer une charge électrique en réponse à une force ou une pression appliquée."
-            ],
-            "correctAnswer": 0
-        },
-        {
-            "id": 11,
-            "question": "Quelle est la différence essentielle entre les capteurs « side-on » et « face-on » dans la mesure de pression ?",
-            "options": [
-                "Les capteurs « side-on » mesurent la pression réfléchie, tandis que les capteurs « face-on » mesurent la pression incidente.",
-                "Les capteurs « side-on » mesurent l'onde de choc incidente, tandis que les capteurs « face-on » mesurent la pression réfléchie.",
-                "Les capteurs « face-on » sont utilisés exclusivement pour les mesures avec des oscilloscopes.",
-                "Les capteurs « side-on » intègrent une microélectronique ICP pour convertir la charge en tension, contrairement aux capteurs « face-on »."
-            ],
-            "correctAnswer": 1
-        },
-        {
-            "id": 12,
-            "question": "Quelle est la caractéristique principale du design d'un capteur « side-on » qui le rend adapté pour mesurer la pression en champ libre ?",
-            "options": [
-                "La membrane en invar située sur le côté pour minimiser les perturbations de l'onde.",
-                "Le corps métallique en acier inoxydable permettant une fixation solide au ras de la surface.",
-                "Le design en forme d'aiguille mince et allongée pour minimiser l'interférence avec la propagation de l'onde.",
-                "L'utilisation d'une pièce auxiliaire pour assurer une mesure précise."
-            ],
-            "correctAnswer": 2
-        },
-        {
-            "id": 13,
-            "question": "Pourquoi utilise-t-on généralement une pièce auxiliaire (« interface ») avec les capteurs « face-on » ?",
-            "options": [
-                "Pour réduire les perturbations de l'onde incidente en champ libre.",
-                "Pour fixer le capteur au ras de la surface et mesurer la pression réfléchie avec précision.",
-                "Pour protéger la membrane en invar contre les surcharges de pression.",
-                "Pour permettre des mesures à incidence oblique uniquement."
-            ],
-            "correctAnswer": 1
-        },
-        {
-            "id": 14,
-            "question": "Dans la méthode d'intégration temporelle directe, quelle est la différence clé entre les procédures explicites et implicites ?",
-            "options": [
-                "Les procédures explicites nécessitent des schémas de différences finies, tandis que les procédures implicites utilisent des schémas analytiques.",
-                "Les procédures explicites dépendent uniquement des informations jusqu'à l'instant tn, tandis que les procédures implicites utilisent également des informations à l'instant tn+1.",
-                "Les procédures explicites nécessitent un pas de temps plus grand Δt pour assurer la convergence, tandis que les procédures implicites fonctionnent mieux avec un Δt plus petit.",
-                "Les procédures explicites et implicites diffèrent uniquement par leur application aux phénomènes linéaires ou non linéaires."
-            ],
-            "correctAnswer": 1
-        },
-        {
-            "id": 15,
-            "question": "Quel est l'avantage principal des procédures implicites par rapport aux procédures explicites dans la méthode d'intégration temporelle directe ?",
-            "options": [
-                "Elles permettent de calculer des solutions plus rapidement grâce à leur extrapolation pure.",
-                "Elles sont toujours plus précises car elles ne dépendent pas du choix du pas de temps Δt.",
-                "Elles sont plus stables pour des systèmes rigides ou des phénomènes rapides nécessitant un petit Δt.",
-                "Elles permettent une meilleure approximation des forces externes à l'instant tn."
-            ],
-            "correctAnswer": 2
-        },
-        {
-            "id": 16,
-            "question": "Dans un spectre de réponse, que représente le facteur de chargement dynamique (Dynamic Load Factor, DLF) ?",
-            "options": [
-                "Le rapport entre la déformation maximale et la charge dynamique appliquée.",
-                "Le rapport entre la déformation dynamique maximale et la déformation statique maximale.",
-                "La réponse maximale du système pour une fréquence donnée de la force extérieure.",
-                "Le rapport entre la masse du système M et son déplacement maximal xmax."
-            ],
-            "correctAnswer": 1
-        },
-        {
-            "id": 17,
-            "question": "Que permet d'évaluer principalement le spectre de réponse d'un système mécanique ?",
-            "options": [
-                "La fréquence naturelle du système en fonction de la masse M.",
-                "L'impact des variations de la masse M sur le déplacement statique xmax.",
-                "La réponse maximale du système en fonction des paramètres caractéristiques du système ou de la force extérieure.",
-                "La résistance du système à des charges statiques appliquées de manière progressive."
-            ],
-            "correctAnswer": 2
-        },
-        {
-            "id": 18,
-            "question": "Dans le cas d'une sollicitation impulsionnelle due à une explosion, quelle conclusion est correcte concernant la déformation maximale xmax d'un système SDOF ?",
-            "options": [
-                "La déformation maximale xmax dépend uniquement de la constante de raideur K et de la masse M, mais pas de l'impulsion I.",
-                "La déformation maximale xmax est proportionnelle à la durée de la sollicitation T.",
-                "La déformation maximale xmax dépend uniquement de l'impulsion I et non de la forme de la sollicitation.",
-                "La déformation maximale xmax peut être réduite en diminuant la rigidité K et la masse M."
-            ],
-            "correctAnswer": 2
+            "solution": "Cas 1: I=492, xmax=23.44mm (Élastique). Cas 2: I=2400, xmax=114.35mm (Plastique). Cas 3: I=3000, xmax=142.95mm (Plastique).",
+            "detailed_solution": "1. ** Propriétés du Système **:\n   - Période propre $T_n = 25$ ms\n   - Résistance max $R_m = 156$ kN\n   - Déplacement élastique limite $x_{el} = R_m / K = 156 / 5200 = 0.03$ m = 30 mm\n\n2. **Cas 1 (Impulsif)**:\n   - $t_d / T_n = 4.8 / 25 = 0.192 < 0.4$ (Régime Impulsif)\n   - $I = 0.5 * P_0 * t_0 = 0.5 * 205 * 0.0048 = 0.492$ kN.s\n   - Énergie cinétique $E_c = I^2 / 2M$\n   - $x_{max} = I / \\sqrt{KM} = 492 / \\sqrt{5.2e6 * 84.8} = 0.02344$ m = **23.44 mm**\n   - $x_{max} < 30$ mm $\\rightarrow$ **Domaine Élastique**\n\n3. **Cas 2 (Dyanmique)**:\n   - $t_d / T_n \\approx 1$ (Régime Dynamique)\n   - Calcul complet requis ou utilisation abaque de réponse.\n   - $x_{max} = 114.35$ mm > 30 mm $\\rightarrow$ **Domaine Plastique**\n\n4. **Cas 3 (Quasi-Statique)**:\n   - $t_d / T_n > 1.6$ (Régime Quasi-statique)\n   - $x_{max} = P_{eq} / K$... (Calcul plastique)\n   - $x_{max} = 142.95$ mm $\\rightarrow$ **Domaine Plastique**",
+            "image_url": "/explosions_fig3.png"
         }
     ]
 }

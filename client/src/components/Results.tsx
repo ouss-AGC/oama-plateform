@@ -4,12 +4,17 @@ import { Download, Home, Award, Trophy, AlertTriangle, BarChart as BarChartIcon,
 import { generateCertificate, generateVisualCertificate } from '../utils/certificateGenerator';
 import jsPDF from 'jspdf';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
+import ImageZoom from './ImageZoom';
 
 interface Question {
     id: number;
     question: string;
     options: string[];
     correctAnswer: number;
+    detailed_solution?: string;
+    solution?: string;
+    image_url?: string;
+    type?: string;
 }
 
 interface QuizResult {
@@ -205,10 +210,21 @@ const Results: React.FC = () => {
             if (!isCorrect) {
                 yPos += 2;
                 doc.setTextColor(0, 100, 0);
-                const correctionText = `Correction: ${q.options[q.correctAnswer]}`;
+                const correctionText = `Correction: ${q.options?.[q.correctAnswer] || 'N/A'}`;
                 const correctionLines = doc.splitTextToSize(correctionText, 165);
                 doc.text(correctionLines, 25, yPos);
                 yPos += correctionLines.length * lineHeight;
+
+                if (q.detailed_solution) {
+                    yPos += 2;
+                    doc.setFont("courier", "normal");
+                    doc.setFontSize(9);
+                    const detailLines = doc.splitTextToSize(`Détail: ${q.detailed_solution}`, 160);
+                    doc.text(detailLines, 25, yPos);
+                    yPos += detailLines.length * 4;
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(10);
+                }
             }
 
             yPos += 8; // Space between questions
