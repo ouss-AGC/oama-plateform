@@ -110,7 +110,7 @@ const Quiz: React.FC = () => {
                                 data: section.data,
                                 questions: section.questions as any, // Sub-questions
                                 sectionTitle: section.title,
-                                images: (section as any).images || (section as any).image_url ? [(section as any).image_url] : []
+                                images: (section as any).images ? (section as any).images : ((section as any).image_url ? [(section as any).image_url] : [])
                             });
                         } else {
                             // QCM Section: Add individual questions
