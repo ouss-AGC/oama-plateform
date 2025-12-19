@@ -57,7 +57,6 @@ const Quiz: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [studentData, setStudentData] = useState<any>(null);
     const [timeLimit, setTimeLimit] = useState(3600); // Dynamic time limit
-    const [timeLimit, setTimeLimit] = useState(3600); // Dynamic time limit
     const [shouldPulseSubject, setShouldPulseSubject] = useState(false);
     const timerRef = useRef<number | null>(null);
 
