@@ -147,12 +147,23 @@ export const generateCertificate = async (result: QuizResult) => {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(24);
     doc.setTextColor(...colors.primary);
-    doc.text(disciplineName, 148.5, 135, { align: "center" });
+
+    // Dynamic text wrapping for discipline name
+    const maxWidth = 220; // Maximum allowed width in mm
+    const splitTitle = doc.splitTextToSize(disciplineName, maxWidth);
+    const titleLines = splitTitle.length;
+    const lineHeight = 10;
+    const startY = 135;
+
+    doc.text(splitTitle, 148.5, startY, { align: "center" });
+
+    // Dynamic vertical shift for score and other elements below
+    const verticalShift = (titleLines - 1) * lineHeight;
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(18);
     doc.setTextColor(0, 0, 0);
-    doc.text(`Score obtenu : ${result.scoreOn20.toFixed(1)}/20`, 148.5, 150, { align: "center" });
+    doc.text(`Score obtenu : ${result.scoreOn20.toFixed(1)}/20`, 148.5, startY + 15 + verticalShift, { align: "center" });
 
     const date = new Date(result.timestamp).toLocaleDateString('fr-FR');
     doc.setFont("helvetica", "bold");
@@ -185,6 +196,31 @@ export const generateCertificate = async (result: QuizResult) => {
 };
 
 export const generateVisualCertificate = async (result: QuizResult): Promise<string> => {
+    // Helper function for canvas text wrapping
+    const wrapText = (context: CanvasRenderingContext2D, text: string, x: number, y: number, maxWidth: number, lineHeight: number) => {
+        const words = text.split(' ');
+        let line = '';
+        const lines = [];
+
+        for (let n = 0; n < words.length; n++) {
+            const testLine = line + words[n] + ' ';
+            const metrics = context.measureText(testLine);
+            const testWidth = metrics.width;
+            if (testWidth > maxWidth && n > 0) {
+                lines.push(line);
+                line = words[n] + ' ';
+            } else {
+                line = testLine;
+            }
+        }
+        lines.push(line);
+
+        for (let i = 0; i < lines.length; i++) {
+            context.fillText(lines[i], x, y + (i * lineHeight));
+        }
+        return lines.length;
+    };
+
     const canvas = document.createElement('canvas');
     canvas.width = 1122;
     canvas.height = 794;
@@ -299,11 +335,14 @@ export const generateVisualCertificate = async (result: QuizResult): Promise<str
 
     ctx.fillStyle = colors.primary;
     ctx.font = 'bold 32px Arial';
-    ctx.fillText(disciplineName, canvas.width / 2, 440);
+    ctx.textAlign = 'center';
+
+    const visualLinesCount = wrapText(ctx, disciplineName, canvas.width / 2, 440, 900, 38);
+    const visualShift = (visualLinesCount - 1) * 38;
 
     ctx.fillStyle = '#000';
     ctx.font = 'bold 24px Arial';
-    ctx.fillText(`Score obtenu : ${result.scoreOn20.toFixed(1)}/20`, canvas.width / 2, 500);
+    ctx.fillText(`Score obtenu : ${result.scoreOn20.toFixed(1)}/20`, canvas.width / 2, 500 + visualShift);
 
     const date = new Date(result.timestamp).toLocaleDateString('fr-FR');
     ctx.fillStyle = '#444';

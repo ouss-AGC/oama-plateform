@@ -106,41 +106,49 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                 >
                     {/* Header/Toolbar */}
                     <div className="absolute top-0 left-0 right-0 p-4 flex items-center justify-between pointer-events-none">
-                        <div className="flex items-center space-x-2 bg-gray-800/80 p-1.5 rounded-lg border border-gray-700 pointer-events-auto backdrop-blur-md">
+                        <div className="flex items-center space-x-2 bg-gray-800/90 p-2 rounded-xl border border-gray-600 pointer-events-auto shadow-2xl backdrop-blur-lg">
                             <button
                                 onClick={() => setActiveTool('none')}
-                                className={`p-2 rounded-md transition-colors ${activeTool === 'none' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-700'}`}
+                                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all ${activeTool === 'none' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:text-white hover:bg-gray-700'}`}
                                 title="Mode Navigation"
                             >
-                                <MousePointer2 size={20} />
+                                <MousePointer2 size={18} />
+                                <span className="text-xs font-bold uppercase tracking-wider">Naviguer</span>
                             </button>
-                            <div className="w-px h-6 bg-gray-700 mx-1"></div>
+
+                            <div className="w-px h-8 bg-gray-700 mx-1"></div>
+
                             <button
                                 onClick={() => setActiveTool('v')}
-                                className={`p-2 rounded-md transition-colors ${activeTool === 'v' ? 'bg-cyan-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-700'}`}
+                                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all ${activeTool === 'v' ? 'bg-cyan-500 text-black font-bold shadow-lg shadow-cyan-500/20' : 'text-cyan-400 hover:text-cyan-300 hover:bg-cyan-900/30'}`}
                                 title="Ajouter Ligne Verticale"
                             >
-                                <MoveVertical size={20} />
+                                <MoveVertical size={18} />
+                                <span className="text-xs font-bold uppercase tracking-wider">Ligne V</span>
                             </button>
+
                             <button
                                 onClick={() => setActiveTool('h')}
-                                className={`p-2 rounded-md transition-colors ${activeTool === 'h' ? 'bg-pink-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-700'}`}
+                                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all ${activeTool === 'h' ? 'bg-pink-500 text-white font-bold shadow-lg shadow-pink-500/20' : 'text-pink-400 hover:text-pink-300 hover:bg-pink-900/30'}`}
                                 title="Ajouter Ligne Horizontale"
                             >
-                                <MoveHorizontal size={20} />
+                                <MoveHorizontal size={18} />
+                                <span className="text-xs font-bold uppercase tracking-wider">Ligne H</span>
                             </button>
-                            <div className="w-px h-6 bg-gray-700 mx-1"></div>
+
+                            <div className="w-px h-8 bg-gray-700 mx-1"></div>
+
                             <button
                                 onClick={() => setLines([])}
-                                className="p-2 rounded-md text-red-400 hover:bg-red-900/40 hover:text-red-300 transition-colors"
+                                className="p-2 rounded-lg text-red-400 hover:bg-red-900/40 hover:text-red-300 transition-all border border-transparent hover:border-red-800/50"
                                 title="Effacer Tout"
                             >
-                                <Trash2 size={20} />
+                                <Trash2 size={18} />
                             </button>
                         </div>
 
                         <button
-                            className="text-white hover:text-gray-300 transition-colors bg-gray-800/80 rounded-full p-2 pointer-events-auto border border-gray-700"
+                            className="text-white hover:text-gray-300 transition-all bg-gray-800/80 rounded-full p-2.5 pointer-events-auto border border-gray-700 hover:scale-110 active:scale-95"
                             onClick={() => setIsOpen(false)}
                         >
                             <X size={24} />
@@ -150,15 +158,24 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                     {/* Image Container with Overlay */}
                     <div
                         ref={containerRef}
-                        className={`relative max-h-[85vh] max-w-[95vw] overflow-hidden select-none shadow-2xl ${activeTool !== 'none' ? 'cursor-crosshair' : 'cursor-default'}`}
+                        className={`relative max-h-[82vh] max-w-[95vw] overflow-hidden select-none shadow-2xl border-2 border-gray-800 rounded-lg bg-gray-900 ${activeTool !== 'none' ? 'cursor-crosshair' : 'cursor-default'}`}
                         onClick={handleContainerClick}
                     >
                         <img
                             src={src}
                             alt={alt}
-                            className="w-full h-full object-contain rounded-md"
+                            className="w-full h-full object-contain"
                             draggable={false}
                         />
+
+                        {/* Guideline Tool Hint Overlay */}
+                        {activeTool !== 'none' && lines.length === 0 && (
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div className="bg-black/60 backdrop-blur-sm text-white px-6 py-3 rounded-full border border-white/20 animate-pulse">
+                                    Cliquez n'importe où sur l'image pour placer la ligne
+                                </div>
+                            </div>
+                        )}
 
                         {/* Guidelines Overlay */}
                         {lines.map(line => (
@@ -166,8 +183,8 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                                 key={line.id}
                                 onMouseDown={(e) => startDrag(e, line.id)}
                                 className={`absolute group transition-shadow hover:shadow-lg ${line.type === 'v'
-                                        ? 'top-0 bottom-0 w-3 -ml-1.5 cursor-col-resize'
-                                        : 'left-0 right-0 h-3 -mt-1.5 cursor-row-resize'
+                                    ? 'top-0 bottom-0 w-3 -ml-1.5 cursor-col-resize'
+                                    : 'left-0 right-0 h-3 -mt-1.5 cursor-row-resize'
                                     }`}
                                 style={{
                                     left: line.type === 'v' ? `${line.position}%` : 0,
