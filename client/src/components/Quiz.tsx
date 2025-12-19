@@ -49,23 +49,14 @@ const Quiz: React.FC = () => {
     const [quizData, setQuizData] = useState<QuizData | null>(null);
     const [flattenedQuestions, setFlattenedQuestions] = useState<Question[]>([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-<<<<<<< HEAD
-    const [answers, setAnswers] = useState<(number | null)[]>([]); // null = not answered
-    const [timeLeft, setTimeLeft] = useState(3600); // Default 1 hour = 3600 seconds
-    const [loading, setLoading] = useState(true);
-    const [studentData, setStudentData] = useState<any>(null); // Store student info at quiz start
-    const [timeLimit, setTimeLimit] = useState(3600); // Dynamic time limit based on discipline
-    const timerRef = useRef<number | null>(null);
-=======
     const [isPdfViewerOpen, setIsPdfViewerOpen] = useState(false);
     // Answers state: number for QCM, Record<string, string> for Exercise
     const [answers, setAnswers] = useState<(number | Record<string, string> | null)[]>([]);
     const [timeLeft, setTimeLeft] = useState(3600);
     const [loading, setLoading] = useState(true);
     const [studentData, setStudentData] = useState<any>(null);
+    const [timeLimit, setTimeLimit] = useState(3600); // Dynamic time limit
     const timerRef = useRef<number | null>(null);
-    const TIME_LIMIT = 3600;
->>>>>>> d534c68 (Feat: Complete Explosions GC31 Exam Integration (Parts 2 & 3, PDF Viewer, Image Zoom))
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -312,16 +303,9 @@ const Quiz: React.FC = () => {
             }
         });
 
-<<<<<<< HEAD
-        const totalQuestions = quizData?.questions.length || 0;
-        const scorePercentage = (correctCount / totalQuestions) * 100;
-        const scoreOn20 = (correctCount / totalQuestions) * 20;
-        const timeElapsed = timeLimit - timeLeft;
-=======
         const finalScoreOn20 = totalPoints > 0 ? (earnedPoints / totalPoints) * 20 : 0;
         const scorePercentage = totalPoints > 0 ? (earnedPoints / totalPoints) * 100 : 0;
-        const timeElapsed = TIME_LIMIT - timeLeft;
->>>>>>> d534c68 (Feat: Complete Explosions GC31 Exam Integration (Parts 2 & 3, PDF Viewer, Image Zoom))
+        const timeElapsed = timeLimit - timeLeft;
 
         const urlParams = new URLSearchParams(window.location.search);
         const isPractice = urlParams.get('mode') === 'practice';
@@ -364,17 +348,15 @@ const Quiz: React.FC = () => {
         return <div className="min-h-screen flex items-center justify-center bg-military-gray text-white">Chargement...</div>;
     }
 
-<<<<<<< HEAD
-    const currentQuestion = quizData.questions[currentQuestionIndex];
-    const answeredCount = answers.filter(a => a !== null).length;
-    const progressPercentage = (answeredCount / quizData.questions.length) * 100;
-    const selectedOption = answers[currentQuestionIndex];
+    const currentQuestion = flattenedQuestions[currentQuestionIndex];
+    const answeredCount = answers.filter(a => a !== null && (typeof a === 'number' || Object.keys(a).length > 0)).length;
+    const progressPercentage = (answeredCount / flattenedQuestions.length) * 100;
     const discipline = localStorage.getItem('selectedDiscipline');
     // For explosions: red at 20 minutes (1200s), for others: red at 5 minutes (300s)
     const warningThreshold = discipline === 'explosions' ? 1200 : 300;
     const isTimeRunningOut = timeLeft < warningThreshold;
     // Blinking in last 10 minutes
-    const isBlinking = timeLeft < 600; // Last 10 minutes
+    const isBlinking = timeLeft < 600;
 
     // Show time-over modal when time reaches 0
     if (timeLeft === 0) {
@@ -384,25 +366,19 @@ const Quiz: React.FC = () => {
                     <div className="mb-6">
                         <Clock className="w-24 h-24 mx-auto text-red-600 animate-pulse" />
                     </div>
-                    <h1 className="text-4xl font-bold text-gray-800 mb-4">Time is Over</h1>
+                    <h1 className="text-4xl font-bold text-gray-800 mb-4">Temps écoulé</h1>
                     <p className="text-xl text-gray-600 mb-2">
-                        Your responses will be automatically submitted to your instructor for instant grading.
+                        Vos réponses vont être automatiquement soumises.
                     </p>
-                    <p className="text-2xl font-bold text-military-green mt-6">Good Luck! 🍀</p>
+                    <p className="text-2xl font-bold text-military-green mt-6">Bonne Chance ! 🍀</p>
                     <div className="mt-8">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-military-green mx-auto"></div>
-                        <p className="text-gray-500 mt-4">Submitting your exam...</p>
+                        <p className="text-gray-500 mt-4">Soumission en cours...</p>
                     </div>
                 </div>
             </div>
         );
     }
-=======
-    const currentQuestion = flattenedQuestions[currentQuestionIndex];
-    const answeredCount = answers.filter(a => a !== null && (typeof a === 'number' || Object.keys(a).length > 0)).length;
-    const progressPercentage = (answeredCount / flattenedQuestions.length) * 100;
-    const isTimeRunningOut = timeLeft < 300;
->>>>>>> d534c68 (Feat: Complete Explosions GC31 Exam Integration (Parts 2 & 3, PDF Viewer, Image Zoom))
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col">
@@ -414,12 +390,6 @@ const Quiz: React.FC = () => {
                         <h1 className="font-bold text-lg hidden md:block">{quizData.title}</h1>
                     </div>
                     <div className="flex items-center space-x-6">
-<<<<<<< HEAD
-                        <div className={`flex items-center px-6 py-3 rounded-full shadow-lg transition-all ${isTimeRunningOut ? 'bg-red-600' : 'bg-green-800'
-                            } ${isBlinking ? 'animate-pulse' : ''}`}>
-                            <Clock className="w-6 h-6 mr-3" />
-                            <span className="font-mono font-bold text-2xl">{formatTime(timeLeft)}</span>
-=======
                         <button
                             onClick={() => setIsPdfViewerOpen(true)}
                             className="bg-military-beige text-military-green px-3 py-1.5 rounded-lg flex items-center text-sm font-bold hover:bg-yellow-200 transition-colors shadow-sm mr-4"
@@ -427,37 +397,39 @@ const Quiz: React.FC = () => {
                             <FileSearch size={18} className="mr-1.5" />
                             Voir Sujet
                         </button>
-                        <div className={`flex items-center px-3 py-1 rounded-full ${isTimeRunningOut ? 'bg-red-600 animate-pulse' : 'bg-green-800'}`}>
-                            <Clock className="w-4 h-4 mr-2" />
-                            <span className="font-mono font-bold">{formatTime(timeLeft)}</span>
->>>>>>> d534c68 (Feat: Complete Explosions GC31 Exam Integration (Parts 2 & 3, PDF Viewer, Image Zoom))
+                        <div className={`flex items-center px-6 py-3 rounded-full shadow-lg transition-all ${isTimeRunningOut ? 'bg-red-600' : 'bg-green-800'
+                            } ${isBlinking ? 'animate-pulse' : ''}`}>
+                            <Clock className="w-6 h-6 mr-3" />
+                            <span className="font-mono font-bold text-2xl">{formatTime(timeLeft)}</span>
                         </div>
-                        <div className="text-sm font-medium">
-                            {answeredCount} / {flattenedQuestions.length} étapes
-                        </div>
+                    </div>
+                    <div className="text-sm font-medium">
+                        {answeredCount} / {flattenedQuestions.length} étapes
                     </div>
                 </div>
             </header>
 
             {/* Progress Bar */}
-            <div className="w-full bg-gray-300 h-2">
+            < div className="w-full bg-gray-300 h-2" >
                 <div
                     className="bg-military-beige h-2 transition-all duration-300 ease-out"
                     style={{ width: `${progressPercentage}%` }}
                 ></div>
-            </div>
+            </div >
 
             {/* Time Warning */}
-            {isTimeRunningOut && (
-                <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 text-center">
-                    <div className="flex items-center justify-center">
-                        <AlertCircle className="w-5 h-5 mr-2" />
-                        <span className="font-semibold">
-                            Attention ! Il vous reste moins de {discipline === 'explosions' ? '20' : '5'} minutes !
-                        </span>
+            {
+                isTimeRunningOut && (
+                    <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 text-center">
+                        <div className="flex items-center justify-center">
+                            <AlertCircle className="w-5 h-5 mr-2" />
+                            <span className="font-semibold">
+                                Attention ! Il vous reste moins de {discipline === 'explosions' ? '20' : '5'} minutes !
+                            </span>
+                        </div>
                     </div>
-                </div>
-            )}
+                )
+            }
 
             {/* Main Content */}
             <main className="flex-grow flex p-4 gap-4 max-w-7xl mx-auto w-full">
@@ -640,29 +612,15 @@ const Quiz: React.FC = () => {
                         </button>
 
                         <div className="flex gap-3">
-<<<<<<< HEAD
-                            {/* Submit Exam Button - Always visible */}
                             <button
                                 onClick={() => finishQuiz(answers)}
                                 className="px-8 py-3 rounded-lg font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-lg flex items-center transition-all"
                             >
-                                Submit Exam
+                                Terminer l'Examen
                                 <Save className="ml-2 w-5 h-5" />
                             </button>
 
-                            {/* Next button - only if not on last question */}
-                            {currentQuestionIndex < quizData.questions.length - 1 && (
-=======
-                            {currentQuestionIndex === flattenedQuestions.length - 1 ? (
-                                <button
-                                    onClick={() => finishQuiz(answers)}
-                                    className="px-8 py-3 rounded-lg font-bold text-white bg-military-green hover:bg-green-800 shadow-lg flex items-center transition-all"
-                                >
-                                    Terminer le Quiz
-                                    <Save className="ml-2 w-5 h-5" />
-                                </button>
-                            ) : (
->>>>>>> d534c68 (Feat: Complete Explosions GC31 Exam Integration (Parts 2 & 3, PDF Viewer, Image Zoom))
+                            {currentQuestionIndex < flattenedQuestions.length - 1 && (
                                 <button
                                     onClick={handleNext}
                                     className="px-8 py-3 rounded-lg font-bold text-white bg-military-green hover:bg-green-800 shadow-lg flex items-center transition-all"

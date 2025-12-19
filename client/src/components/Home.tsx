@@ -32,13 +32,8 @@ const Home: React.FC = () => {
         {
             id: 'explosions',
             title: 'Calcul des effets des explosions sur les structures GC31',
-<<<<<<< HEAD
-            icon: <Flame className="w-8 h-8" />,
-            description: 'Calcul des effets des explosions et analyse structurelle.',
-=======
             icon: <Bomb className="w-8 h-8" />,
             description: 'Phénomènes physiques, ondes de choc et réponse des structures.',
->>>>>>> d534c68 (Feat: Complete Explosions GC31 Exam Integration (Parts 2 & 3, PDF Viewer, Image Zoom))
             color: 'bg-red-600'
         }
     ];
