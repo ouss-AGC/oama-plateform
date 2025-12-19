@@ -11,9 +11,10 @@ interface ExamPDFViewerProps {
     pdfUrl: string;
     isOpen: boolean;
     onClose: () => void;
+    studentName?: string;
 }
 
-const ExamPDFViewer: React.FC<ExamPDFViewerProps> = ({ pdfUrl, isOpen, onClose }) => {
+const ExamPDFViewer: React.FC<ExamPDFViewerProps> = ({ pdfUrl, isOpen, onClose, studentName }) => {
     const [numPages, setNumPages] = useState<number | null>(null);
     const [pageNumber, setPageNumber] = useState(1);
     const [scale, setScale] = useState(1.0);
@@ -30,8 +31,9 @@ const ExamPDFViewer: React.FC<ExamPDFViewerProps> = ({ pdfUrl, isOpen, onClose }
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 animate-in fade-in duration-200"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 animate-in fade-in duration-200 select-none"
             onClick={onClose}
+            onDragStart={(e) => e.preventDefault()}
         >
             <div
                 className="bg-slate-900 rounded-lg shadow-xl w-[95vw] h-[95vh] flex flex-col overflow-hidden border border-slate-700"
@@ -71,20 +73,28 @@ const ExamPDFViewer: React.FC<ExamPDFViewerProps> = ({ pdfUrl, isOpen, onClose }
 
                 {/* Content */}
                 <div className="flex-1 overflow-auto flex justify-center p-4 bg-slate-900/50" onContextMenu={(e) => e.preventDefault()}>
-                    <Document
-                        file={pdfUrl}
-                        onLoadSuccess={onDocumentLoadSuccess}
-                        className="flex flex-col items-center"
-                        loading={<div className="text-white">Chargement du sujet...</div>}
-                    >
-                        <Page
-                            pageNumber={pageNumber}
-                            scale={scale}
-                            renderTextLayer={false}
-                            renderAnnotationLayer={false}
-                            className="shadow-2xl mb-4"
-                        />
-                    </Document>
+                    <div className="relative group">
+                        <Document
+                            file={pdfUrl}
+                            onLoadSuccess={onDocumentLoadSuccess}
+                            className="flex flex-col items-center"
+                            loading={<div className="text-white">Chargement du sujet...</div>}
+                        >
+                            <Page
+                                pageNumber={pageNumber}
+                                scale={scale}
+                                renderTextLayer={false}
+                                renderAnnotationLayer={false}
+                                className="shadow-2xl mb-4"
+                            />
+                        </Document>
+                        {/* Security Watermark Overlay */}
+                        <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.03] select-none flex items-center justify-center rotate-[-45deg]">
+                            <div className="text-9xl font-black whitespace-nowrap uppercase">
+                                {studentName || 'PROPRIÉTÉ OAMA'} - NE PAS DIFFUSER
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Footer Controls */}

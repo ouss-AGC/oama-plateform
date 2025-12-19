@@ -662,6 +662,7 @@ const Quiz: React.FC = () => {
                 pdfUrl="/resources/exam_explosions_gc31.pdf"
                 isOpen={isPdfViewerOpen}
                 onClose={() => setIsPdfViewerOpen(false)}
+                studentName={studentData?.nom}
             />
 
             {/* Image Zoom Modal */}
