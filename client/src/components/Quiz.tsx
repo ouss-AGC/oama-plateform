@@ -62,6 +62,31 @@ const Quiz: React.FC = () => {
     const [timeLimit, setTimeLimit] = useState(3600); // Dynamic time limit
     const [shouldPulseSubject, setShouldPulseSubject] = useState(false);
     const timerRef = useRef<number | null>(null);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    const insertSymbol = (value: string) => {
+        if (!textareaRef.current) return;
+
+        const textarea = textareaRef.current;
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const text = textarea.value;
+
+        if (value === 'CLEAR') {
+            handleExerciseAnswer("");
+            return;
+        }
+
+        const newValue = text.substring(0, start) + value + text.substring(end);
+
+        handleExerciseAnswer(newValue);
+
+        // Reset focus and cursor position after state update
+        setTimeout(() => {
+            textarea.focus();
+            textarea.setSelectionRange(start + value.length, start + value.length);
+        }, 0);
+    };
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -390,7 +415,7 @@ const Quiz: React.FC = () => {
         <div className="min-h-screen bg-gray-100 flex flex-col">
             {/* Header */}
             <header className="bg-military-green text-white p-4 shadow-md">
-                <div className="max-w-7xl mx-auto flex justify-between items-center">
+                <div className="max-w-[98%] mx-auto flex justify-between items-center">
                     <div className="flex items-center">
                         <img src="/academy-logo.png" alt="Logo" className="h-10 w-10 mr-3" />
                         <h1 className="font-bold text-lg hidden md:block">{quizData.title}</h1>
@@ -438,7 +463,7 @@ const Quiz: React.FC = () => {
             }
 
             {/* Main Content */}
-            <main className="flex-grow flex p-4 gap-4 max-w-7xl mx-auto w-full">
+            <main className="flex-grow flex p-4 gap-4 max-w-[98%] mx-auto w-full">
                 {/* Question Grid Sidebar */}
                 <div className="hidden lg:block w-72 bg-white rounded-xl shadow-lg p-5 h-fit sticky top-4 overflow-hidden">
                     <h3 className="font-bold text-gray-800 mb-4 flex items-center">
@@ -557,6 +582,7 @@ const Quiz: React.FC = () => {
                                         Votre Réponse
                                     </label>
                                     <textarea
+                                        ref={textareaRef}
                                         value={answers[currentQuestionIndex] as string || ''}
                                         onChange={(e) => handleExerciseAnswer(e.target.value)}
                                         className="w-full p-5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-military-green/10 focus:border-military-green min-h-[180px] text-lg transition-all shadow-inner bg-white"
@@ -665,54 +691,178 @@ const Quiz: React.FC = () => {
                         )}
                     </div >
 
-                    {/* Navigation Buttons */}
-                    < div className="bg-gray-50 p-6 border-t border-gray-100 flex justify-between items-center" >
+                    {/* Footer / Navigation Buttons */}
+                    <div className="bg-gray-50 border-t p-6 flex justify-between items-center group">
                         <button
                             onClick={handlePrevious}
                             disabled={currentQuestionIndex === 0}
-                            className={`px-6 py-3 rounded-lg font-bold flex items-center transition-all
-                                ${currentQuestionIndex > 0
-                                    ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                                    : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                            className={`flex items-center px-6 py-3 rounded-xl font-bold transition-all
+                                ${currentQuestionIndex === 0
+                                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                    : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-military-green hover:text-military-green shadow-sm'
                                 }`}
                         >
-                            <ChevronLeft className="mr-2 w-5 h-5" />
+                            <ChevronLeft className="w-5 h-5 mr-3" />
                             Précédent
                         </button>
 
                         <div className="flex gap-3">
-                            <button
-                                onClick={() => finishQuiz(answers)}
-                                className="px-8 py-3 rounded-lg font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-lg flex items-center transition-all"
-                            >
-                                Terminer l'Examen
-                                <Save className="ml-2 w-5 h-5" />
-                            </button>
-
-                            {currentQuestionIndex < flattenedQuestions.length - 1 && (
+                            {currentQuestionIndex < flattenedQuestions.length - 1 ? (
                                 <button
                                     onClick={handleNext}
-                                    className="px-8 py-3 rounded-lg font-bold text-white bg-military-green hover:bg-green-800 shadow-lg flex items-center transition-all"
+                                    className="bg-military-green text-white px-8 py-3 rounded-xl font-bold flex items-center hover:bg-green-800 transition-all shadow-md active:scale-95"
                                 >
                                     Suivant
-                                    <ChevronRight className="ml-2 w-5 h-5" />
+                                    <ChevronRight className="w-5 h-5 ml-3" />
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => finishQuiz(answers)}
+                                    className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold flex items-center hover:bg-blue-700 transition-all shadow-lg animate-pulse ring-2 ring-blue-400 ring-offset-2"
+                                >
+                                    Terminer l'Examen
+                                    <CheckCircle className="w-5 h-5 ml-3" />
                                 </button>
                             )}
                         </div>
-                    </div >
-                </div >
-            </main >
+                    </div>
+                </div>
+
+                {/* Right Sidebar: Symbol Palette */}
+                <div className="hidden lg:block w-72 bg-white rounded-xl shadow-lg p-5 h-fit sticky top-4 overflow-hidden border-2 border-military-beige/30">
+                    <h3 className="font-bold text-gray-800 mb-4 flex items-center uppercase tracking-tighter text-sm">
+                        <Save className="w-4 h-4 mr-2 text-military-green" />
+                        Palette d'Outils
+                    </h3>
+
+                    <div className="space-y-4 max-h-[75vh] overflow-y-auto pr-1 custom-scrollbar">
+                        {symbolCategories.map((cat, catIdx) => (
+                            <div key={catIdx} className="space-y-2 pb-3 border-b border-gray-100 last:border-0">
+                                <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{cat.name}</h4>
+                                <div className="grid grid-cols-3 gap-1.5">
+                                    {cat.items.map((item, itemIdx) => (
+                                        <button
+                                            key={itemIdx}
+                                            onClick={() => insertSymbol(item.value)}
+                                            className={`h-9 rounded-lg border border-gray-200 text-xs font-bold transition-all shadow-sm flex items-center justify-center
+                                                ${cat.name === 'Nombres' ? 'bg-gray-50 text-gray-700 hover:bg-white hover:border-military-green' : 'bg-military-beige/5 text-military-green hover:bg-military-beige/20 hover:border-military-green'}
+                                            `}
+                                        >
+                                            {(item as any).display || item.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="mt-4 pt-4 border-t border-dashed border-gray-200">
+                        <p className="text-[10px] text-gray-400 text-center italic">
+                            Insertion rapide au curseur
+                        </p>
+                    </div>
+                </div>
+            </main>
 
             {/* PDF Viewer Modal */}
-            <ExamPDFViewer
-                pdfUrl="/resources/exam_explosions_gc31.pdf"
-                isOpen={isPdfViewerOpen}
-                onClose={() => setIsPdfViewerOpen(false)}
-                studentName={studentData?.nom}
-            />
-
+            {isPdfViewerOpen && (
+                <div className="fixed inset-0 z-50 flex flex-col bg-black">
+                    <div className="flex justify-between items-center p-4 bg-military-green text-white">
+                        <h2 className="font-bold">Sujet d'Examen</h2>
+                        <button
+                            onClick={() => setIsPdfViewerOpen(false)}
+                            className="p-2 hover:bg-green-800 rounded-full transition-all"
+                        >
+                            <X className="w-8 h-8" />
+                        </button>
+                    </div>
+                    <div className="flex-grow">
+                        <ExamPDFViewer
+                            pdfUrl={`/subjects/Calcul_Explosions.pdf`}
+                            isOpen={isPdfViewerOpen}
+                            onClose={() => setIsPdfViewerOpen(false)}
+                            studentName={studentData?.nom}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
+
+// --- Symbol Palette Data ---
+const symbolCategories = [
+    {
+        name: "Nombres",
+        items: [
+            { label: "1", value: "1" }, { label: "2", value: "2" }, { label: "3", value: "3" },
+            { label: "4", value: "4" }, { label: "5", value: "5" }, { label: "6", value: "6" },
+            { label: "7", value: "7" }, { label: "8", value: "8" }, { label: "9", value: "9" },
+            { label: "0", value: "0" }, { label: ".", value: "." }, { label: "C", value: "CLEAR" }
+        ]
+    },
+    {
+        name: "Explosion & Choc",
+        items: [
+            { label: "Ps0", value: "P_s0", display: "Pₛ₀" },
+            { label: "Pr", value: "P_r", display: "Pᵣ" },
+            { label: "is", value: "i_s", display: "iₛ" },
+            { label: "ir", value: "i_r", display: "iᵣ" },
+            { label: "ta", value: "t_a", display: "tₐ" },
+            { label: "u0DC", value: "u_0DC", display: "u₀_DC" },
+            { label: "q0", value: "q_0", display: "q₀" },
+            { label: "ZA", value: "Z_A", display: "Zₐ" },
+            { label: "ZB", value: "Z_B", display: "Zᵦ" },
+            { label: "W", value: "W", display: "W" },
+            { label: "R", value: "R", display: "R" }
+        ]
+    },
+    {
+        name: "SDOF & Dynamique",
+        items: [
+            { label: "xmax", value: "x_max", display: "xₘₐₓ" },
+            { label: "xel", value: "x_el", display: "xₑₗ" },
+            { label: "μ", value: "mu", display: "μ" },
+            { label: "τ", value: "tau", display: "τ" },
+            { label: "ωn", value: "omega_n", display: "ωₙ" },
+            { label: "M", value: "M", display: "M" },
+            { label: "K", value: "K", display: "K" },
+            { label: "Rm", value: "R_m", display: "Rₘ" },
+            { label: "P0", value: "P_0", display: "P₀" },
+            { label: "t0", value: "t_0", display: "t₀" },
+            { label: "t0f", value: "t_0f", display: "t₀բ" },
+            { label: "trf", value: "t_rf", display: "tᵣբ" }
+        ]
+    },
+    {
+        name: "Opérateurs",
+        items: [
+            { label: "≈", value: " ≈ ", display: "≈" },
+            { label: "≤", value: " <= ", display: "≤" },
+            { label: "≥", value: " >= ", display: "≥" },
+            { label: "×", value: " * ", display: "×" },
+            { label: "÷", value: " / ", display: "÷" },
+            { label: "√", value: "sqrt(", display: "√" },
+            { label: "Δ", value: "Delta", display: "Δ" },
+            { label: "±", value: " +/- ", display: "±" },
+            { label: "²", value: "^2", display: "²" }
+        ]
+    },
+    {
+        name: "Unités",
+        items: [
+            { label: "kg", value: " kg" },
+            { label: "kPa", value: " kPa" },
+            { label: "ms", value: " ms" },
+            { label: "kN", value: " kN" },
+            { label: "rad/s", value: " rad/s" },
+            { label: "kN/m", value: " kN/m" },
+            { label: "mm", value: " mm" },
+            { label: "s", value: " s" },
+            { label: "m/s", value: " m/s" },
+            { label: "kPa.ms", value: " kPa.ms" }
+        ]
+    }
+];
 
 export default Quiz;
