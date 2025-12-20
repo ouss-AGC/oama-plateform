@@ -64,6 +64,11 @@ const Quiz: React.FC = () => {
     const timerRef = useRef<number | null>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+    // Briefing states
+    const [showBriefing, setShowBriefing] = useState(false);
+    const [briefingData, setBriefingData] = useState<{ title: string; message: string } | null>(null);
+    const [viewedBriefings, setViewedBriefings] = useState<Set<string>>(new Set());
+
     const insertSymbol = (value: string) => {
         if (!textareaRef.current) return;
 
@@ -206,6 +211,38 @@ const Quiz: React.FC = () => {
             finishQuiz(answers);
         }
     }, [timeLeft]);
+
+    // Handle Section Briefings
+    useEffect(() => {
+        if (flattenedQuestions.length > 0 && currentQuestionIndex < flattenedQuestions.length) {
+            const currentPart = flattenedQuestions[currentQuestionIndex].sectionTitle || "";
+            if (currentPart && !viewedBriefings.has(currentPart)) {
+                let briefingText = "";
+                let briefingTitle = "";
+
+                if (currentPart.includes("Partie 01")) {
+                    briefingTitle = "MISSION BRIEFING : PHASE 01";
+                    briefingText = "DÉCRYPTAGE THÉORIQUE EN COURS... ANALYSE DES MÉCANISMES DE DÉTONATION ET DÉFLAGRATION... VÉRIFICATION DES CONCEPTS FONDAMENTAUX... STATUT : OPÉRATIONNEL.";
+                } else if (currentPart.includes("Partie 02")) {
+                    briefingTitle = "MISSION BRIEFING : PHASE 02";
+                    briefingText = "ANALYSE BALISTIQUE ET PRESSION DE CHOC... CALCUL DES CHARGES TNT ET DISTANCES RÉDUITES... DÉTERMINATION DES PRESSIONS INCIDENTES ET RÉFLÉCHIES (Pₛ₀, Pᵣ)... OBJECTIF : PRÉCISION BALISTIQUE.";
+                } else if (currentPart.includes("Partie 03")) {
+                    briefingTitle = "MISSION BRIEFING : PHASE 03";
+                    briefingText = "ANALYSE DYNAMIQUE DES STRUCTURES SDOF... ÉVALUATION DE LA RÉPONSE AUX SOLLICITATIONS IMPULSIONNELLES... VÉRIFICATION DES SEUILS ÉLASTIQUES ET PLASTIQUES... STATUT : CRITIQUE.";
+                }
+
+                if (briefingTitle) {
+                    setBriefingData({ title: briefingTitle, message: briefingText });
+                    setShowBriefing(true);
+                    setViewedBriefings(prev => {
+                        const next = new Set(prev);
+                        next.add(currentPart);
+                        return next;
+                    });
+                }
+            }
+        }
+    }, [currentQuestionIndex, flattenedQuestions, viewedBriefings]);
 
     const formatTime = (seconds: number) => {
         const hours = Math.floor(seconds / 3600);
@@ -407,6 +444,60 @@ const Quiz: React.FC = () => {
                         <p className="text-gray-500 mt-4">Soumission en cours...</p>
                     </div>
                 </div>
+            </div>
+        );
+    }
+
+    // --- Tactical Briefing UI ---
+    if (showBriefing && briefingData) {
+        return (
+            <div className="fixed inset-0 z-[100] bg-slate-950 flex flex-col items-center justify-center p-8 overflow-hidden">
+                {/* Background Grid Effect */}
+                <div className="absolute inset-0 opacity-10 pointer-events-none"
+                    style={{ backgroundImage: 'radial-gradient(circle, #06b6d4 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
+
+                <div className="max-w-4xl w-full space-y-8 relative z-10">
+                    {/* Header */}
+                    <div className="flex items-center space-x-4 border-b border-cyan-500/30 pb-6">
+                        <div className="p-4 bg-cyan-500/10 rounded-2xl border border-cyan-500/50 animate-pulse">
+                            <Terminal className="w-10 h-10 text-cyan-400" />
+                        </div>
+                        <div>
+                            <h2 className="text-cyan-500 font-mono text-sm tracking-[0.3em] font-black uppercase">
+                                Classified Information
+                            </h2>
+                            <h1 className="text-4xl text-white font-black tracking-tight mt-1">
+                                {briefingData.title}
+                            </h1>
+                        </div>
+                    </div>
+
+                    {/* Content Body */}
+                    <div className="bg-slate-900/50 p-10 rounded-3xl border border-slate-800 backdrop-blur-xl shadow-2xl min-h-[250px] flex items-center">
+                        <div className="font-mono text-2xl leading-relaxed text-cyan-300 drop-shadow-[0_0_8px_rgba(6,182,212,0.3)]">
+                            <Typewriter text={briefingData.message} speed={25} />
+                            <span className="inline-block w-3 h-8 bg-cyan-500 ml-2 animate-bounce"></span>
+                        </div>
+                    </div>
+
+                    {/* Footer Actions */}
+                    <div className="flex justify-between items-center pt-8">
+                        <div className="flex space-x-6 text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+                            <div className="flex items-center"><ShieldCheck className="w-3 h-3 mr-2 text-green-500" /> Encr. Securé</div>
+                            <div className="flex items-center"><Cpu className="w-3 h-3 mr-2 text-cyan-500" /> Analyse CPU</div>
+                        </div>
+                        <button
+                            onClick={() => setShowBriefing(false)}
+                            className="bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-10 py-5 rounded-2xl font-black text-lg tracking-widest transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(6,182,212,0.4)] flex items-center group"
+                        >
+                            PROCÉDER À LA MISSION
+                            <ChevronRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" />
+                        </button>
+                    </div>
+                </div>
+
+                {/* Scanline Effect */}
+                <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-cyan-500/5 to-transparent h-[2px] w-full animate-scanline opacity-20"></div>
             </div>
         );
     }
@@ -875,5 +966,26 @@ const symbolCategories = [
         ]
     }
 ];
+
+// --- Helper Components ---
+const Typewriter: React.FC<{ text: string; speed?: number }> = ({ text, speed = 30 }) => {
+    const [displayedText, setDisplayedText] = useState("");
+
+    useEffect(() => {
+        let i = 0;
+        setDisplayedText("");
+        const timer = setInterval(() => {
+            if (i < text.length) {
+                setDisplayedText((prev) => prev + text.charAt(i));
+                i++;
+            } else {
+                clearInterval(timer);
+            }
+        }, speed);
+        return () => clearInterval(timer);
+    }, [text, speed]);
+
+    return <span>{displayedText}</span>;
+};
 
 export default Quiz;
