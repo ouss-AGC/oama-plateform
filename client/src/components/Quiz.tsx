@@ -159,7 +159,23 @@ const Quiz: React.FC = () => {
                                         ...q,
                                         type: 'qcm',
                                         sectionTitle: section.title,
+                                        sectionDescription: section.description,
+                                        sectionContext: (section as any).context,
                                         points: q.points || 0.5
+                                    });
+                                });
+                            }
+                        } else {
+                            // Exercise Section
+                            if (section.questions) {
+                                section.questions.forEach(q => {
+                                    allQuestions.push({
+                                        ...q,
+                                        type: 'exercise',
+                                        sectionTitle: section.title,
+                                        sectionDescription: section.description,
+                                        sectionContext: (section as any).context,
+                                        points: q.points || 0
                                     });
                                 });
                             }
@@ -215,31 +231,23 @@ const Quiz: React.FC = () => {
     // Handle Section Briefings
     useEffect(() => {
         if (flattenedQuestions.length > 0 && currentQuestionIndex < flattenedQuestions.length) {
-            const currentPart = flattenedQuestions[currentQuestionIndex].sectionTitle || "";
+            const currentQ = flattenedQuestions[currentQuestionIndex];
+            const currentPart = currentQ.sectionTitle || "";
+
             if (currentPart && !viewedBriefings.has(currentPart)) {
-                let briefingText = "";
-                let briefingTitle = "";
+                const description = (currentQ as any).sectionDescription || "";
+                const context = (currentQ as any).sectionContext || "";
 
-                if (currentPart.includes("Partie 01")) {
-                    briefingTitle = "MISSION BRIEFING : PHASE 01";
-                    briefingText = "DÉCRYPTAGE THÉORIQUE EN COURS... ANALYSE DES MÉCANISMES DE DÉTONATION ET DÉFLAGRATION... VÉRIFICATION DES CONCEPTS FONDAMENTAUX... STATUT : OPÉRATIONNEL.";
-                } else if (currentPart.includes("Partie 02")) {
-                    briefingTitle = "MISSION BRIEFING : PHASE 02";
-                    briefingText = "ANALYSE BALISTIQUE ET PRESSION DE CHOC... CALCUL DES CHARGES TNT ET DISTANCES RÉDUITES... DÉTERMINATION DES PRESSIONS INCIDENTES ET RÉFLÉCHIES (Pₛ₀, Pᵣ)... OBJECTIF : PRÉCISION BALISTIQUE.";
-                } else if (currentPart.includes("Partie 03")) {
-                    briefingTitle = "MISSION BRIEFING : PHASE 03";
-                    briefingText = "ANALYSE DYNAMIQUE DES STRUCTURES SDOF... ÉVALUATION DE LA RÉPONSE AUX SOLLICITATIONS IMPULSIONNELLES... VÉRIFICATION DES SEUILS ÉLASTIQUES ET PLASTIQUES... STATUT : CRITIQUE.";
-                }
+                let briefingTitle = `MISSION BRIEFING : ${currentPart.toUpperCase()}`;
+                let briefingText = `${description}${context ? ' --- ' + context : ''}`.toUpperCase();
 
-                if (briefingTitle) {
-                    setBriefingData({ title: briefingTitle, message: briefingText });
-                    setShowBriefing(true);
-                    setViewedBriefings(prev => {
-                        const next = new Set(prev);
-                        next.add(currentPart);
-                        return next;
-                    });
-                }
+                setBriefingData({ title: briefingTitle, message: briefingText });
+                setShowBriefing(true);
+                setViewedBriefings(prev => {
+                    const next = new Set(prev);
+                    next.add(currentPart);
+                    return next;
+                });
             }
         }
     }, [currentQuestionIndex, flattenedQuestions, viewedBriefings]);
