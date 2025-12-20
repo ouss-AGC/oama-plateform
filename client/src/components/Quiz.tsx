@@ -12,21 +12,11 @@ interface SubQuestion {
     points: number;
 }
 
-interface Question {
-    id: number | string;
-    question: string;
-    options?: string[]; // For QCM
-    correctAnswer?: number; // For QCM
-    type?: 'qcm' | 'exercise';
-    image?: string;
-    images?: string[];
-    // For Exercise
-    title?: string;
-    description?: string;
-    context?: string;
-    data?: any;
-    questions?: SubQuestion[]; // Sub-questions for exercise
-    sectionTitle?: string; // To display section info
+subId ?: string; // For exercise sub-questions
+parentId ?: string; // Original section ID
+points ?: number;
+validation ?: any;
+sectionTitle ?: string; // To display section info
 }
 
 interface Section {
@@ -99,31 +89,46 @@ const Quiz: React.FC = () => {
                 if (data.sections) {
                     data.sections.forEach(section => {
                         if (section.type === 'exercise') {
-                            // Treat the whole section as one "Exercise Question"
-                            allQuestions.push({
-                                id: section.id,
-                                question: section.title, // Use title as main question text
-                                type: 'exercise',
-                                title: section.title,
-                                description: section.description,
-                                context: section.context,
-                                data: section.data,
-                                questions: section.questions as any, // Sub-questions
-                                sectionTitle: section.title,
-                                images: (section as any).images ? (section as any).images : ((section as any).image_url ? [(section as any).image_url] : [])
+                            // Split sub-questions into individual items
+                            const subQs = section.questions || [];
+                            subQs.forEach((subQ: any) => {
+                                allQuestions.push({
+                                    id: `${section.id}_${subQ.id}`,
+                                    subId: subQ.id,
+                                    parentId: section.id,
+                                    question: subQ.question,
+                                    points: subQ.points,
+                                    type: 'exercise',
+                                    title: section.title,
+                                    description: section.description,
+                                    context: section.context,
+                                    data: section.data,
+                                    sectionTitle: section.title,
+                                    validation: subQ.validation,
+                                    images: (section as any).images ? (section as any).images : ((section as any).image_url ? [(section as any).image_url] : [])
+                                });
                             });
                         } else {
                             // QCM Section: Add individual questions
                             if (section.questions) {
                                 section.questions.forEach(q => {
-                                    allQuestions.push({ ...q, type: 'qcm', sectionTitle: section.title });
+                                    allQuestions.push({
+                                        ...q,
+                                        type: 'qcm',
+                                        sectionTitle: section.title,
+                                        points: q.points || 0.5
+                                    });
                                 });
                             }
                         }
                     });
                 } else if (data.questions) {
                     // Legacy flat structure
-                    allQuestions = data.questions.map(q => ({ ...q, type: 'qcm' }));
+                    allQuestions = data.questions.map(q => ({
+                        ...q,
+                        type: 'qcm',
+                        points: q.points || 0.5
+                    }));
                 }
 
                 setFlattenedQuestions(allQuestions);
@@ -177,10 +182,9 @@ const Quiz: React.FC = () => {
         setAnswers(newAnswers);
     };
 
-    const handleExerciseAnswer = (subQuestionId: string, value: string) => {
+    const handleExerciseAnswer = (value: string) => {
         const newAnswers = [...answers];
-        const currentAnswer = (newAnswers[currentQuestionIndex] as Record<string, string>) || {};
-        newAnswers[currentQuestionIndex] = { ...currentAnswer, [subQuestionId]: value };
+        newAnswers[currentQuestionIndex] = value;
         setAnswers(newAnswers);
     };
 
@@ -209,103 +213,85 @@ const Quiz: React.FC = () => {
         let manualScores: Record<string, number> = {};
 
         flattenedQuestions.forEach((q, index) => {
-            if (q.type === 'exercise') {
-                // Exercise Scoring
+            const studentAnswer = finalAnswers[index];
+            const maxPoints = q.points || 0;
+            totalPoints += maxPoints;
+
+            if (q.type === 'exercise' && studentAnswer) {
                 let questionScore = 0;
-                const maxPoints = q.questions?.reduce((sum: number, subQ: any) => sum + subQ.points, 0) || 0;
-                totalPoints += maxPoints;
+                const subAnswer = String(studentAnswer);
 
-                const studentAnswerObj = finalAnswers[index] || {};
+                if (q.validation) {
+                    if (q.validation.type === 'split_criteria') {
+                        let points = 0;
+                        const keywords = q.validation.keywords || q.validation.values || [];
+                        if (q.validation.formulas) keywords.push(...q.validation.formulas);
 
-                q.questions?.forEach((subQ: any) => {
-                    const subAnswer = studentAnswerObj[subQ.id] || "";
-                    let subScore = 0;
-
-                    if (subQ.validation) {
-                        if (subQ.validation.type === 'split_criteria') {
-                            // Split Criteria (Keywords / Text) matching legacy "formulas" or "results"
-                            // But now likely used for open ended text
-                            let points = 0;
-                            const keywords = subQ.validation.keywords || subQ.validation.values || [];
-                            if (subQ.validation.formulas) keywords.push(...subQ.validation.formulas);
-                            if (subQ.validation.results && !subQ.validation.type.includes('numeric')) keywords.push(...subQ.validation.results);
-
-                            let matchCount = 0;
-                            keywords.forEach((val: string) => {
-                                if (subAnswer.toLowerCase().includes(val.toLowerCase())) {
-                                    matchCount++;
-                                }
-                            });
-
-                            if (subQ.validation.partial && keywords.length > 0) {
-                                points = (matchCount / keywords.length) * subQ.points;
-                            } else {
-                                points = matchCount === keywords.length ? subQ.points : 0;
+                        let matchCount = 0;
+                        keywords.forEach((val: string) => {
+                            if (subAnswer.toLowerCase().includes(val.toLowerCase())) {
+                                matchCount++;
                             }
-                            subScore = points;
+                        });
 
-                        } else if (subQ.validation.type === 'numeric_set' || subQ.validation.type === 'numeric') {
-                            // Numeric Grading with Tolerance
-                            const tolerance = subQ.validation.tolerance || 0.02; // Default 2%
-                            const parts = subQ.validation.parts || (subQ.validation.value !== undefined ? [{ value: subQ.validation.value }] : []);
-
-                            // Extract all numbers from student answer
-                            const sent = subAnswer.replace(/,/g, '.'); // Normalize commas
-                            // Match numbers like 123, 123.45, -123.45
-                            const numbersFound = sent.match(/-?\d+(\.\d+)?/g)?.map(Number) || [];
-
-                            let partsPassed = 0;
-
-                            parts.forEach((part: any) => {
-                                const expected = part.value;
-                                // Check if ANY found number matches this expected value within tolerance
-                                const foundMatch = numbersFound.some((num: number) => {
-                                    const diff = Math.abs(num - expected);
-                                    const allowedDiff = Math.abs(expected * tolerance);
-                                    // small epsilon for float comparison safety
-                                    return diff <= (allowedDiff + 1e-6);
-                                });
-
-                                if (foundMatch) {
-                                    partsPassed++;
-                                }
-                            });
-
-                            if (parts.length > 0) {
-                                subScore = (partsPassed / parts.length) * subQ.points;
-                            }
+                        if (q.validation.partial && keywords.length > 0) {
+                            points = (matchCount / keywords.length) * maxPoints;
                         } else {
-                            // Fallback (Legacy contains_values)
-                            const values = subQ.validation.values || [];
-                            let matchCount = 0;
-                            values.forEach((val: string) => {
-                                if (subAnswer.toLowerCase().includes(val.toLowerCase())) {
-                                    matchCount++;
-                                }
+                            points = matchCount === keywords.length ? maxPoints : 0;
+                        }
+                        questionScore = points;
+
+                    } else if (q.validation.type === 'numeric_set' || q.validation.type === 'numeric') {
+                        const tolerance = q.validation.tolerance || 0.02;
+                        const parts = q.validation.parts || (q.validation.value !== undefined ? [{ value: q.validation.value }] : []);
+
+                        const sent = subAnswer.replace(/,/g, '.');
+                        const numbersFound = sent.match(/-?\d+(\.\d+)?/g)?.map(Number) || [];
+
+                        let partsPassed = 0;
+                        parts.forEach((part: any) => {
+                            const expected = part.value;
+                            const foundMatch = numbersFound.some((num: number) => {
+                                const diff = Math.abs(num - expected);
+                                const allowedDiff = Math.abs(expected * tolerance);
+                                return diff <= (allowedDiff + 1e-6);
                             });
 
-                            if (subQ.validation.partial) {
-                                subScore = (matchCount / values.length) * subQ.points;
-                            } else {
-                                subScore = matchCount === values.length ? subQ.points : 0;
+                            if (foundMatch) {
+                                partsPassed++;
                             }
-                        }
+                        });
 
-                        // Cap at max points
-                        subScore = Math.min(subScore, subQ.points);
+                        if (parts.length > 0) {
+                            questionScore = (partsPassed / parts.length) * maxPoints;
+                        }
+                    } else {
+                        const values = q.validation.values || [];
+                        let matchCount = 0;
+                        values.forEach((val: string) => {
+                            if (subAnswer.toLowerCase().includes(val.toLowerCase())) {
+                                matchCount++;
+                            }
+                        });
+
+                        if (q.validation.partial) {
+                            questionScore = (matchCount / values.length) * maxPoints;
+                        } else {
+                            questionScore = matchCount === values.length ? maxPoints : 0;
+                        }
                     }
 
-                    questionScore += subScore;
-                });
+                    questionScore = Math.min(questionScore, maxPoints);
+                }
 
-                manualScores[q.id] = questionScore;
+                if (q.parentId) {
+                    manualScores[q.parentId] = (manualScores[q.parentId] || 0) + questionScore;
+                }
                 earnedPoints += questionScore;
 
-            } else {
-                // QCM Scoring
-                totalPoints += 0.5; // Assuming 0.5 per QCM
-                if (finalAnswers[index] === q.correctAnswer) {
-                    earnedPoints += 0.5;
+            } else if (q.type === 'qcm') {
+                if (studentAnswer === q.correctAnswer) {
+                    earnedPoints += maxPoints;
                 }
             }
         });
@@ -356,7 +342,7 @@ const Quiz: React.FC = () => {
     }
 
     const currentQuestion = flattenedQuestions[currentQuestionIndex];
-    const answeredCount = answers.filter(a => a !== null && (typeof a === 'number' || Object.keys(a).length > 0)).length;
+    const answeredCount = answers.filter(a => a !== null && a !== '').length;
     const progressPercentage = (answeredCount / flattenedQuestions.length) * 100;
     const discipline = localStorage.getItem('selectedDiscipline');
     // For explosions: red at 20 minutes (1200s), for others: red at 5 minutes (300s)
@@ -468,11 +454,6 @@ const Quiz: React.FC = () => {
                     <div className="p-8 flex-grow overflow-y-auto max-h-[70vh]">
                         <div className="flex justify-between items-start mb-4">
                             <div className="flex-grow">
-                                {currentQuestion.sectionTitle && (
-                                    <div className="text-sm font-bold text-military-green uppercase tracking-wider mb-2">
-                                        {currentQuestion.sectionTitle}
-                                    </div>
-                                )}
                                 <h2 className="text-2xl font-bold text-gray-800">
                                     {currentQuestion.question}
                                 </h2>
@@ -480,9 +461,14 @@ const Quiz: React.FC = () => {
                                     <p className="text-gray-600 mt-2 italic">{currentQuestion.description}</p>
                                 )}
                             </div>
-                            <span className="ml-4 px-3 py-1 bg-gray-100 rounded-full text-sm font-semibold text-gray-600 whitespace-nowrap">
-                                {currentQuestion.type === 'exercise' ? 'Exercice' : `Q${currentQuestionIndex + 1}`}
-                            </span>
+                            <div className="flex flex-col items-end ml-4 gap-2">
+                                <span className="px-3 py-1 bg-military-green text-white rounded-full text-sm font-bold whitespace-nowrap">
+                                    {currentQuestion.points} pts
+                                </span>
+                                <span className="px-3 py-1 bg-gray-100 rounded-full text-sm font-semibold text-gray-600 whitespace-nowrap">
+                                    {currentQuestion.subId ? `Question ${currentQuestion.subId}` : `Q${currentQuestionIndex + 1}`}
+                                </span>
+                            </div>
                         </div>
 
                         {currentQuestion.type === 'exercise' ? (
@@ -576,19 +562,17 @@ const Quiz: React.FC = () => {
                                 )}
 
                                 <div className="space-y-6 mt-6">
-                                    {currentQuestion.questions?.map((subQ) => (
-                                        <div key={subQ.id} className="border-l-4 border-military-beige pl-4 py-2">
-                                            <label className="block text-gray-800 font-bold mb-2">
-                                                {subQ.question} <span className="text-sm font-normal text-gray-500">({subQ.points} pts)</span>
-                                            </label>
-                                            <textarea
-                                                value={(answers[currentQuestionIndex] as Record<string, string>)?.[subQ.id] || ''}
-                                                onChange={(e) => handleExerciseAnswer(subQ.id, e.target.value)}
-                                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-military-green focus:border-transparent min-h-[100px]"
-                                                placeholder="Votre réponse ici..."
-                                            />
-                                        </div>
-                                    ))}
+                                    <div className="border-l-4 border-military-beige pl-4 py-2">
+                                        <textarea
+                                            value={answers[currentQuestionIndex] as string || ''}
+                                            onChange={(e) => handleExerciseAnswer(e.target.value)}
+                                            className="w-full p-4 border border-gray-300 rounded-xl focus:ring-4 focus:ring-military-green/20 focus:border-military-green min-h-[160px] text-lg transition-all"
+                                            placeholder="Tapez votre réponse détaillée ici..."
+                                        />
+                                        <p className="mt-2 text-xs text-gray-500 italic">
+                                            Astuce : Pour les calculs, indiquez la formule et le résultat numérique.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         ) : (
