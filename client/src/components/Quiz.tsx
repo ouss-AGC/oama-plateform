@@ -228,8 +228,8 @@ const Quiz: React.FC = () => {
                 const description = (currentQ as any).sectionDescription || "";
                 const context = (currentQ as any).sectionContext || "";
 
-                let briefingTitle = `MISSION BRIEFING : ${currentPart.toUpperCase()}`;
-                let briefingText = `${description}${context ? ' --- ' + context : ''}`.toUpperCase();
+                let briefingTitle = `BRIEFING OFFICIEL : ${currentPart.toUpperCase()}`;
+                let briefingText = `${description}${context ? ' --- ' + context : ''}`;
 
                 setBriefingData({ title: briefingTitle, message: briefingText });
                 setShowBriefing(true);
@@ -462,7 +462,7 @@ const Quiz: React.FC = () => {
                         </div>
                         <div>
                             <h2 className="text-cyan-500 font-mono text-sm tracking-[0.3em] font-black uppercase">
-                                Classified Information
+                                Information Classifiée
                             </h2>
                             <h1 className="text-4xl text-white font-black tracking-tight mt-1">
                                 {briefingData.title}
@@ -481,8 +481,8 @@ const Quiz: React.FC = () => {
                     {/* Footer Actions */}
                     <div className="flex justify-between items-center pt-8">
                         <div className="flex space-x-6 text-[10px] font-mono text-slate-500 uppercase tracking-widest">
-                            <div className="flex items-center"><ShieldCheck className="w-3 h-3 mr-2 text-green-500" /> Encr. Securé</div>
-                            <div className="flex items-center"><Cpu className="w-3 h-3 mr-2 text-cyan-500" /> Analyse CPU</div>
+                            <div className="flex items-center"><ShieldCheck className="w-3 h-3 mr-2 text-green-500" /> Sécurité Chiffrée</div>
+                            <div className="flex items-center"><Cpu className="w-3 h-3 mr-2 text-cyan-500" /> Analyse Systémique</div>
                         </div>
                         <button
                             onClick={() => setShowBriefing(false)}
@@ -552,7 +552,7 @@ const Quiz: React.FC = () => {
             }
 
             {/* Main Content */}
-            <main className="flex-grow flex p-4 gap-4 max-w-[98%] mx-auto w-full">
+            <main className="flex-grow flex p-4 gap-4 max-w-[98%] mx-auto w-full items-start">
                 {/* Question Grid Sidebar */}
                 <div className="hidden lg:block w-72 bg-white rounded-xl shadow-lg p-5 h-fit sticky top-4 overflow-hidden">
                     <h3 className="font-bold text-gray-800 mb-4 flex items-center">
@@ -588,7 +588,7 @@ const Quiz: React.FC = () => {
 
                         {/* Part 2: Calculs */}
                         <div>
-                            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 border-b pb-1">Partie 2 : Calculs</h4>
+                            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 border-b pb-1">Partie 2 : Problème</h4>
                             <div className="grid grid-cols-5 gap-2">
                                 {flattenedQuestions.filter(q => q.parentId === 'part2').map((q) => {
                                     const index = flattenedQuestions.indexOf(q);
@@ -596,7 +596,7 @@ const Quiz: React.FC = () => {
                                         <button
                                             key={index}
                                             onClick={() => goToQuestion(index)}
-                                            className={`w-10 h-10 rounded-lg font-bold text-[10px] transition-all flex items-center justify-center
+                                            className={`w-10 h-10 rounded-lg font-bold text-xs transition-all flex items-center justify-center
                                                 ${index === currentQuestionIndex
                                                     ? 'bg-blue-600 text-white ring-2 ring-offset-2 ring-blue-600 shadow-md'
                                                     : answers[index] !== null && answers[index] !== ''
@@ -614,7 +614,7 @@ const Quiz: React.FC = () => {
 
                         {/* Part 3: SDOF */}
                         <div>
-                            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 border-b pb-1">Partie 3 : SDOF</h4>
+                            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 border-b pb-1">Partie 3 : Analyse SDOF</h4>
                             <div className="grid grid-cols-5 gap-2">
                                 {flattenedQuestions.filter(q => q.parentId === 'part3').map((q) => {
                                     const index = flattenedQuestions.indexOf(q);
@@ -622,7 +622,7 @@ const Quiz: React.FC = () => {
                                         <button
                                             key={index}
                                             onClick={() => goToQuestion(index)}
-                                            className={`w-10 h-10 rounded-lg font-bold text-[10px] transition-all flex items-center justify-center
+                                            className={`w-10 h-10 rounded-lg font-bold text-xs transition-all flex items-center justify-center
                                                 ${index === currentQuestionIndex
                                                     ? 'bg-purple-600 text-white ring-2 ring-offset-2 ring-purple-600 shadow-md'
                                                     : answers[index] !== null && answers[index] !== ''
@@ -648,9 +648,6 @@ const Quiz: React.FC = () => {
                                 <h2 className="text-2xl font-bold text-gray-800">
                                     {currentQuestion.question}
                                 </h2>
-                                {currentQuestion.description && (
-                                    <p className="text-gray-600 mt-2 italic">{currentQuestion.description}</p>
-                                )}
                             </div>
                             <div className="flex flex-col items-end ml-4 gap-2">
                                 <span className="px-3 py-1 bg-military-green text-white rounded-full text-sm font-bold whitespace-nowrap">
