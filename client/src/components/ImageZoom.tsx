@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, ZoomIn, MoveHorizontal, MoveVertical, Trash2, MousePointer2 } from 'lucide-react';
+import { X, ZoomIn, MoveHorizontal, MoveVertical, Trash2, MousePointer2, HelpCircle } from 'lucide-react';
 
 interface ImageZoomProps {
     src: string;
@@ -23,6 +23,7 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
     const [isPanning, setIsPanning] = useState(false);
     const [lastMousePos, setLastMousePos] = useState({ x: 0, y: 0 });
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const [showHelp, setShowHelp] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
     const imgRef = useRef<HTMLImageElement>(null);
     const [loupeCoords, setLoupeCoords] = useState({ x: 0, y: 0, bgX: 0, bgY: 0 });
@@ -90,9 +91,9 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
             const posY = e.clientY - imgRect.top;
 
             // Background position for the 3x zoom
-            // We want the point under the cursor (posX, posY) to be centered in the loupe bubble (100px current offset for 200px bubble)
-            const bgX = (posX * 3) - 100;
-            const bgY = (posY * 3) - 100;
+            // With 260px bubble, center is 130px
+            const bgX = (posX * 3) - 130;
+            const bgY = (posY * 3) - 130;
 
             setLoupeCoords({
                 x: relativeX,
@@ -221,6 +222,15 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                         <div className="flex-grow"></div>
 
                         <button
+                            onClick={() => setShowHelp(!showHelp)}
+                            className={`flex flex-col items-center justify-center p-3 rounded-xl transition-all w-16 h-16 ${showHelp ? 'bg-indigo-600 text-white' : 'text-indigo-400 hover:bg-indigo-900/40'}`}
+                            title="Aide"
+                        >
+                            <HelpCircle size={24} />
+                            <span className="text-[10px] font-bold mt-1 uppercase">Aide</span>
+                        </button>
+
+                        <button
                             onClick={() => { setLines([]); setScale(1); setOffset({ x: 0, y: 0 }); }}
                             className="p-3 rounded-xl text-red-400 hover:bg-red-900/40 transition-all w-16 h-16 flex flex-col items-center justify-center"
                             title="Reset"
@@ -305,27 +315,53 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                                     ))}
                                 </div>
 
-                                {/* Loupe Effect - Fixed 3x Pixel-based zoom */}
+                                {/* Loupe Effect - 260px Fixed 3x Pixel-based zoom with Guideline mirroring */}
                                 {activeTool === 'loupe' && imgRef.current && (
                                     <div
                                         className="absolute pointer-events-none rounded-full border-4 border-yellow-500 shadow-2xl overflow-hidden bg-gray-900"
                                         style={{
                                             left: `${loupeCoords.x}%`,
                                             top: `${loupeCoords.y}%`,
-                                            width: '200px',
-                                            height: '200px',
+                                            width: '260px',
+                                            height: '260px',
                                             transform: 'translate(-50%, -50%)',
                                             zIndex: 100
                                         }}
                                     >
+                                        {/* Magnified Container */}
                                         <div style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            backgroundImage: `url(${src})`,
-                                            backgroundRepeat: 'no-repeat',
-                                            backgroundSize: `${imgRef.current.offsetWidth * 3}px ${imgRef.current.offsetHeight * 3}px`,
-                                            backgroundPosition: `-${loupeCoords.bgX}px -${loupeCoords.bgY}px`
-                                        }}></div>
+                                            position: 'absolute',
+                                            width: `${imgRef.current.offsetWidth * 3}px`,
+                                            height: `${imgRef.current.offsetHeight * 3}px`,
+                                            left: `-${loupeCoords.bgX}px`,
+                                            top: `-${loupeCoords.bgY}px`,
+                                        }}>
+                                            {/* Mirrored Image */}
+                                            <img
+                                                src={src}
+                                                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                                                alt="zoomed"
+                                            />
+
+                                            {/* Mirrored Guidelines (Scaled 3x) */}
+                                            {lines.map(line => (
+                                                <div
+                                                    key={`loupe-line-${line.id}`}
+                                                    className="absolute"
+                                                    style={{
+                                                        left: line.type === 'v' ? `${line.position}%` : 0,
+                                                        top: line.type === 'h' ? `${line.position}%` : 0,
+                                                        width: line.type === 'v' ? '2px' : '100%',
+                                                        height: line.type === 'h' ? '2px' : '100%',
+                                                        backgroundColor: line.type === 'v' ? '#22d3ee' : '#f472b6',
+                                                        boxShadow: `0 0 6px ${line.type === 'v' ? 'rgba(34,211,238,0.8)' : 'rgba(244,114,182,0.8)'}`,
+                                                        zIndex: 10
+                                                    }}
+                                                />
+                                            ))}
+                                        </div>
+
+                                        {/* Reticle */}
                                         <div className="absolute inset-0 flex items-center justify-center opacity-40">
                                             <div className="w-full h-px bg-white"></div>
                                             <div className="h-full w-px bg-white absolute"></div>
@@ -341,12 +377,77 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                                 {activeTool === 'none'
                                     ? "Mode Navigation : Glissez pour déplacer le graphique"
                                     : activeTool === 'loupe'
-                                        ? "Loupe Active (3x) : Survoler les graduations pour zoomer"
+                                        ? "Loupe Active (XL - 3x) : Survoler les graduations et intersections"
                                         : `Outil Ligne ${activeTool === 'v' ? 'V' : 'H'} : Cliquez sur le graphique pour placer`
                                 }
                             </div>
                         </div>
                     </div>
+
+                    {/* Interactive Help Overlay */}
+                    {showHelp && (
+                        <div className="absolute inset-0 z-50 flex items-center justify-center p-8 bg-black/60 backdrop-blur-md animate-in zoom-in duration-300">
+                            <div className="bg-gray-900 border border-gray-700 rounded-3xl p-8 max-w-2xl shadow-3xl relative">
+                                <button
+                                    onClick={() => setShowHelp(false)}
+                                    className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+                                >
+                                    <X size={24} />
+                                </button>
+
+                                <div className="flex items-center space-x-3 mb-6">
+                                    <div className="bg-indigo-600 p-2 rounded-xl">
+                                        <HelpCircle className="text-white" size={24} />
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-white uppercase tracking-wider">Guide d'utilisation</h3>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-4">
+                                        <div className="flex items-start space-x-3">
+                                            <div className="bg-blue-600/20 p-2 rounded-lg mt-1 text-blue-400"><MousePointer2 size={18} /></div>
+                                            <div>
+                                                <p className="font-bold text-white text-sm">Navigation (Pan)</p>
+                                                <p className="text-gray-400 text-xs text-balance">Faites glisser le graphique pour le déplacer. Utile pour centrer les zones d'intérêt.</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start space-x-3">
+                                            <div className="bg-cyan-500/20 p-2 rounded-lg mt-1 text-cyan-400"><MoveVertical size={18} /></div>
+                                            <div>
+                                                <p className="font-bold text-white text-sm">Lignes Verticales/Horizontales</p>
+                                                <p className="text-gray-400 text-xs text-balance">Placez des guides pour repérer les valeurs. Cliquez sur le graphique pour les poser.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-4">
+                                        <div className="flex items-start space-x-3">
+                                            <div className="bg-yellow-500/20 p-2 rounded-lg mt-1 text-yellow-500"><ZoomIn size={18} /></div>
+                                            <div>
+                                                <p className="font-bold text-white text-sm">Loupe de Précision (3x)</p>
+                                                <p className="text-gray-400 text-xs text-balance">Grossit les axes et vos lignes. Indispensable pour lire les graduations avec précision.</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start space-x-3">
+                                            <div className="bg-red-600/20 p-2 rounded-lg mt-1 text-red-400"><Trash2 size={18} /></div>
+                                            <div>
+                                                <p className="font-bold text-white text-sm">Réinitialisation</p>
+                                                <p className="text-gray-400 text-xs text-balance">Le bouton Reset efface toutes les lignes et remet le zoom à zéro.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mt-8 pt-6 border-t border-gray-800 flex justify-center">
+                                    <button
+                                        onClick={() => setShowHelp(false)}
+                                        className="px-8 py-3 bg-white text-black font-bold rounded-xl hover:bg-gray-200 transition-colors uppercase tracking-widest text-sm"
+                                    >
+                                        J'ai compris
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             )}
         </>
