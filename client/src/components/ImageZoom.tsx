@@ -24,6 +24,8 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
     const [lastMousePos, setLastMousePos] = useState({ x: 0, y: 0 });
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const containerRef = useRef<HTMLDivElement>(null);
+    const imgRef = useRef<HTMLImageElement>(null);
+    const [loupeCoords, setLoupeCoords] = useState({ x: 0, y: 0, bgX: 0, bgY: 0 });
 
     // Prevent scrolling when modal is open
     useEffect(() => {
@@ -73,11 +75,32 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
         if (!containerRef.current) return;
         const rect = containerRef.current.getBoundingClientRect();
 
-        // Update mouse pos for loupe
-        setMousePos({
-            x: ((e.clientX - rect.left) / rect.width) * 100,
-            y: ((e.clientY - rect.top) / rect.height) * 100
-        });
+        const relativeX = ((e.clientX - rect.left) / rect.width) * 100;
+        const relativeY = ((e.clientY - rect.top) / rect.height) * 100;
+
+        // Update mouse pos for lines and hints
+        setMousePos({ x: relativeX, y: relativeY });
+
+        // Accurate Loupe Pixel Calculations
+        if (activeTool === 'loupe' && imgRef.current) {
+            const imgRect = imgRef.current.getBoundingClientRect();
+
+            // Cursor position relative to the image element (in pixels)
+            const posX = e.clientX - imgRect.left;
+            const posY = e.clientY - imgRect.top;
+
+            // Background position for the 3x zoom
+            // We want the point under the cursor (posX, posY) to be centered in the loupe bubble (100px current offset for 200px bubble)
+            const bgX = (posX * 3) - 100;
+            const bgY = (posY * 3) - 100;
+
+            setLoupeCoords({
+                x: relativeX,
+                y: relativeY,
+                bgX: bgX,
+                bgY: bgY
+            });
+        }
 
         if (draggingId !== null) {
             const line = lines.find(l => l.id === draggingId);
@@ -85,9 +108,9 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
 
             let newPos = 0;
             if (line.type === 'v') {
-                newPos = ((e.clientX - rect.left) / rect.width) * 100;
+                newPos = relativeX;
             } else {
-                newPos = ((e.clientY - rect.top) / rect.height) * 100;
+                newPos = relativeY;
             }
 
             newPos = Math.max(0, Math.min(100, newPos));
@@ -238,17 +261,11 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                                     height: '100%'
                                 }}>
                                     <img
+                                        ref={imgRef}
                                         src={src}
                                         alt={alt}
                                         className="max-h-full max-w-full object-contain pointer-events-none"
                                         draggable={false}
-                                        onLoad={(e) => {
-                                            // Ensure container matches image aspect ratio if possible
-                                            const img = e.currentTarget;
-                                            if (containerRef.current) {
-                                                // We don't want to force container size, but helps with loupe calculations
-                                            }
-                                        }}
                                     />
 
                                     {/* Guideline Tool Hint Overlay */}
@@ -288,13 +305,13 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                                     ))}
                                 </div>
 
-                                {/* Loupe Effect - Constrained within the container boundary */}
-                                {activeTool === 'loupe' && (
+                                {/* Loupe Effect - Fixed 3x Pixel-based zoom */}
+                                {activeTool === 'loupe' && imgRef.current && (
                                     <div
-                                        className="absolute pointer-events-none rounded-full border-4 border-yellow-500 shadow-2xl overflow-hidden"
+                                        className="absolute pointer-events-none rounded-full border-4 border-yellow-500 shadow-2xl overflow-hidden bg-gray-900"
                                         style={{
-                                            left: `${mousePos.x}%`,
-                                            top: `${mousePos.y}%`,
+                                            left: `${loupeCoords.x}%`,
+                                            top: `${loupeCoords.y}%`,
                                             width: '200px',
                                             height: '200px',
                                             transform: 'translate(-50%, -50%)',
@@ -306,10 +323,10 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                                             height: '100%',
                                             backgroundImage: `url(${src})`,
                                             backgroundRepeat: 'no-repeat',
-                                            backgroundSize: `${100 * 3}% ${100 * 3}%`, // Perfect 3x zoom for axis reading
-                                            backgroundPosition: `${mousePos.x}% ${mousePos.y}%`
+                                            backgroundSize: `${imgRef.current.offsetWidth * 3}px ${imgRef.current.offsetHeight * 3}px`,
+                                            backgroundPosition: `-${loupeCoords.bgX}px -${loupeCoords.bgY}px`
                                         }}></div>
-                                        <div className="absolute inset-0 flex items-center justify-center opacity-30">
+                                        <div className="absolute inset-0 flex items-center justify-center opacity-40">
                                             <div className="w-full h-px bg-white"></div>
                                             <div className="h-full w-px bg-white absolute"></div>
                                         </div>
