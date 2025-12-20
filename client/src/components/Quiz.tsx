@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Clock, CheckCircle, ChevronRight, ChevronLeft, Save, AlertCircle, FileText, FileSearch, X, ZoomIn, LineChart } from 'lucide-react';
+import { Clock, CheckCircle, ChevronRight, ChevronLeft, Save, AlertCircle, FileText, FileSearch, X, ZoomIn, LineChart, Terminal, ShieldCheck, Cpu } from 'lucide-react';
 import ExamPDFViewer from './ExamPDFViewer';
 import ImageZoom from './ImageZoom';
 
@@ -30,6 +30,8 @@ interface Question {
     points?: number;
     validation?: any;
     sectionTitle?: string; // To display section info
+    sectionDescription?: string;
+    sectionContext?: string;
 }
 
 interface Section {
@@ -145,6 +147,8 @@ const Quiz: React.FC = () => {
                                     title: section.title,
                                     description: section.description,
                                     context: section.context,
+                                    sectionDescription: section.description,
+                                    sectionContext: section.context,
                                     data: section.data,
                                     sectionTitle: section.title,
                                     validation: subQ.validation,
@@ -162,20 +166,6 @@ const Quiz: React.FC = () => {
                                         sectionDescription: section.description,
                                         sectionContext: (section as any).context,
                                         points: q.points || 0.5
-                                    });
-                                });
-                            }
-                        } else {
-                            // Exercise Section
-                            if (section.questions) {
-                                section.questions.forEach(q => {
-                                    allQuestions.push({
-                                        ...q,
-                                        type: 'exercise',
-                                        sectionTitle: section.title,
-                                        sectionDescription: section.description,
-                                        sectionContext: (section as any).context,
-                                        points: q.points || 0
                                     });
                                 });
                             }
