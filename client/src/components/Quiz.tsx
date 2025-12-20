@@ -729,24 +729,33 @@ const Quiz: React.FC = () => {
                 </div>
 
                 {/* Right Sidebar: Symbol Palette */}
-                <div className="hidden lg:block w-72 bg-white rounded-xl shadow-lg p-5 h-fit sticky top-4 overflow-hidden border-2 border-military-beige/30">
-                    <h3 className="font-bold text-gray-800 mb-4 flex items-center uppercase tracking-tighter text-sm">
-                        <Save className="w-4 h-4 mr-2 text-military-green" />
-                        Palette d'Outils
-                    </h3>
+                <div className="hidden lg:block w-80 bg-white rounded-xl shadow-2xl h-fit sticky top-4 overflow-hidden border border-gray-100">
+                    <div className="bg-slate-800 p-4 flex items-center justify-between">
+                        <h3 className="font-black text-white flex items-center uppercase tracking-widest text-xs">
+                            <Save className="w-4 h-4 mr-2 text-cyan-400" />
+                            Palette d'Outils
+                        </h3>
+                        <span className="bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded text-[10px] font-bold">EXPERT</span>
+                    </div>
 
-                    <div className="space-y-4 max-h-[75vh] overflow-y-auto pr-1 custom-scrollbar">
+                    <div className="p-4 space-y-6 max-h-[80vh] overflow-y-auto custom-scrollbar bg-slate-50/30">
                         {symbolCategories.map((cat, catIdx) => (
-                            <div key={catIdx} className="space-y-2 pb-3 border-b border-gray-100 last:border-0">
-                                <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{cat.name}</h4>
-                                <div className="grid grid-cols-3 gap-1.5">
+                            <div key={catIdx} className="space-y-3">
+                                <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center">
+                                    <span className="w-1 h-3 bg-slate-300 mr-2 rounded-full"></span>
+                                    {cat.name}
+                                </h4>
+                                <div className="grid grid-cols-3 gap-2">
                                     {cat.items.map((item, itemIdx) => (
                                         <button
                                             key={itemIdx}
                                             onClick={() => insertSymbol(item.value)}
-                                            className={`h-9 rounded-lg border border-gray-200 text-xs font-bold transition-all shadow-sm flex items-center justify-center
-                                                ${cat.name === 'Nombres' ? 'bg-gray-50 text-gray-700 hover:bg-white hover:border-military-green' : 'bg-military-beige/5 text-military-green hover:bg-military-beige/20 hover:border-military-green'}
+                                            className={`h-12 rounded-xl border-2 text-base font-bold transition-all shadow-sm flex items-center justify-center active:scale-95
+                                                ${cat.name.includes('Nombres')
+                                                    ? 'bg-white border-slate-200 text-slate-700 hover:border-cyan-500 hover:text-cyan-600 shadow-sm'
+                                                    : 'bg-cyan-50 border-cyan-100 text-cyan-700 hover:bg-cyan-100 hover:border-cyan-400'}
                                             `}
+                                            title={item.label}
                                         >
                                             {(item as any).display || item.label}
                                         </button>
@@ -756,9 +765,9 @@ const Quiz: React.FC = () => {
                         ))}
                     </div>
 
-                    <div className="mt-4 pt-4 border-t border-dashed border-gray-200">
-                        <p className="text-[10px] text-gray-400 text-center italic">
-                            Insertion rapide au curseur
+                    <div className="p-3 bg-slate-800/10 border-t border-slate-100">
+                        <p className="text-[10px] text-slate-500 text-center font-medium italic">
+                            Insertion instantanée au curseur
                         </p>
                     </div>
                 </div>
@@ -778,7 +787,7 @@ const Quiz: React.FC = () => {
                     </div>
                     <div className="flex-grow">
                         <ExamPDFViewer
-                            pdfUrl={`/subjects/Calcul_Explosions.pdf`}
+                            pdfUrl={`/resources/exam_explosions_gc31.pdf`}
                             isOpen={isPdfViewerOpen}
                             onClose={() => setIsPdfViewerOpen(false)}
                             studentName={studentData?.nom}
@@ -793,59 +802,61 @@ const Quiz: React.FC = () => {
 // --- Symbol Palette Data ---
 const symbolCategories = [
     {
-        name: "Nombres",
+        name: "Nombres & Opérateurs",
         items: [
             { label: "1", value: "1" }, { label: "2", value: "2" }, { label: "3", value: "3" },
             { label: "4", value: "4" }, { label: "5", value: "5" }, { label: "6", value: "6" },
             { label: "7", value: "7" }, { label: "8", value: "8" }, { label: "9", value: "9" },
-            { label: "0", value: "0" }, { label: ".", value: "." }, { label: "C", value: "CLEAR" }
+            { label: ".", value: "." }, { label: "0", value: "0" }, { label: "C", value: "CLEAR", display: "⌫" },
+            { label: "+", value: " + " }, { label: "-", value: " - " }, { label: "=", value: " = " },
+            { label: "(", value: "(" }, { label: ")", value: ")" }, { label: "%", value: "%" }
         ]
     },
     {
         name: "Explosion & Choc",
         items: [
-            { label: "Ps0", value: "P_s0", display: "Pₛ₀" },
-            { label: "Pr", value: "P_r", display: "Pᵣ" },
-            { label: "is", value: "i_s", display: "iₛ" },
-            { label: "ir", value: "i_r", display: "iᵣ" },
-            { label: "ta", value: "t_a", display: "tₐ" },
-            { label: "u0DC", value: "u_0DC", display: "u₀_DC" },
-            { label: "q0", value: "q_0", display: "q₀" },
-            { label: "ZA", value: "Z_A", display: "Zₐ" },
-            { label: "ZB", value: "Z_B", display: "Zᵦ" },
-            { label: "W", value: "W", display: "W" },
-            { label: "R", value: "R", display: "R" }
+            { label: "Ps0", value: "Pₛ₀" },
+            { label: "Pr", value: "Pᵣ" },
+            { label: "is", value: "iₛ" },
+            { label: "ir", value: "iᵣ" },
+            { label: "ta", value: "tₐ" },
+            { label: "u0DC", value: "u₀_DC" },
+            { label: "q0", value: "q₀" },
+            { label: "ZA", value: "Zₐ" },
+            { label: "ZB", value: "Zᵦ" },
+            { label: "W", value: "W" },
+            { label: "R", value: "R" }
         ]
     },
     {
         name: "SDOF & Dynamique",
         items: [
-            { label: "xmax", value: "x_max", display: "xₘₐₓ" },
-            { label: "xel", value: "x_el", display: "xₑₗ" },
-            { label: "μ", value: "mu", display: "μ" },
-            { label: "τ", value: "tau", display: "τ" },
-            { label: "ωn", value: "omega_n", display: "ωₙ" },
-            { label: "M", value: "M", display: "M" },
-            { label: "K", value: "K", display: "K" },
-            { label: "Rm", value: "R_m", display: "Rₘ" },
-            { label: "P0", value: "P_0", display: "P₀" },
-            { label: "t0", value: "t_0", display: "t₀" },
-            { label: "t0f", value: "t_0f", display: "t₀բ" },
-            { label: "trf", value: "t_rf", display: "tᵣբ" }
+            { label: "xmax", value: "xₘₐₓ" },
+            { label: "xel", value: "xₑₗ" },
+            { label: "μ", value: "μ" },
+            { label: "τ", value: "τ" },
+            { label: "ωn", value: "ωₙ" },
+            { label: "M", value: "M" },
+            { label: "K", value: "K" },
+            { label: "Rm", value: "Rₘ" },
+            { label: "P0", value: "P₀" },
+            { label: "t0", value: "t₀" },
+            { label: "t0f", value: "t₀բ" },
+            { label: "trf", value: "tᵣբ" }
         ]
     },
     {
-        name: "Opérateurs",
+        name: "Symboles & Maths",
         items: [
-            { label: "≈", value: " ≈ ", display: "≈" },
-            { label: "≤", value: " <= ", display: "≤" },
-            { label: "≥", value: " >= ", display: "≥" },
-            { label: "×", value: " * ", display: "×" },
-            { label: "÷", value: " / ", display: "÷" },
-            { label: "√", value: "sqrt(", display: "√" },
-            { label: "Δ", value: "Delta", display: "Δ" },
-            { label: "±", value: " +/- ", display: "±" },
-            { label: "²", value: "^2", display: "²" }
+            { label: "≈", value: " ≈ " },
+            { label: "≤", value: " ≤ " },
+            { label: "≥", value: " ≥ " },
+            { label: "×", value: " × " },
+            { label: "÷", value: " ÷ " },
+            { label: "√", value: "√(" },
+            { label: "Δ", value: "Δ" },
+            { label: "±", value: " ± " },
+            { label: "²", value: "²" }
         ]
     },
     {
