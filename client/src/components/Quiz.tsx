@@ -440,25 +440,89 @@ const Quiz: React.FC = () => {
             {/* Main Content */}
             <main className="flex-grow flex p-4 gap-4 max-w-7xl mx-auto w-full">
                 {/* Question Grid Sidebar */}
-                <div className="hidden lg:block w-64 bg-white rounded-xl shadow-lg p-4 h-fit sticky top-4">
-                    <h3 className="font-bold text-gray-700 mb-3 text-center">Navigation</h3>
-                    <div className="grid grid-cols-5 gap-2">
-                        {flattenedQuestions.map((q, index) => (
-                            <button
-                                key={index}
-                                onClick={() => goToQuestion(index)}
-                                className={`w-10 h-10 rounded-lg font-bold text-sm transition-all flex items-center justify-center
-                                    ${index === currentQuestionIndex
-                                        ? 'bg-military-green text-white ring-2 ring-offset-2 ring-military-green'
-                                        : answers[index] !== null
-                                            ? 'bg-green-100 text-green-700 border-2 border-green-300'
-                                            : 'bg-gray-100 text-gray-600 border-2 border-gray-300 hover:bg-gray-200'
-                                    }`}
-                                title={q.type === 'exercise' ? 'Exercice' : `Question ${index + 1}`}
-                            >
-                                {q.type === 'exercise' ? <FileText size={16} /> : index + 1}
-                            </button>
-                        ))}
+                <div className="hidden lg:block w-72 bg-white rounded-xl shadow-lg p-5 h-fit sticky top-4 overflow-hidden">
+                    <h3 className="font-bold text-gray-800 mb-4 flex items-center">
+                        <LineChart className="w-5 h-5 mr-2 text-military-green" />
+                        Navigation
+                    </h3>
+
+                    <div className="space-y-6 max-h-[75vh] overflow-y-auto pr-1 custom-scrollbar">
+                        {/* Part 1: QCM */}
+                        <div>
+                            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 border-b pb-1">Partie 1 : QCM</h4>
+                            <div className="grid grid-cols-5 gap-2">
+                                {flattenedQuestions.filter(q => q.type === 'qcm').map((q) => {
+                                    const index = flattenedQuestions.indexOf(q);
+                                    return (
+                                        <button
+                                            key={index}
+                                            onClick={() => goToQuestion(index)}
+                                            className={`w-10 h-10 rounded-lg font-bold text-xs transition-all flex items-center justify-center
+                                                ${index === currentQuestionIndex
+                                                    ? 'bg-military-green text-white ring-2 ring-offset-2 ring-military-green shadow-md'
+                                                    : answers[index] !== null
+                                                        ? 'bg-green-100 text-green-700 border-2 border-green-200'
+                                                        : 'bg-gray-100 text-gray-500 border-2 border-transparent hover:bg-gray-200'
+                                                }`}
+                                        >
+                                            {index + 1}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Part 2: Calculs */}
+                        <div>
+                            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 border-b pb-1">Partie 2 : Calculs</h4>
+                            <div className="grid grid-cols-5 gap-2">
+                                {flattenedQuestions.filter(q => q.parentId === 'part2').map((q) => {
+                                    const index = flattenedQuestions.indexOf(q);
+                                    return (
+                                        <button
+                                            key={index}
+                                            onClick={() => goToQuestion(index)}
+                                            className={`w-10 h-10 rounded-lg font-bold text-[10px] transition-all flex items-center justify-center
+                                                ${index === currentQuestionIndex
+                                                    ? 'bg-blue-600 text-white ring-2 ring-offset-2 ring-blue-600 shadow-md'
+                                                    : answers[index] !== null && answers[index] !== ''
+                                                        ? 'bg-green-100 text-green-700 border-2 border-green-200'
+                                                        : 'bg-gray-100 text-gray-500 border-2 border-transparent hover:bg-gray-200'
+                                                }`}
+                                            title={`Question ${q.subId}`}
+                                        >
+                                            {q.subId}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Part 3: SDOF */}
+                        <div>
+                            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 border-b pb-1">Partie 3 : SDOF</h4>
+                            <div className="grid grid-cols-5 gap-2">
+                                {flattenedQuestions.filter(q => q.parentId === 'part3').map((q) => {
+                                    const index = flattenedQuestions.indexOf(q);
+                                    return (
+                                        <button
+                                            key={index}
+                                            onClick={() => goToQuestion(index)}
+                                            className={`w-10 h-10 rounded-lg font-bold text-[10px] transition-all flex items-center justify-center
+                                                ${index === currentQuestionIndex
+                                                    ? 'bg-purple-600 text-white ring-2 ring-offset-2 ring-purple-600 shadow-md'
+                                                    : answers[index] !== null && answers[index] !== ''
+                                                        ? 'bg-green-100 text-green-700 border-2 border-green-200'
+                                                        : 'bg-gray-100 text-gray-500 border-2 border-transparent hover:bg-gray-200'
+                                                }`}
+                                            title={`Question ${q.subId}`}
+                                        >
+                                            {q.subId}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -485,53 +549,60 @@ const Quiz: React.FC = () => {
                         </div>
 
                         {currentQuestion.type === 'exercise' ? (
-                            // Exercise View
+                            // Exercise View: Prioritized Answer Box First
                             <div className="space-y-6">
-                                {currentQuestion.context && (
-                                    <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 text-gray-800 text-sm leading-relaxed">
-                                        <h4 className="font-bold mb-2 text-blue-800 flex items-center">
-                                            <FileText className="w-4 h-4 mr-2" />
-                                            Contexte
-                                        </h4>
-                                        {currentQuestion.context}
+                                {/* 1. Answer Box */}
+                                <div className="border-l-4 border-military-beige pl-4 py-4 bg-military-beige/5 rounded-r-2xl">
+                                    <label className="block text-military-green font-black text-sm uppercase tracking-widest mb-3">
+                                        Votre Réponse
+                                    </label>
+                                    <textarea
+                                        value={answers[currentQuestionIndex] as string || ''}
+                                        onChange={(e) => handleExerciseAnswer(e.target.value)}
+                                        className="w-full p-5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-military-green/10 focus:border-military-green min-h-[180px] text-lg transition-all shadow-inner bg-white"
+                                        placeholder="Saisissez vos calculs, formules et résultats ici..."
+                                    />
+                                    <div className="mt-3 flex items-center text-xs text-gray-500 italic bg-white/50 p-2 rounded-lg border border-gray-100">
+                                        <AlertCircle className="w-3.5 h-3.5 mr-2 text-military-green" />
+                                        <span>Utilisez le point (.) comme séparateur décimal (ex: 12.5). Indiquez clairement les unités.</span>
                                     </div>
-                                )}
+                                </div>
 
-                                {/* Data Visualization */}
-                                {currentQuestion.data && (
-                                    <div className="bg-gray-50 p-5 rounded-lg border border-gray-200 text-sm">
-                                        <h4 className="font-bold mb-3 text-gray-700 border-b pb-2">Données Techniques</h4>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            {Object.entries(currentQuestion.data).map(([key, value]) => (
-                                                <div key={key} className="bg-white p-3 rounded border border-gray-100 shadow-sm">
-                                                    <span className="font-semibold text-gray-600 capitalize block mb-1">
-                                                        {key.replace(/_/g, ' ')}
-                                                    </span>
-                                                    {typeof value === 'object' && value !== null ? (
-                                                        <div className="pl-2 border-l-2 border-military-beige space-y-1">
-                                                            {Object.entries(value).map(([subKey, subValue]) => (
-                                                                <div key={subKey} className="flex justify-between">
-                                                                    <span className="text-gray-500">{subKey}:</span>
-                                                                    <span className="font-mono font-medium">
-                                                                        {typeof subValue === 'object' ? JSON.stringify(subValue) : String(subValue)}
-                                                                    </span>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    ) : (
-                                                        <span className="font-mono font-medium text-gray-800">{String(value)}</span>
-                                                    )}
-                                                </div>
-                                            ))}
+                                {/* 2. Technical Context & Data */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {currentQuestion.context && (
+                                        <div className="bg-blue-50/50 p-5 rounded-xl border border-blue-100 text-gray-700 text-sm leading-relaxed">
+                                            <h4 className="font-black mb-3 text-blue-800 flex items-center text-xs uppercase tracking-wider">
+                                                <FileText className="w-4 h-4 mr-2" />
+                                                Contexte du Problème
+                                            </h4>
+                                            {currentQuestion.context}
                                         </div>
-                                    </div>
-                                )}
+                                    )}
 
-                                {/* Image Display */}
+                                    {currentQuestion.data && (
+                                        <div className="bg-gray-50 p-5 rounded-xl border border-gray-200 text-sm">
+                                            <h4 className="font-black mb-3 text-gray-700 border-b pb-2 text-xs uppercase tracking-wider">Données Techniques</h4>
+                                            <div className="grid grid-cols-1 gap-2">
+                                                {Object.entries(currentQuestion.data).map(([key, value]) => (
+                                                    <div key={key} className="flex justify-between items-center bg-white p-2 rounded border border-gray-100 shadow-sm">
+                                                        <span className="font-semibold text-gray-500 capitalize text-xs">
+                                                            {key.replace(/_/g, ' ')}
+                                                        </span>
+                                                        <span className="font-mono font-bold text-military-green">{String(value)}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* 3. Image Display (bottom) */}
                                 {(currentQuestion.image || currentQuestion.images) && (
-                                    <div className="space-y-6">
+                                    <div className="space-y-6 pt-4 border-t border-dashed border-gray-200">
+                                        <h4 className="font-black text-gray-500 text-xs uppercase tracking-wider mb-4">Support Visuel / Graphiques</h4>
                                         {currentQuestion.image && (
-                                            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center group relative overflow-hidden">
+                                            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center group relative overflow-hidden ring-1 ring-gray-100">
                                                 <ImageZoom
                                                     src={currentQuestion.image}
                                                     alt="Figure"
@@ -546,7 +617,7 @@ const Quiz: React.FC = () => {
                                             </div>
                                         )}
                                         {currentQuestion.images && currentQuestion.images.map((imgUrl: string, idx: number) => (
-                                            <div key={idx} className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center group relative overflow-hidden">
+                                            <div key={idx} className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center group relative overflow-hidden ring-1 ring-gray-100">
                                                 <ImageZoom
                                                     src={imgUrl}
                                                     alt={`Figure ${idx + 1}`}
@@ -555,7 +626,7 @@ const Quiz: React.FC = () => {
                                                 <div className="mt-4 flex items-center justify-center pointer-events-none">
                                                     <span className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-bold shadow-lg animate-pulse">
                                                         <LineChart className="w-4 h-4 mr-2" />
-                                                        🛠️ Analyser la Figure {idx + 1} (Cliquez sur l'image)
+                                                        🛠️ Analyser la Figure {idx + 1}
                                                     </span>
                                                 </div>
                                             </div>
@@ -563,30 +634,13 @@ const Quiz: React.FC = () => {
                                     </div>
                                 )}
 
-                                {/* Image Placeholder (only if no image provided) */}
                                 {!currentQuestion.image && !currentQuestion.images && (
-                                    <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                                        <p className="text-gray-500 italic">
-                                            [Figure / Schéma du dispositif]
-                                            <br />
-                                            <span className="text-xs">(Image non disponible)</span>
+                                    <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-xl p-8 text-center">
+                                        <p className="text-gray-500 italic text-sm">
+                                            [Figure / Schéma du dispositif non requis pour cette étape]
                                         </p>
                                     </div>
                                 )}
-
-                                <div className="space-y-6 mt-6">
-                                    <div className="border-l-4 border-military-beige pl-4 py-2">
-                                        <textarea
-                                            value={answers[currentQuestionIndex] as string || ''}
-                                            onChange={(e) => handleExerciseAnswer(e.target.value)}
-                                            className="w-full p-4 border border-gray-300 rounded-xl focus:ring-4 focus:ring-military-green/20 focus:border-military-green min-h-[160px] text-lg transition-all"
-                                            placeholder="Tapez votre réponse détaillée ici..."
-                                        />
-                                        <p className="mt-2 text-xs text-gray-500 italic">
-                                            Astuce : Pour les calculs, indiquez la formule et le résultat numérique.
-                                        </p>
-                                    </div>
-                                </div>
                             </div>
                         ) : (
                             // Standard QCM View
