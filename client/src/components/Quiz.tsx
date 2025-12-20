@@ -12,11 +12,24 @@ interface SubQuestion {
     points: number;
 }
 
-subId ?: string; // For exercise sub-questions
-parentId ?: string; // Original section ID
-points ?: number;
-validation ?: any;
-sectionTitle ?: string; // To display section info
+interface Question {
+    id: number | string;
+    question: string;
+    options?: string[]; // For QCM
+    correctAnswer?: number; // For QCM
+    type?: 'qcm' | 'exercise';
+    image?: string;
+    images?: string[];
+    // For Exercise
+    title?: string;
+    description?: string;
+    context?: string;
+    data?: any;
+    subId?: string; // For exercise sub-questions
+    parentId?: string; // Original section ID
+    points?: number;
+    validation?: any;
+    sectionTitle?: string; // To display section info
 }
 
 interface Section {
@@ -41,8 +54,8 @@ const Quiz: React.FC = () => {
     const [flattenedQuestions, setFlattenedQuestions] = useState<Question[]>([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [isPdfViewerOpen, setIsPdfViewerOpen] = useState(false);
-    // Answers state: number for QCM, Record<string, string> for Exercise
-    const [answers, setAnswers] = useState<(number | Record<string, string> | null)[]>([]);
+    // Answers state: number for QCM, string for Exercises
+    const [answers, setAnswers] = useState<(number | string | null)[]>([]);
     const [timeLeft, setTimeLeft] = useState(3600);
     const [loading, setLoading] = useState(true);
     const [studentData, setStudentData] = useState<any>(null);
