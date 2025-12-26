@@ -123,7 +123,7 @@ const Quiz: React.FC = () => {
 
         const fetchQuizData = async () => {
             try {
-                const fileName = isPractice ? `${discipline}_practice.json` : `quiz_data_${discipline}.json`;
+                const fileName = isPractice ? `${discipline}_practice.json` : `quiz_data_${discipline === 'explosions' ? 'explosions_v2' : discipline}.json`;
                 const response = await fetch(`/${fileName}?t=${Date.now()}`);
                 if (!response.ok) throw new Error('Failed to load quiz data');
                 const data: QuizData = await response.json();
@@ -501,8 +501,8 @@ const Quiz: React.FC = () => {
                                     <div className="absolute inset-0 border-[4px] border-cyan-500/30 rounded-full animate-[spin_10s_linear_infinite] border-t-cyan-400 border-l-transparent border-r-transparent"></div>
                                     <div className="absolute inset-6 border-[2px] border-cyan-500/20 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
 
-                                    {/* Image Container */}
-                                    <div className="absolute inset-4 rounded-full overflow-hidden border-2 border-cyan-500/50 shadow-[0_0_80px_rgba(6,182,212,0.4)] bg-slate-900/80 backdrop-blur-sm">
+                                    {/* Image Container - Rectangular for full visibility */}
+                                    <div className="absolute inset-4 rounded-2xl overflow-hidden border-2 border-cyan-500/50 shadow-[0_0_80px_rgba(6,182,212,0.4)] bg-slate-900/80 backdrop-blur-sm">
                                         <img
                                             src={briefingData.image}
                                             alt="Scholar"
