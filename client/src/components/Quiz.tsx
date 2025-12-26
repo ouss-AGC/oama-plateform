@@ -71,7 +71,152 @@ const Quiz: React.FC = () => {
     const [briefingData, setBriefingData] = useState<{ title: string; message: string; image?: string; scholar?: string } | null>(null);
     const [viewedBriefings, setViewedBriefings] = useState<Set<string>>(new Set());
 
-    // ... (insertSymbol function remains here) ...
+    const insertSymbol = (value: string) => {
+        if (!textareaRef.current) return;
+
+        const textarea = textareaRef.current;
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const text = textarea.value;
+
+        if (value === 'CLEAR') {
+            handleExerciseAnswer("");
+            return;
+        }
+
+        const newValue = text.substring(0, start) + value + text.substring(end);
+
+        handleExerciseAnswer(newValue);
+
+        // Reset focus and cursor position after state update
+        setTimeout(() => {
+            textarea.focus();
+            textarea.setSelectionRange(start + value.length, start + value.length);
+        }, 0);
+    };
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const mode = urlParams.get('mode');
+        const urlDiscipline = urlParams.get('discipline');
+        const isPractice = mode === 'practice';
+
+        let discipline = localStorage.getItem('selectedDiscipline');
+        if (!discipline && urlDiscipline) {
+            discipline = urlDiscipline;
+            localStorage.setItem('selectedDiscipline', urlDiscipline);
+        }
+
+        // Set time limit based on discipline
+        const disciplineTimeLimit = discipline === 'explosions' ? 7200 : 3600; // 2 hours for explosions, 1 hour for others
+        setTimeLimit(disciplineTimeLimit);
+        setTimeLeft(disciplineTimeLimit);
+
+        const studentInfo = localStorage.getItem('studentInfo');
+
+        if (!discipline || !studentInfo) {
+            navigate('/');
+            return;
+        }
+
+        setStudentData(JSON.parse(studentInfo));
+
+        const fetchQuizData = async () => {
+            try {
+                const fileName = isPractice ? `${discipline}_practice.json` : `quiz_data_${discipline}.json`;
+                const response = await fetch(`/${fileName}?t=${Date.now()}`);
+                if (!response.ok) throw new Error('Failed to load quiz data');
+                const data: QuizData = await response.json();
+                setQuizData(data);
+
+                // Flatten questions from sections if they exist
+                let allQuestions: Question[] = [];
+                if (data.sections) {
+                    data.sections.forEach(section => {
+                        if (section.type === 'exercise') {
+                            // Split sub-questions into individual items
+                            const subQs = section.questions || [];
+                            subQs.forEach((subQ: any) => {
+                                allQuestions.push({
+                                    id: `${section.id}_${subQ.id}`,
+                                    subId: subQ.id,
+                                    parentId: section.id,
+                                    question: subQ.question,
+                                    points: subQ.points,
+                                    type: 'exercise',
+                                    title: section.title,
+                                    description: section.description,
+                                    context: section.context,
+                                    sectionDescription: section.description,
+                                    sectionContext: section.context,
+                                    data: section.data,
+                                    sectionTitle: section.title,
+                                    validation: subQ.validation,
+                                    images: (section as any).images ? (section as any).images : ((section as any).image_url ? [(section as any).image_url] : [])
+                                });
+                            });
+                        } else {
+                            // QCM Section: Add individual questions
+                            if (section.questions) {
+                                section.questions.forEach(q => {
+                                    allQuestions.push({
+                                        ...q,
+                                        type: 'qcm',
+                                        sectionTitle: section.title,
+                                        sectionDescription: section.description,
+                                        sectionContext: (section as any).context,
+                                        points: q.points || 0.5
+                                    });
+                                });
+                            }
+                        }
+                    });
+                } else if (data.questions) {
+                    // Legacy flat structure
+                    allQuestions = data.questions.map(q => ({
+                        ...q,
+                        type: 'qcm',
+                        points: q.points || 0.5
+                    }));
+                }
+
+                setFlattenedQuestions(allQuestions);
+                setAnswers(new Array(allQuestions.length).fill(null));
+                setLoading(false);
+
+                timerRef.current = window.setInterval(() => {
+                    setTimeLeft(prev => {
+                        if (prev % 20 === 0 && prev !== timeLimit) {
+                            setShouldPulseSubject(true);
+                            setTimeout(() => setShouldPulseSubject(false), 3000); // Pulse for 3 seconds
+                        }
+                        if (prev <= 1) {
+                            clearInterval(timerRef.current!);
+                            return 0;
+                        }
+                        return prev - 1;
+                    });
+                }, 1000);
+
+            } catch (error) {
+                console.error(error);
+                alert('Erreur lors du chargement du quiz.');
+                navigate('/');
+            }
+        };
+
+        fetchQuizData();
+
+        return () => {
+            if (timerRef.current) clearInterval(timerRef.current);
+        };
+    }, [navigate]);
+
+    useEffect(() => {
+        if (timeLeft === 0 && quizData) {
+            finishQuiz(answers);
+        }
+    }, [timeLeft]);
 
     // Handle Section Briefings
     useEffect(() => {
@@ -81,23 +226,16 @@ const Quiz: React.FC = () => {
 
             if (currentPart && !viewedBriefings.has(currentPart)) {
                 const description = (currentQ as any).sectionDescription || "";
-                const context = (currentQ as any).sectionContext || "";
 
-                // Get scholar info from the section data (requires we propagate it during flattening)
-                // Since flattenedQuestions might not have it directly if we didn't map it, we need to ensure it's mapped.
-                // Re-checking the flattening logic in fetchQuizData (lines ~135-173) suggests we need to map 'briefingImage' and 'briefingScholar' there too.
-                // However, 'currentQ' has properties spreading from the section. Let's assume we update the flattening logic to include these.
-
-                // NOTE: I will update the flattening logic in a separate edit to ensure 'briefingImage' is passed down.
-                // For now, let's assume it's available on currentQ or we find the section.
+                // Get scholar info from the section data
                 const sectionId = currentQ.parentId || (currentQ as any).sectionId;
                 const section = quizData?.sections?.find(s => s.id === sectionId || s.title === currentPart);
 
-                const briefingImage = (section as any)?.briefingImage; // Access from source section
+                const briefingImage = (section as any)?.briefingImage;
                 const briefingScholar = (section as any)?.briefingScholar;
 
                 let briefingTitle = `BRIEFING OFFICIEL : ${currentPart.replace('Partie', 'SÉQUENCE').toUpperCase()}`;
-                let briefingText = description; // Just description for the typewriter, context can be separate if needed or appended.
+                let briefingText = description;
 
                 setBriefingData({
                     title: briefingTitle,
@@ -113,9 +251,211 @@ const Quiz: React.FC = () => {
                 });
             }
         }
-    }, [currentQuestionIndex, flattenedQuestions, viewedBriefings, quizData]); // Added quizData dependency
+    }, [currentQuestionIndex, flattenedQuestions, viewedBriefings, quizData]);
 
-    // ... (formatTime, handleOptionSelect etc.) ...
+    const formatTime = (seconds: number) => {
+        const hours = Math.floor(seconds / 3600);
+        const mins = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    };
+
+    const handleOptionSelect = (index: number) => {
+        const newAnswers = [...answers];
+        newAnswers[currentQuestionIndex] = index;
+        setAnswers(newAnswers);
+    };
+
+    const handleExerciseAnswer = (value: string) => {
+        const newAnswers = [...answers];
+        newAnswers[currentQuestionIndex] = value;
+        setAnswers(newAnswers);
+    };
+
+    const goToQuestion = (index: number) => {
+        setCurrentQuestionIndex(index);
+    };
+
+    const handlePrevious = () => {
+        if (currentQuestionIndex > 0) {
+            setCurrentQuestionIndex(prev => prev - 1);
+        }
+    };
+
+    const handleNext = () => {
+        if (currentQuestionIndex < flattenedQuestions.length - 1) {
+            setCurrentQuestionIndex(prev => prev + 1);
+        }
+    };
+
+    const finishQuiz = async (finalAnswers: any[]) => {
+        if (timerRef.current) clearInterval(timerRef.current);
+
+        // Calculate score (Only for QCMs for now, Exercises need manual grading or complex logic)
+        let earnedPoints = 0;
+        let totalPoints = 0;
+        let manualScores: Record<string, number> = {};
+
+        flattenedQuestions.forEach((q, index) => {
+            const studentAnswer = finalAnswers[index];
+            const maxPoints = q.points || 0;
+            totalPoints += maxPoints;
+
+            if (q.type === 'exercise' && studentAnswer) {
+                let questionScore = 0;
+                const subAnswer = String(studentAnswer);
+
+                if (q.validation) {
+                    if (q.validation.type === 'split_criteria') {
+                        let points = 0;
+                        const keywords = q.validation.keywords || q.validation.values || [];
+                        if (q.validation.formulas) keywords.push(...q.validation.formulas);
+
+                        let matchCount = 0;
+                        keywords.forEach((val: string) => {
+                            if (subAnswer.toLowerCase().includes(val.toLowerCase())) {
+                                matchCount++;
+                            }
+                        });
+
+                        if (q.validation.partial && keywords.length > 0) {
+                            points = (matchCount / keywords.length) * maxPoints;
+                        } else {
+                            points = matchCount === keywords.length ? maxPoints : 0;
+                        }
+                        questionScore = points;
+
+                    } else if (q.validation.type === 'numeric_set' || q.validation.type === 'numeric') {
+                        const tolerance = q.validation.tolerance || 0.02;
+                        const parts = q.validation.parts || (q.validation.value !== undefined ? [{ value: q.validation.value }] : []);
+
+                        const sent = subAnswer.replace(/,/g, '.');
+                        const numbersFound = sent.match(/-?\d+(\.\d+)?/g)?.map(Number) || [];
+
+                        let partsPassed = 0;
+                        parts.forEach((part: any) => {
+                            const expected = part.value;
+                            const foundMatch = numbersFound.some((num: number) => {
+                                const diff = Math.abs(num - expected);
+                                const allowedDiff = Math.abs(expected * tolerance);
+                                return diff <= (allowedDiff + 1e-6);
+                            });
+
+                            if (foundMatch) {
+                                partsPassed++;
+                            }
+                        });
+
+                        if (parts.length > 0) {
+                            questionScore = (partsPassed / parts.length) * maxPoints;
+                        }
+                    } else {
+                        const values = q.validation.values || [];
+                        let matchCount = 0;
+                        values.forEach((val: string) => {
+                            if (subAnswer.toLowerCase().includes(val.toLowerCase())) {
+                                matchCount++;
+                            }
+                        });
+
+                        if (q.validation.partial) {
+                            questionScore = (matchCount / values.length) * maxPoints;
+                        } else {
+                            questionScore = matchCount === values.length ? maxPoints : 0;
+                        }
+                    }
+
+                    questionScore = Math.min(questionScore, maxPoints);
+                }
+
+                if (q.parentId) {
+                    manualScores[q.parentId] = (manualScores[q.parentId] || 0) + questionScore;
+                }
+                earnedPoints += questionScore;
+
+            } else if (q.type === 'qcm') {
+                if (studentAnswer === q.correctAnswer) {
+                    earnedPoints += maxPoints;
+                }
+            }
+        });
+
+        const finalScoreOn20 = totalPoints > 0 ? (earnedPoints / totalPoints) * 20 : 0;
+        const scorePercentage = totalPoints > 0 ? (earnedPoints / totalPoints) * 100 : 0;
+        const timeElapsed = timeLimit - timeLeft;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const isPractice = urlParams.get('mode') === 'practice';
+
+        const resultData = {
+            discipline: localStorage.getItem('selectedDiscipline'),
+            student: studentData || JSON.parse(localStorage.getItem('studentInfo') || '{}'),
+            answers: finalAnswers,
+            score: scorePercentage,
+            scoreOn20: finalScoreOn20,
+            totalQuestions: flattenedQuestions.length,
+            correctCount: 0,
+            timeElapsed: timeElapsed,
+            timestamp: Date.now(),
+            isPractice: isPractice,
+            manualScores: manualScores,
+            needsGrading: false // Auto-graded!
+        };
+
+        localStorage.setItem('lastQuizResult', JSON.stringify(resultData));
+
+        const history = JSON.parse(localStorage.getItem('quizHistory') || '[]');
+        history.push(resultData);
+        localStorage.setItem('quizHistory', JSON.stringify(history));
+
+        try {
+            await fetch('/api/submit-quiz', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(resultData)
+            });
+        } catch (error) {
+            console.error("Failed to submit results to server:", error);
+        }
+
+        navigate('/results');
+    };
+
+    if (loading || !quizData) {
+        return <div className="min-h-screen flex items-center justify-center bg-military-gray text-white">Chargement...</div>;
+    }
+
+    const currentQuestion = flattenedQuestions[currentQuestionIndex];
+    const answeredCount = answers.filter(a => a !== null && a !== '').length;
+    const progressPercentage = (answeredCount / flattenedQuestions.length) * 100;
+    const discipline = localStorage.getItem('selectedDiscipline');
+    // For explosions: red at 20 minutes (1200s), for others: red at 5 minutes (300s)
+    const warningThreshold = discipline === 'explosions' ? 1200 : 300;
+    const isTimeRunningOut = timeLeft < warningThreshold;
+    // Blinking in last 10 minutes
+    const isBlinking = timeLeft < 600;
+
+    // Show time-over modal when time reaches 0
+    if (timeLeft === 0) {
+        return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
+                <div className="bg-white rounded-2xl p-12 max-w-2xl mx-4 text-center shadow-2xl">
+                    <div className="mb-6">
+                        <Clock className="w-24 h-24 mx-auto text-red-600 animate-pulse" />
+                    </div>
+                    <h1 className="text-4xl font-bold text-gray-800 mb-4">Temps écoulé</h1>
+                    <p className="text-xl text-gray-600 mb-2">
+                        Vos réponses vont être automatiquement soumises.
+                    </p>
+                    <p className="text-2xl font-bold text-military-green mt-6">Bonne Chance ! 🍀</p>
+                    <div className="mt-8">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-military-green mx-auto"></div>
+                        <p className="text-gray-500 mt-4">Soumission en cours...</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     // --- Tactical Briefing UI ---
     if (showBriefing && briefingData) {
