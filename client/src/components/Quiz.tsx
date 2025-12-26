@@ -537,8 +537,8 @@ const Quiz: React.FC = () => {
                                 <div className="w-20 h-20 border-b-4 border-l-4 border-cyan-500/40 rounded-bl-2xl"></div>
                             </div>
 
-                            <div className="p-14 flex-grow font-mono text-2xl leading-loose text-cyan-50 text-shadow overflow-y-auto custom-scrollbar flex items-center">
-                                <div>
+                            <div className="p-10 md:p-14 flex-grow font-mono text-xl md:text-2xl leading-loose text-cyan-50 text-shadow overflow-y-auto custom-scrollbar flex items-center">
+                                <div className="w-full">
                                     <Typewriter text={briefingData.message} speed={15} />
                                     <span className="inline-block w-3 h-8 bg-cyan-400 ml-2 animate-pulse align-middle"></span>
                                 </div>
