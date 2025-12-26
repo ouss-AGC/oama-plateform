@@ -901,15 +901,15 @@ const symbolCategories = [
     {
         name: "Explosion & Choc",
         items: [
-            { label: "Ps0", value: "Pₛ₀" },
-            { label: "Pr", value: "Pᵣ" },
-            { label: "is", value: "iₛ" },
-            { label: "ir", value: "iᵣ" },
-            { label: "ta", value: "tₐ" },
-            { label: "u0DC", value: "u₀_DC" },
-            { label: "q0", value: "q₀" },
-            { label: "ZA", value: "Zₐ" },
-            { label: "ZB", value: "Zᵦ" },
+            { label: "Pₛ₀", value: "Pₛ₀" },
+            { label: "Pᵣ", value: "Pᵣ" },
+            { label: "iₛ", value: "iₛ" },
+            { label: "iᵣ", value: "iᵣ" },
+            { label: "tₐ", value: "tₐ" },
+            { label: "u₀_DC", value: "u₀_DC" },
+            { label: "q₀", value: "q₀" },
+            { label: "Zₐ", value: "Zₐ" },
+            { label: "Zᵦ", value: "Zᵦ" },
             { label: "W", value: "W" },
             { label: "R", value: "R" }
         ]
@@ -917,18 +917,18 @@ const symbolCategories = [
     {
         name: "SDOF & Dynamique",
         items: [
-            { label: "xmax", value: "xₘₐₓ" },
-            { label: "xel", value: "xₑₗ" },
+            { label: "xₘₐₓ", value: "xₘₐₓ" },
+            { label: "xₑₗ", value: "xₑₗ" },
             { label: "μ", value: "μ" },
             { label: "τ", value: "τ" },
-            { label: "ωn", value: "ωₙ" },
+            { label: "ωₙ", value: "ωₙ" },
             { label: "M", value: "M" },
             { label: "K", value: "K" },
-            { label: "Rm", value: "Rₘ" },
-            { label: "P0", value: "P₀" },
-            { label: "t0", value: "t₀" },
-            { label: "t0f", value: "t₀բ" },
-            { label: "trf", value: "tᵣբ" }
+            { label: "Rₘ", value: "Rₘ" },
+            { label: "P₀", value: "P₀" },
+            { label: "t₀", value: "t₀" },
+            { label: "t₀բ", value: "t₀բ" },
+            { label: "tᵣբ", value: "tᵣբ" }
         ]
     },
     {
