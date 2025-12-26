@@ -68,7 +68,7 @@ const Quiz: React.FC = () => {
 
     // Briefing states
     const [showBriefing, setShowBriefing] = useState(false);
-    const [briefingData, setBriefingData] = useState<{ title: string; message: string; image?: string; scholar?: string } | null>(null);
+    const [briefingData, setBriefingData] = useState<{ title: string; message: string; image?: string; scholar?: string; scholarMessage?: string } | null>(null);
     const [viewedBriefings, setViewedBriefings] = useState<Set<string>>(new Set());
 
     const insertSymbol = (value: string) => {
@@ -233,6 +233,7 @@ const Quiz: React.FC = () => {
 
                 const briefingImage = (section as any)?.briefingImage;
                 const briefingScholar = (section as any)?.briefingScholar;
+                const scholarMessage = (section as any)?.scholarMessage;
 
                 let briefingTitle = `BRIEFING OFFICIEL : ${currentPart.replace('Partie', 'SÉQUENCE').toUpperCase()}`;
                 let briefingText = description;
@@ -241,7 +242,8 @@ const Quiz: React.FC = () => {
                     title: briefingTitle,
                     message: briefingText,
                     image: briefingImage,
-                    scholar: briefingScholar
+                    scholar: briefingScholar,
+                    scholarMessage: scholarMessage
                 });
                 setShowBriefing(true);
                 setViewedBriefings(prev => {
@@ -501,15 +503,32 @@ const Quiz: React.FC = () => {
                                     <div className="absolute inset-0 border-[4px] border-cyan-500/30 rounded-full animate-[spin_10s_linear_infinite] border-t-cyan-400 border-l-transparent border-r-transparent"></div>
                                     <div className="absolute inset-6 border-[2px] border-cyan-500/20 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
 
-                                    {/* Image Container - Zoomed for Head-Only Portrait */}
-                                    <div className="absolute inset-4 rounded-3xl overflow-hidden border-2 border-cyan-500/50 shadow-[0_0_80px_rgba(6,182,212,0.4)] bg-slate-900/80 backdrop-blur-sm">
+                                    {/* Image Container - Zoomed for Head-Only Portrait - GROUP for Hover */}
+                                    <div className="absolute inset-4 rounded-3xl overflow-hidden border-2 border-cyan-500/50 shadow-[0_0_80px_rgba(6,182,212,0.4)] bg-slate-900/80 backdrop-blur-sm group cursor-help">
                                         <img
                                             src={briefingData.image}
                                             alt="Scholar"
-                                            className="w-full h-full object-cover object-top opacity-90 mix-blend-luminosity filter contrast-125 brightness-110 scale-[1.35] origin-top translate-y-4"
+                                            className="w-full h-full object-cover object-top opacity-90 mix-blend-luminosity filter contrast-125 brightness-110 scale-[1.35] origin-top translate-y-4 transition-transform duration-700 group-hover:scale-[1.4] group-hover:brightness-125"
                                         />
                                         {/* Scanline Overlay on Image */}
                                         <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(6,182,212,0.1)_50%)] bg-[length:100%_4px] pointer-events-none"></div>
+
+                                        {/* HOVER OVERLAY - Message from Scholar */}
+                                        {briefingData.scholarMessage && (
+                                            <div className="absolute inset-0 flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 z-10 bg-gradient-to-t from-black/90 via-slate-900/60 to-transparent p-6">
+                                                <div className="bg-slate-950/70 border border-cyan-500/40 backdrop-blur-md rounded-xl p-4 shadow-[0_0_30px_rgba(6,182,212,0.2)] transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 w-full mb-4">
+                                                    <div className="flex items-center justify-between mb-2">
+                                                        <span className="text-xs font-bold text-cyan-500 uppercase tracking-widest flex items-center">
+                                                            <Terminal className="w-3 h-3 mr-1" /> MESSAGE PRIORITAIRE
+                                                        </span>
+                                                        <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                                                    </div>
+                                                    <p className="text-cyan-50 font-mono text-sm leading-relaxed text-shadow-sm">
+                                                        "{briefingData.scholarMessage}"
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 

@@ -10,6 +10,7 @@
             "description": "La première partie de l'examen est conçue pour évaluer votre compréhension des phénomènes physiques et des concepts fondamentaux abordés dans le module « Calcul des structures sous l'effet des explosions ». Lisez attentivement chaque question et choisissez la réponse la plus appropriée. Notez qu'il n'existe qu'une seule réponse correcte par question. Soyez vigilants, certaines questions peuvent contenir des subtilités.",
             "briefingImage": "/scholars/ibn_al_haytham_v2.png",
             "briefingScholar": "Ibn al-Haytham (Alhazen) - Père de l'Optique Moderne",
+            "scholarMessage": "Je suis Ibn al-Haytham. La vérité se révèle par l'observation et la preuve. Concentrez-vous pour maîtriser ces concepts fondamentaux et gagner les points de l'Assistant Professor Atoui Oussama.",
             "questions": [
                 {
                     "id": 1,
@@ -236,6 +237,7 @@
             "type": "exercise",
             "briefingImage": "/scholars/jabir_ibn_hayyan_v2.png",
             "briefingScholar": "Jabir ibn Hayyan (Geber) - Père de la Chimie",
+            "scholarMessage": "Je suis Jabir ibn Hayyan. La science exige patience et exactitude. Calculez avec précision pour déchiffrer les mystères des explosions et obtenir les points de l'Assistant Professor Atoui Oussama.",
             "context": "Charge: 26g TNT. Distance Rₐ=2m, Rᵦ=2.25m. Pression atmosphérique P₀=101.3 kPa.",
             "data": {
                 "W_TNT": "26 g",
@@ -412,6 +414,7 @@
             "type": "exercise",
             "briefingImage": "/scholars/al_jazari_v2.png",
             "briefingScholar": "Al-Jazari - Maître Ingénieur Mécanicien",
+            "scholarMessage": "Je suis Al-Jazari. L'ingéniosité réside dans le mouvement et la précision. Analysez la dynamique des structures avec rigueur pour honorer l'ingénierie et mériter les points de l'Assistant Professor Atoui Oussama.",
             "context": "M=84.8 kg, K=5200 kN/m, Rₘ=156 kN, Tₙ=25 ms.",
             "questions": [
                 {
