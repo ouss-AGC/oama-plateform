@@ -68,7 +68,7 @@ const Quiz: React.FC = () => {
 
     // Briefing states
     const [showBriefing, setShowBriefing] = useState(false);
-    const [briefingData, setBriefingData] = useState<{ title: string; message: string; image?: string; scholar?: string; scholarMessage?: string } | null>(null);
+    const [briefingData, setBriefingData] = useState<{ title: string; message: string; image?: string; scholar?: string; scholarMessage?: string; imageStyle?: string } | null>(null);
     const [viewedBriefings, setViewedBriefings] = useState<Set<string>>(new Set());
 
     const insertSymbol = (value: string) => {
@@ -234,6 +234,7 @@ const Quiz: React.FC = () => {
                 const briefingImage = (section as any)?.briefingImage;
                 const briefingScholar = (section as any)?.briefingScholar;
                 const scholarMessage = (section as any)?.scholarMessage;
+                const imageStyle = (section as any)?.imageStyle;
 
                 let briefingTitle = `BRIEFING OFFICIEL : ${currentPart.replace('Partie', 'SÉQUENCE').toUpperCase()}`;
                 let briefingText = description;
@@ -243,7 +244,8 @@ const Quiz: React.FC = () => {
                     message: briefingText,
                     image: briefingImage,
                     scholar: briefingScholar,
-                    scholarMessage: scholarMessage
+                    scholarMessage: scholarMessage,
+                    imageStyle: imageStyle
                 });
                 setShowBriefing(true);
                 setViewedBriefings(prev => {
@@ -508,7 +510,7 @@ const Quiz: React.FC = () => {
                                         <img
                                             src={briefingData.image}
                                             alt="Scholar"
-                                            className="w-full h-full object-cover object-top opacity-90 mix-blend-luminosity filter contrast-125 brightness-110 scale-[1.35] origin-top translate-y-4 transition-transform duration-700 group-hover:scale-[1.4] group-hover:brightness-125"
+                                            className={`w-full h-full object-cover opacity-90 mix-blend-luminosity filter contrast-125 brightness-110 transition-transform duration-700 group-hover:scale-[1.4] group-hover:brightness-125 ${briefingData.imageStyle || 'object-top scale-[1.35] origin-top translate-y-4'}`}
                                         />
                                         {/* Scanline Overlay on Image */}
                                         <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(6,182,212,0.1)_50%)] bg-[length:100%_4px] pointer-events-none"></div>

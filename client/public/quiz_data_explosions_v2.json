@@ -415,6 +415,7 @@
             "briefingImage": "/scholars/al_jazari_v2.png",
             "briefingScholar": "Al-Jazari - Maître Ingénieur Mécanicien",
             "scholarMessage": "Je suis Al-Jazari. L'ingéniosité réside dans le mouvement et la précision. Analysez la dynamique des structures avec rigueur pour honorer l'ingénierie et mériter les points de l'Assistant Professor Atoui Oussama.",
+            "imageStyle": "object-center scale-[1.5] origin-center",
             "context": "M=84.8 kg, K=5200 kN/m, Rₘ=156 kN, Tₙ=25 ms.",
             "questions": [
                 {
