@@ -501,12 +501,12 @@ const Quiz: React.FC = () => {
                                     <div className="absolute inset-0 border-[4px] border-cyan-500/30 rounded-full animate-[spin_10s_linear_infinite] border-t-cyan-400 border-l-transparent border-r-transparent"></div>
                                     <div className="absolute inset-6 border-[2px] border-cyan-500/20 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
 
-                                    {/* Image Container - Rectangular for full visibility */}
-                                    <div className="absolute inset-4 rounded-2xl overflow-hidden border-2 border-cyan-500/50 shadow-[0_0_80px_rgba(6,182,212,0.4)] bg-slate-900/80 backdrop-blur-sm">
+                                    {/* Image Container - Zoomed for Head-Only Portrait */}
+                                    <div className="absolute inset-4 rounded-3xl overflow-hidden border-2 border-cyan-500/50 shadow-[0_0_80px_rgba(6,182,212,0.4)] bg-slate-900/80 backdrop-blur-sm">
                                         <img
                                             src={briefingData.image}
                                             alt="Scholar"
-                                            className="w-full h-full object-contain object-bottom opacity-90 mix-blend-luminosity filter contrast-125 brightness-110"
+                                            className="w-full h-full object-cover object-top opacity-90 mix-blend-luminosity filter contrast-125 brightness-110 scale-[1.35] origin-top translate-y-4"
                                         />
                                         {/* Scanline Overlay on Image */}
                                         <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(6,182,212,0.1)_50%)] bg-[length:100%_4px] pointer-events-none"></div>
