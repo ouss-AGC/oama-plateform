@@ -468,41 +468,41 @@ const Quiz: React.FC = () => {
                 {/* Ambient Particles/Glow */}
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-cyan-900/20 via-slate-950/60 to-slate-950 pointer-events-none"></div>
 
-                <div className="max-w-6xl w-full space-y-6 relative z-10 flex flex-col h-[85vh]">
+                <div className="max-w-[90vw] w-full space-y-6 relative z-10 flex flex-col h-[90vh]">
                     {/* Header */}
                     <div className="flex items-center justify-between border-b border-cyan-500/30 pb-4 shrink-0">
-                        <div className="flex items-center space-x-4">
-                            <div className="p-3 bg-cyan-500/10 rounded-xl border border-cyan-500/50 animate-pulse">
-                                <Terminal className="w-8 h-8 text-cyan-400" />
+                        <div className="flex items-center space-x-6">
+                            <div className="p-4 bg-cyan-500/10 rounded-xl border border-cyan-500/50 animate-pulse">
+                                <Terminal className="w-10 h-10 text-cyan-400" />
                             </div>
                             <div>
-                                <h2 className="text-cyan-500 font-mono text-xs tracking-[0.3em] font-black uppercase mb-1">
+                                <h2 className="text-cyan-500 font-mono text-sm tracking-[0.3em] font-black uppercase mb-1">
                                     Transmission Entrante
                                 </h2>
-                                <h1 className="text-3xl text-white font-black tracking-tight uppercase shadow-cyan- glow">
+                                <h1 className="text-4xl text-white font-black tracking-tight uppercase shadow-cyan- glow">
                                     {briefingData.title}
                                 </h1>
                             </div>
                         </div>
-                        <div className="flex space-x-6 text-[10px] font-mono text-slate-500 uppercase tracking-widest hidden md:flex">
-                            <div className="flex items-center"><ShieldCheck className="w-3 h-3 mr-2 text-green-500" /> Canal Sécurisé</div>
-                            <div className="flex items-center"><Cpu className="w-3 h-3 mr-2 text-cyan-500" /> Liaison Historique</div>
+                        <div className="flex space-x-8 text-xs font-mono text-slate-500 uppercase tracking-widest hidden md:flex">
+                            <div className="flex items-center"><ShieldCheck className="w-4 h-4 mr-2 text-green-500" /> Canal Sécurisé</div>
+                            <div className="flex items-center"><Cpu className="w-4 h-4 mr-2 text-cyan-500" /> Liaison Historique</div>
                         </div>
                     </div>
 
                     {/* Main Content Area - Split View */}
-                    <div className="flex-grow flex flex-col md:flex-row gap-8 overflow-hidden">
+                    <div className="flex-grow flex flex-col md:flex-row gap-12 overflow-hidden items-center justify-center">
 
                         {/* LEFT: Scholar Hologram */}
                         {briefingData.image && (
-                            <div className="w-full md:w-1/3 flex flex-col items-center justify-center relative group">
-                                <div className="relative w-full aspect-square max-w-[400px] mx-auto">
+                            <div className="w-full md:w-1/2 flex flex-col items-center justify-center relative group h-full">
+                                <div className="relative w-full aspect-square max-w-[600px] max-h-[600px] flex items-center justify-center">
                                     {/* Hologram Rings */}
-                                    <div className="absolute inset-0 border-[3px] border-cyan-500/30 rounded-full animate-[spin_10s_linear_infinite] border-t-cyan-400 border-l-transparent border-r-transparent"></div>
-                                    <div className="absolute inset-4 border-[1px] border-cyan-500/20 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
+                                    <div className="absolute inset-0 border-[4px] border-cyan-500/30 rounded-full animate-[spin_10s_linear_infinite] border-t-cyan-400 border-l-transparent border-r-transparent"></div>
+                                    <div className="absolute inset-6 border-[2px] border-cyan-500/20 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
 
                                     {/* Image Container */}
-                                    <div className="absolute inset-8 rounded-full overflow-hidden border-2 border-cyan-500/50 shadow-[0_0_50px_rgba(6,182,212,0.3)] bg-slate-900/80 backdrop-blur-sm">
+                                    <div className="absolute inset-10 rounded-full overflow-hidden border-2 border-cyan-500/50 shadow-[0_0_80px_rgba(6,182,212,0.4)] bg-slate-900/80 backdrop-blur-sm">
                                         <img
                                             src={briefingData.image}
                                             alt="Scholar"
@@ -515,11 +515,11 @@ const Quiz: React.FC = () => {
 
                                 {/* Scholar Identification */}
                                 {briefingData.scholar && (
-                                    <div className="mt-6 text-center animate-fade-in-up">
-                                        <h3 className="text-cyan-300 font-bold text-xl tracking-wide font-mono shadow-black drop-shadow-lg">
+                                    <div className="mt-8 text-center animate-fade-in-up z-20 bg-slate-950/50 px-6 py-2 rounded-full border border-cyan-500/30 backdrop-blur-md">
+                                        <h3 className="text-cyan-300 font-bold text-3xl tracking-wide font-mono shadow-black drop-shadow-xl">
                                             {briefingData.scholar.split(' - ')[0]}
                                         </h3>
-                                        <p className="text-cyan-500/70 text-sm font-medium tracking-widest uppercase mt-1">
+                                        <p className="text-cyan-500/90 text-sm font-bold tracking-[0.2em] uppercase mt-2">
                                             {briefingData.scholar.split(' - ')[1]}
                                         </p>
                                     </div>
@@ -528,18 +528,20 @@ const Quiz: React.FC = () => {
                         )}
 
                         {/* RIGHT: Text Content */}
-                        <div className={`bg-slate-900/50 rounded-3xl border border-slate-800 backdrop-blur-xl shadow-2xl flex flex-col relative overflow-hidden ${briefingData.image ? 'w-full md:w-2/3' : 'w-full'}`}>
+                        <div className={`bg-slate-900/60 rounded-3xl border border-slate-700 backdrop-blur-2xl shadow-2xl flex flex-col relative overflow-hidden h-full max-h-[70vh] ${briefingData.image ? 'w-full md:w-1/2' : 'w-full'}`}>
                             {/* Decorative corner accents */}
                             <div className="absolute top-0 right-0 p-4">
-                                <div className="w-16 h-16 border-t-2 border-r-2 border-cyan-500/30 rounded-tr-xl"></div>
+                                <div className="w-20 h-20 border-t-4 border-r-4 border-cyan-500/40 rounded-tr-2xl"></div>
                             </div>
                             <div className="absolute bottom-0 left-0 p-4">
-                                <div className="w-16 h-16 border-b-2 border-l-2 border-cyan-500/30 rounded-bl-xl"></div>
+                                <div className="w-20 h-20 border-b-4 border-l-4 border-cyan-500/40 rounded-bl-2xl"></div>
                             </div>
 
-                            <div className="p-10 flex-grow font-mono text-xl leading-loose text-cyan-100/90 text-shadow overflow-y-auto custom-scrollbar">
-                                <Typewriter text={briefingData.message} speed={20} />
-                                <span className="inline-block w-2 h-6 bg-cyan-400 ml-1 animate-pulse align-middle"></span>
+                            <div className="p-14 flex-grow font-mono text-2xl leading-loose text-cyan-50 text-shadow overflow-y-auto custom-scrollbar flex items-center">
+                                <div>
+                                    <Typewriter text={briefingData.message} speed={15} />
+                                    <span className="inline-block w-3 h-8 bg-cyan-400 ml-2 animate-pulse align-middle"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -548,10 +550,10 @@ const Quiz: React.FC = () => {
                     <div className="flex justify-end items-center pt-4 shrink-0">
                         <button
                             onClick={() => setShowBriefing(false)}
-                            className="bg-cyan-600/20 hover:bg-cyan-500/30 border border-cyan-500/50 text-cyan-300 hover:text-white px-12 py-4 rounded-xl font-bold text-lg tracking-widest transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(6,182,212,0.2)] flex items-center group backdrop-blur-md"
+                            className="bg-cyan-600/20 hover:bg-cyan-500/40 border-2 border-cyan-500/60 text-cyan-200 hover:text-white px-16 py-6 rounded-2xl font-black text-xl tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(6,182,212,0.25)] flex items-center group backdrop-blur-md hover:shadow-cyan-500/20"
                         >
                             ACCUSER RÉCEPTION
-                            <ChevronRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" />
+                            <ChevronRight className="w-8 h-8 ml-4 group-hover:translate-x-2 transition-transform" />
                         </button>
                     </div>
                 </div>
