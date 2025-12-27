@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Clock, CheckCircle, ChevronRight, ChevronLeft, Save, AlertCircle, FileText, FileSearch, X, ZoomIn, LineChart, Terminal, ShieldCheck, Cpu, Volume2, StopCircle } from 'lucide-react';
 import ExamPDFViewer from './ExamPDFViewer';
+import EmbeddedPDFViewer from './EmbeddedPDFViewer';
 import ImageZoom from './ImageZoom';
 
 
@@ -806,7 +807,7 @@ const Quiz: React.FC = () => {
                                         ref={textareaRef}
                                         value={answers[currentQuestionIndex] as string || ''}
                                         onChange={(e) => handleExerciseAnswer(e.target.value)}
-                                        className="w-full p-5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-military-green/10 focus:border-military-green min-h-[180px] text-lg transition-all shadow-inner bg-white"
+                                        className={`w-full p-5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-military-green/10 focus:border-military-green text-lg transition-all shadow-inner bg-white ${currentQuestion.parentId === 'part3' ? 'min-h-[400px]' : 'min-h-[180px]'}`}
                                         placeholder="Saisissez vos calculs, formules et résultats ici..."
                                     />
                                     <div className="mt-3 flex items-center text-xs text-gray-500 italic bg-white/50 p-2 rounded-lg border border-gray-100">
@@ -816,36 +817,72 @@ const Quiz: React.FC = () => {
                                 </div>
 
                                 {/* 2. Technical Context & Data */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    {currentQuestion.context && (
-                                        <div className="bg-blue-50/50 p-5 rounded-xl border border-blue-100 text-gray-700 text-sm leading-relaxed">
-                                            <h4 className="font-black mb-3 text-blue-800 flex items-center text-xs uppercase tracking-wider">
-                                                <FileText className="w-4 h-4 mr-2" />
-                                                Contexte du Problème
-                                            </h4>
-                                            {currentQuestion.context}
-                                        </div>
-                                    )}
 
-                                    {currentQuestion.data && (
-                                        <div className="bg-gray-50 p-5 rounded-xl border border-gray-200 text-sm">
-                                            <h4 className="font-black mb-3 text-gray-700 border-b pb-2 text-xs uppercase tracking-wider">Données Techniques</h4>
-                                            <div className="grid grid-cols-1 gap-2">
-                                                {Object.entries(currentQuestion.data).map(([key, value]) => (
-                                                    <div key={key} className="flex justify-between items-center bg-white p-2 rounded border border-gray-100 shadow-sm">
-                                                        <span className="font-semibold text-gray-500 capitalize text-xs">
-                                                            {key.replace(/_/g, ' ')}
-                                                        </span>
-                                                        <span className="font-mono font-bold text-military-green">{String(value)}</span>
-                                                    </div>
-                                                ))}
+
+                                {/* 2. Technical Context & Data / PDF Viewer */}
+                                {currentQuestion.parentId === 'part3' ? (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="h-full min-h-[500px] flex flex-col">
+                                            <EmbeddedPDFViewer
+                                                pdfUrl="/resources/analysis_sdof.pdf"
+                                                className="flex-grow shadow-lg border-blue-200"
+                                            />
+                                            <div className="mt-4 p-4 bg-blue-50 border border-blue-100 rounded-lg text-xs text-blue-700">
+                                                <p className="font-bold mb-1 flex items-center">
+                                                    <AlertCircle className="w-3 h-3 mr-1" />
+                                                    Instruction
+                                                </p>
+                                                <p>Consultez la présentation ci-dessus pour résoudre le problème.</p>
                                             </div>
                                         </div>
-                                    )}
-                                </div>
+                                        {currentQuestion.data && (
+                                            <div className="bg-gray-50 p-5 rounded-xl border border-gray-200 text-sm">
+                                                <h4 className="font-black mb-3 text-gray-700 border-b pb-2 text-xs uppercase tracking-wider">Données Techniques</h4>
+                                                <div className="grid grid-cols-1 gap-2">
+                                                    {Object.entries(currentQuestion.data).map(([key, value]) => (
+                                                        <div key={key} className="flex justify-between items-center bg-white p-2 rounded border border-gray-100 shadow-sm">
+                                                            <span className="font-semibold text-gray-500 capitalize text-xs">
+                                                                {key.replace(/_/g, ' ')}
+                                                            </span>
+                                                            <span className="font-mono font-bold text-military-green">{String(value)}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        {currentQuestion.context && (
+                                            <div className="bg-blue-50/50 p-5 rounded-xl border border-blue-100 text-gray-700 text-sm leading-relaxed">
+                                                <h4 className="font-black mb-3 text-blue-800 flex items-center text-xs uppercase tracking-wider">
+                                                    <FileText className="w-4 h-4 mr-2" />
+                                                    Contexte du Problème
+                                                </h4>
+                                                {currentQuestion.context}
+                                            </div>
+                                        )}
+
+                                        {currentQuestion.data && (
+                                            <div className="bg-gray-50 p-5 rounded-xl border border-gray-200 text-sm">
+                                                <h4 className="font-black mb-3 text-gray-700 border-b pb-2 text-xs uppercase tracking-wider">Données Techniques</h4>
+                                                <div className="grid grid-cols-1 gap-2">
+                                                    {Object.entries(currentQuestion.data).map(([key, value]) => (
+                                                        <div key={key} className="flex justify-between items-center bg-white p-2 rounded border border-gray-100 shadow-sm">
+                                                            <span className="font-semibold text-gray-500 capitalize text-xs">
+                                                                {key.replace(/_/g, ' ')}
+                                                            </span>
+                                                            <span className="font-mono font-bold text-military-green">{String(value)}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
 
                                 {/* 3. Image Display (bottom) */}
-                                {(currentQuestion.image || currentQuestion.images) && (
+                                {currentQuestion.parentId !== 'part3' && (currentQuestion.image || currentQuestion.images) && (
                                     <div className="space-y-6 pt-4 border-t border-dashed border-gray-200">
                                         <h4 className="font-black text-gray-500 text-xs uppercase tracking-wider mb-4">Support Visuel / Graphiques</h4>
                                         {currentQuestion.image && (
@@ -881,7 +918,7 @@ const Quiz: React.FC = () => {
                                     </div>
                                 )}
 
-                                {!currentQuestion.image && !currentQuestion.images && (
+                                {currentQuestion.parentId !== 'part3' && !currentQuestion.image && !currentQuestion.images && (
                                     <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-xl p-8 text-center">
                                         <p className="text-gray-500 italic text-sm">
                                             [Figure / Schéma du dispositif non requis pour cette étape]
@@ -910,7 +947,7 @@ const Quiz: React.FC = () => {
                                 ))}
                             </div>
                         )}
-                    </div >
+                    </div>
 
                     {/* Footer / Navigation Buttons */}
                     <div className="bg-gray-50 border-t p-6 flex justify-between items-center group">
