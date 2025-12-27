@@ -254,6 +254,7 @@
                     "points": 0.5,
                     "image": "/explosions_fig3.png",
                     "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
+                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
                     "subQuestions": [
                         {
                             "id": "za",
@@ -286,6 +287,7 @@
                     "question": "Calcul analytique - Pressions incidentes Pₛ₀.",
                     "points": 1.0,
                     "image": "/explosions_fig3.png",
+                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
                     "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
                     "subQuestions": [
                         {
@@ -320,6 +322,7 @@
                     "points": 1.0,
                     "image": "/explosions_fig3.png",
                     "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
+                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
                     "subQuestions": [
                         {
                             "id": "pr_a",
@@ -352,6 +355,8 @@
                     "question": "Calcul analytique - Durées (t₀բ) et Impulsions (iₛ, iᵣ).",
                     "points": 1.0,
                     "image": "/explosions_fig3.png",
+                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
+                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
                     "subQuestions": [
                         {
                             "id": "t0_a",
@@ -394,6 +399,7 @@
                     "question": "Calcul analytique - Vitesses de l'onde (U) et Temps d'arrivée (tₐ).",
                     "points": 1.0,
                     "image": "/explosions_fig3.png",
+                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
                     "subQuestions": [
                         {
                             "id": "u_a",
@@ -422,6 +428,7 @@
                     "question": "Calcul analytique - Pressions dynamiques q₀.",
                     "points": 1.0,
                     "image": "/explosions_fig3.png",
+                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
                     "subQuestions": [
                         {
                             "id": "q0_a",
