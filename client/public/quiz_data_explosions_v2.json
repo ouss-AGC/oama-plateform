@@ -419,8 +419,26 @@
             "questions": [
                 {
                     "id": "3.1",
-                    "question": "Cas 01 (P₀=205 kN, t₀=4.8 ms). Calculer iₛ, xₘₐₓ, et vérifier le domaine.",
-                    "points": 1.0,
+                    "question": "Pour le premier cas, effectuez un calcul détaillé afin de démontrer que la déformation maximale xₘₐₓ reste toujours dans le domaine élastique.",
+                    "points": 1.5,
+                    "image": "/sdof_table.png",
+                    "subQuestions": [
+                        {
+                            "id": "a",
+                            "label": "a) Le calcul de l'impulsion I (0.5 pt)",
+                            "placeholder": "Calculez l'impulsion I..."
+                        },
+                        {
+                            "id": "b",
+                            "label": "b) La détermination de la déformation élastique xₑₗ (0.5 pt)",
+                            "placeholder": "Déterminez xₑₗ..."
+                        },
+                        {
+                            "id": "c",
+                            "label": "c) La vérification que xₘₐₓ reste inférieure à la limite élastique xₑₗ (0.5 pt)",
+                            "placeholder": "Vérifiez que xₘₐₓ < xₑₗ..."
+                        }
+                    ],
                     "validation": {
                         "type": "numeric_set",
                         "tolerance": 0.07,

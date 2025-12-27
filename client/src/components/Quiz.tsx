@@ -798,23 +798,60 @@ const Quiz: React.FC = () => {
                         {currentQuestion.type === 'exercise' ? (
                             // Exercise View: Prioritized Answer Box First
                             <div className="space-y-6">
-                                {/* 1. Answer Box */}
-                                <div className="border-l-4 border-military-beige pl-4 py-4 bg-military-beige/5 rounded-r-2xl">
-                                    <label className="block text-military-green font-black text-sm uppercase tracking-widest mb-3">
-                                        Votre Réponse
-                                    </label>
-                                    <textarea
-                                        ref={textareaRef}
-                                        value={answers[currentQuestionIndex] as string || ''}
-                                        onChange={(e) => handleExerciseAnswer(e.target.value)}
-                                        className={`w-full p-5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-military-green/10 focus:border-military-green text-lg transition-all shadow-inner bg-white ${currentQuestion.parentId === 'part3' ? 'min-h-[600px]' : 'min-h-[180px]'}`}
-                                        placeholder="Saisissez vos calculs, formules et résultats ici..."
-                                    />
-                                    <div className="mt-3 flex items-center text-xs text-gray-500 italic bg-white/50 p-2 rounded-lg border border-gray-100">
-                                        <AlertCircle className="w-3.5 h-3.5 mr-2 text-military-green" />
-                                        <span>Utilisez le point (.) comme séparateur décimal (ex: 12.5). Indiquez clairement les unités.</span>
+                                {/* 1. Answer Box - Check for Sub-Questions */}
+                                {(currentQuestion as any).subQuestions ? (
+                                    <div className="space-y-4">
+                                        <label className="block text-military-green font-black text-sm uppercase tracking-widest mb-3">
+                                            Vos Réponses
+                                        </label>
+                                        {(currentQuestion as any).subQuestions.map((subQ: any, idx: number) => (
+                                            <div key={subQ.id} className="border-l-4 border-military-beige pl-4 py-3 bg-military-beige/5 rounded-r-xl">
+                                                <label className="block text-gray-700 font-semibold text-sm mb-2">
+                                                    {subQ.label}
+                                                </label>
+                                                <textarea
+                                                    value={
+                                                        typeof answers[currentQuestionIndex] === 'object' && answers[currentQuestionIndex] !== null
+                                                            ? (answers[currentQuestionIndex] as any)[subQ.id] || ''
+                                                            : ''
+                                                    }
+                                                    onChange={(e) => {
+                                                        const newAnswers = [...answers];
+                                                        const currentAnswer = typeof newAnswers[currentQuestionIndex] === 'object' && newAnswers[currentQuestionIndex] !== null
+                                                            ? { ...newAnswers[currentQuestionIndex] as any }
+                                                            : {};
+                                                        currentAnswer[subQ.id] = e.target.value;
+                                                        newAnswers[currentQuestionIndex] = currentAnswer;
+                                                        setAnswers(newAnswers);
+                                                    }}
+                                                    className="w-full p-4 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-military-green/10 focus:border-military-green text-base transition-all shadow-inner bg-white min-h-[120px]"
+                                                    placeholder={subQ.placeholder}
+                                                />
+                                            </div>
+                                        ))}
+                                        <div className="mt-3 flex items-center text-xs text-gray-500 italic bg-white/50 p-2 rounded-lg border border-gray-100">
+                                            <AlertCircle className="w-3.5 h-3.5 mr-2 text-military-green" />
+                                            <span>Utilisez le point (.) comme séparateur décimal (ex: 12.5). Indiquez clairement les unités.</span>
+                                        </div>
                                     </div>
-                                </div>
+                                ) : (
+                                    <div className="border-l-4 border-military-beige pl-4 py-4 bg-military-beige/5 rounded-r-2xl">
+                                        <label className="block text-military-green font-black text-sm uppercase tracking-widest mb-3">
+                                            Votre Réponse
+                                        </label>
+                                        <textarea
+                                            ref={textareaRef}
+                                            value={answers[currentQuestionIndex] as string || ''}
+                                            onChange={(e) => handleExerciseAnswer(e.target.value)}
+                                            className={`w-full p-5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-military-green/10 focus:border-military-green text-lg transition-all shadow-inner bg-white ${currentQuestion.parentId === 'part3' ? 'min-h-[600px]' : 'min-h-[180px]'}`}
+                                            placeholder="Saisissez vos calculs, formules et résultats ici..."
+                                        />
+                                        <div className="mt-3 flex items-center text-xs text-gray-500 italic bg-white/50 p-2 rounded-lg border border-gray-100">
+                                            <AlertCircle className="w-3.5 h-3.5 mr-2 text-military-green" />
+                                            <span>Utilisez le point (.) comme séparateur décimal (ex: 12.5). Indiquez clairement les unités.</span>
+                                        </div>
+                                    </div>
+                                )}
 
                                 {/* 2. Technical Context & Data */}
 
