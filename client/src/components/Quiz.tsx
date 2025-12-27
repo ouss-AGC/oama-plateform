@@ -33,6 +33,7 @@ interface Question {
     sectionTitle?: string; // To display section info
     sectionDescription?: string;
     sectionContext?: string;
+    subQuestions?: Array<{ id: string; label: string; placeholder: string }>; // For structured sub-questions
 }
 
 interface Section {
