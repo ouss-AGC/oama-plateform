@@ -868,10 +868,10 @@ const Quiz: React.FC = () => {
                                                             )}
                                                         </label>
                                                         <textarea
-                                                            value={typeof answers[currentQuestionIndex] === 'object' ? (answers[currentQuestionIndex] as any)[subQ.id] || '' : ''}
+                                                            value={(answers[currentQuestionIndex] && typeof answers[currentQuestionIndex] === 'object') ? (answers[currentQuestionIndex] as any)[subQ.id] || '' : ''}
                                                             onChange={(e) => {
                                                                 const newAnswers = [...answers];
-                                                                const currentAnswer = typeof newAnswers[currentQuestionIndex] === 'object' ? { ...newAnswers[currentQuestionIndex] as any } : {};
+                                                                const currentAnswer = (newAnswers[currentQuestionIndex] && typeof newAnswers[currentQuestionIndex] === 'object') ? { ...newAnswers[currentQuestionIndex] as any } : {};
                                                                 currentAnswer[subQ.id] = e.target.value;
                                                                 newAnswers[currentQuestionIndex] = currentAnswer;
                                                                 setAnswers(newAnswers);
@@ -935,10 +935,10 @@ const Quiz: React.FC = () => {
                                                             )}
                                                         </label>
                                                         <textarea
-                                                            value={typeof answers[currentQuestionIndex] === 'object' ? (answers[currentQuestionIndex] as any)[subQ.id] || '' : ''}
+                                                            value={(answers[currentQuestionIndex] && typeof answers[currentQuestionIndex] === 'object') ? (answers[currentQuestionIndex] as any)[subQ.id] || '' : ''}
                                                             onChange={(e) => {
                                                                 const newAnswers = [...answers];
-                                                                const currentAnswer = typeof newAnswers[currentQuestionIndex] === 'object' ? { ...newAnswers[currentQuestionIndex] as any } : {};
+                                                                const currentAnswer = (newAnswers[currentQuestionIndex] && typeof newAnswers[currentQuestionIndex] === 'object') ? { ...newAnswers[currentQuestionIndex] as any } : {};
                                                                 currentAnswer[subQ.id] = e.target.value;
                                                                 newAnswers[currentQuestionIndex] = currentAnswer;
                                                                 setAnswers(newAnswers);
