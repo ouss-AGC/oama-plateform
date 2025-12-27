@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Clock, CheckCircle, ChevronRight, ChevronLeft, Save, AlertCircle, FileText, FileSearch, X, ZoomIn, LineChart, Terminal, ShieldCheck, Cpu } from 'lucide-react';
+import { Clock, CheckCircle, ChevronRight, ChevronLeft, Save, AlertCircle, FileText, FileSearch, X, ZoomIn, LineChart, Terminal, ShieldCheck, Cpu, Volume2, StopCircle } from 'lucide-react';
 import ExamPDFViewer from './ExamPDFViewer';
 import ImageZoom from './ImageZoom';
 
@@ -70,6 +70,42 @@ const Quiz: React.FC = () => {
     const [showBriefing, setShowBriefing] = useState(false);
     const [briefingData, setBriefingData] = useState<{ title: string; message: string; image?: string; scholar?: string; scholarMessage?: string; imageStyle?: string } | null>(null);
     const [viewedBriefings, setViewedBriefings] = useState<Set<string>>(new Set());
+    const [isSpeaking, setIsSpeaking] = useState(false);
+
+    const handleSpeak = (text: string) => {
+        if (!text) return;
+
+        // Stop any current speech
+        window.speechSynthesis.cancel();
+
+        if (isSpeaking) {
+            setIsSpeaking(false);
+            return;
+        }
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'fr-FR';
+        utterance.pitch = 0.65; // Deep voice for ancient scholar
+        utterance.rate = 0.85; // Slow, deliberate pace
+
+        // Try to find a French voice
+        const voices = window.speechSynthesis.getVoices();
+        const frenchVoice = voices.find(v => v.lang.includes('fr'));
+        if (frenchVoice) utterance.voice = frenchVoice;
+
+        utterance.onstart = () => setIsSpeaking(true);
+        utterance.onend = () => setIsSpeaking(false);
+        utterance.onerror = () => setIsSpeaking(false);
+
+        window.speechSynthesis.speak(utterance);
+    };
+
+    // Clean up speech on unmount
+    useEffect(() => {
+        return () => {
+            window.speechSynthesis.cancel();
+        };
+    }, []);
 
     const insertSymbol = (value: string) => {
         if (!textareaRef.current) return;
@@ -523,11 +559,28 @@ const Quiz: React.FC = () => {
                                                         <span className="text-xs font-bold text-cyan-500 uppercase tracking-widest flex items-center">
                                                             <Terminal className="w-3 h-3 mr-1" /> MESSAGE PRIORITAIRE
                                                         </span>
-                                                        <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleSpeak(briefingData.scholarMessage || '');
+                                                            }}
+                                                            className={`p-1.5 rounded-full transition-all duration-300 ${isSpeaking ? 'bg-cyan-500/20 text-cyan-400 ring-1 ring-cyan-500 animate-pulse' : 'bg-transparent text-slate-400 hover:text-cyan-400 hover:bg-cyan-500/10'}`}
+                                                            title={isSpeaking ? "Arrêter la transmission" : "Écouter le message"}
+                                                        >
+                                                            {isSpeaking ? <StopCircle className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                                                        </button>
                                                     </div>
                                                     <p className="text-cyan-50 font-mono text-sm leading-relaxed text-shadow-sm">
                                                         "{briefingData.scholarMessage}"
                                                     </p>
+                                                    {isSpeaking && (
+                                                        <div className="flex items-center justify-center gap-1 mt-2 h-2">
+                                                            <div className="w-0.5 h-full bg-cyan-500 animate-[music_1s_ease-in-out_infinite]"></div>
+                                                            <div className="w-0.5 h-full bg-cyan-500 animate-[music_1.1s_ease-in-out_infinite]"></div>
+                                                            <div className="w-0.5 h-full bg-cyan-500 animate-[music_1.2s_ease-in-out_infinite]"></div>
+                                                            <div className="w-0.5 h-full bg-cyan-500 animate-[music_0.9s_ease-in-out_infinite]"></div>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         )}
