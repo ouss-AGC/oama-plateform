@@ -798,6 +798,17 @@ const Quiz: React.FC = () => {
                         {currentQuestion.type === 'exercise' ? (
                             // Exercise View: Prioritized Answer Box First
                             <div className="space-y-6">
+                                {/* 0. Question-Specific Image (for sub-questions) */}
+                                {(currentQuestion as any).image && (currentQuestion as any).subQuestions && (
+                                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                                        <img
+                                            src={(currentQuestion as any).image}
+                                            alt="Question figure"
+                                            className="w-full rounded-lg"
+                                        />
+                                    </div>
+                                )}
+
                                 {/* 1. Answer Box - Check for Sub-Questions */}
                                 {(currentQuestion as any).subQuestions ? (
                                     <div className="space-y-4">
