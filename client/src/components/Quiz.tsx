@@ -204,6 +204,7 @@ const Quiz: React.FC = () => {
                                     allQuestions.push({
                                         ...q,
                                         type: 'qcm',
+                                        parentId: section.id,
                                         sectionTitle: section.title,
                                         sectionDescription: section.description,
                                         sectionContext: (section as any).context,
@@ -1040,49 +1041,51 @@ const Quiz: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Right Sidebar: Symbol Palette */}
-                <div className="hidden lg:block w-80 bg-white rounded-xl shadow-2xl h-fit sticky top-4 overflow-hidden border border-gray-100">
-                    <div className="bg-slate-800 p-4 flex items-center justify-between">
-                        <h3 className="font-black text-white flex items-center uppercase tracking-widest text-xs">
-                            <Save className="w-4 h-4 mr-2 text-cyan-400" />
-                            Palette d'Outils
-                        </h3>
-                        <span className="bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded text-[10px] font-bold">EXPERT</span>
-                    </div>
+                {/* Right Sidebar: Symbol Palette - Hidden for Part 1 */}
+                {currentQuestion.parentId !== 'part1' && (
+                    <div className="hidden lg:block w-80 bg-white rounded-xl shadow-2xl h-fit sticky top-4 overflow-hidden border border-gray-100">
+                        <div className="bg-slate-800 p-4 flex items-center justify-between">
+                            <h3 className="font-black text-white flex items-center uppercase tracking-widest text-xs">
+                                <Save className="w-4 h-4 mr-2 text-cyan-400" />
+                                Palette d'Outils
+                            </h3>
+                            <span className="bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded text-[10px] font-bold">EXPERT</span>
+                        </div>
 
-                    <div className="p-4 space-y-6 max-h-[80vh] overflow-y-auto custom-scrollbar bg-slate-50/30">
-                        {symbolCategories.map((cat, catIdx) => (
-                            <div key={catIdx} className="space-y-3">
-                                <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center">
-                                    <span className="w-1 h-3 bg-slate-300 mr-2 rounded-full"></span>
-                                    {cat.name}
-                                </h4>
-                                <div className="grid grid-cols-3 gap-2">
-                                    {cat.items.map((item, itemIdx) => (
-                                        <button
-                                            key={itemIdx}
-                                            onClick={() => insertSymbol(item.value)}
-                                            className={`h-12 rounded-xl border-2 text-base font-bold transition-all shadow-sm flex items-center justify-center active:scale-95
+                        <div className="p-4 space-y-6 max-h-[80vh] overflow-y-auto custom-scrollbar bg-slate-50/30">
+                            {symbolCategories.map((cat, catIdx) => (
+                                <div key={catIdx} className="space-y-3">
+                                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center">
+                                        <span className="w-1 h-3 bg-slate-300 mr-2 rounded-full"></span>
+                                        {cat.name}
+                                    </h4>
+                                    <div className="grid grid-cols-3 gap-2">
+                                        {cat.items.map((item, itemIdx) => (
+                                            <button
+                                                key={itemIdx}
+                                                onClick={() => insertSymbol(item.value)}
+                                                className={`h-12 rounded-xl border-2 text-base font-bold transition-all shadow-sm flex items-center justify-center active:scale-95
                                                 ${cat.name.includes('Nombres')
-                                                    ? 'bg-white border-slate-200 text-slate-700 hover:border-cyan-500 hover:text-cyan-600 shadow-sm'
-                                                    : 'bg-cyan-50 border-cyan-100 text-cyan-700 hover:bg-cyan-100 hover:border-cyan-400'}
+                                                        ? 'bg-white border-slate-200 text-slate-700 hover:border-cyan-500 hover:text-cyan-600 shadow-sm'
+                                                        : 'bg-cyan-50 border-cyan-100 text-cyan-700 hover:bg-cyan-100 hover:border-cyan-400'}
                                             `}
-                                            title={item.label}
-                                        >
-                                            {(item as any).display || item.label}
-                                        </button>
-                                    ))}
+                                                title={item.label}
+                                            >
+                                                {(item as any).display || item.label}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
 
-                    <div className="p-3 bg-slate-800/10 border-t border-slate-100">
-                        <p className="text-[10px] text-slate-500 text-center font-medium italic">
-                            Insertion instantanée au curseur
-                        </p>
+                        <div className="p-3 bg-slate-800/10 border-t border-slate-100">
+                            <p className="text-[10px] text-slate-500 text-center font-medium italic">
+                                Insertion instantanée au curseur
+                            </p>
+                        </div>
                     </div>
-                </div>
+                )}
             </main>
 
             {/* PDF Viewer Modal */}
