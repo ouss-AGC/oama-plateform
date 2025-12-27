@@ -456,8 +456,31 @@
                 },
                 {
                     "id": "3.2",
-                    "question": "Cas 02 (P₀=200 kN, t₀=24 ms). Calculer iₛ, xₘₐₓ, et vérifier le domaine.",
-                    "points": 1.5,
+                    "question": "Pour le deuxième cas, effectuez un calcul détaillé afin de déterminer si la déformation maximale xₘₐₓ conduit le système dans le domaine plastique.",
+                    "points": 2.0,
+                    "image": "/sdof_question_3_2.png",
+                    "subQuestions": [
+                        {
+                            "id": "a",
+                            "label": "a) Le calcul de l'impulsion I (0.5 pt)",
+                            "placeholder": "Calculez l'impulsion I..."
+                        },
+                        {
+                            "id": "b",
+                            "label": "b) La détermination de la déformation maximale xₘₐₓ (0.5 pt)",
+                            "placeholder": "Déterminez xₘₐₓ..."
+                        },
+                        {
+                            "id": "c",
+                            "label": "c) La comparaison entre xₘₐₓ et la déformation élastique xₑₗ (0.5 pt)",
+                            "placeholder": "Comparez xₘₐₓ et xₑₗ..."
+                        },
+                        {
+                            "id": "d",
+                            "label": "d) Le calcul du facteur de ductilité μ. Concluez si le système reste dans le domaine élastique ou entre dans le domaine plastique (01 pt)",
+                            "placeholder": "Calculez μ et concluez..."
+                        }
+                    ],
                     "validation": {
                         "type": "numeric_set",
                         "tolerance": 0.07,
