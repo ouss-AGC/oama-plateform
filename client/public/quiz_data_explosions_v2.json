@@ -258,11 +258,13 @@
                         {
                             "id": "za",
                             "label": "Distance réduite Zₐ",
+                            "points": 0.25,
                             "placeholder": "Entrez Zₐ..."
                         },
                         {
                             "id": "zb",
                             "label": "Distance réduite Zᵦ",
+                            "points": 0.25,
                             "placeholder": "Entrez Zᵦ..."
                         }
                     ],
@@ -291,11 +293,13 @@
                         {
                             "id": "pso_a",
                             "label": "Pression incidente Pₛ₀ (Face A)",
+                            "points": 0.5,
                             "placeholder": "Entrez Pₛ₀ (A)..."
                         },
                         {
                             "id": "pso_b",
                             "label": "Pression incidente Pₛ₀ (Face B)",
+                            "points": 0.5,
                             "placeholder": "Entrez Pₛ₀ (B)..."
                         }
                     ],
@@ -324,11 +328,13 @@
                         {
                             "id": "pr_a",
                             "label": "Pression réfléchie Pᵣ (Face A)",
+                            "points": 0.5,
                             "placeholder": "Entrez Pᵣ (A)..."
                         },
                         {
                             "id": "pr_b",
                             "label": "Pression réfléchie Pᵣ (Face B)",
+                            "points": 0.5,
                             "placeholder": "Entrez Pᵣ (B)..."
                         }
                     ],
@@ -357,21 +363,25 @@
                         {
                             "id": "t0_a",
                             "label": "Durée t₀բ (Face A)",
+                            "points": 0.25,
                             "placeholder": "Entrez t₀բ (A)..."
                         },
                         {
                             "id": "t0_b",
                             "label": "Durée t₀բ (Face B)",
+                            "points": 0.25,
                             "placeholder": "Entrez t₀բ (B)..."
                         },
                         {
                             "id": "is_a",
                             "label": "Impulsion iₛ (Face A)",
+                            "points": 0.25,
                             "placeholder": "Entrez iₛ (A)..."
                         },
                         {
                             "id": "ir_a",
                             "label": "Impulsion iᵣ (Face A)",
+                            "points": 0.25,
                             "placeholder": "Entrez iᵣ (A)..."
                         }
                     ],
@@ -399,13 +409,21 @@
                     "subQuestions": [
                         {
                             "id": "u_a",
-                            "label": "Vitesse U (Face A)",
-                            "placeholder": "Entrez U..."
+                            "label": "Vitesse du choc U (Face A)",
+                            "points": 0.33,
+                            "placeholder": "Entrez U (A)..."
                         },
                         {
                             "id": "ta_a",
                             "label": "Temps d'arrivée tₐ (Face A)",
-                            "placeholder": "Entrez tₐ..."
+                            "points": 0.33,
+                            "placeholder": "Entrez tₐ (A)..."
+                        },
+                        {
+                            "id": "ta_b",
+                            "label": "Temps d'arrivée tₐ (Face B)",
+                            "points": 0.34,
+                            "placeholder": "Entrez tₐ (B)..."
                         }
                     ],
                     "validation": {
@@ -428,13 +446,15 @@
                     "subQuestions": [
                         {
                             "id": "q0_a",
-                            "label": "Pression q₀ (Face A)",
-                            "placeholder": "Entrez q₀..."
+                            "label": "Pression dynamique q₀ (Face A)",
+                            "points": 0.5,
+                            "placeholder": "Entrez q₀ (A)..."
                         },
                         {
                             "id": "q0_b",
-                            "label": "Pression q₀ (Face B)",
-                            "placeholder": "Entrez q₀..."
+                            "label": "Pression dynamique q₀ (Face B)",
+                            "points": 0.5,
+                            "placeholder": "Entrez q₀ (B)..."
                         }
                     ],
                     "validation": {
@@ -486,7 +506,7 @@
             "title": "Partie 03 : Analyse SDOF (04 pts)",
             "description": "La troisième partie de l'examen a pour objectif de tester vos compétences en résolution de problèmes appliqués aux structures soumises aux effets des explosions. Vous devrez effectuer des calculs détaillés, analyser les résultats obtenus et formuler des conclusions fondées. Veillez à suivre scrupuleusement les étapes indiquées dans l'énoncé et à présenter vos calculs de manière organisée. La précision de vos réponses et la clarté de vos explications seront particulièrement valorisées.",
             "type": "exercise",
-            "briefingImage": "/scholars/al_jazari_v3.png",
+            "briefingImage": "/scholars/al_jazari_hologram_clean.png",
             "briefingScholar": "Al-Jazari - Maître Ingénieur Mécanicien",
             "scholarMessage": "Je suis Al-Jazari. L'ingéniosité réside dans le mouvement et la précision. Analysez la dynamique des structures avec rigueur pour honorer l'ingénierie et mériter les points de l'Assistant Professor Atoui Oussama.",
             "context": "M=84.8 kg, K=5200 kN/m, Rₘ=156 kN, Tₙ=25 ms.",
@@ -499,17 +519,20 @@
                     "subQuestions": [
                         {
                             "id": "a",
-                            "label": "a) Le calcul de l'impulsion I (0.5 pt)",
+                            "label": "a) Le calcul de l'impulsion I",
+                            "points": 0.5,
                             "placeholder": "Calculez l'impulsion I..."
                         },
                         {
                             "id": "b",
-                            "label": "b) La détermination de la déformation élastique xₑₗ (0.5 pt)",
+                            "label": "b) La détermination de la déformation élastique xₑₗ",
+                            "points": 0.5,
                             "placeholder": "Déterminez xₑₗ..."
                         },
                         {
                             "id": "c",
-                            "label": "c) La vérification que xₘₐₓ reste inférieure à la limite élastique xₑₗ (0.5 pt)",
+                            "label": "c) La vérification que xₘₐₓ reste inférieure à la limite élastique xₑₗ",
+                            "points": 0.5,
                             "placeholder": "Vérifiez que xₘₐₓ < xₑₗ..."
                         }
                     ],
@@ -536,22 +559,26 @@
                     "subQuestions": [
                         {
                             "id": "a",
-                            "label": "a) Le calcul de l'impulsion I (0.5 pt)",
+                            "label": "a) Le calcul de l'impulsion I",
+                            "points": 0.5,
                             "placeholder": "Calculez l'impulsion I..."
                         },
                         {
                             "id": "b",
-                            "label": "b) La détermination de la déformation maximale xₘₐₓ (0.5 pt)",
+                            "label": "b) La détermination de la déformation maximale xₘₐₓ",
+                            "points": 0.5,
                             "placeholder": "Déterminez xₘₐₓ..."
                         },
                         {
                             "id": "c",
-                            "label": "c) La comparaison entre xₘₐₓ et la déformation élastique xₑₗ (0.5 pt)",
+                            "label": "c) La comparaison entre xₘₐₓ et la déformation élastique xₑₗ",
+                            "points": 0.5,
                             "placeholder": "Comparez xₘₐₓ et xₑₗ..."
                         },
                         {
                             "id": "d",
-                            "label": "d) Le calcul du facteur de ductilité μ. Concluez si le système reste dans le domaine élastique ou entre dans le domaine plastique (01 pt)",
+                            "label": "d) Le calcul du facteur de ductilité μ. Concluez si le système reste dans le domaine élastique ou entre dans le domaine plastique",
+                            "points": 1.0,
                             "placeholder": "Calculez μ et concluez..."
                         }
                     ],
@@ -578,23 +605,27 @@
                     "subQuestions": [
                         {
                             "id": "a",
-                            "label": "a) Le calcul de l'impulsion I (0.5 pt)",
+                            "label": "a) Le calcul de l'impulsion I",
+                            "points": 0.5,
                             "placeholder": "Calculez l'impulsion I..."
                         },
                         {
                             "id": "b",
-                            "label": "b) La détermination de la déformation maximale xₘₐₓ (0.5 pt)",
+                            "label": "b) La détermination de la déformation maximale xₘₐₓ",
+                            "points": 0.5,
                             "placeholder": "Déterminez xₘₐₓ..."
                         },
                         {
                             "id": "c",
-                            "label": "c) La comparaison entre xₘₐₓ et la déformation élastique xₑₗ (0.5 pt)",
+                            "label": "c) La comparaison entre xₘₐₓ et la déformation élastique xₑₗ",
+                            "points": 1.0,
                             "placeholder": "Comparez xₘₐₓ et xₑₗ..."
                         },
                         {
                             "id": "d",
-                            "label": "d) Le calcul du facteur de ductilité μ. Concluez si le système reste dans le domaine élastique ou entre dans le domaine plastique (01 pt)",
-                            "placeholder": "Calculez μ et concluez..."
+                            "label": "d) Expliquez pourquoi le calcul du facteur de ductilité μ est inutile ici",
+                            "points": 0.5,
+                            "placeholder": "Expliquez..."
                         }
                     ],
                     "validation": {

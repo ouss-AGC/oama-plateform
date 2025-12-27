@@ -859,8 +859,13 @@ const Quiz: React.FC = () => {
                                                 </label>
                                                 {(currentQuestion as any).subQuestions.map((subQ: any) => (
                                                     <div key={subQ.id} className="border-l-4 border-military-beige pl-4 py-3 bg-military-beige/5 rounded-r-xl">
-                                                        <label className="block text-gray-700 font-semibold text-sm mb-2">
-                                                            {subQ.label}
+                                                        <label className="block text-gray-700 font-semibold text-sm mb-2 flex justify-between items-center">
+                                                            <span>{subQ.label}</span>
+                                                            {subQ.points && (
+                                                                <span className="text-red-600 font-black ml-2 whitespace-nowrap">
+                                                                    ({subQ.points} pt{subQ.points > 1 ? 's' : ''})
+                                                                </span>
+                                                            )}
                                                         </label>
                                                         <textarea
                                                             value={typeof answers[currentQuestionIndex] === 'object' ? (answers[currentQuestionIndex] as any)[subQ.id] || '' : ''}
@@ -921,7 +926,14 @@ const Quiz: React.FC = () => {
                                             <div className="space-y-4">
                                                 {(currentQuestion as any).subQuestions.map((subQ: any) => (
                                                     <div key={subQ.id} className="border-l-4 border-military-beige pl-4 py-3 bg-military-beige/5 rounded-r-xl">
-                                                        <label className="block text-gray-700 font-semibold text-sm mb-2">{subQ.label}</label>
+                                                        <label className="block text-gray-700 font-semibold text-sm mb-2 flex justify-between items-center">
+                                                            <span>{subQ.label}</span>
+                                                            {subQ.points && (
+                                                                <span className="text-red-600 font-black ml-2 whitespace-nowrap">
+                                                                    ({subQ.points} pt{subQ.points > 1 ? 's' : ''})
+                                                                </span>
+                                                            )}
+                                                        </label>
                                                         <textarea
                                                             value={typeof answers[currentQuestionIndex] === 'object' ? (answers[currentQuestionIndex] as any)[subQ.id] || '' : ''}
                                                             onChange={(e) => {
