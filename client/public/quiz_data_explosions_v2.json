@@ -235,6 +235,7 @@
             "title": "Partie 02 : Problème (07 pts)",
             "description": "Cette deuxième partie évalue votre capacité à appliquer les concepts du module à un cas pratique d'analyse des effets d'une explosion sur une structure. Vous devrez effectuer des calculs analytiques, comparer vos résultats aux données expérimentales et proposer des solutions pour renforcer la protection de la structure. Soyez précis et méthodiques dans vos réponses.",
             "type": "exercise",
+            "pdfUrl": "/resources/sequence_2.pdf",
             "briefingImage": "/scholars/jabir_ibn_hayyan_v2.png",
             "briefingScholar": "Jabir ibn Hayyan (Geber) - Père de la Chimie",
             "scholarMessage": "Je suis Jabir ibn Hayyan. La science exige patience et exactitude. Calculez avec précision pour déchiffrer les mystères des explosions et obtenir les points de l'Assistant Professor Atoui Oussama.",
@@ -251,6 +252,19 @@
                     "id": "2.1",
                     "question": "Calculer les distances réduites Zₐ et Zᵦ.",
                     "points": 0.5,
+                    "image": "/explosions_fig1.png",
+                    "subQuestions": [
+                        {
+                            "id": "za",
+                            "label": "Distance réduite Zₐ",
+                            "placeholder": "Entrez Zₐ..."
+                        },
+                        {
+                            "id": "zb",
+                            "label": "Distance réduite Zᵦ",
+                            "placeholder": "Entrez Zᵦ..."
+                        }
+                    ],
                     "validation": {
                         "type": "numeric_set",
                         "tolerance": 0.07,
@@ -270,6 +284,29 @@
                     "id": "2.2",
                     "question": "Calculer les pressions incidentes (Pₛ₀) et réfléchies (Pᵣ) pour les faces A et B.",
                     "points": 1.5,
+                    "image": "/explosions_fig1.png",
+                    "subQuestions": [
+                        {
+                            "id": "pso_a",
+                            "label": "Pression incidente Pₛ₀ (Face A)",
+                            "placeholder": "Entrez Pₛ₀ (A)..."
+                        },
+                        {
+                            "id": "pso_b",
+                            "label": "Pression incidente Pₛ₀ (Face B)",
+                            "placeholder": "Entrez Pₛ₀ (B)..."
+                        },
+                        {
+                            "id": "pr_a",
+                            "label": "Pression réfléchie Pᵣ (Face A)",
+                            "placeholder": "Entrez Pᵣ (A)..."
+                        },
+                        {
+                            "id": "pr_b",
+                            "label": "Pression réfléchie Pᵣ (Face B)",
+                            "placeholder": "Entrez Pᵣ (B)..."
+                        }
+                    ],
                     "validation": {
                         "type": "numeric_set",
                         "tolerance": 0.07,
@@ -297,6 +334,39 @@
                     "id": "2.3",
                     "question": "Calculer la durée (t₀բ), l'impulsion incidente (iₛ), et l'impulsion réfléchie (iᵣ) pour A et B.",
                     "points": 1,
+                    "image": "/explosions_fig2.png",
+                    "subQuestions": [
+                        {
+                            "id": "t0_a",
+                            "label": "Durée t₀բ (Face A)",
+                            "placeholder": "Entrez t₀բ (A)..."
+                        },
+                        {
+                            "id": "t0_b",
+                            "label": "Durée t₀բ (Face B)",
+                            "placeholder": "Entrez t₀բ (B)..."
+                        },
+                        {
+                            "id": "is_a",
+                            "label": "Impulsion incidente iₛ (Face A)",
+                            "placeholder": "Entrez iₛ (A)..."
+                        },
+                        {
+                            "id": "is_b",
+                            "label": "Impulsion incidente iₛ (Face B)",
+                            "placeholder": "Entrez iₛ (B)..."
+                        },
+                        {
+                            "id": "ir_a",
+                            "label": "Impulsion réfléchie iᵣ (Face A)",
+                            "placeholder": "Entrez iᵣ (A)..."
+                        },
+                        {
+                            "id": "ir_b",
+                            "label": "Impulsion réfléchie iᵣ (Face B)",
+                            "placeholder": "Entrez iᵣ (B)..."
+                        }
+                    ],
                     "validation": {
                         "type": "numeric_set",
                         "tolerance": 0.07,
@@ -332,6 +402,39 @@
                     "id": "2.4",
                     "question": "Calculer la vitesse de l'onde (U), le temps d'arrivée (tₐ) et la pression dynamique (q₀).",
                     "points": 1,
+                    "image": "/explosions_fig3.png",
+                    "subQuestions": [
+                        {
+                            "id": "u_a",
+                            "label": "Vitesse de l'onde U (Face A)",
+                            "placeholder": "Entrez U (A)..."
+                        },
+                        {
+                            "id": "u_b",
+                            "label": "Vitesse de l'onde U (Face B)",
+                            "placeholder": "Entrez U (B)..."
+                        },
+                        {
+                            "id": "ta_a",
+                            "label": "Temps d'arrivée tₐ (Face A)",
+                            "placeholder": "Entrez tₐ (A)..."
+                        },
+                        {
+                            "id": "ta_b",
+                            "label": "Temps d'arrivée tₐ (Face B)",
+                            "placeholder": "Entrez tₐ (B)..."
+                        },
+                        {
+                            "id": "q0_a",
+                            "label": "Pression dynamique q₀ (Face A)",
+                            "placeholder": "Entrez q₀ (A)..."
+                        },
+                        {
+                            "id": "q0_b",
+                            "label": "Pression dynamique q₀ (Face B)",
+                            "placeholder": "Entrez q₀ (B)..."
+                        }
+                    ],
                     "validation": {
                         "type": "numeric_set",
                         "tolerance": 0.07,
