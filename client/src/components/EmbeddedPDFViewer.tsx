@@ -15,7 +15,7 @@ interface EmbeddedPDFViewerProps {
 const EmbeddedPDFViewer: React.FC<EmbeddedPDFViewerProps> = ({ pdfUrl, className = "" }) => {
     const [numPages, setNumPages] = useState<number | null>(null);
     const [pageNumber, setPageNumber] = useState(1);
-    const [scale, setScale] = useState(0.7);
+    const [scale, setScale] = useState(0.65);
 
     function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
         setNumPages(numPages);
