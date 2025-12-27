@@ -826,6 +826,24 @@ const Quiz: React.FC = () => {
                                     </div>
                                 )}
 
+                                {/* 2. PDF Viewer - Full Width at Top */}
+                                {['part2', 'part3'].includes(currentQuestion.parentId as string) && (
+                                    <div className="w-full h-full min-h-[600px] flex flex-col mb-8">
+                                        <EmbeddedPDFViewer
+                                            pdfUrl={currentQuestion.pdfUrl || (currentQuestion.parentId === 'part3' ? "/resources/analysis_sdof.pdf" : "/resources/sequence_2.pdf")}
+                                            defaultScale={currentQuestion.parentId === 'part2' ? 1.55 : 0.65}
+                                            className="flex-grow shadow-lg border-blue-200"
+                                        />
+                                        <div className="mt-4 p-4 bg-blue-50 border border-blue-100 rounded-lg text-xs text-blue-700">
+                                            <p className="font-bold mb-1 flex items-center">
+                                                <AlertCircle className="w-3 h-3 mr-1" />
+                                                Instruction
+                                            </p>
+                                            <p>Consultez la présentation ci-dessus pour résoudre le problème.</p>
+                                        </div>
+                                    </div>
+                                )}
+
                                 {/* 1. Answer Box - Check for Sub-Questions */}
                                 {(currentQuestion as any).subQuestions ? (
                                     <div className="space-y-4">
@@ -881,43 +899,8 @@ const Quiz: React.FC = () => {
                                     </div>
                                 )}
 
-                                {/* 2. Technical Context & Data */}
-
-
-                                {/* 2. Technical Context & Data / PDF Viewer */}
-                                {['part2', 'part3'].includes(currentQuestion.parentId as string) ? (
-                                    <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-6">
-                                        <div className="h-full min-h-[600px] flex flex-col">
-                                            <EmbeddedPDFViewer
-                                                pdfUrl={currentQuestion.pdfUrl || (currentQuestion.parentId === 'part3' ? "/resources/analysis_sdof.pdf" : "/resources/sequence_2_new.pdf")}
-                                                defaultScale={currentQuestion.parentId === 'part2' ? 1.55 : 0.65}
-                                                className="flex-grow shadow-lg border-blue-200"
-                                            />
-                                            <div className="mt-4 p-4 bg-blue-50 border border-blue-100 rounded-lg text-xs text-blue-700">
-                                                <p className="font-bold mb-1 flex items-center">
-                                                    <AlertCircle className="w-3 h-3 mr-1" />
-                                                    Instruction
-                                                </p>
-                                                <p>Consultez la présentation ci-dessus pour résoudre le problème.</p>
-                                            </div>
-                                        </div>
-                                        {currentQuestion.data && (
-                                            <div className="bg-gray-50 p-5 rounded-xl border border-gray-200 text-sm">
-                                                <h4 className="font-black mb-3 text-gray-700 border-b pb-2 text-xs uppercase tracking-wider">Données Techniques</h4>
-                                                <div className="grid grid-cols-1 gap-2">
-                                                    {Object.entries(currentQuestion.data).map(([key, value]) => (
-                                                        <div key={key} className="flex justify-between items-center bg-white p-2 rounded border border-gray-100 shadow-sm">
-                                                            <span className="font-semibold text-gray-500 capitalize text-xs">
-                                                                {key.replace(/_/g, ' ')}
-                                                            </span>
-                                                            <span className="font-mono font-bold text-military-green">{String(value)}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                ) : (
+                                {/* 2. Technical Context & Data (Fallback for non-PDF items) */}
+                                {!['part2', 'part3'].includes(currentQuestion.parentId as string) && (
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         {currentQuestion.context && (
                                             <div className="bg-blue-50/50 p-5 rounded-xl border border-blue-100 text-gray-700 text-sm leading-relaxed">
