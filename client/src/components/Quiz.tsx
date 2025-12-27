@@ -35,6 +35,7 @@ interface Question {
     sectionContext?: string;
     subQuestions?: Array<{ id: string; label: string; placeholder: string }>; // For structured sub-questions
     pdfUrl?: string; // For embedded PDF viewer
+    caption?: string; // For figure captions
 }
 
 interface Section {
@@ -925,6 +926,11 @@ const Quiz: React.FC = () => {
                                         <h4 className="font-black text-gray-500 text-xs uppercase tracking-wider mb-4">Support Visuel / Graphiques</h4>
                                         {currentQuestion.image && (
                                             <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center group relative overflow-hidden ring-1 ring-gray-100">
+                                                {currentQuestion.caption && (
+                                                    <div className="mb-4 p-3 bg-gray-50 border-l-4 border-blue-500 rounded text-sm text-gray-700 italic">
+                                                        {currentQuestion.caption}
+                                                    </div>
+                                                )}
                                                 <ImageZoom
                                                     src={currentQuestion.image}
                                                     alt="Figure"
