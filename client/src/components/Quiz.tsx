@@ -813,20 +813,9 @@ const Quiz: React.FC = () => {
                         </div>
 
                         {currentQuestion.type === 'exercise' ? (
-                            // Exercise View: Prioritized Answer Box First
+                            // Exercise View: PDF First
                             <div className="space-y-6">
-                                {/* 0. Question-Specific Image (for sub-questions) */}
-                                {(currentQuestion as any).image && (currentQuestion as any).subQuestions && (
-                                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                                        <img
-                                            src={(currentQuestion as any).image}
-                                            alt="Question figure"
-                                            className="w-full rounded-lg"
-                                        />
-                                    </div>
-                                )}
-
-                                {/* 2. PDF Viewer - Full Width at Top */}
+                                {/* 1. PDF Viewer - Full Width at Top */}
                                 {['part2', 'part3'].includes(currentQuestion.parentId as string) && (
                                     <div className="w-full h-full min-h-[600px] flex flex-col mb-8">
                                         <EmbeddedPDFViewer
@@ -844,7 +833,7 @@ const Quiz: React.FC = () => {
                                     </div>
                                 )}
 
-                                {/* 1. Answer Box - Check for Sub-Questions */}
+                                {/* 2. Answer Box - Check for Sub-Questions */}
                                 {(currentQuestion as any).subQuestions ? (
                                     <div className="space-y-4">
                                         <label className="block text-military-green font-black text-sm uppercase tracking-widest mb-3">
