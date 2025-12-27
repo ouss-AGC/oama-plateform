@@ -88,13 +88,24 @@ const Quiz: React.FC = () => {
 
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'fr-FR';
-        utterance.pitch = 0.65; // Deep voice for ancient scholar
-        utterance.rate = 0.85; // Slow, deliberate pace
+        utterance.pitch = 0.85; // Slightly higher than 0.65 to avoid distortion with male voices, but still deep
+        utterance.rate = 0.9; // Slightly faster but still deliberate
 
-        // Try to find a French voice
+        // Find a suitable French male voice
         const voices = window.speechSynthesis.getVoices();
-        const frenchVoice = voices.find(v => v.lang.includes('fr'));
-        if (frenchVoice) utterance.voice = frenchVoice;
+
+        // Priority list for male French voices
+        const maleFrenchVoice = voices.find(v =>
+            v.lang.includes('fr') &&
+            (v.name.toLowerCase().includes('thomas') ||
+                v.name.toLowerCase().includes('paul') ||
+                v.name.toLowerCase().includes('daniel') ||
+                v.name.toLowerCase().includes('henri') ||
+                v.name.toLowerCase().includes('male') ||
+                v.name.toLowerCase().includes('homme'))
+        ) || voices.find(v => v.lang.includes('fr')); // Fallback to any French voice
+
+        if (maleFrenchVoice) utterance.voice = maleFrenchVoice;
 
         utterance.onstart = () => setIsSpeaking(true);
         utterance.onend = () => setIsSpeaking(false);
