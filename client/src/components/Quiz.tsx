@@ -814,166 +814,161 @@ const Quiz: React.FC = () => {
                         </div>
 
                         {currentQuestion.type === 'exercise' ? (
-                            // Exercise View: PDF First
                             <div className="space-y-6">
-                                {/* 1. PDF Viewer - Full Width at Top */}
-                                {['part2', 'part3'].includes(currentQuestion.parentId as string) && (
-                                    <div className="w-full h-full min-h-[600px] flex flex-col mb-8">
-                                        <EmbeddedPDFViewer
-                                            pdfUrl={currentQuestion.pdfUrl || (currentQuestion.parentId === 'part3' ? "/resources/analysis_sdof.pdf" : "/resources/sequence_2.pdf")}
-                                            defaultScale={currentQuestion.parentId === 'part2' ? 1.55 : 0.65}
-                                            className="flex-grow shadow-lg border-blue-200"
-                                        />
-                                        <div className="mt-4 p-4 bg-blue-50 border border-blue-100 rounded-lg text-xs text-blue-700">
-                                            <p className="font-bold mb-1 flex items-center">
-                                                <AlertCircle className="w-3 h-3 mr-1" />
-                                                Instruction
-                                            </p>
-                                            <p>Consultez la présentation ci-dessus pour résoudre le problème.</p>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* 2. Answer Box - Check for Sub-Questions */}
-                                {(currentQuestion as any).subQuestions ? (
-                                    <div className="space-y-4">
-                                        <label className="block text-military-green font-black text-sm uppercase tracking-widest mb-3">
-                                            Vos Réponses
-                                        </label>
-                                        {(currentQuestion as any).subQuestions.map((subQ: any, idx: number) => (
-                                            <div key={subQ.id} className="border-l-4 border-military-beige pl-4 py-3 bg-military-beige/5 rounded-r-xl">
-                                                <label className="block text-gray-700 font-semibold text-sm mb-2">
-                                                    {subQ.label}
-                                                </label>
-                                                <textarea
-                                                    value={
-                                                        typeof answers[currentQuestionIndex] === 'object' && answers[currentQuestionIndex] !== null
-                                                            ? (answers[currentQuestionIndex] as any)[subQ.id] || ''
-                                                            : ''
-                                                    }
-                                                    onChange={(e) => {
-                                                        const newAnswers = [...answers];
-                                                        const currentAnswer = typeof newAnswers[currentQuestionIndex] === 'object' && newAnswers[currentQuestionIndex] !== null
-                                                            ? { ...newAnswers[currentQuestionIndex] as any }
-                                                            : {};
-                                                        currentAnswer[subQ.id] = e.target.value;
-                                                        newAnswers[currentQuestionIndex] = currentAnswer;
-                                                        setAnswers(newAnswers);
-                                                    }}
-                                                    className="w-full p-4 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-military-green/10 focus:border-military-green text-base transition-all shadow-inner bg-white min-h-[120px]"
-                                                    placeholder={subQ.placeholder}
-                                                />
-                                            </div>
-                                        ))}
-                                        <div className="mt-3 flex items-center text-xs text-gray-500 italic bg-white/50 p-2 rounded-lg border border-gray-100">
-                                            <AlertCircle className="w-3.5 h-3.5 mr-2 text-military-green" />
-                                            <span>Utilisez le point (.) comme séparateur décimal (ex: 12.5). Indiquez clairement les unités.</span>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="border-l-4 border-military-beige pl-4 py-4 bg-military-beige/5 rounded-r-2xl">
-                                        <label className="block text-military-green font-black text-sm uppercase tracking-widest mb-3">
-                                            Votre Réponse
-                                        </label>
-                                        <textarea
-                                            ref={textareaRef}
-                                            value={answers[currentQuestionIndex] as string || ''}
-                                            onChange={(e) => handleExerciseAnswer(e.target.value)}
-                                            className={`w-full p-5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-military-green/10 focus:border-military-green text-lg transition-all shadow-inner bg-white ${['part2', 'part3'].includes(currentQuestion.parentId as string) ? 'min-h-[600px]' : 'min-h-[180px]'}`}
-                                            placeholder="Saisissez vos calculs, formules et résultats ici..."
-                                        />
-                                        <div className="mt-3 flex items-center text-xs text-gray-500 italic bg-white/50 p-2 rounded-lg border border-gray-100">
-                                            <AlertCircle className="w-3.5 h-3.5 mr-2 text-military-green" />
-                                            <span>Utilisez le point (.) comme séparateur décimal (ex: 12.5). Indiquez clairement les unités.</span>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* 2. Technical Context & Data (Fallback for non-PDF items) */}
-                                {!['part2', 'part3'].includes(currentQuestion.parentId as string) && (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        {currentQuestion.context && (
-                                            <div className="bg-blue-50/50 p-5 rounded-xl border border-blue-100 text-gray-700 text-sm leading-relaxed">
-                                                <h4 className="font-black mb-3 text-blue-800 flex items-center text-xs uppercase tracking-wider">
-                                                    <FileText className="w-4 h-4 mr-2" />
-                                                    Contexte du Problème
-                                                </h4>
-                                                {currentQuestion.context}
-                                            </div>
-                                        )}
-
-                                        {currentQuestion.data && (
-                                            <div className="bg-gray-50 p-5 rounded-xl border border-gray-200 text-sm">
-                                                <h4 className="font-black mb-3 text-gray-700 border-b pb-2 text-xs uppercase tracking-wider">Données Techniques</h4>
-                                                <div className="grid grid-cols-1 gap-2">
-                                                    {Object.entries(currentQuestion.data).map(([key, value]) => (
-                                                        <div key={key} className="flex justify-between items-center bg-white p-2 rounded border border-gray-100 shadow-sm">
-                                                            <span className="font-semibold text-gray-500 capitalize text-xs">
-                                                                {key.replace(/_/g, ' ')}
+                                {currentQuestion.parentId === 'part3' ? (
+                                    // PART 3 Special Layout: Visuals -> Answers -> PDF
+                                    <>
+                                        {/* 1. Visual / Graph (Top) */}
+                                        {(currentQuestion.image || currentQuestion.images) && (
+                                            <div className="space-y-6 pb-6 border-b border-dashed border-gray-200">
+                                                <h4 className="font-black text-gray-500 text-xs uppercase tracking-wider mb-4">Support Visuel / Graphiques</h4>
+                                                {currentQuestion.image && (
+                                                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center group relative overflow-hidden ring-1 ring-gray-100">
+                                                        {currentQuestion.caption && (
+                                                            <div className="w-full mb-6 p-4 bg-blue-50 border-2 border-blue-200 rounded-xl shadow-sm">
+                                                                <h5 className="font-black text-blue-800 text-xs uppercase tracking-widest mb-2 flex items-center">
+                                                                    <FileSearch className="w-4 h-4 mr-2" />
+                                                                    Légende Technique
+                                                                </h5>
+                                                                <p className="text-gray-800 font-bold leading-relaxed">
+                                                                    {currentQuestion.caption}
+                                                                </p>
+                                                            </div>
+                                                        )}
+                                                        <ImageZoom
+                                                            src={currentQuestion.image}
+                                                            alt="Figure"
+                                                            className="w-full"
+                                                        />
+                                                        <div className="mt-4 flex items-center justify-center pointer-events-none">
+                                                            <span className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-bold shadow-lg animate-pulse">
+                                                                <LineChart className="w-4 h-4 mr-2" />
+                                                                🛠️ Analyser le graphique (Cliquez sur l'image)
                                                             </span>
-                                                            <span className="font-mono font-bold text-military-green">{String(value)}</span>
                                                         </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-
-                                {/* 3. Image Display (bottom) */}
-                                {(currentQuestion.image || currentQuestion.images) && (
-                                    <div className="space-y-6 pt-4 border-t border-dashed border-gray-200">
-                                        <h4 className="font-black text-gray-500 text-xs uppercase tracking-wider mb-4">Support Visuel / Graphiques</h4>
-                                        {currentQuestion.image && (
-                                            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center group relative overflow-hidden ring-1 ring-gray-100">
-                                                {currentQuestion.caption && (
-                                                    <div className="w-full mb-6 p-4 bg-blue-50 border-2 border-blue-200 rounded-xl shadow-sm">
-                                                        <h5 className="font-black text-blue-800 text-xs uppercase tracking-widest mb-2 flex items-center">
-                                                            <FileSearch className="w-4 h-4 mr-2" />
-                                                            Légende Technique
-                                                        </h5>
-                                                        <p className="text-gray-800 font-bold leading-relaxed">
-                                                            {currentQuestion.caption}
-                                                        </p>
                                                     </div>
                                                 )}
-                                                <ImageZoom
-                                                    src={currentQuestion.image}
-                                                    alt="Figure"
-                                                    className="w-full"
-                                                />
-                                                <div className="mt-4 flex items-center justify-center pointer-events-none">
-                                                    <span className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-bold shadow-lg animate-pulse">
-                                                        <LineChart className="w-4 h-4 mr-2" />
-                                                        🛠️ Analyser le graphique (Cliquez sur l'image)
-                                                    </span>
-                                                </div>
                                             </div>
                                         )}
-                                        {currentQuestion.images && currentQuestion.images.map((imgUrl: string, idx: number) => (
-                                            <div key={idx} className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center group relative overflow-hidden ring-1 ring-gray-100">
-                                                <ImageZoom
-                                                    src={imgUrl}
-                                                    alt={`Figure ${idx + 1}`}
-                                                    className="w-full"
+
+                                        {/* 2. Answers (Middle) */}
+                                        {((currentQuestion as any).subQuestions ? (
+                                            <div className="space-y-4">
+                                                <label className="block text-military-green font-black text-sm uppercase tracking-widest mb-3">
+                                                    Vos Réponses
+                                                </label>
+                                                {(currentQuestion as any).subQuestions.map((subQ: any) => (
+                                                    <div key={subQ.id} className="border-l-4 border-military-beige pl-4 py-3 bg-military-beige/5 rounded-r-xl">
+                                                        <label className="block text-gray-700 font-semibold text-sm mb-2">
+                                                            {subQ.label}
+                                                        </label>
+                                                        <textarea
+                                                            value={typeof answers[currentQuestionIndex] === 'object' ? (answers[currentQuestionIndex] as any)[subQ.id] || '' : ''}
+                                                            onChange={(e) => {
+                                                                const newAnswers = [...answers];
+                                                                const currentAnswer = typeof newAnswers[currentQuestionIndex] === 'object' ? { ...newAnswers[currentQuestionIndex] as any } : {};
+                                                                currentAnswer[subQ.id] = e.target.value;
+                                                                newAnswers[currentQuestionIndex] = currentAnswer;
+                                                                setAnswers(newAnswers);
+                                                            }}
+                                                            className="w-full p-4 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-military-green/10 focus:border-military-green text-base transition-all shadow-inner bg-white min-h-[120px]"
+                                                            placeholder={subQ.placeholder}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="border-l-4 border-military-beige pl-4 py-4 bg-military-beige/5 rounded-r-2xl">
+                                                <label className="block text-military-green font-black text-sm uppercase tracking-widest mb-3">
+                                                    Votre Réponse
+                                                </label>
+                                                <textarea
+                                                    ref={textareaRef}
+                                                    value={answers[currentQuestionIndex] as string || ''}
+                                                    onChange={(e) => handleExerciseAnswer(e.target.value)}
+                                                    className="w-full p-5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-military-green/10 focus:border-military-green text-lg transition-all shadow-inner bg-white min-h-[400px]"
+                                                    placeholder="Saisissez vos calculs et résultats..."
                                                 />
-                                                <div className="mt-4 flex items-center justify-center pointer-events-none">
-                                                    <span className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-bold shadow-lg animate-pulse">
-                                                        <LineChart className="w-4 h-4 mr-2" />
-                                                        🛠️ Analyser la Figure {idx + 1}
-                                                    </span>
-                                                </div>
                                             </div>
                                         ))}
-                                    </div>
-                                )}
 
-                                {(currentQuestion.parentId === 'part1') && !currentQuestion.image && !currentQuestion.images && (
-                                    <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-xl p-8 text-center">
-                                        <p className="text-gray-500 italic text-sm">
-                                            [Figure / Schéma du dispositif non requis pour cette étape]
-                                        </p>
-                                    </div>
+                                        {/* 3. PDF Viewer (Bottom) */}
+                                        <div className="w-full h-full min-h-[600px] flex flex-col mt-8 pt-8 border-t-2 border-gray-100">
+                                            <h4 className="font-black text-gray-500 text-xs uppercase tracking-wider mb-4">Document de Référence</h4>
+                                            <EmbeddedPDFViewer
+                                                pdfUrl="/resources/analysis_sdof.pdf"
+                                                defaultScale={0.65}
+                                                className="flex-grow shadow-lg border-blue-200"
+                                            />
+                                        </div>
+                                    </>
+                                ) : (
+                                    // PART 2 (and others): PDF -> Answers -> Visuals
+                                    <>
+                                        {/* 1. PDF Viewer (Top) */}
+                                        {currentQuestion.parentId === 'part2' && (
+                                            <div className="w-full h-full min-h-[600px] flex flex-col mb-8 text-center pt-8 border-t-2 border-gray-100">
+                                                <EmbeddedPDFViewer
+                                                    pdfUrl="/resources/sequence_2.pdf"
+                                                    defaultScale={1.55}
+                                                    className="flex-grow shadow-lg border-blue-200"
+                                                />
+                                            </div>
+                                        )}
+
+                                        {/* 2. Answers (Middle) */}
+                                        {((currentQuestion as any).subQuestions ? (
+                                            <div className="space-y-4">
+                                                {(currentQuestion as any).subQuestions.map((subQ: any) => (
+                                                    <div key={subQ.id} className="border-l-4 border-military-beige pl-4 py-3 bg-military-beige/5 rounded-r-xl">
+                                                        <label className="block text-gray-700 font-semibold text-sm mb-2">{subQ.label}</label>
+                                                        <textarea
+                                                            value={typeof answers[currentQuestionIndex] === 'object' ? (answers[currentQuestionIndex] as any)[subQ.id] || '' : ''}
+                                                            onChange={(e) => {
+                                                                const newAnswers = [...answers];
+                                                                const currentAnswer = typeof newAnswers[currentQuestionIndex] === 'object' ? { ...newAnswers[currentQuestionIndex] as any } : {};
+                                                                currentAnswer[subQ.id] = e.target.value;
+                                                                newAnswers[currentQuestionIndex] = currentAnswer;
+                                                                setAnswers(newAnswers);
+                                                            }}
+                                                            className="w-full p-4 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-military-green/10 focus:border-military-green text-base transition-all shadow-inner bg-white min-h-[120px]"
+                                                            placeholder={subQ.placeholder}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="border-l-4 border-military-beige pl-4 py-4 bg-military-beige/5 rounded-r-2xl">
+                                                <textarea
+                                                    ref={textareaRef}
+                                                    value={answers[currentQuestionIndex] as string || ''}
+                                                    onChange={(e) => handleExerciseAnswer(e.target.value)}
+                                                    className="w-full p-5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-military-green/10 focus:border-military-green text-lg transition-all shadow-inner bg-white min-h-[180px]"
+                                                />
+                                            </div>
+                                        ))}
+
+                                        {/* 3. Visuals (Bottom) */}
+                                        {(currentQuestion.image || currentQuestion.images) && (
+                                            <div className="space-y-6 pt-4 border-t border-dashed border-gray-200">
+                                                <h4 className="font-black text-gray-500 text-xs uppercase tracking-wider mb-4">Support Visuel / Graphiques</h4>
+                                                {currentQuestion.image && (
+                                                    <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center group relative overflow-hidden ring-1 ring-gray-100">
+                                                        {currentQuestion.caption && (
+                                                            <div className="w-full mb-6 p-4 bg-blue-50 border-2 border-blue-200 rounded-xl shadow-sm">
+                                                                <h5 className="font-black text-blue-800 text-xs uppercase tracking-widest mb-2 flex items-center">
+                                                                    <FileSearch className="w-4 h-4 mr-2" />
+                                                                    Légende Technique
+                                                                </h5>
+                                                                <p className="text-gray-800 font-bold leading-relaxed">{currentQuestion.caption}</p>
+                                                            </div>
+                                                        )}
+                                                        <ImageZoom src={currentQuestion.image} alt="Figure" className="w-full" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </>
                                 )}
                             </div>
                         ) : (

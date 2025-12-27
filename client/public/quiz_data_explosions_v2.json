@@ -254,7 +254,6 @@
                     "points": 0.5,
                     "image": "/explosions_fig3.png",
                     "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
-                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
                     "subQuestions": [
                         {
                             "id": "za",
@@ -287,7 +286,6 @@
                     "question": "Calcul analytique - Pressions incidentes Pₛ₀.",
                     "points": 1.0,
                     "image": "/explosions_fig3.png",
-                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
                     "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
                     "subQuestions": [
                         {
@@ -322,7 +320,6 @@
                     "points": 1.0,
                     "image": "/explosions_fig3.png",
                     "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
-                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
                     "subQuestions": [
                         {
                             "id": "pr_a",
@@ -355,7 +352,6 @@
                     "question": "Calcul analytique - Durées (t₀բ) et Impulsions (iₛ, iᵣ).",
                     "points": 1.0,
                     "image": "/explosions_fig3.png",
-                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
                     "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
                     "subQuestions": [
                         {
@@ -618,10 +614,7 @@
                 }
             ],
             "solution": "Cas 1: iₛ=492, xₘₐₓ=23.44mm (Élastique). Cas 2: iₛ=2400, xₘₐₓ=114.35mm (Plastique). Cas 3: iₛ=3000, xₘₐₓ=142.95mm (Plastique).",
-            "detailed_solution": "1. ** Propriétés du Système **:\n   - Période propre $T_n = 25$ ms\n   - Résistance max $R_m = 156$ kN\n   - Déplacement élastique limite $x_{el} = R_m / K = 156 / 5200 = 0.03$ m = 30 mm\n\n2. **Cas 1 (Impulsif)**:\n   - $t_d / T_n = 4.8 / 25 = 0.192 < 0.4$ (Régime Impulsif)\n   - $i_ₛ = 0.5 * P₀ * t₀ = 0.5 * 205 * 0.0048 = 0.492$ kN.s\n   - Énergie cinétique $E_c = i_ₛ^2 / 2M$\n   - $x_{max} = i_ₛ / \\sqrt{KM} = 492 / \\sqrt{5.2e6 * 84.8} = 0.02344$ m = **23.44 mm**\n   - $x_{max} < 30$ mm $\\rightarrow$ **Domaine Élastique**\n\n3. **Cas 2 (Dyanmique)**:\n   - $t_d / T_n \\approx 1$ (Régime Dynamique)\n   - Calcul complet requis ou utilisation abaque de réponse.\n   - $x_{max} = 114.35$ mm > 30 mm $\\rightarrow$ **Domaine Plastique**\n\n4. **Cas 3 (Quasi-Statique)**:\n   - $t_d / T_n > 1.6$ (Régime Quasi-statique)\n   - $x_{max} = P_{eq} / K$... (Calcul plastique)\n   - $x_{max} = 142.95$ mm $\\rightarrow$ **Domaine Plastique**",
-            "images": [
-                "/explosions_fig3.png"
-            ]
+            "detailed_solution": "1. ** Propriétés du Système **:\n   - Période propre $T_n = 25$ ms\n   - Résistance max $R_m = 156$ kN\n   - Déplacement élastique limite $x_{el} = R_m / K = 156 / 5200 = 0.03$ m = 30 mm\n\n2. **Cas 1 (Impulsif)**:\n   - $t_d / T_n = 4.8 / 25 = 0.192 < 0.4$ (Régime Impulsif)\n   - $i_ₛ = 0.5 * P₀ * t₀ = 0.5 * 205 * 0.0048 = 0.492$ kN.s\n   - Énergie cinétique $E_c = i_ₛ^2 / 2M$\n   - $x_{max} = i_ₛ / \\sqrt{KM} = 492 / \\sqrt{5.2e6 * 84.8} = 0.02344$ m = **23.44 mm**\n   - $x_{max} < 30$ mm $\\rightarrow$ **Domaine Élastique**\n\n3. **Cas 2 (Dyanmique)**:\n   - $t_d / T_n \\approx 1$ (Régime Dynamique)\n   - Calcul complet requis ou utilisation abaque de réponse.\n   - $x_{max} = 114.35$ mm > 30 mm $\\rightarrow$ **Domaine Plastique**\n\n4. **Cas 3 (Quasi-Statique)**:\n   - $t_d / T_n > 1.6$ (Régime Quasi-statique)\n   - $x_{max} = P_{eq} / K$... (Calcul plastique)\n   - $x_{max} = 142.95$ mm $\\rightarrow$ **Domaine Plastique**"
         }
     ]
 }
