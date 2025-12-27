@@ -189,7 +189,9 @@ const Quiz: React.FC = () => {
                                     data: section.data,
                                     sectionTitle: section.title,
                                     validation: subQ.validation,
-                                    images: (section as any).images ? (section as any).images : ((section as any).image_url ? [(section as any).image_url] : [])
+                                    images: (section as any).images ? (section as any).images : ((section as any).image_url ? [(section as any).image_url] : []),
+                                    image: subQ.image,  // Add question-specific image
+                                    subQuestions: subQ.subQuestions  // Add sub-questions array
                                 });
                             });
                         } else {
