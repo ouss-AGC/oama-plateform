@@ -412,10 +412,10 @@
             "title": "Partie 03 : Analyse SDOF (04 pts)",
             "description": "La troisième partie de l'examen a pour objectif de tester vos compétences en résolution de problèmes appliqués aux structures soumises aux effets des explosions. Vous devrez effectuer des calculs détaillés, analyser les résultats obtenus et formuler des conclusions fondées. Veillez à suivre scrupuleusement les étapes indiquées dans l'énoncé et à présenter vos calculs de manière organisée. La précision de vos réponses et la clarté de vos explications seront particulièrement valorisées.",
             "type": "exercise",
-            "briefingImage": "/scholars/al_jazari_v2.png",
+            "type": "exercise",
+            "briefingImage": "/scholars/al_jazari_v3.png",
             "briefingScholar": "Al-Jazari - Maître Ingénieur Mécanicien",
             "scholarMessage": "Je suis Al-Jazari. L'ingéniosité réside dans le mouvement et la précision. Analysez la dynamique des structures avec rigueur pour honorer l'ingénierie et mériter les points de l'Assistant Professor Atoui Oussama.",
-            "imageStyle": "object-[50%_20%] scale-[1.7] origin-center",
             "context": "M=84.8 kg, K=5200 kN/m, Rₘ=156 kN, Tₙ=25 ms.",
             "questions": [
                 {
