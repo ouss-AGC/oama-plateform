@@ -789,7 +789,7 @@ const Quiz: React.FC = () => {
                                 </h2>
                             </div>
                             <div className="flex flex-col items-end ml-4 gap-2">
-                                <span className="px-3 py-1 bg-military-green text-white rounded-full text-sm font-bold whitespace-nowrap">
+                                <span className="px-3 py-1 bg-red-600 text-white rounded-full text-sm font-black whitespace-nowrap shadow-sm">
                                     {currentQuestion.points} pts
                                 </span>
                                 <span className="px-3 py-1 bg-gray-100 rounded-full text-sm font-semibold text-gray-600 whitespace-nowrap">

@@ -457,7 +457,7 @@
                 {
                     "id": "3.2",
                     "question": "Pour le deuxième cas, effectuez un calcul détaillé afin de déterminer si la déformation maximale xₘₐₓ conduit le système dans le domaine plastique.",
-                    "points": 2.0,
+                    "points": 2.5,
                     "image": "/sdof_question_3_2.png",
                     "subQuestions": [
                         {
@@ -499,7 +499,7 @@
                 {
                     "id": "3.3",
                     "question": "Pour le troisième cas, effectuez un calcul détaillé afin de déterminer si la déformation maximale xₘₐₓ conduit le système dans le domaine plastique.",
-                    "points": 2.0,
+                    "points": 2.5,
                     "image": "/sdof_question_3_3.png",
                     "subQuestions": [
                         {
