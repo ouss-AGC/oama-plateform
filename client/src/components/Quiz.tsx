@@ -921,14 +921,20 @@ const Quiz: React.FC = () => {
                                 )}
 
                                 {/* 3. Image Display (bottom) */}
-                                {currentQuestion.parentId !== 'part3' && (currentQuestion.image || currentQuestion.images) && (
+                                {(currentQuestion.image || currentQuestion.images) && (
                                     <div className="space-y-6 pt-4 border-t border-dashed border-gray-200">
                                         <h4 className="font-black text-gray-500 text-xs uppercase tracking-wider mb-4">Support Visuel / Graphiques</h4>
                                         {currentQuestion.image && (
                                             <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center group relative overflow-hidden ring-1 ring-gray-100">
                                                 {currentQuestion.caption && (
-                                                    <div className="mb-4 p-3 bg-gray-50 border-l-4 border-blue-500 rounded text-sm text-gray-700 italic">
-                                                        {currentQuestion.caption}
+                                                    <div className="w-full mb-6 p-4 bg-blue-50 border-2 border-blue-200 rounded-xl shadow-sm">
+                                                        <h5 className="font-black text-blue-800 text-xs uppercase tracking-widest mb-2 flex items-center">
+                                                            <FileSearch className="w-4 h-4 mr-2" />
+                                                            Légende Technique
+                                                        </h5>
+                                                        <p className="text-gray-800 font-bold leading-relaxed">
+                                                            {currentQuestion.caption}
+                                                        </p>
                                                     </div>
                                                 )}
                                                 <ImageZoom
@@ -962,7 +968,7 @@ const Quiz: React.FC = () => {
                                     </div>
                                 )}
 
-                                {currentQuestion.parentId !== 'part3' && !currentQuestion.image && !currentQuestion.images && (
+                                {(currentQuestion.parentId === 'part1') && !currentQuestion.image && !currentQuestion.images && (
                                     <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-xl p-8 text-center">
                                         <p className="text-gray-500 italic text-sm">
                                             [Figure / Schéma du dispositif non requis pour cette étape]
