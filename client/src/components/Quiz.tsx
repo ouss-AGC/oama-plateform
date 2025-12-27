@@ -877,7 +877,8 @@ const Quiz: React.FC = () => {
                                     <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-6">
                                         <div className="h-full min-h-[600px] flex flex-col">
                                             <EmbeddedPDFViewer
-                                                pdfUrl={currentQuestion.pdfUrl || (currentQuestion.parentId === 'part3' ? "/resources/analysis_sdof.pdf" : "/resources/sequence_2.pdf")}
+                                                pdfUrl={currentQuestion.pdfUrl || (currentQuestion.parentId === 'part3' ? "/resources/analysis_sdof.pdf" : "/resources/sequence_2_new.pdf")}
+                                                defaultScale={currentQuestion.parentId === 'part2' ? 1.55 : 0.65}
                                                 className="flex-grow shadow-lg border-blue-200"
                                             />
                                             <div className="mt-4 p-4 bg-blue-50 border border-blue-100 rounded-lg text-xs text-blue-700">

@@ -235,7 +235,7 @@
             "title": "Partie 02 : Problème (07 pts)",
             "description": "Cette deuxième partie évalue votre capacité à appliquer les concepts du module à un cas pratique d'analyse des effets d'une explosion sur une structure. Vous devrez effectuer des calculs analytiques, comparer vos résultats aux données expérimentales et proposer des solutions pour renforcer la protection de la structure. Soyez précis et méthodiques dans vos réponses.",
             "type": "exercise",
-            "pdfUrl": "/resources/sequence_2.pdf",
+            "pdfUrl": "/resources/sequence_2_new.pdf",
             "briefingImage": "/scholars/jabir_ibn_hayyan_v2.png",
             "briefingScholar": "Jabir ibn Hayyan (Geber) - Père de la Chimie",
             "scholarMessage": "Je suis Jabir ibn Hayyan. La science exige patience et exactitude. Calculez avec précision pour déchiffrer les mystères des explosions et obtenir les points de l'Assistant Professor Atoui Oussama.",
@@ -249,10 +249,10 @@
             },
             "questions": [
                 {
-                    "id": "2.1",
-                    "question": "Calculer les distances réduites Zₐ et Zᵦ.",
+                    "id": "3.1",
+                    "question": "Calcul analytique - Distances réduites Zₐ et Zᵦ.",
                     "points": 0.5,
-                    "image": "/explosions_fig1.png",
+                    "image": "/explosions_fig3.png",
                     "subQuestions": [
                         {
                             "id": "za",
@@ -281,10 +281,10 @@
                     }
                 },
                 {
-                    "id": "2.2",
-                    "question": "Calculer les pressions incidentes (Pₛ₀) et réfléchies (Pᵣ) pour les faces A et B.",
-                    "points": 1.5,
-                    "image": "/explosions_fig1.png",
+                    "id": "3.2",
+                    "question": "Calcul analytique - Pressions incidentes Pₛ₀.",
+                    "points": 1.0,
+                    "image": "/explosions_fig3.png",
                     "subQuestions": [
                         {
                             "id": "pso_a",
@@ -295,7 +295,29 @@
                             "id": "pso_b",
                             "label": "Pression incidente Pₛ₀ (Face B)",
                             "placeholder": "Entrez Pₛ₀ (B)..."
-                        },
+                        }
+                    ],
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.07,
+                        "parts": [
+                            {
+                                "label": "Pₛ₀ (A)",
+                                "value": 1.534
+                            },
+                            {
+                                "label": "Pₛ₀ (B)",
+                                "value": 1.180
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "3.3",
+                    "question": "Calcul analytique - Pressions réfléchies Pᵣ.",
+                    "points": 1.0,
+                    "image": "/explosions_fig3.png",
+                    "subQuestions": [
                         {
                             "id": "pr_a",
                             "label": "Pression réfléchie Pᵣ (Face A)",
@@ -312,14 +334,6 @@
                         "tolerance": 0.07,
                         "parts": [
                             {
-                                "label": "Pₛ₀ (A)",
-                                "value": 1.534
-                            },
-                            {
-                                "label": "Pₛ₀ (B)",
-                                "value": 1.180
-                            },
-                            {
                                 "label": "Pᵣ (A)",
                                 "value": 3.085
                             },
@@ -331,10 +345,10 @@
                     }
                 },
                 {
-                    "id": "2.3",
-                    "question": "Calculer la durée (t₀բ), l'impulsion incidente (iₛ), et l'impulsion réfléchie (iᵣ) pour A et B.",
-                    "points": 1,
-                    "image": "/explosions_fig2.png",
+                    "id": "3.4",
+                    "question": "Calcul analytique - Durées (t₀բ) et Impulsions (iₛ, iᵣ).",
+                    "points": 1.0,
+                    "image": "/explosions_fig3.png",
                     "subQuestions": [
                         {
                             "id": "t0_a",
@@ -348,23 +362,13 @@
                         },
                         {
                             "id": "is_a",
-                            "label": "Impulsion incidente iₛ (Face A)",
+                            "label": "Impulsion iₛ (Face A)",
                             "placeholder": "Entrez iₛ (A)..."
                         },
                         {
-                            "id": "is_b",
-                            "label": "Impulsion incidente iₛ (Face B)",
-                            "placeholder": "Entrez iₛ (B)..."
-                        },
-                        {
                             "id": "ir_a",
-                            "label": "Impulsion réfléchie iᵣ (Face A)",
+                            "label": "Impulsion iᵣ (Face A)",
                             "placeholder": "Entrez iᵣ (A)..."
-                        },
-                        {
-                            "id": "ir_b",
-                            "label": "Impulsion réfléchie iᵣ (Face B)",
-                            "placeholder": "Entrez iᵣ (B)..."
                         }
                     ],
                     "validation": {
@@ -376,63 +380,27 @@
                                 "value": 6.861
                             },
                             {
-                                "label": "t₀բ (B)",
-                                "value": 7.080
-                            },
-                            {
                                 "label": "iₛ (A)",
                                 "value": 5.261
-                            },
-                            {
-                                "label": "iₛ (B)",
-                                "value": 4.177
-                            },
-                            {
-                                "label": "iᵣ (A)",
-                                "value": 10.577
-                            },
-                            {
-                                "label": "iᵣ (B)",
-                                "value": 8.387
                             }
                         ]
                     }
                 },
                 {
-                    "id": "2.4",
-                    "question": "Calculer la vitesse de l'onde (U), le temps d'arrivée (tₐ) et la pression dynamique (q₀).",
-                    "points": 1,
+                    "id": "3.5",
+                    "question": "Calcul analytique - Vitesses de l'onde (U) et Temps d'arrivée (tₐ).",
+                    "points": 1.0,
                     "image": "/explosions_fig3.png",
                     "subQuestions": [
                         {
                             "id": "u_a",
-                            "label": "Vitesse de l'onde U (Face A)",
-                            "placeholder": "Entrez U (A)..."
-                        },
-                        {
-                            "id": "u_b",
-                            "label": "Vitesse de l'onde U (Face B)",
-                            "placeholder": "Entrez U (B)..."
+                            "label": "Vitesse U (Face A)",
+                            "placeholder": "Entrez U..."
                         },
                         {
                             "id": "ta_a",
                             "label": "Temps d'arrivée tₐ (Face A)",
-                            "placeholder": "Entrez tₐ (A)..."
-                        },
-                        {
-                            "id": "ta_b",
-                            "label": "Temps d'arrivée tₐ (Face B)",
-                            "placeholder": "Entrez tₐ (B)..."
-                        },
-                        {
-                            "id": "q0_a",
-                            "label": "Pression dynamique q₀ (Face A)",
-                            "placeholder": "Entrez q₀ (A)..."
-                        },
-                        {
-                            "id": "q0_b",
-                            "label": "Pression dynamique q₀ (Face B)",
-                            "placeholder": "Entrez q₀ (B)..."
+                            "placeholder": "Entrez tₐ..."
                         }
                     ],
                     "validation": {
@@ -442,71 +410,68 @@
                             {
                                 "label": "U (A)",
                                 "value": 345.2
-                            },
-                            {
-                                "label": "U (B)",
-                                "value": 344.7
-                            },
-                            {
-                                "label": "tₐ (A)",
-                                "value": 3.475
-                            },
-                            {
-                                "label": "tₐ (B)",
-                                "value": 3.578
-                            },
-                            {
-                                "label": "q₀ (A)",
-                                "value": 0.00827
-                            },
-                            {
-                                "label": "q₀ (B)",
-                                "value": 0.00490
                             }
                         ]
                     }
                 },
                 {
-                    "id": "2.5",
-                    "question": "Comparaison Analytique vs Expérimental (Pᵣ=59.7 vs 3.085). Expliquez l'écart.",
-                    "points": 1.5,
+                    "id": "3.6",
+                    "question": "Calcul analytique - Pressions dynamiques q₀.",
+                    "points": 1.0,
+                    "image": "/explosions_fig3.png",
+                    "subQuestions": [
+                        {
+                            "id": "q0_a",
+                            "label": "Pression q₀ (Face A)",
+                            "placeholder": "Entrez q₀..."
+                        },
+                        {
+                            "id": "q0_b",
+                            "label": "Pression q₀ (Face B)",
+                            "placeholder": "Entrez q₀..."
+                        }
+                    ],
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.07,
+                        "parts": [
+                            {
+                                "label": "q₀ (A)",
+                                "value": 0.00827
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "4.a",
+                    "question": "Comparaison Analytique vs Expérimental.",
+                    "points": 0.75,
                     "validation": {
                         "type": "split_criteria",
                         "keywords": [
                             "diffraction",
-                            "clearing",
-                            "contournement",
-                            "réflexion non idéale",
-                            "écart",
-                            "sous-estimation"
+                            "clearing"
                         ],
                         "partial": true
                     }
                 },
                 {
-                    "id": "2.6",
-                    "question": "Proposer 3 solutions pour renforcer la protection.",
-                    "points": 1.5,
+                    "id": "4.b",
+                    "question": "Propositions de renforcement.",
+                    "points": 0.75,
                     "validation": {
                         "type": "split_criteria",
                         "keywords": [
                             "rigidité",
-                            "masse",
-                            "sacrificiel",
-                            "mousse",
-                            "ductilité",
-                            "acier",
-                            "renforcement"
+                            "masse"
                         ],
                         "partial": true
                     }
                 }
             ],
-            "solution": "Zₐ=6.751, Zᵦ=7.595. Pₛ₀(A)=1.534 kPa, Pᵣ(A)=3.085 kPa. Écart dû aux effets de diffraction (clearing) sur la petite structure.",
-            "detailed_solution": "1. **Distances réduites Z**: \n   $Z = R / W^{1/3}$ \n   - $W = 0.026$ kg\n   - $Z_ₐ = 2 / (0.026)^{1/3} = 6.751$ m/kg$^{1/3}$\n   - $Z_ᵦ = 2.25 / (0.026)^{1/3} = 7.595$ m/kg$^{1/3}$\n\n2. **Paramètres de l'onde (Abaques)**:\n   - Pour $Z_ₐ=6.75$: $P_{s0} \\approx 1.53$ kPa, $P_r \\approx 3.08$ kPa\n   - Pour $Z_ᵦ=7.60$: $P_{s0} \\approx 1.18$ kPa, $P_r \\approx 2.37$ kPa\n\n3. **Comparaison (Clearing)**:\n   La valeur expérimentale $P_r$ est nettement inférieure à l'analytique ($59.7$ vs $3.085$). Cela s'explique par le phénomène de **contournement (clearing)**. L'onde de choc enveloppe rapidement la petite structure, réduisant la surpression sur la face avant plus vite que prévu par la théorie de réflexion infinie.",
+            "solution": "Zₐ=6.751. Pₛ₀(A)=1.534 kPa, Pᵣ(A)=3.085 kPa.",
+            "detailed_solution": "Calculs des paramètres de souffle et comparaison expérimental.",
             "images": [
-                "/explosions_fig1.png",
-                "/explosions_fig2.png",
                 "/explosions_fig3.png"
             ]
         },

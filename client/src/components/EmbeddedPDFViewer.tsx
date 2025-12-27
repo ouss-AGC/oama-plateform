@@ -10,12 +10,13 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 interface EmbeddedPDFViewerProps {
     pdfUrl: string;
     className?: string;
+    defaultScale?: number;
 }
 
-const EmbeddedPDFViewer: React.FC<EmbeddedPDFViewerProps> = ({ pdfUrl, className = "" }) => {
+const EmbeddedPDFViewer: React.FC<EmbeddedPDFViewerProps> = ({ pdfUrl, className = "", defaultScale = 0.65 }) => {
     const [numPages, setNumPages] = useState<number | null>(null);
     const [pageNumber, setPageNumber] = useState(1);
-    const [scale, setScale] = useState(0.65);
+    const [scale, setScale] = useState(defaultScale);
 
     function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
         setNumPages(numPages);
