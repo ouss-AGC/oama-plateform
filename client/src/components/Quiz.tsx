@@ -690,7 +690,7 @@ const Quiz: React.FC = () => {
             {/* Main Content */}
             <main className="flex-grow flex p-4 gap-4 max-w-[98%] mx-auto w-full items-start">
                 {/* Question Grid Sidebar */}
-                <div className="hidden lg:block w-72 bg-white rounded-xl shadow-lg p-5 h-fit sticky top-4 overflow-hidden">
+                <div className="hidden lg:block w-80 bg-white rounded-xl shadow-lg p-5 h-fit sticky top-4 overflow-hidden">
                     <h3 className="font-bold text-gray-800 mb-4 flex items-center">
                         <LineChart className="w-5 h-5 mr-2 text-military-green" />
                         Navigation
@@ -807,7 +807,7 @@ const Quiz: React.FC = () => {
                                         ref={textareaRef}
                                         value={answers[currentQuestionIndex] as string || ''}
                                         onChange={(e) => handleExerciseAnswer(e.target.value)}
-                                        className={`w-full p-5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-military-green/10 focus:border-military-green text-lg transition-all shadow-inner bg-white ${currentQuestion.parentId === 'part3' ? 'min-h-[400px]' : 'min-h-[180px]'}`}
+                                        className={`w-full p-5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-military-green/10 focus:border-military-green text-lg transition-all shadow-inner bg-white ${currentQuestion.parentId === 'part3' ? 'min-h-[600px]' : 'min-h-[180px]'}`}
                                         placeholder="Saisissez vos calculs, formules et résultats ici..."
                                     />
                                     <div className="mt-3 flex items-center text-xs text-gray-500 italic bg-white/50 p-2 rounded-lg border border-gray-100">
@@ -821,8 +821,8 @@ const Quiz: React.FC = () => {
 
                                 {/* 2. Technical Context & Data / PDF Viewer */}
                                 {currentQuestion.parentId === 'part3' ? (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div className="h-full min-h-[500px] flex flex-col">
+                                    <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-6">
+                                        <div className="h-full min-h-[600px] flex flex-col">
                                             <EmbeddedPDFViewer
                                                 pdfUrl="/resources/analysis_sdof.pdf"
                                                 className="flex-grow shadow-lg border-blue-200"
