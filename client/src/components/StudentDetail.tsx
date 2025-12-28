@@ -52,6 +52,7 @@ interface QuizResult {
     answers: any[]; // Can be number[] or object[]
     isPractice?: boolean;
     manualScores?: Record<string, number>; // Store manual scores for exercises
+    diagramLines?: Record<string, any[]>; // Store diagram traces
 }
 
 const StudentDetail: React.FC = () => {
@@ -601,8 +602,15 @@ const StudentDetail: React.FC = () => {
                                                 <div className="bg-gray-50 p-3 rounded text-sm text-gray-700 italic border border-gray-200">
                                                     {q.description}
                                                     {q.image_url && (
-                                                        <div className="mt-2">
-                                                            <ImageZoom src={q.image_url} alt="Figure de référence" className="max-h-48 rounded" />
+                                                        <div className="mt-2 text-center">
+                                                            <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-1 italic">Vues et traces de l'élève</p>
+                                                            <ImageZoom
+                                                                src={q.image_url}
+                                                                alt="Figure de référence"
+                                                                className="max-h-64 rounded shadow-lg border border-gray-200"
+                                                                lines={result.diagramLines?.[q.image_url!] || []}
+                                                                onLinesChange={() => { }} // Read-only for admin
+                                                            />
                                                         </div>
                                                     )}
                                                 </div>

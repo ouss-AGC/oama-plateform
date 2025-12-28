@@ -481,6 +481,7 @@ const Quiz: React.FC = () => {
             timestamp: Date.now(),
             isPractice: isPractice,
             manualScores: manualScores,
+            diagramLines: diagramLines,
             needsGrading: false // Auto-graded!
         };
 
