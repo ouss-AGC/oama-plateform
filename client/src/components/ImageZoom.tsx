@@ -1,22 +1,36 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, ZoomIn, MoveHorizontal, MoveVertical, Trash2, MousePointer2, HelpCircle } from 'lucide-react';
-
-interface ImageZoomProps {
-    src: string;
-    alt: string;
-    className?: string;
-}
+import { X, ZoomIn, MoveHorizontal, MoveVertical, Trash2, MousePointer2, HelpCircle, ShieldCheck } from 'lucide-react';
 
 interface Guideline {
     id: number;
     position: number; // Percentage (0-100)
     type: 'h' | 'v';
+    color?: string;
+    isLocked?: boolean;
 }
 
-const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
+interface ImageZoomProps {
+    src: string;
+    alt: string;
+    className?: string; // Prop optional
+    lines: Guideline[];
+    onLinesChange: (lines: Guideline[]) => void;
+}
+
+const COLORS = [
+    { name: 'Cyan', value: '#22d3ee' },
+    { name: 'Rose', value: '#f472b6' },
+    { name: 'Vert', value: '#4ade80' },
+    { name: 'Jaune', value: '#facc15' },
+    { name: 'Orange', value: '#fb923c' },
+    { name: 'Rouge', value: '#ef4444' },
+    { name: 'Blanc', value: '#ffffff' }
+];
+
+const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className, lines, onLinesChange }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [activeTool, setActiveTool] = useState<'none' | 'h' | 'v' | 'loupe'>('none');
-    const [lines, setLines] = useState<Guideline[]>([]);
+    const [selectedColor, setSelectedColor] = useState(COLORS[0].value);
     const [draggingId, setDraggingId] = useState<number | null>(null);
     const [scale, setScale] = useState(1);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -34,7 +48,6 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'unset';
-            setLines([]); // Reset lines when closing
             setActiveTool('none');
             setScale(1);
             setOffset({ x: 0, y: 0 });
@@ -51,21 +64,31 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
         const newLine: Guideline = {
             id: Date.now(),
             type: activeTool,
-            position: activeTool === 'v' ? x : y
+            position: activeTool === 'v' ? x : y,
+            color: selectedColor,
+            isLocked: false
         };
 
-        setLines([...lines, newLine]);
+        onLinesChange([...lines, newLine]);
     };
 
     const deleteLine = (e: React.MouseEvent, id: number) => {
         e.stopPropagation();
-        setLines(lines.filter(l => l.id !== id));
+        onLinesChange(lines.filter(l => l.id !== id));
+    };
+
+    const toggleLock = (e: React.MouseEvent, id: number) => {
+        e.stopPropagation();
+        onLinesChange(lines.map(l => l.id === id ? { ...l, isLocked: !l.isLocked } : l));
     };
 
     const startDragOrPan = (e: React.MouseEvent, id?: number) => {
         e.stopPropagation();
         if (id !== undefined) {
-            setDraggingId(id);
+            const line = lines.find(l => l.id === id);
+            if (line && !line.isLocked) {
+                setDraggingId(id);
+            }
         } else if (activeTool === 'none') {
             setIsPanning(true);
             setLastMousePos({ x: e.clientX, y: e.clientY });
@@ -91,7 +114,6 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
             const posY = e.clientY - imgRect.top;
 
             // Background position for the 3x zoom
-            // With 260px bubble, center is 130px
             const bgX = (posX * 3) - 130;
             const bgY = (posY * 3) - 130;
 
@@ -105,7 +127,7 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
 
         if (draggingId !== null) {
             const line = lines.find(l => l.id === draggingId);
-            if (!line) return;
+            if (!line || line.isLocked) return;
 
             let newPos = 0;
             if (line.type === 'v') {
@@ -115,7 +137,7 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
             }
 
             newPos = Math.max(0, Math.min(100, newPos));
-            setLines(lines.map(l => l.id === draggingId ? { ...l, position: newPos } : l));
+            onLinesChange(lines.map(l => l.id === draggingId ? { ...l, position: newPos } : l));
         } else if (isPanning) {
             const dx = e.clientX - lastMousePos.x;
             const dy = e.clientY - lastMousePos.y;
@@ -140,7 +162,7 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
     return (
         <>
             <div
-                className={`relative group cursor-pointer inline-block ${className}`}
+                className={`relative group cursor-pointer inline-block ${className || ''}`}
                 onClick={() => setIsOpen(true)}
             >
                 <img
@@ -175,7 +197,8 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
 
                         <button
                             onClick={() => setActiveTool('v')}
-                            className={`flex flex-col items-center justify-center p-3 rounded-xl transition-all w-16 h-16 ${activeTool === 'v' ? 'bg-cyan-500 text-black font-bold shadow-lg shadow-cyan-500/20' : 'text-cyan-400 hover:text-cyan-300 hover:bg-cyan-900/30'}`}
+                            className={`flex flex-col items-center justify-center p-3 rounded-xl transition-all w-16 h-16 ${activeTool === 'v' ? 'shadow-lg shadow-cyan-500/20' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}
+                            style={{ backgroundColor: activeTool === 'v' ? selectedColor : 'transparent', color: activeTool === 'v' ? (selectedColor === '#ffffff' ? '#000' : '#fff') : '' }}
                             title="Ligne Verticale"
                         >
                             <MoveVertical size={24} />
@@ -184,12 +207,26 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
 
                         <button
                             onClick={() => setActiveTool('h')}
-                            className={`flex flex-col items-center justify-center p-3 rounded-xl transition-all w-16 h-16 ${activeTool === 'h' ? 'bg-pink-500 text-white font-bold shadow-lg shadow-pink-500/20' : 'text-pink-400 hover:text-pink-300 hover:bg-pink-900/30'}`}
+                            className={`flex flex-col items-center justify-center p-3 rounded-xl transition-all w-16 h-16 ${activeTool === 'h' ? 'shadow-lg shadow-pink-500/20' : 'text-gray-400 hover:text-white hover:bg-gray-800'}`}
+                            style={{ backgroundColor: activeTool === 'h' ? selectedColor : 'transparent', color: activeTool === 'h' ? (selectedColor === '#ffffff' ? '#000' : '#fff') : '' }}
                             title="Ligne Horizontale"
                         >
                             <MoveHorizontal size={24} />
                             <span className="text-[10px] font-bold mt-1 uppercase">Ligne H</span>
                         </button>
+
+                        {/* Color Palette */}
+                        <div className="flex flex-wrap justify-center gap-1.5 px-2 py-2 bg-gray-800/50 rounded-xl border border-gray-700">
+                            {COLORS.map(c => (
+                                <button
+                                    key={c.value}
+                                    onClick={() => setSelectedColor(c.value)}
+                                    className={`w-5 h-5 rounded-full border-2 transition-transform hover:scale-125 ${selectedColor === c.value ? 'border-white scale-110' : 'border-transparent'}`}
+                                    style={{ backgroundColor: c.value }}
+                                    title={c.name}
+                                />
+                            ))}
+                        </div>
 
                         <button
                             onClick={() => setActiveTool(activeTool === 'loupe' ? 'none' : 'loupe')}
@@ -231,7 +268,7 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                         </button>
 
                         <button
-                            onClick={() => { setLines([]); setScale(1); setOffset({ x: 0, y: 0 }); }}
+                            onClick={() => { onLinesChange([]); setScale(1); setOffset({ x: 0, y: 0 }); }}
                             className="p-3 rounded-xl text-red-400 hover:bg-red-900/40 transition-all w-16 h-16 flex flex-col items-center justify-center"
                             title="Reset"
                         >
@@ -244,7 +281,7 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                     <div className="flex-1 relative flex flex-col overflow-hidden">
                         {/* Top Bar for Close and Title */}
                         <div className="flex items-center justify-between p-4 z-10">
-                            <h2 className="text-gray-400 text-sm font-medium tracking-widest uppercase">Analyse de graphique</h2>
+                            <h2 className="text-gray-400 text-sm font-medium tracking-widest uppercase font-mono">Analyse de graphique tactique</h2>
                             <button
                                 className="text-white hover:text-gray-300 transition-all bg-gray-800/80 rounded-full p-2 border border-gray-700 hover:rotate-90"
                                 onClick={() => setIsOpen(false)}
@@ -281,8 +318,8 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                                     {/* Guideline Tool Hint Overlay */}
                                     {(activeTool === 'v' || activeTool === 'h') && lines.length === 0 && (
                                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                            <div className="bg-black/60 backdrop-blur-sm text-white px-6 py-3 rounded-full border border-white/20 animate-pulse">
-                                                Cliquez pour placer la ligne
+                                            <div className="bg-black/60 backdrop-blur-sm text-white px-6 py-3 rounded-full border border-white/20 animate-pulse font-mono text-sm uppercase tracking-tighter">
+                                                Placer le guide sur le graphique
                                             </div>
                                         </div>
                                     )}
@@ -293,8 +330,8 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                                             key={line.id}
                                             onMouseDown={(e) => startDragOrPan(e, line.id)}
                                             className={`absolute group transition-shadow hover:shadow-lg ${line.type === 'v'
-                                                ? 'top-0 bottom-0 w-3 -ml-1.5 cursor-col-resize'
-                                                : 'left-0 right-0 h-3 -mt-1.5 cursor-row-resize'
+                                                ? 'top-0 bottom-0 w-4 -ml-2 cursor-col-resize'
+                                                : 'left-0 right-0 h-4 -mt-2 cursor-row-resize'
                                                 }`}
                                             style={{
                                                 left: line.type === 'v' ? `${line.position}%` : 0,
@@ -303,19 +340,39 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                                             }}
                                         >
                                             <div className={`absolute ${line.type === 'v' ? 'left-1/2 top-0 bottom-0 w-[2px]' : 'top-1/2 left-0 right-0 h-[2px]'
-                                                } ${line.type === 'v' ? 'bg-cyan-400/80 shadow-[0_0_8px_rgba(34,211,238,0.5)]' : 'bg-pink-400/80 shadow-[0_0_8px_rgba(244,114,182,0.5)]'}`}>
+                                                }`} style={{ backgroundColor: line.color || '#22d3ee', boxShadow: `0 0 10px ${line.color || '#22d3ee'}80` }}>
                                             </div>
-                                            <button
-                                                onClick={(e) => deleteLine(e, line.id)}
-                                                className="absolute -top-6 -left-2 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity z-30 shadow-lg"
-                                            >
-                                                <Trash2 size={12} />
-                                            </button>
+
+                                            {/* Line Controls Overlay */}
+                                            <div className="absolute -top-12 left-1/2 -translate-x-1/2 flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity z-50">
+                                                <button
+                                                    onClick={(e) => toggleLock(e, line.id)}
+                                                    className={`p-2 rounded-lg shadow-xl border transition-all ${line.isLocked ? 'bg-orange-600 text-white border-orange-400' : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-white hover:bg-slate-700'}`}
+                                                    title={line.isLocked ? "Déverrouiller" : "Figer la ligne (Verrouiller)"}
+                                                >
+                                                    <ShieldCheck size={16} />
+                                                </button>
+                                                {!line.isLocked && (
+                                                    <button
+                                                        onClick={(e) => deleteLine(e, line.id)}
+                                                        className="p-2 bg-red-600/90 text-white rounded-lg transition-all shadow-xl border border-red-500 hover:bg-red-500"
+                                                        title="Supprimer"
+                                                    >
+                                                        <Trash2 size={16} />
+                                                    </button>
+                                                )}
+                                            </div>
+
+                                            {line.isLocked && (
+                                                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full mb-1">
+                                                    <ShieldCheck size={12} className="text-orange-500 drop-shadow-md" />
+                                                </div>
+                                            )}
                                         </div>
                                     ))}
                                 </div>
 
-                                {/* Loupe Effect - 260px Fixed 3x Pixel-based zoom with Guideline mirroring */}
+                                {/* Loupe Effect */}
                                 {activeTool === 'loupe' && imgRef.current && (
                                     <div
                                         className="absolute pointer-events-none rounded-full border-4 border-yellow-500 shadow-2xl overflow-hidden bg-gray-900"
@@ -328,7 +385,6 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                                             zIndex: 100
                                         }}
                                     >
-                                        {/* Magnified Container */}
                                         <div style={{
                                             position: 'absolute',
                                             width: `${imgRef.current.offsetWidth * 3}px`,
@@ -336,14 +392,12 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                                             left: `-${loupeCoords.bgX}px`,
                                             top: `-${loupeCoords.bgY}px`,
                                         }}>
-                                            {/* Mirrored Image */}
                                             <img
                                                 src={src}
                                                 style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                                                 alt="zoomed"
                                             />
 
-                                            {/* Mirrored Guidelines (Scaled 3x) */}
                                             {lines.map(line => (
                                                 <div
                                                     key={`loupe-line-${line.id}`}
@@ -351,10 +405,10 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
                                                     style={{
                                                         left: line.type === 'v' ? `${line.position}%` : 0,
                                                         top: line.type === 'h' ? `${line.position}%` : 0,
-                                                        width: line.type === 'v' ? '2px' : '100%',
-                                                        height: line.type === 'h' ? '2px' : '100%',
-                                                        backgroundColor: line.type === 'v' ? '#22d3ee' : '#f472b6',
-                                                        boxShadow: `0 0 6px ${line.type === 'v' ? 'rgba(34,211,238,0.8)' : 'rgba(244,114,182,0.8)'}`,
+                                                        width: line.type === 'v' ? '2.5px' : '100%',
+                                                        height: line.type === 'h' ? '2.5px' : '100%',
+                                                        backgroundColor: line.color || '#22d3ee',
+                                                        boxShadow: `0 0 8px ${line.color || '#22d3ee'}A0`,
                                                         zIndex: 10
                                                     }}
                                                 />
@@ -373,12 +427,12 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
 
                         {/* Bottom Tooltip */}
                         <div className="p-2 md:p-4 flex justify-center">
-                            <div className="text-gray-400 text-xs bg-gray-900/60 px-6 py-2 rounded-full border border-gray-800 shadow-sm">
+                            <div className="text-cyan-400 text-xs bg-slate-900/80 px-8 py-2.5 rounded-full border border-cyan-900/50 shadow-2xl backdrop-blur-md font-mono uppercase tracking-widest">
                                 {activeTool === 'none'
-                                    ? "Mode Navigation : Glissez pour déplacer le graphique"
+                                    ? "Navigation • Vos tracés sont persistants"
                                     : activeTool === 'loupe'
-                                        ? "Loupe Active (XL - 3x) : Survoler les graduations et intersections"
-                                        : `Outil Ligne ${activeTool === 'v' ? 'V' : 'H'} : Cliquez sur le graphique pour placer`
+                                        ? "Précision XL (3x) • Idéal pour les abaques de Baker"
+                                        : `Guide ${activeTool === 'v' ? 'Vertical' : 'Horizontal'} • Cliquez pour poser • Palette pour la couleur`
                                 }
                             </div>
                         </div>
@@ -386,63 +440,69 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className }) => {
 
                     {/* Interactive Help Overlay */}
                     {showHelp && (
-                        <div className="absolute inset-0 z-50 flex items-center justify-center p-8 bg-black/60 backdrop-blur-md animate-in zoom-in duration-300">
-                            <div className="bg-gray-900 border border-gray-700 rounded-3xl p-8 max-w-2xl shadow-3xl relative">
+                        <div className="absolute inset-0 z-[110] flex items-center justify-center p-8 bg-slate-950/80 backdrop-blur-xl animate-in fade-in zoom-in duration-300">
+                            <div className="bg-slate-900 border border-slate-700/50 rounded-3xl p-10 max-w-3xl shadow-[0_0_100px_rgba(34,211,238,0.15)] relative">
                                 <button
                                     onClick={() => setShowHelp(false)}
-                                    className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+                                    className="absolute top-6 right-6 text-slate-500 hover:text-white transition-colors p-2 hover:bg-slate-800 rounded-full"
                                 >
                                     <X size={24} />
                                 </button>
 
-                                <div className="flex items-center space-x-3 mb-6">
-                                    <div className="bg-indigo-600 p-2 rounded-xl">
-                                        <HelpCircle className="text-white" size={24} />
+                                <div className="flex items-center space-x-4 mb-8">
+                                    <div className="bg-indigo-600/20 p-3 rounded-2xl border border-indigo-500/30">
+                                        <HelpCircle className="text-indigo-400" size={32} />
                                     </div>
-                                    <h3 className="text-2xl font-bold text-white uppercase tracking-wider">Guide d'utilisation</h3>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="space-y-4">
-                                        <div className="flex items-start space-x-3">
-                                            <div className="bg-blue-600/20 p-2 rounded-lg mt-1 text-blue-400"><MousePointer2 size={18} /></div>
-                                            <div>
-                                                <p className="font-bold text-white text-sm">Navigation (Pan)</p>
-                                                <p className="text-gray-400 text-xs text-balance">Faites glisser le graphique pour le déplacer. Utile pour centrer les zones d'intérêt.</p>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-start space-x-3">
-                                            <div className="bg-cyan-500/20 p-2 rounded-lg mt-1 text-cyan-400"><MoveVertical size={18} /></div>
-                                            <div>
-                                                <p className="font-bold text-white text-sm">Lignes Verticales/Horizontales</p>
-                                                <p className="text-gray-400 text-xs text-balance">Placez des guides pour repérer les valeurs. Cliquez sur le graphique pour les poser.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="space-y-4">
-                                        <div className="flex items-start space-x-3">
-                                            <div className="bg-yellow-500/20 p-2 rounded-lg mt-1 text-yellow-500"><ZoomIn size={18} /></div>
-                                            <div>
-                                                <p className="font-bold text-white text-sm">Loupe de Précision (3x)</p>
-                                                <p className="text-gray-400 text-xs text-balance">Grossit les axes et vos lignes. Indispensable pour lire les graduations avec précision.</p>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-start space-x-3">
-                                            <div className="bg-red-600/20 p-2 rounded-lg mt-1 text-red-400"><Trash2 size={18} /></div>
-                                            <div>
-                                                <p className="font-bold text-white text-sm">Réinitialisation</p>
-                                                <p className="text-gray-400 text-xs text-balance">Le bouton Reset efface toutes les lignes et remet le zoom à zéro.</p>
-                                            </div>
-                                        </div>
+                                    <div>
+                                        <h3 className="text-3xl font-black text-white uppercase tracking-tighter font-mono">Manuel d'Analyse Graphique</h3>
+                                        <p className="text-indigo-400 text-xs font-mono tracking-widest uppercase mt-1">Protocole d'expertise structurelle</p>
                                     </div>
                                 </div>
 
-                                <div className="mt-8 pt-6 border-t border-gray-800 flex justify-center">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="space-y-6">
+                                        <div className="flex items-start space-x-4">
+                                            <div className="bg-blue-600/20 p-2.5 rounded-xl border border-blue-500/30 text-blue-400 shrink-0"><MousePointer2 size={20} /></div>
+                                            <div>
+                                                <p className="font-bold text-white text-base">Persistence Totale</p>
+                                                <p className="text-slate-400 text-xs leading-relaxed">Vos tracés ne sont **jamais effacés** lors de la fermeture de la fenêtre. Ils restent liés au graphique pour toute la durée de l'examen.</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start space-x-4">
+                                            <div className="bg-cyan-500/20 p-2.5 rounded-xl border border-cyan-500/30 text-cyan-400 shrink-0"><MoveVertical size={20} /></div>
+                                            <div>
+                                                <p className="font-bold text-white text-base">Codification Couleur</p>
+                                                <p className="text-slate-400 text-xs leading-relaxed">Utilisez la palette latérale pour changer de couleur. Utile pour séparer les étapes de calcul (ex: Zₐ en Cyan, Pₛ₀ en Rose).</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-6">
+                                        <div className="flex items-start space-x-4">
+                                            <div className="bg-orange-600/20 p-2.5 rounded-xl border border-orange-500/30 text-orange-500 shrink-0"><ShieldCheck size={20} /></div>
+                                            <div>
+                                                <p className="font-bold text-white text-base">Verrouillage de Preuve</p>
+                                                <p className="text-slate-400 text-xs leading-relaxed">Une fois votre ligne posée, cliquez sur 🔒 pour la **figer**. Elle laisse une trace immuable de votre raisonnement sur l'abaque.</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start space-x-4">
+                                            <div className="bg-yellow-500/20 p-2.5 rounded-xl border border-yellow-500/30 text-yellow-500 shrink-0"><ZoomIn size={20} /></div>
+                                            <div>
+                                                <p className="font-bold text-white text-base">Lecture au ms & kPa</p>
+                                                <p className="text-slate-400 text-xs leading-relaxed">La loupe XL (3x) est l'outil indispensable pour relever des valeurs précises sur les échelles logarithmiques de Baker.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mt-10 pt-8 border-t border-slate-800 flex flex-col items-center space-y-6">
+                                    <p className="text-slate-500 text-[11px] text-center max-w-lg leading-relaxed font-mono">
+                                        Note: Les tracés verrouillés sont visibles lors de la revue admin par l'Assistant Professor Atoui Oussama pour valider votre méthodologie.
+                                    </p>
                                     <button
                                         onClick={() => setShowHelp(false)}
-                                        className="px-8 py-3 bg-white text-black font-bold rounded-xl hover:bg-gray-200 transition-colors uppercase tracking-widest text-sm"
+                                        className="px-16 py-4 bg-white text-black font-black rounded-2xl hover:bg-slate-200 transition-all uppercase tracking-[0.2em] text-sm shadow-[0_0_40px_rgba(255,255,255,0.1)] active:scale-95"
                                     >
-                                        J'ai compris
+                                        RETOUR AU CALCUL
                                     </button>
                                 </div>
                             </div>

@@ -13,6 +13,14 @@ interface SubQuestion {
     points: number;
 }
 
+interface Guideline {
+    id: number;
+    position: number; // Percentage (0-100)
+    type: 'h' | 'v';
+    color?: string;
+    isLocked?: boolean;
+}
+
 interface Question {
     id: number | string;
     question: string;
@@ -75,6 +83,7 @@ const Quiz: React.FC = () => {
     const [briefingData, setBriefingData] = useState<{ title: string; message: string; image?: string; scholar?: string; scholarMessage?: string; imageStyle?: string } | null>(null);
     const [viewedBriefings, setViewedBriefings] = useState<Set<string>>(new Set());
     const [isSpeaking, setIsSpeaking] = useState(false);
+    const [diagramLines, setDiagramLines] = useState<Record<string, Guideline[]>>({});
 
     const handleSpeak = (text: string) => {
         if (!text) return;
@@ -159,9 +168,23 @@ const Quiz: React.FC = () => {
         }
 
         // Set time limit based on discipline
-        const disciplineTimeLimit = discipline === 'explosions' ? 7200 : 3600; // 2 hours for explosions, 1 hour for others
+        const disciplineTimeLimit = discipline === 'explosions' ? 9000 : 3600; // 2.5 hours for explosions, 1 hour for others
         setTimeLimit(disciplineTimeLimit);
-        setTimeLeft(disciplineTimeLimit);
+
+        // Timer Persistence: Check for existing start time
+        const studentInfoStr = localStorage.getItem('studentInfo');
+        const student = studentInfoStr ? JSON.parse(studentInfoStr) : null;
+        const timerKey = `quiz_start_time_${discipline}_${student?.matricule || 'anonymous'}`;
+        const savedStartTime = localStorage.getItem(timerKey);
+
+        if (savedStartTime) {
+            const elapsed = Math.floor((Date.now() - parseInt(savedStartTime)) / 1000);
+            const remaining = Math.max(0, disciplineTimeLimit - elapsed);
+            setTimeLeft(remaining);
+        } else {
+            localStorage.setItem(timerKey, Date.now().toString());
+            setTimeLeft(disciplineTimeLimit);
+        }
 
         const studentInfo = localStorage.getItem('studentInfo');
 
@@ -488,11 +511,12 @@ const Quiz: React.FC = () => {
     const answeredCount = answers.filter(a => a !== null && a !== '').length;
     const progressPercentage = (answeredCount / flattenedQuestions.length) * 100;
     const discipline = localStorage.getItem('selectedDiscipline');
-    // For explosions: red at 20 minutes (1200s), for others: red at 5 minutes (300s)
-    const warningThreshold = discipline === 'explosions' ? 1200 : 300;
-    const isTimeRunningOut = timeLeft < warningThreshold;
-    // Blinking in last 10 minutes
-    const isBlinking = timeLeft < 600;
+    // Visual Thresholds:
+    // - Orange at 15 minutes (900s)
+    // - Red + Blinking at 5 minutes (300s)
+    const isNearEnd = timeLeft < 900;
+    const isTimeRunningOut = timeLeft < 300;
+    const isBlinking = timeLeft < 300;
 
     // Show time-over modal when time reaches 0
     if (timeLeft === 0) {
@@ -671,7 +695,7 @@ const Quiz: React.FC = () => {
                             <FileSearch className="w-6 h-6 mr-3" />
                             Voir Sujet
                         </button>
-                        <div className={`flex items-center px-6 py-3 rounded-full shadow-lg transition-all ${isTimeRunningOut ? 'bg-red-600' : 'bg-green-800'
+                        <div className={`flex items-center px-6 py-3 rounded-full shadow-lg transition-all ${isTimeRunningOut ? 'bg-red-600' : isNearEnd ? 'bg-orange-500' : 'bg-green-800'
                             } ${isBlinking ? 'animate-pulse' : ''}`}>
                             <Clock className="w-6 h-6 mr-3" />
                             <span className="font-mono font-bold text-2xl">{formatTime(timeLeft)}</span>
@@ -698,7 +722,7 @@ const Quiz: React.FC = () => {
                         <div className="flex items-center justify-center">
                             <AlertCircle className="w-5 h-5 mr-2" />
                             <span className="font-semibold">
-                                Attention ! Il vous reste moins de {discipline === 'explosions' ? '20' : '5'} minutes !
+                                Attention ! Il vous reste moins de {isTimeRunningOut ? '5' : '15'} minutes !
                             </span>
                         </div>
                     </div>
@@ -839,6 +863,8 @@ const Quiz: React.FC = () => {
                                                             src={currentQuestion.image}
                                                             alt="Figure"
                                                             className="w-full"
+                                                            lines={diagramLines[currentQuestion.image] || []}
+                                                            onLinesChange={(newLines) => setDiagramLines(prev => ({ ...prev, [currentQuestion.image!]: newLines }))}
                                                         />
                                                         <div className="mt-4 flex items-center justify-center pointer-events-none">
                                                             <span className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-bold shadow-lg animate-pulse">
@@ -975,7 +1001,13 @@ const Quiz: React.FC = () => {
                                                                 <p className="text-gray-800 font-bold leading-relaxed">{currentQuestion.caption}</p>
                                                             </div>
                                                         )}
-                                                        <ImageZoom src={currentQuestion.image} alt="Figure" className="w-full" />
+                                                        <ImageZoom
+                                                            src={currentQuestion.image}
+                                                            alt="Figure"
+                                                            className="w-full"
+                                                            lines={diagramLines[currentQuestion.image] || []}
+                                                            onLinesChange={(newLines) => setDiagramLines(prev => ({ ...prev, [currentQuestion.image!]: newLines }))}
+                                                        />
                                                     </div>
                                                 )}
                                             </div>
