@@ -83,6 +83,8 @@ const Quiz: React.FC = () => {
     const [briefingData, setBriefingData] = useState<{ title: string; message: string; image?: string; scholar?: string; scholarMessage?: string; imageStyle?: string } | null>(null);
     const [viewedBriefings, setViewedBriefings] = useState<Set<string>>(new Set());
     const [isSpeaking, setIsSpeaking] = useState(false);
+    const [activeTextareaId, setActiveTextareaId] = useState<string | null>(null);
+    const textareaRefs = useRef<Record<string, HTMLTextAreaElement | null>>({});
     const [diagramLines, setDiagramLines] = useState<Record<string, Guideline[]>>({});
 
     const handleSpeak = (text: string) => {
@@ -132,27 +134,64 @@ const Quiz: React.FC = () => {
     }, []);
 
     const insertSymbol = (value: string) => {
-        if (!textareaRef.current) return;
+        let textarea: HTMLTextAreaElement | null = null;
 
-        const textarea = textareaRef.current;
+        if (activeTextareaId && textareaRefs.current[activeTextareaId]) {
+            textarea = textareaRefs.current[activeTextareaId];
+        } else if (textareaRef.current) {
+            textarea = textareaRef.current;
+        }
+
+        if (!textarea) return;
+
         const start = textarea.selectionStart;
         const end = textarea.selectionEnd;
         const text = textarea.value;
 
         if (value === 'CLEAR') {
-            handleExerciseAnswer("");
+            if (activeTextareaId) {
+                const newAnswers = [...answers];
+                const currentAnswer = (newAnswers[currentQuestionIndex] && typeof newAnswers[currentQuestionIndex] === 'object')
+                    ? { ...newAnswers[currentQuestionIndex] as any }
+                    : {};
+                currentAnswer[activeTextareaId] = "";
+                newAnswers[currentQuestionIndex] = currentAnswer;
+                setAnswers(newAnswers);
+            } else {
+                handleExerciseAnswer("");
+            }
             return;
         }
 
         const newValue = text.substring(0, start) + value + text.substring(end);
 
-        handleExerciseAnswer(newValue);
+        if (activeTextareaId) {
+            const newAnswers = [...answers];
+            const currentAnswer = (newAnswers[currentQuestionIndex] && typeof newAnswers[currentQuestionIndex] === 'object')
+                ? { ...newAnswers[currentQuestionIndex] as any }
+                : {};
+            currentAnswer[activeTextareaId] = newValue;
+            newAnswers[currentQuestionIndex] = currentAnswer;
+            setAnswers(newAnswers);
 
-        // Reset focus and cursor position after state update
-        setTimeout(() => {
-            textarea.focus();
-            textarea.setSelectionRange(start + value.length, start + value.length);
-        }, 0);
+            // Re-focus and set cursor position
+            setTimeout(() => {
+                if (textarea) {
+                    textarea.focus();
+                    const newPos = start + value.length;
+                    textarea.setSelectionRange(newPos, newPos);
+                }
+            }, 0);
+        } else {
+            handleExerciseAnswer(newValue);
+            setTimeout(() => {
+                if (textareaRef.current) {
+                    textareaRef.current.focus();
+                    const newPos = start + value.length;
+                    textareaRef.current.setSelectionRange(newPos, newPos);
+                }
+            }, 0);
+        }
     };
 
     useEffect(() => {
@@ -385,7 +424,9 @@ const Quiz: React.FC = () => {
 
             if (q.type === 'exercise' && studentAnswer) {
                 let questionScore = 0;
-                const subAnswer = String(studentAnswer);
+                const subAnswer = studentAnswer && typeof studentAnswer === 'object'
+                    ? Object.values(studentAnswer).join(' ')
+                    : String(studentAnswer || '');
 
                 if (q.validation) {
                     if (q.validation.type === 'split_criteria') {
@@ -962,6 +1003,8 @@ const Quiz: React.FC = () => {
                                                             )}
                                                         </label>
                                                         <textarea
+                                                            ref={el => { textareaRefs.current[subQ.id] = el; }}
+                                                            onFocus={() => setActiveTextareaId(subQ.id)}
                                                             value={(answers[currentQuestionIndex] && typeof answers[currentQuestionIndex] === 'object') ? (answers[currentQuestionIndex] as any)[subQ.id] || '' : ''}
                                                             onChange={(e) => {
                                                                 const newAnswers = [...answers];
@@ -980,6 +1023,7 @@ const Quiz: React.FC = () => {
                                             <div className="border-l-4 border-military-beige pl-4 py-4 bg-military-beige/5 rounded-r-2xl">
                                                 <textarea
                                                     ref={textareaRef}
+                                                    onFocus={() => setActiveTextareaId(null)}
                                                     value={answers[currentQuestionIndex] as string || ''}
                                                     onChange={(e) => handleExerciseAnswer(e.target.value)}
                                                     className="w-full p-5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-military-green/10 focus:border-military-green text-lg transition-all shadow-inner bg-white min-h-[180px]"

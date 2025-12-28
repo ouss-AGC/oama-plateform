@@ -348,26 +348,50 @@
                         {
                             "id": "t0_a",
                             "label": "Durée t₀բ (Face A)",
-                            "points": 0.25,
+                            "points": 0.125,
                             "placeholder": "Entrez t₀բ (A)..."
                         },
                         {
                             "id": "t0_b",
                             "label": "Durée t₀բ (Face B)",
-                            "points": 0.25,
+                            "points": 0.125,
                             "placeholder": "Entrez t₀բ (B)..."
+                        },
+                        {
+                            "id": "trf_a",
+                            "label": "Durée tᵣբ (Face A)",
+                            "points": 0.125,
+                            "placeholder": "Entrez tᵣբ (A)..."
+                        },
+                        {
+                            "id": "trf_b",
+                            "label": "Durée tᵣբ (Face B)",
+                            "points": 0.125,
+                            "placeholder": "Entrez tᵣբ (B)..."
                         },
                         {
                             "id": "is_a",
                             "label": "Impulsion iₛ (Face A)",
-                            "points": 0.25,
+                            "points": 0.125,
                             "placeholder": "Entrez iₛ (A)..."
+                        },
+                        {
+                            "id": "is_b",
+                            "label": "Impulsion iₛ (Face B)",
+                            "points": 0.125,
+                            "placeholder": "Entrez iₛ (B)..."
                         },
                         {
                             "id": "ir_a",
                             "label": "Impulsion iᵣ (Face A)",
-                            "points": 0.25,
+                            "points": 0.125,
                             "placeholder": "Entrez iᵣ (A)..."
+                        },
+                        {
+                            "id": "ir_b",
+                            "label": "Impulsion iᵣ (Face B)",
+                            "points": 0.125,
+                            "placeholder": "Entrez iᵣ (B)..."
                         }
                     ],
                     "validation": {
@@ -395,8 +419,14 @@
                         {
                             "id": "u_a",
                             "label": "Vitesse du choc U (Face A)",
-                            "points": 1.0,
+                            "points": 0.5,
                             "placeholder": "Entrez U (A)..."
+                        },
+                        {
+                            "id": "u_b",
+                            "label": "Vitesse du choc U (Face B)",
+                            "points": 0.5,
+                            "placeholder": "Entrez U (B)..."
                         }
                     ],
                     "validation": {
@@ -474,8 +504,16 @@
                 },
                 {
                     "id": "4.a",
-                    "question": "Comparaison Analytique vs Expérimental.",
+                    "question": "Partie 4.a - Comparaison Analytique vs Expérimental.",
                     "points": 0.5,
+                    "subQuestions": [
+                        {
+                            "id": "discussion_a",
+                            "label": "Synthèse et Analyse comparative",
+                            "points": 0.5,
+                            "placeholder": "Analysez les écarts entre les résultats analytiques et expérimentaux..."
+                        }
+                    ],
                     "validation": {
                         "type": "split_criteria",
                         "keywords": [
@@ -487,8 +525,16 @@
                 },
                 {
                     "id": "4.b",
-                    "question": "Propositions de renforcement.",
+                    "question": "Partie 4.b - Propositions de renforcement.",
                     "points": 0.5,
+                    "subQuestions": [
+                        {
+                            "id": "discussion_b",
+                            "label": "Recommandations techniques",
+                            "points": 0.5,
+                            "placeholder": "Proposez des solutions pour renforcer le bâtiment (ex: rigidité, masse)..."
+                        }
+                    ],
                     "validation": {
                         "type": "split_criteria",
                         "keywords": [
