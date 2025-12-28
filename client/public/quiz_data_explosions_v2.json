@@ -251,20 +251,20 @@
                 {
                     "id": "3.1",
                     "question": "Calcul analytique - Distances réduites Zₐ et Zᵦ.",
-                    "points": 0.5,
+                    "points": 1.0,
                     "image": "/explosions_fig3.png",
                     "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
                     "subQuestions": [
                         {
                             "id": "za",
                             "label": "Distance réduite Zₐ",
-                            "points": 0.25,
+                            "points": 0.5,
                             "placeholder": "Entrez Zₐ..."
                         },
                         {
                             "id": "zb",
                             "label": "Distance réduite Zᵦ",
-                            "points": 0.25,
+                            "points": 0.5,
                             "placeholder": "Entrez Zᵦ..."
                         }
                     ],
@@ -285,7 +285,7 @@
                 },
                 {
                     "id": "3.2",
-                    "question": "Calcul analytique - Pressions incidentes Pₛ₀.",
+                    "question": "Calcul analytique - Pressions incidentes Pₛ₀ et réfléchies Pᵣ.",
                     "points": 1.0,
                     "image": "/explosions_fig3.png",
                     "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
@@ -293,14 +293,26 @@
                         {
                             "id": "pso_a",
                             "label": "Pression incidente Pₛ₀ (Face A)",
-                            "points": 0.5,
+                            "points": 0.25,
                             "placeholder": "Entrez Pₛ₀ (A)..."
                         },
                         {
                             "id": "pso_b",
                             "label": "Pression incidente Pₛ₀ (Face B)",
-                            "points": 0.5,
+                            "points": 0.25,
                             "placeholder": "Entrez Pₛ₀ (B)..."
+                        },
+                        {
+                            "id": "pr_a",
+                            "label": "Pression réfléchie Pᵣ (Face A)",
+                            "points": 0.25,
+                            "placeholder": "Entrez Pᵣ (A)..."
+                        },
+                        {
+                            "id": "pr_b",
+                            "label": "Pression réfléchie Pᵣ (Face B)",
+                            "points": 0.25,
+                            "placeholder": "Entrez Pᵣ (B)..."
                         }
                     ],
                     "validation": {
@@ -314,34 +326,7 @@
                             {
                                 "label": "Pₛ₀ (B)",
                                 "value": 1.180
-                            }
-                        ]
-                    }
-                },
-                {
-                    "id": "3.3",
-                    "question": "Calcul analytique - Pressions réfléchies Pᵣ.",
-                    "points": 1.0,
-                    "image": "/explosions_fig3.png",
-                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
-                    "subQuestions": [
-                        {
-                            "id": "pr_a",
-                            "label": "Pression réfléchie Pᵣ (Face A)",
-                            "points": 0.5,
-                            "placeholder": "Entrez Pᵣ (A)..."
-                        },
-                        {
-                            "id": "pr_b",
-                            "label": "Pression réfléchie Pᵣ (Face B)",
-                            "points": 0.5,
-                            "placeholder": "Entrez Pᵣ (B)..."
-                        }
-                    ],
-                    "validation": {
-                        "type": "numeric_set",
-                        "tolerance": 0.07,
-                        "parts": [
+                            },
                             {
                                 "label": "Pᵣ (A)",
                                 "value": 3.085
@@ -354,8 +339,8 @@
                     }
                 },
                 {
-                    "id": "3.4",
-                    "question": "Calcul analytique - Durées (t₀բ) et Impulsions (iₛ, iᵣ).",
+                    "id": "3.3",
+                    "question": "Calcul analytique - Paramètres t₀բ, tᵣբ, iₛ et impulsions iᵣ.",
                     "points": 1.0,
                     "image": "/explosions_fig3.png",
                     "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
@@ -401,8 +386,8 @@
                     }
                 },
                 {
-                    "id": "3.5",
-                    "question": "Calcul analytique - Vitesses de l'onde (U) et Temps d'arrivée (tₐ).",
+                    "id": "3.4",
+                    "question": "Calcul analytique - Vitesses des ondes de choc u₀_DC.",
                     "points": 1.0,
                     "image": "/explosions_fig3.png",
                     "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
@@ -410,20 +395,8 @@
                         {
                             "id": "u_a",
                             "label": "Vitesse du choc U (Face A)",
-                            "points": 0.33,
+                            "points": 1.0,
                             "placeholder": "Entrez U (A)..."
-                        },
-                        {
-                            "id": "ta_a",
-                            "label": "Temps d'arrivée tₐ (Face A)",
-                            "points": 0.33,
-                            "placeholder": "Entrez tₐ (A)..."
-                        },
-                        {
-                            "id": "ta_b",
-                            "label": "Temps d'arrivée tₐ (Face B)",
-                            "points": 0.34,
-                            "placeholder": "Entrez tₐ (B)..."
                         }
                     ],
                     "validation": {
@@ -433,6 +406,37 @@
                             {
                                 "label": "U (A)",
                                 "value": 345.2
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "3.5",
+                    "question": "Calcul analytique - Temps d'arrivée tₐ.",
+                    "points": 1.0,
+                    "image": "/explosions_fig3.png",
+                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
+                    "subQuestions": [
+                        {
+                            "id": "ta_a",
+                            "label": "Temps d'arrivée tₐ (Face A)",
+                            "points": 0.5,
+                            "placeholder": "Entrez tₐ (A)..."
+                        },
+                        {
+                            "id": "ta_b",
+                            "label": "Temps d'arrivée tₐ (Face B)",
+                            "points": 0.5,
+                            "placeholder": "Entrez tₐ (B)..."
+                        }
+                    ],
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.07,
+                        "parts": [
+                            {
+                                "label": "tₐ (A)",
+                                "value": 5.8
                             }
                         ]
                     }
@@ -471,7 +475,7 @@
                 {
                     "id": "4.a",
                     "question": "Comparaison Analytique vs Expérimental.",
-                    "points": 0.75,
+                    "points": 0.5,
                     "validation": {
                         "type": "split_criteria",
                         "keywords": [
@@ -484,7 +488,7 @@
                 {
                     "id": "4.b",
                     "question": "Propositions de renforcement.",
-                    "points": 0.75,
+                    "points": 0.5,
                     "validation": {
                         "type": "split_criteria",
                         "keywords": [
