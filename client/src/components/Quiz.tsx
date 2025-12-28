@@ -210,20 +210,41 @@ const Quiz: React.FC = () => {
         const disciplineTimeLimit = discipline === 'explosions' ? 9000 : 3600; // 2.5 hours for explosions, 1 hour for others
         setTimeLimit(disciplineTimeLimit);
 
-        // Timer Persistence: Check for existing start time
-        const studentInfoStr = localStorage.getItem('studentInfo');
-        const student = studentInfoStr ? JSON.parse(studentInfoStr) : null;
-        const timerKey = `quiz_start_time_${discipline}_${student?.matricule || 'anonymous'}`;
-        const savedStartTime = localStorage.getItem(timerKey);
+        // Timer Persistence: Check for existing global start time from server first
+        const initTimer = async () => {
+            const studentInfoStr = localStorage.getItem('studentInfo');
+            const student = studentInfoStr ? JSON.parse(studentInfoStr) : null;
+            const timerKey = `quiz_start_time_${discipline}_${student?.matricule || 'anonymous'}`;
+            const localSavedStartTime = localStorage.getItem(timerKey);
 
-        if (savedStartTime) {
-            const elapsed = Math.floor((Date.now() - parseInt(savedStartTime)) / 1000);
-            const remaining = Math.max(0, disciplineTimeLimit - elapsed);
-            setTimeLeft(remaining);
-        } else {
-            localStorage.setItem(timerKey, Date.now().toString());
-            setTimeLeft(disciplineTimeLimit);
-        }
+            let finalStartTime = localSavedStartTime;
+
+            try {
+                const response = await fetch('/api/quiz-status');
+                const data = await response.json();
+                if (data.started && data.startTime) {
+                    // SERVER START TIME TAKES PRECEDENCE for transparency
+                    finalStartTime = data.startTime.toString();
+                    console.log("Using dynamic server start time:", new Date(data.startTime).toLocaleTimeString());
+                }
+            } catch (err) {
+                console.warn("Failed to fetch server start time, falling back to local storage.");
+            }
+
+            if (finalStartTime) {
+                const elapsed = Math.floor((Date.now() - parseInt(finalStartTime)) / 1000);
+                const remaining = Math.max(0, disciplineTimeLimit - elapsed);
+                setTimeLeft(remaining);
+                // Also update local storage to keep them in sync if it was a server time
+                localStorage.setItem(timerKey, finalStartTime);
+            } else {
+                const now = Date.now().toString();
+                localStorage.setItem(timerKey, now);
+                setTimeLeft(disciplineTimeLimit);
+            }
+        };
+
+        initTimer();
 
         const studentInfo = localStorage.getItem('studentInfo');
 
@@ -936,6 +957,8 @@ const Quiz: React.FC = () => {
                                                             )}
                                                         </label>
                                                         <textarea
+                                                            ref={el => { textareaRefs.current[subQ.id] = el; }}
+                                                            onFocus={() => setActiveTextareaId(subQ.id)}
                                                             value={(answers[currentQuestionIndex] && typeof answers[currentQuestionIndex] === 'object') ? (answers[currentQuestionIndex] as any)[subQ.id] || '' : ''}
                                                             onChange={(e) => {
                                                                 const newAnswers = [...answers];
@@ -957,6 +980,7 @@ const Quiz: React.FC = () => {
                                                 </label>
                                                 <textarea
                                                     ref={textareaRef}
+                                                    onFocus={() => setActiveTextareaId(null)}
                                                     value={answers[currentQuestionIndex] as string || ''}
                                                     onChange={(e) => handleExerciseAnswer(e.target.value)}
                                                     className="w-full p-5 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-military-green/10 focus:border-military-green text-lg transition-all shadow-inner bg-white min-h-[400px]"

@@ -13,6 +13,7 @@ app.use(express.json());
 let sessionState = {
     currentPin: '123456', // Default PIN for Dev/Testing
     isQuizStarted: true,
+    quizStartTime: null, // Store when the quiz was officially started
     participants: [],
     results: [] // Store quiz results here
 };
@@ -25,6 +26,7 @@ app.post('/api/admin/generate-pin', (req, res) => {
     const newPin = Math.floor(100000 + Math.random() * 900000).toString();
     sessionState.currentPin = newPin;
     sessionState.isQuizStarted = false;
+    sessionState.quizStartTime = null; // Reset start time
     sessionState.participants = []; // Reset participants
     sessionState.results = []; // Reset results
     console.log(`New Session Started. PIN: ${newPin}`);
@@ -48,8 +50,9 @@ app.post('/api/admin/start-quiz', (req, res) => {
         return res.status(400).json({ error: "No active session" });
     }
     sessionState.isQuizStarted = true;
-    console.log("Quiz Started!");
-    res.json({ success: true });
+    sessionState.quizStartTime = Date.now(); // Set global start time
+    console.log(`Quiz Started at ${new Date(sessionState.quizStartTime).toLocaleTimeString()}!`);
+    res.json({ success: true, startTime: sessionState.quizStartTime });
 });
 
 // Student: Validate PIN
@@ -104,7 +107,10 @@ app.post('/api/submit-quiz', (req, res) => {
 
 // Student: Check Quiz Status (Polling)
 app.get('/api/quiz-status', (req, res) => {
-    res.json({ started: sessionState.isQuizStarted });
+    res.json({
+        started: sessionState.isQuizStarted,
+        startTime: sessionState.quizStartTime
+    });
 });
 
 // Admin: Generate Test Data (for production testing)
