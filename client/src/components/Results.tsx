@@ -31,7 +31,7 @@ interface QuizResult {
     timeElapsed: number;
     discipline: string;
     timestamp: number;
-    answers: number[];
+    answers: any[];
     isPractice?: boolean; // Flag for practice quiz
 }
 
@@ -66,26 +66,42 @@ const Results: React.FC = () => {
                 // Load practice questions if this is a practice quiz
                 const fileName = parsedResult.isPractice
                     ? `${parsedResult.discipline}_practice.json`
-                    : `quiz_data_${parsedResult.discipline}.json`;
+                    : `quiz_data_${parsedResult.discipline === 'explosions' ? 'explosions_v2' : parsedResult.discipline}.json`;
                 const questionsRes = await fetch(`/${fileName}`);
                 const questionsData = await questionsRes.json();
 
                 if (questionsData.sections) {
-                    let flat: Question[] = [];
+                    let flat: any[] = [];
                     questionsData.sections.forEach((section: any) => {
-                        if (section.questions) {
-                            if (section.type === 'exercise') {
-                                // For exercises, we summarize or include the section header
+                        if (section.type === 'exercise') {
+                            // Split sub-questions into individual items (Source: Quiz.tsx line 271)
+                            const subQs = section.questions || [];
+                            subQs.forEach((subQ: any) => {
                                 flat.push({
-                                    id: section.id,
-                                    question: section.title,
+                                    ...subQ,
+                                    id: `${section.id}_${subQ.id}`,
+                                    parentId: section.id,
+                                    type: 'exercise',
+                                    question: subQ.question || section.title,
                                     options: ["(Exercice de calcul)"],
                                     correctAnswer: -1,
-                                    type: 'exercise',
-                                    detailed_solution: section.detailed_solution || section.solution
-                                } as any);
-                            } else {
-                                flat = [...flat, ...section.questions];
+                                    subQuestions: (subQ.subQuestions || []).map((atomic: any) => ({
+                                        ...atomic,
+                                        label: atomic.label || atomic.question
+                                    })),
+                                    detailed_solution: subQ.detailed_solution || subQ.solution || section.detailed_solution || section.solution
+                                });
+                            });
+                        } else {
+                            // QCM section
+                            if (section.questions) {
+                                section.questions.forEach((q: any) => {
+                                    flat.push({
+                                        ...q,
+                                        type: 'qcm',
+                                        parentId: section.id
+                                    });
+                                });
                             }
                         }
                     });
@@ -204,49 +220,93 @@ const Results: React.FC = () => {
         doc.setFontSize(10);
         const lineHeight = 6; // Height per line of text
 
-        quizQuestions.forEach((q, index) => {
+        quizQuestions.forEach((q: any, index) => {
             if (yPos > 270) {
                 doc.addPage();
                 yPos = 20;
             }
 
-            const userAnswer = result.answers[index];
-            const isCorrect = userAnswer === q.correctAnswer;
+            if (q.type === 'exercise') {
+                const studentAnswers = result.answers[index] || {};
 
-            // Question
-            doc.setTextColor(0);
-            doc.setFont("helvetica", "bold");
-            const questionText = `Q${index + 1}: ${q.question}`;
-            const questionLines = doc.splitTextToSize(questionText, 170);
-            doc.text(questionLines, 20, yPos);
-            yPos += questionLines.length * lineHeight + 2;
+                // Question Header
+                doc.setTextColor(0);
+                doc.setFont("helvetica", "bold");
+                const questionText = `Q${index + 1}: ${q.question}`;
+                const questionLines = doc.splitTextToSize(questionText, 170);
+                doc.text(questionLines, 20, yPos);
+                yPos += questionLines.length * lineHeight + 2;
 
-            // User's answer
-            doc.setFont("helvetica", "normal");
-            doc.setTextColor(isCorrect ? 0 : 200, isCorrect ? 100 : 0, 0);
-            const answerText = `Réponse: ${q.options[userAnswer]} ${isCorrect ? '(Correct)' : '(Incorrect)'}`;
-            const answerLines = doc.splitTextToSize(answerText, 165);
-            doc.text(answerLines, 25, yPos);
-            yPos += answerLines.length * lineHeight;
+                // Sub-answers for exercise
+                (q.subQuestions || []).forEach((subQ: any) => {
+                    if (yPos > 280) {
+                        doc.addPage();
+                        yPos = 20;
+                    }
+                    doc.setFont("helvetica", "normal");
+                    doc.setTextColor(100);
+                    const subQLabel = `• ${subQ.label}: `;
+                    doc.text(subQLabel, 25, yPos);
 
-            // Correction if incorrect
-            if (!isCorrect) {
-                yPos += 2;
-                doc.setTextColor(0, 100, 0);
-                const correctionText = `Correction: ${q.options?.[q.correctAnswer] || 'N/A'}`;
-                const correctionLines = doc.splitTextToSize(correctionText, 165);
-                doc.text(correctionLines, 25, yPos);
-                yPos += correctionLines.length * lineHeight;
+                    const answer = studentAnswers[subQ.id] || "Aucune réponse";
+                    doc.setTextColor(60);
+                    const answerLines = doc.splitTextToSize(answer, 130);
+                    doc.text(answerLines, 25 + doc.getTextWidth(subQLabel), yPos);
+                    yPos += Math.max(1, answerLines.length) * lineHeight;
+                });
 
+                // Detailed Solution for exercise
                 if (q.detailed_solution) {
                     yPos += 2;
+                    doc.setTextColor(0, 100, 0);
                     doc.setFont("courier", "normal");
                     doc.setFontSize(9);
-                    const detailLines = doc.splitTextToSize(`Détail: ${q.detailed_solution}`, 160);
+                    const detailLines = doc.splitTextToSize(`Solution: ${q.detailed_solution}`, 160);
                     doc.text(detailLines, 25, yPos);
                     yPos += detailLines.length * 4;
                     doc.setFont("helvetica", "normal");
                     doc.setFontSize(10);
+                }
+            } else {
+                // QCM Rendering
+                const userAnswer = result.answers[index];
+                const isCorrect = userAnswer === q.correctAnswer;
+
+                // Question
+                doc.setTextColor(0);
+                doc.setFont("helvetica", "bold");
+                const questionText = `Q${index + 1}: ${q.question}`;
+                const questionLines = doc.splitTextToSize(questionText, 170);
+                doc.text(questionLines, 20, yPos);
+                yPos += questionLines.length * lineHeight + 2;
+
+                // User's answer
+                doc.setFont("helvetica", "normal");
+                doc.setTextColor(isCorrect ? 0 : 200, isCorrect ? 100 : 0, 0);
+                const answerText = `Réponse: ${q.options?.[userAnswer] || 'N/A'} ${isCorrect ? '(Correct)' : '(Incorrect)'}`;
+                const answerLines = doc.splitTextToSize(answerText, 165);
+                doc.text(answerLines, 25, yPos);
+                yPos += answerLines.length * lineHeight;
+
+                // Correction if incorrect
+                if (!isCorrect) {
+                    yPos += 2;
+                    doc.setTextColor(0, 100, 0);
+                    const correctionText = `Correction: ${q.options?.[q.correctAnswer] || 'N/A'}`;
+                    const correctionLines = doc.splitTextToSize(correctionText, 165);
+                    doc.text(correctionLines, 25, yPos);
+                    yPos += correctionLines.length * lineHeight;
+
+                    if (q.detailed_solution) {
+                        yPos += 2;
+                        doc.setFont("courier", "normal");
+                        doc.setFontSize(9);
+                        const detailLines = doc.splitTextToSize(`Détail: ${q.detailed_solution}`, 160);
+                        doc.text(detailLines, 25, yPos);
+                        yPos += detailLines.length * 4;
+                        doc.setFont("helvetica", "normal");
+                        doc.setFontSize(10);
+                    }
                 }
             }
 

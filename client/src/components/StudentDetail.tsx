@@ -95,21 +95,44 @@ const StudentDetail: React.FC = () => {
                     // Fetch questions - load practice questions if this is a practice quiz
                     const fileName = foundResult.isPractice
                         ? `${foundResult.discipline}_practice.json`
-                        : `quiz_data_${foundResult.discipline}.json`;
+                        : `quiz_data_${foundResult.discipline === 'explosions' ? 'explosions_v2' : foundResult.discipline}.json`;
                     fetch(`/${fileName}`)
                         .then(res => res.json())
                         .then(data => {
-                            // Flatten questions if sections exist (for Explosions GC31)
+                            // Flatten questions if sections exist (matching Quiz.tsx logic)
                             if (data.sections) {
                                 let flat: Question[] = [];
                                 data.sections.forEach((section: any) => {
-                                    if (section.questions) {
-                                        // If it's an exercise section, the section itself is the "question" container
-                                        if (section.type === 'exercise') {
-                                            flat.push(section);
-                                        } else {
-                                            // QCM section
-                                            flat = [...flat, ...section.questions];
+                                    if (section.type === 'exercise') {
+                                        // Split sub-questions into individual items (Source: Quiz.tsx line 271)
+                                        const subQs = section.questions || [];
+                                        subQs.forEach((subQ: any) => {
+                                            flat.push({
+                                                ...subQ,
+                                                id: `${section.id}_${subQ.id}`,
+                                                parentId: section.id,
+                                                type: 'exercise',
+                                                title: subQ.question || section.title, // Use the prompt text as title
+                                                description: section.description,
+                                                context: section.context,
+                                                image_url: subQ.image || section.image_url,
+                                                // Map atomic fields to 'questions' with 'question' field for UI
+                                                questions: (subQ.subQuestions || []).map((atomic: any) => ({
+                                                    ...atomic,
+                                                    question: atomic.label || atomic.question
+                                                }))
+                                            } as any);
+                                        });
+                                    } else {
+                                        // QCM section
+                                        if (section.questions) {
+                                            section.questions.forEach((q: any) => {
+                                                flat.push({
+                                                    ...q,
+                                                    type: 'qcm',
+                                                    parentId: section.id
+                                                });
+                                            });
                                         }
                                     }
                                 });
