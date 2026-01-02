@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partie 03 - Analyse SDOF - Correction Détaillée</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Roboto:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #0a0a0f;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            position: relative;
+            display: none;
+            flex-direction: column;
+            padding: 60px;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(0, 217, 255, 0.03) 25%, rgba(0, 217, 255, 0.03) 26%, transparent 27%, transparent 74%, rgba(0, 217, 255, 0.03) 75%, rgba(0, 217, 255, 0.03) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(0, 217, 255, 0.03) 25%, rgba(0, 217, 255, 0.03) 26%, transparent 27%, transparent 74%, rgba(0, 217, 255, 0.03) 75%, rgba(0, 217, 255, 0.03) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .slide-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 52px;
+            font-weight: 700;
+            color: #00d9ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+            border-bottom: 3px solid #00d9ff;
+            padding-bottom: 20px;
+        }
+
+        .slide-body {
+            font-size: 20px;
+            color: #cccccc;
+            line-height: 1.8;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding-right: 20px;
+        }
+
+        .slide-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .slide-body::-webkit-scrollbar-track {
+            background: rgba(0, 217, 255, 0.1);
+        }
+
+        .slide-body::-webkit-scrollbar-thumb {
+            background: #00d9ff;
+            border-radius: 4px;
+        }
+
+        .section-header {
+            font-size: 26px;
+            font-weight: 700;
+            color: #00d9ff;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00d9ff;
+            padding-left: 15px;
+        }
+
+        .subsection-header {
+            font-size: 22px;
+            font-weight: 700;
+            color: #00d9ff;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .formula-box {
+            background: rgba(0, 217, 255, 0.1);
+            border: 2px solid #00d9ff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 19px;
+        }
+
+        .result-box {
+            background: rgba(255, 68, 68, 0.1);
+            border: 2px solid #ff4444;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 19px;
+            color: #ff4444;
+            font-weight: 700;
+        }
+
+        .note-box {
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px solid #4caf50;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 18px;
+            color: #4caf50;
+        }
+
+        .table-container {
+            background: rgba(0, 217, 255, 0.05);
+            border: 1px solid #00d9ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 18px;
+        }
+
+        th {
+            background: #00d9ff;
+            color: #1a1a2e;
+            padding: 12px;
+            text-align: left;
+            font-weight: 700;
+            border: 1px solid #00d9ff;
+        }
+
+        td {
+            padding: 10px 12px;
+            border: 1px solid #00d9ff;
+            color: #cccccc;
+        }
+
+        tr:nth-child(even) {
+            background: rgba(0, 217, 255, 0.05);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        button {
+            background: #00d9ff;
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        button:hover {
+            background: #00b8cc;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            color: #00d9ff;
+            background: rgba(0, 217, 255, 0.1);
+            padding: 10px 20px;
+            border: 2px solid #00d9ff;
+            border-radius: 4px;
+            z-index: 100;
+        }
+
+        .mjx-chtml {
+            font-size: 1.1em !important;
+        }
+
+        @media (max-width: 1024px) {
+            .slide {
+                padding: 40px;
+            }
+
+            .slide-title {
+                font-size: 40px;
+            }
+
+            .slide-body {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- SLIDE 1: TITLE -->
+        <div class="slide active">
+            <div class="slide-content">
+                <div style="text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <div class="slide-title" style="border: none; text-shadow: 0 0 30px rgba(0, 217, 255, 0.5); margin-bottom: 40px;">PARTIE 03</div>
+                    <div style="font-size: 48px; font-weight: 700; color: #ffffff; margin-bottom: 30px;">Analyse SDOF</div>
+                    <div style="font-size: 32px; color: #00d9ff; margin-bottom: 50px;">Réponse Dynamique aux Sollicitations Impulsionnelles</div>
+                    <div style="font-size: 24px; color: #cccccc;">Correction Détaillée - 3 Cas d'Analyse</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: SYSTEM PARAMETERS -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Paramètres du Système SDOF</div>
+                <div class="slide-body">
+                    <div class="section-header">Données Fournies:</div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Paramètre</th>
+                                    <th>Valeur</th>
+                                    <th>Unité</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Masse (M)</td>
+                                    <td>84,8</td>
+                                    <td>kg</td>
+                                </tr>
+                                <tr>
+                                    <td>Raideur (K)</td>
+                                    <td>5200</td>
+                                    <td>kN/m = 5,2 × 10<sup>6</sup> N/m</td>
+                                </tr>
+                                <tr>
+                                    <td>Résistance limite (R<sub>m</sub>)</td>
+                                    <td>156</td>
+                                    <td>kN = 1,56 × 10<sup>5</sup> N</td>
+                                </tr>
+                                <tr>
+                                    <td>Période naturelle (T)</td>
+                                    <td>25</td>
+                                    <td>ms = 0,025 s</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="section-header">Grandeurs Dérivées:</div>
+                    
+                    <div class="formula-box">
+                        <strong>Fréquence naturelle:</strong><br>
+                        $$\omega_n = \sqrt{\frac{K}{M}} = \sqrt{\frac{5,2 \times 10^6}{84,8}} = \sqrt{61\,327} = 247,63 \text{ rad/s}$$
+                    </div>
+
+                    <div class="formula-box">
+                        <strong>Déformation élastique limite:</strong><br>
+                        $$x_{el} = \frac{R_m}{K} = \frac{1,56 \times 10^5}{5,2 \times 10^6} = 0,03 \text{ m} = 30 \text{ mm}$$
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: CAS 01 INTRO -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Cas 01: Réponse Élastique</div>
+                <div class="slide-body">
+                    <div class="section-header">Paramètres de Sollicitation:</div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Paramètre</th>
+                                    <th>Valeur</th>
+                                    <th>Unité</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Pression maximale (P<sub>0</sub>)</td>
+                                    <td>205</td>
+                                    <td>kN</td>
+                                </tr>
+                                <tr>
+                                    <td>Durée (t<sub>0</sub>)</td>
+                                    <td>4,8</td>
+                                    <td>ms</td>
+                                </tr>
+                                <tr>
+                                    <td>Forme de charge</td>
+                                    <td colspan="2">Triangulaire</td>
+                                </tr>
+                                <tr>
+                                    <td>Rapport T/t<sub>0</sub></td>
+                                    <td>25/4,8 = 5,21</td>
+                                    <td>Impulsionnel (T/t<sub>0</sub> ≫ 1)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="note-box">
+                        <strong>✓ Régime Impulsionnel:</strong> Comme T/t₀ = 5,21 ≫ 1, la sollicitation est très courte par rapport à la période naturelle du système. La réponse dépend principalement de l'impulsion et non de la forme de la charge.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: CAS 01 STEP A -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Cas 01: Étape a) Calcul de l'Impulsion</div>
+                <div class="slide-body">
+                    <div class="section-header">Formule pour charge triangulaire:</div>
+                    <div class="formula-box">
+                        $$I = \frac{1}{2} P_0 t_0$$
+                    </div>
+
+                    <div class="section-header">Calcul:</div>
+                    <div class="formula-box">
+                        $$I = \frac{1}{2} \times 205 \times 10^3 \text{ N} \times 4,8 \times 10^{-3} \text{ s}$$
+                        $$I = \frac{1}{2} \times 984 \text{ N·s}$$
+                        $$I = 492 \text{ N·s}$$
+                    </div>
+
+                    <div class="result-box">
+                        <strong>Réponse attendue:</strong> I = 492 N·s (±1%)
+                    </div>
+
+                    <div class="note-box">
+                        <strong>Interprétation:</strong> L'impulsion de 492 N·s représente l'effet intégré de la pression sur la durée. C'est ce paramètre qui détermine principalement la réponse du système en régime impulsionnel.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: CAS 01 STEP B -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Cas 01: Étape b) Déformation Maximale</div>
+                <div class="slide-body">
+                    <div class="section-header">Formule pour régime impulsionnel (T/t₀ ≫ 1):</div>
+                    <div class="formula-box">
+                        $$x_{max} = \frac{I}{M \omega_n}$$
+                    </div>
+
+                    <div class="section-header">Calcul:</div>
+                    <div class="formula-box">
+                        $$x_{max} = \frac{492 \text{ N·s}}{84,8 \text{ kg} \times 247,63 \text{ rad/s}}$$
+                        $$x_{max} = \frac{492}{21\,010} \text{ m}$$
+                        $$x_{max} = 0,02344 \text{ m} = 23,44 \text{ mm}$$
+                    </div>
+
+                    <div class="result-box">
+                        <strong>Réponse attendue:</strong> x<sub>max</sub> = 23,44 mm (±1%)
+                    </div>
+
+                    <div class="note-box">
+                        <strong>Remarque:</strong> La déformation maximale est inversement proportionnelle à la fréquence naturelle. Un système plus rigide (ω<sub>n</sub> plus élevé) se déforme moins.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: CAS 01 STEP C -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Cas 01: Étape c) Vérification du Domaine Élastique</div>
+                <div class="slide-body">
+                    <div class="section-header">Critère d'élasticité:</div>
+                    <div class="formula-box">
+                        $$x_{max} \stackrel{?}{<} x_{el}$$
+                    </div>
+
+                    <div class="section-header">Vérification:</div>
+                    <div class="formula-box">
+                        $$23,44 \text{ mm} < 30 \text{ mm}$$ ✓
+                    </div>
+
+                    <div class="section-header">Facteur de ductilité:</div>
+                    <div class="formula-box">
+                        $$\mu = \frac{x_{max}}{x_{el}} = \frac{23,44}{30} = 0,78$$
+                    </div>
+
+                    <div class="result-box">
+                        <strong>Conclusion:</strong> Le système reste en domaine élastique avec μ = 0,78 &lt; 1. La structure se comporte comme un ressort parfait et revient à sa position initiale après la sollicitation. Aucun dommage permanent.
+                    </div>
+
+                    <div class="note-box">
+                        <strong>Barème Cas 01:</strong> Calcul d'impulsion (0,5 pts) + Déformation (0,5 pts) + Domaine (0,5 pts) = <strong>1,5 pts</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: CAS 02 INTRO -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Cas 02: Réponse Plastique (t₀ = 24 ms)</div>
+                <div class="slide-body">
+                    <div class="section-header">Paramètres de Sollicitation:</div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Paramètre</th>
+                                    <th>Valeur</th>
+                                    <th>Unité</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Pression maximale (P<sub>0</sub>)</td>
+                                    <td>200</td>
+                                    <td>kN</td>
+                                </tr>
+                                <tr>
+                                    <td>Durée (t<sub>0</sub>)</td>
+                                    <td>24</td>
+                                    <td>ms</td>
+                                </tr>
+                                <tr>
+                                    <td>Forme de charge</td>
+                                    <td colspan="2">Triangulaire</td>
+                                </tr>
+                                <tr>
+                                    <td>Rapport T/t<sub>0</sub></td>
+                                    <td>25/24 = 1,04</td>
+                                    <td>Quasi-statique (T/t<sub>0</sub> ≈ 1)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="note-box">
+                        <strong>⚠ Régime Quasi-Statique:</strong> Comme T/t₀ ≈ 1, la durée de la sollicitation est comparable à la période naturelle. La réponse dépend à la fois de l'impulsion et de la forme de la charge. Le système peut potentiellement entrer en domaine plastique.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: CAS 02 STEP A -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Cas 02: Étape a) Calcul de l'Impulsion</div>
+                <div class="slide-body">
+                    <div class="section-header">Formule pour charge triangulaire:</div>
+                    <div class="formula-box">
+                        $$I = \frac{1}{2} P_0 t_0$$
+                    </div>
+
+                    <div class="section-header">Calcul:</div>
+                    <div class="formula-box">
+                        $$I = \frac{1}{2} \times 200 \times 10^3 \text{ N} \times 24 \times 10^{-3} \text{ s}$$
+                        $$I = \frac{1}{2} \times 4800 \text{ N·s}$$
+                        $$I = 2400 \text{ N·s}$$
+                    </div>
+
+                    <div class="result-box">
+                        <strong>Réponse attendue:</strong> I = 2400 N·s (±1%)
+                    </div>
+
+                    <div class="note-box">
+                        <strong>Comparaison avec Cas 01:</strong> L'impulsion du Cas 02 (2400 N·s) est 4,88 fois plus élevée que celle du Cas 01 (492 N·s). Bien que P₀ soit légèrement plus faible (200 vs 205 kN), la durée beaucoup plus longue (24 vs 4,8 ms) augmente considérablement l'impulsion.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: CAS 02 STEP B -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Cas 02: Étape b) Déformation Maximale</div>
+                <div class="slide-body">
+                    <div class="section-header">Formule (même formule que Cas 01):</div>
+                    <div class="formula-box">
+                        $$x_{max} = \frac{I}{M \omega_n}$$
+                    </div>
+
+                    <div class="section-header">Calcul:</div>
+                    <div class="formula-box">
+                        $$x_{max} = \frac{2400 \text{ N·s}}{84,8 \text{ kg} \times 247,63 \text{ rad/s}}$$
+                        $$x_{max} = \frac{2400}{21\,010} \text{ m}$$
+                        $$x_{max} = 0,11435 \text{ m} = 114,35 \text{ mm}$$
+                    </div>
+
+                    <div class="result-box">
+                        <strong>Réponse attendue:</strong> x<sub>max</sub> = 114,35 mm (±1%)
+                    </div>
+
+                    <div class="note-box">
+                        <strong>Augmentation significative:</strong> La déformation du Cas 02 (114,35 mm) est 4,88 fois plus élevée que celle du Cas 01 (23,44 mm), proportionnellement à l'augmentation de l'impulsion. Cette augmentation massive indique une transition vers le domaine plastique.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: CAS 02 STEP C -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Cas 02: Étape c) Vérification du Domaine Plastique</div>
+                <div class="slide-body">
+                    <div class="section-header">Critère de plastification:</div>
+                    <div class="formula-box">
+                        $$x_{max} \stackrel{?}{>} x_{el}$$
+                    </div>
+
+                    <div class="section-header">Vérification:</div>
+                    <div class="formula-box">
+                        $$114,35 \text{ mm} > 30 \text{ mm}$$ ✓
+                    </div>
+
+                    <div class="section-header">Facteur de ductilité:</div>
+                    <div class="formula-box">
+                        $$\mu = \frac{x_{max}}{x_{el}} = \frac{114,35}{30} = 3,81$$
+                    </div>
+
+                    <div class="result-box">
+                        <strong>Conclusion:</strong> Le système entre en domaine plastique avec μ = 3,81. La structure doit se déformer plastiquement d'un facteur 3,81 fois sa limite élastique pour accommoder l'impulsion appliquée. Cela indique une déformation plastique significative et des dommages permanents potentiels.
+                    </div>
+
+                    <div class="note-box">
+                        <strong>Barème Cas 02:</strong> Calcul d'impulsion (0,5 pts) + Déformation (0,5 pts) + Domaine et μ (0,5 pts) = <strong>1,5 pts</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 11: CAS 03 INTRO -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Cas 03: Réponse Plastique (t₀ = 40 ms)</div>
+                <div class="slide-body">
+                    <div class="section-header">Paramètres de Sollicitation:</div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Paramètre</th>
+                                    <th>Valeur</th>
+                                    <th>Unité</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Pression maximale (P<sub>0</sub>)</td>
+                                    <td>150</td>
+                                    <td>kN</td>
+                                </tr>
+                                <tr>
+                                    <td>Durée (t<sub>0</sub>)</td>
+                                    <td>40</td>
+                                    <td>ms</td>
+                                </tr>
+                                <tr>
+                                    <td>Forme de charge</td>
+                                    <td colspan="2">Triangulaire</td>
+                                </tr>
+                                <tr>
+                                    <td>Rapport T/t<sub>0</sub></td>
+                                    <td>25/40 = 0,625</td>
+                                    <td>Quasi-statique (t<sub>0</sub> > T)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="note-box">
+                        <strong>⚠ Régime Quasi-Statique Extrême:</strong> Comme T/t₀ = 0,625 &lt; 1, la durée de la sollicitation est plus longue que la période naturelle. C'est le régime le plus proche du quasi-statique. Le système a le temps d'osciller plusieurs fois pendant la sollicitation.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 12: CAS 03 STEP A -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Cas 03: Étape a) Calcul de l'Impulsion</div>
+                <div class="slide-body">
+                    <div class="section-header">Formule pour charge triangulaire:</div>
+                    <div class="formula-box">
+                        $$I = \frac{1}{2} P_0 t_0$$
+                    </div>
+
+                    <div class="section-header">Calcul:</div>
+                    <div class="formula-box">
+                        $$I = \frac{1}{2} \times 150 \times 10^3 \text{ N} \times 40 \times 10^{-3} \text{ s}$$
+                        $$I = \frac{1}{2} \times 6000 \text{ N·s}$$
+                        $$I = 3000 \text{ N·s}$$
+                    </div>
+
+                    <div class="result-box">
+                        <strong>Réponse attendue:</strong> I = 3000 N·s (±1%)
+                    </div>
+
+                    <div class="note-box">
+                        <strong>Comparaison:</strong> L'impulsion du Cas 03 (3000 N·s) est la plus élevée des trois cas, même si P₀ est la plus faible (150 kN). La durée très longue (40 ms) compense la pression plus faible.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 13: CAS 03 STEP B -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Cas 03: Étape b) Déformation Maximale</div>
+                <div class="slide-body">
+                    <div class="section-header">Formule (même formule que Cas 01 et 02):</div>
+                    <div class="formula-box">
+                        $$x_{max} = \frac{I}{M \omega_n}$$
+                    </div>
+
+                    <div class="section-header">Calcul:</div>
+                    <div class="formula-box">
+                        $$x_{max} = \frac{3000 \text{ N·s}}{84,8 \text{ kg} \times 247,63 \text{ rad/s}}$$
+                        $$x_{max} = \frac{3000}{21\,010} \text{ m}$$
+                        $$x_{max} = 0,14295 \text{ m} = 142,95 \text{ mm}$$
+                    </div>
+
+                    <div class="result-box">
+                        <strong>Réponse attendue:</strong> x<sub>max</sub> = 142,95 mm (±1%)
+                    </div>
+
+                    <div class="note-box">
+                        <strong>Déformation maximale:</strong> La déformation du Cas 03 (142,95 mm) est la plus élevée des trois cas. Elle est 6,10 fois plus élevée que celle du Cas 01 et 1,25 fois plus élevée que celle du Cas 02.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 14: CAS 03 STEP C -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Cas 03: Étape c) Vérification du Domaine Plastique</div>
+                <div class="slide-body">
+                    <div class="section-header">Critère de plastification:</div>
+                    <div class="formula-box">
+                        $$x_{max} \stackrel{?}{>} x_{el}$$
+                    </div>
+
+                    <div class="section-header">Vérification:</div>
+                    <div class="formula-box">
+                        $$142,95 \text{ mm} > 30 \text{ mm}$$ ✓
+                    </div>
+
+                    <div class="section-header">Facteur de ductilité:</div>
+                    <div class="formula-box">
+                        $$\mu = \frac{x_{max}}{x_{el}} = \frac{142,95}{30} = 4,77$$
+                    </div>
+
+                    <div class="result-box">
+                        <strong>Conclusion:</strong> Le système entre en domaine plastique avec μ = 4,77. C'est le facteur de ductilité le plus élevé des trois cas. La structure subit une déformation plastique très importante et nécessiterait un renforcement significatif ou une redesign pour survivre à cette sollicitation sans s'effondrer.
+                    </div>
+
+                    <div class="note-box">
+                        <strong>Barème Cas 03:</strong> Calcul d'impulsion (0,5 pts) + Déformation (0,5 pts) + Domaine et μ (0,5 pts) = <strong>1,5 pts</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 15: SUMMARY TABLE -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Tableau Récapitulatif</div>
+                <div class="slide-body">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cas</th>
+                                    <th>P<sub>0</sub> (kN)</th>
+                                    <th>t<sub>0</sub> (ms)</th>
+                                    <th>I (N·s)</th>
+                                    <th>x<sub>max</sub> (mm)</th>
+                                    <th>x<sub>el</sub> (mm)</th>
+                                    <th>Domaine</th>
+                                    <th>μ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>01</td>
+                                    <td>205</td>
+                                    <td>4,8</td>
+                                    <td>492</td>
+                                    <td>23,44</td>
+                                    <td>30</td>
+                                    <td>Élastique</td>
+                                    <td>0,78</td>
+                                </tr>
+                                <tr>
+                                    <td>02</td>
+                                    <td>200</td>
+                                    <td>24</td>
+                                    <td>2400</td>
+                                    <td>114,35</td>
+                                    <td>30</td>
+                                    <td>Plastique</td>
+                                    <td>3,81</td>
+                                </tr>
+                                <tr>
+                                    <td>03</td>
+                                    <td>150</td>
+                                    <td>40</td>
+                                    <td>3000</td>
+                                    <td>142,95</td>
+                                    <td>30</td>
+                                    <td>Plastique</td>
+                                    <td>4,77</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="note-box">
+                        <strong>Observations clés:</strong><br>
+                        • L'impulsion augmente avec la durée de la sollicitation<br>
+                        • La déformation maximale est directement proportionnelle à l'impulsion<br>
+                        • Cas 01: Régime impulsionnel (T/t₀ = 5,21) → Domaine élastique<br>
+                        • Cas 02: Régime quasi-statique (T/t₀ = 1,04) → Domaine plastique<br>
+                        • Cas 03: Régime quasi-statique extrême (T/t₀ = 0,625) → Domaine plastique sévère
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 16: CONCLUSIONS -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Conclusions et Interprétations</div>
+                <div class="slide-body">
+                    <div class="section-header">Cas 01 - Régime Impulsionnel:</div>
+                    <div class="note-box">
+                        Le système reste en domaine élastique (μ = 0,78). La structure se comporte comme un ressort et revient à sa position initiale. Aucun dommage permanent. Ce régime est caractéristique des explosions très brèves où l'énergie est concentrée dans une courte durée.
+                    </div>
+
+                    <div class="section-header">Cas 02 - Régime Quasi-Statique Modéré:</div>
+                    <div class="note-box">
+                        Le système entre en domaine plastique (μ = 3,81). La structure subit une déformation plastique significative avec dommages permanents potentiels. La durée de la sollicitation (24 ms) est comparable à la période naturelle (25 ms), ce qui amplifie la réponse.
+                    </div>
+
+                    <div class="section-header">Cas 03 - Régime Quasi-Statique Extrême:</div>
+                    <div class="note-box">
+                        Le système entre en domaine plastique sévère (μ = 4,77). La structure subit une déformation plastique très importante et risque de s'effondrer si elle n'a pas une ductilité suffisante. Ce régime représente le scénario le plus critique pour la structure.
+                    </div>
+
+                    <div class="section-header">Recommandation Générale:</div>
+                    <div class="result-box">
+                        Pour survivre à ces trois cas de sollicitation, la structure doit avoir une ductilité d'au moins μ = 4,77 (Cas 03). Un renforcement ou une redesign est nécessaire pour les Cas 02 et 03.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">16</span>
+    </div>
+
+    <div class="controls">
+        <button onclick="previousSlide()">← Précédent</button>
+        <button onclick="nextSlide()">Suivant →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+            if (e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
