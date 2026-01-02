@@ -241,10 +241,8 @@ const StudentDetail: React.FC = () => {
     if (!result) return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
 
     const generateReport = async () => {
-        if (!result) return;
+        if (!result || !result.student || result.scoreOn20 === undefined) return;
         const doc = new jsPDF();
-
-
 
         const loadImage = (src: string): Promise<string> => {
             return new Promise((resolve, reject) => {
@@ -291,7 +289,7 @@ const StudentDetail: React.FC = () => {
         doc.setFontSize(22);
         doc.setFont("times", "italic");
         doc.setTextColor(200, 0, 0);
-        doc.text(`${result.scoreOn20.toFixed(1)}/20`, 180, 42, { align: "center", angle: 15 });
+        doc.text(`${result!.scoreOn20.toFixed(1)}/20`, 180, 42, { align: "center", angle: 15 });
 
         // Signature
         if (signatureDataUrl) {
@@ -311,16 +309,16 @@ const StudentDetail: React.FC = () => {
         doc.setFontSize(14);
         doc.setFont("helvetica", "bold");
         doc.setTextColor(200, 0, 0);
-        doc.text(`Nom: ${result.student.grade} ${result.student.name}`, 20, 70);
+        doc.text(`Nom: ${result!.student.grade} ${result!.student.name}`, 20, 70);
 
         doc.setTextColor(0);
         doc.setFont("helvetica", "normal");
-        doc.text(`Classe: ${result.student.className}`, 20, 78);
-        doc.text(`Matricule: ${result.student.matricule}`, 20, 86);
+        doc.text(`Classe: ${result!.student.className}`, 20, 78);
+        doc.text(`Matricule: ${result!.student.matricule}`, 20, 86);
 
-        doc.text(`Discipline: ${result.discipline.toUpperCase()}`, 140, 70);
-        doc.text(`Score: ${result.scoreOn20.toFixed(2)}/20`, 140, 78);
-        doc.text(`Date: ${new Date(result.timestamp).toLocaleDateString()}`, 140, 86);
+        doc.text(`Discipline: ${result!.discipline.toUpperCase()}`, 140, 70);
+        doc.text(`Score: ${result!.scoreOn20.toFixed(2)}/20`, 140, 78);
+        doc.text(`Date: ${new Date(result!.timestamp).toLocaleDateString()}`, 140, 86);
 
         let yPos = 110;
         doc.setFontSize(16);
@@ -417,7 +415,7 @@ const StudentDetail: React.FC = () => {
         };
 
         // Mention Interactive Correction for Sequence 3
-        if (result.discipline === 'explosions') {
+        if (result!.discipline === 'explosions') {
             doc.setFont("helvetica", "bold");
             doc.setTextColor(79, 70, 229);
             const noteText = "NOTE: Une correction interactive détaillée pour les Séquences 1, 2 et 3 est disponible sur la plateforme (OAMA Plateform).";
@@ -452,7 +450,7 @@ const StudentDetail: React.FC = () => {
             yPos += 4;
 
             if (isExercise) {
-                const studentAnswers = result.answers[index] || {};
+                const studentAnswers = result!.answers[index] || {};
                 (q.subQuestions || []).forEach((subQ: any) => {
                     if (yPos > 260) { doc.addPage(); yPos = 20; }
 
@@ -478,7 +476,7 @@ const StudentDetail: React.FC = () => {
                 });
 
                 if (q.detailed_solution || q.solution) {
-                    if (result.discipline === 'explosions') {
+                    if (result!.discipline === 'explosions') {
                         if (yPos > 250) { doc.addPage(); yPos = 20; }
                         doc.setFillColor(240, 253, 244);
                         doc.setDrawColor(22, 163, 74);
@@ -504,7 +502,7 @@ const StudentDetail: React.FC = () => {
                     }
                 }
             } else {
-                const userAnswer = result.answers[index];
+                const userAnswer = result!.answers[index];
                 const isCorrect = userAnswer === q.correctAnswer;
 
                 const optionText = sanitizeSymbols(q.options?.[userAnswer] || 'N/A');
@@ -524,7 +522,7 @@ const StudentDetail: React.FC = () => {
                 yPos = finalY + 4;
 
                 if (!isCorrect) {
-                    if (result.discipline === 'explosions') {
+                    if (result!.discipline === 'explosions') {
                         if (yPos > 260) { doc.addPage(); yPos = 20; }
                         doc.setFillColor(240, 253, 244);
                         doc.setDrawColor(22, 163, 74);
@@ -547,7 +545,7 @@ const StudentDetail: React.FC = () => {
             yPos += 6;
         });
 
-        doc.save(`Rapport_Complet_${result.student.grade}_${result.student.name.replace(/\s+/g, '_')}.pdf`);
+        doc.save(`Rapport_Complet_${result!.student.grade}_${result!.student.name.replace(/\s+/g, '_')}.pdf`);
     };
 
 
