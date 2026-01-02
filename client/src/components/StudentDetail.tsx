@@ -625,7 +625,7 @@ const StudentDetail: React.FC = () => {
                                                 <div className="bg-gray-50 p-3 rounded text-sm text-gray-700 italic border border-gray-200">
                                                     {q.description}
                                                     {q.image_url && (
-                                                        <div className="mt-2 text-center">
+                                                        <div className="mt-2 text-center overflow-hidden flex flex-col items-center">
                                                             <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-1 italic">Vues et traces de l'élève</p>
                                                             <ImageZoom
                                                                 src={q.image_url}

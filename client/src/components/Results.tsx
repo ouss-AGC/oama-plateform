@@ -243,16 +243,18 @@ const Results: React.FC = () => {
                         doc.addPage();
                         yPos = 20;
                     }
-                    doc.setFont("helvetica", "normal");
-                    doc.setTextColor(100);
+                    doc.setFont("helvetica", "bold");
+                    doc.setTextColor(80);
                     const subQLabel = `• ${subQ.label}: `;
                     doc.text(subQLabel, 25, yPos);
+                    yPos += lineHeight; // Next line for answer
 
                     const answer = studentAnswers[subQ.id] || "Aucune réponse";
+                    doc.setFont("helvetica", "normal");
                     doc.setTextColor(60);
-                    const answerLines = doc.splitTextToSize(answer, 130);
-                    doc.text(answerLines, 25 + doc.getTextWidth(subQLabel), yPos);
-                    yPos += Math.max(1, answerLines.length) * lineHeight;
+                    const answerLines = doc.splitTextToSize(answer, 160);
+                    doc.text(answerLines, 30, yPos);
+                    yPos += Math.max(1, answerLines.length) * lineHeight + 2;
                 });
 
                 // Detailed Solution for exercise

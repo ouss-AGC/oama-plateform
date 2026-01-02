@@ -168,7 +168,7 @@ const ImageZoom: React.FC<ImageZoomProps> = ({ src, alt, className, lines, onLin
                 <img
                     src={src}
                     alt={alt}
-                    className="rounded-lg shadow-sm hover:shadow-md transition-shadow max-w-full h-auto"
+                    className="rounded-lg shadow-sm hover:shadow-md transition-shadow max-w-full max-h-full h-auto object-contain"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100">
                     <ZoomIn className="text-white drop-shadow-md" size={32} />
