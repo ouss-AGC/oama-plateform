@@ -523,16 +523,27 @@ const Results: React.FC = () => {
                         </button>
 
                         {result.discipline === 'explosions' && (
-                            <div className="flex space-x-3">
+                            <div className="flex flex-col sm:flex-row gap-4 mb-4">
                                 <button
                                     onClick={() => setActiveCorrection({
                                         url: '/resources/Sequence_1_MCQ_Correction_Interactive.html',
                                         title: 'Séquence 1 : QCM Détonique'
                                     })}
-                                    className="flex items-center space-x-2 px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition-colors border border-indigo-200"
+                                    className="px-6 py-3 rounded-lg bg-indigo-600 text-white font-bold hover:bg-indigo-700 flex items-center justify-center shadow-md transition-colors"
                                 >
-                                    <BookOpen className="w-4 h-4" />
-                                    <span>Correction Séquence 1</span>
+                                    <BookOpen className="w-5 h-5 mr-2" />
+                                    Correction Séquence 1
+                                </button>
+
+                                <button
+                                    onClick={() => setActiveCorrection({
+                                        url: '/resources/Sequence_2_Partie02_Correction_Interactive.html',
+                                        title: 'Séquence 2 : Partie 02 - Problème Pratique'
+                                    })}
+                                    className="px-6 py-3 rounded-lg bg-indigo-600 text-white font-bold hover:bg-indigo-700 flex items-center justify-center shadow-md transition-colors"
+                                >
+                                    <BookOpen className="w-5 h-5 mr-2" />
+                                    Correction Séquence 2
                                 </button>
 
                                 <button
@@ -540,10 +551,10 @@ const Results: React.FC = () => {
                                         url: '/resources/SDOF_Correction_Interactive.html',
                                         title: 'Séquence 3 : Analyse SDOF'
                                     })}
-                                    className="flex items-center space-x-2 px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition-colors border border-indigo-200"
+                                    className="px-6 py-3 rounded-lg bg-indigo-600 text-white font-bold hover:bg-indigo-700 flex items-center justify-center shadow-md transition-colors"
                                 >
-                                    <BookOpen className="w-4 h-4" />
-                                    <span>Correction Séquence 3</span>
+                                    <BookOpen className="w-5 h-5 mr-2" />
+                                    Correction Séquence 3
                                 </button>
                             </div>
                         )}

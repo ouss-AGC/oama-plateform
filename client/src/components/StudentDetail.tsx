@@ -554,6 +554,17 @@ const StudentDetail: React.FC = () => {
 
                                 <button
                                     onClick={() => setActiveCorrection({
+                                        url: '/resources/Sequence_2_Partie02_Correction_Interactive.html',
+                                        title: 'Séquence 2 : Partie 02 - Problème Pratique'
+                                    })}
+                                    className="flex items-center space-x-2 px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition-colors border border-indigo-200"
+                                >
+                                    <BookOpen className="w-4 h-4" />
+                                    <span className="text-xs font-medium">Corr. S2</span>
+                                </button>
+
+                                <button
+                                    onClick={() => setActiveCorrection({
                                         url: '/resources/SDOF_Correction_Interactive.html',
                                         title: 'Séquence 3 : Analyse SDOF'
                                     })}
