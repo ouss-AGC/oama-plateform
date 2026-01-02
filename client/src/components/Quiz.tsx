@@ -1242,6 +1242,9 @@ const symbolCategories = [
             { label: "q₀", value: "q₀" },
             { label: "Zₐ", value: "Zₐ" },
             { label: "Zᵦ", value: "Zᵦ" },
+            { label: "Cᵣ", value: "Cᵣ" },
+            { label: "ρ", value: "ρ" },
+            { label: "D", value: "D" },
             { label: "W", value: "W" },
             { label: "R", value: "R" }
         ]
@@ -1254,6 +1257,9 @@ const symbolCategories = [
             { label: "μ", value: "μ" },
             { label: "τ", value: "τ" },
             { label: "ωₙ", value: "ωₙ" },
+            { label: "ξ", value: "ξ" },
+            { label: "Z*", value: "Z*" },
+            { label: "f", value: "f" },
             { label: "M", value: "M" },
             { label: "K", value: "K" },
             { label: "Rₘ", value: "Rₘ" },
@@ -1274,7 +1280,8 @@ const symbolCategories = [
             { label: "√", value: "√(" },
             { label: "Δ", value: "Δ" },
             { label: "±", value: " ± " },
-            { label: "²", value: "²" }
+            { label: "²", value: "²" },
+            { label: "³", value: "³" }
         ]
     },
     {
@@ -1289,7 +1296,9 @@ const symbolCategories = [
             { label: "mm", value: " mm" },
             { label: "s", value: " s" },
             { label: "m/s", value: " m/s" },
-            { label: "kPa.ms", value: " kPa.ms" }
+            { label: "kPa.ms", value: " kPa.ms" },
+            { label: "m/kg¹/³", value: " m/kg¹/³" },
+            { label: "Hz", value: " Hz" }
         ]
     }
 ];

@@ -234,6 +234,11 @@ const Results: React.FC = () => {
                 .replace(/Zᵦ/g, 'Zb')
                 .replace(/Z\*/g, 'Z*')
                 .replace(/Pᵣ/g, 'Pr')
+                .replace(/Cᵣ/g, 'Cr')
+                .replace(/ρ/g, 'rho')
+                .replace(/ξ/g, 'xi')
+                .replace(/³/g, '^3')
+                .replace(/¹\/³/g, '^1/3') // Handle the fraction properly
                 .replace(/q₀/g, 'q0');
         };
 
