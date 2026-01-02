@@ -154,10 +154,10 @@ const StudentDetail: React.FC = () => {
             });
     }, [navigate, timestamp]);
 
-    const handleScoreChange = (questionId: string | number, score: number) => {
+    const handleScoreChange = (key: string, score: number) => {
         setManualScores(prev => ({
             ...prev,
-            [questionId]: score
+            [key]: score
         }));
     };
 
@@ -171,20 +171,17 @@ const StudentDetail: React.FC = () => {
 
         quizQuestions.forEach((q, index) => {
             if (q.type === 'exercise') {
-                // Exercise scoring
-                const maxPoints = q.questions?.reduce((sum, subQ) => sum + subQ.points, 0) || 0;
-                totalPoints += maxPoints; // Add to total possible points (weighted?)
-                // Actually, for mixed exams, we need to know the weight of QCM vs Exercises.
-                // Assuming QCMs are 0.5 pts each as per description in JSON.
-                // And Exercises have specific points.
-
-                // However, the current system calculates scoreOn20 based on QCM count.
-                // We need a more robust scoring system for mixed content.
-
-                // Let's assume manualScores contains the total score for the exercise
-                const exerciseScore = manualScores[q.id] || 0;
-                earnedPoints += exerciseScore;
-
+                // Exercise scoring - sum up granular manual scores
+                const subQuestions = q.questions || [];
+                let exerciseEarned = 0;
+                let exerciseMax = 0;
+                subQuestions.forEach(sq => {
+                    const key = `${q.id}_${sq.id}`;
+                    exerciseEarned += manualScores[key] || 0;
+                    exerciseMax += sq.points;
+                });
+                earnedPoints += exerciseEarned;
+                totalPoints += exerciseMax; // Add to total possible points for the exercise
             } else {
                 // QCM scoring
                 totalPoints += 0.5; // Assuming 0.5 per QCM as per JSON
@@ -375,10 +372,10 @@ const StudentDetail: React.FC = () => {
             doc.text(questionLines, 20, yPos);
 
             if (isExercise) {
-                const score = manualScores[q.id] !== undefined ? manualScores[q.id] : 0;
+                const subScoreSum = (q.questions || []).reduce((sum, sq) => sum + (manualScores[`${q.id}_${sq.id}`] || 0), 0);
                 const maxPoints = q.questions?.reduce((sum, sq) => sum + sq.points, 0) || 0;
                 doc.setTextColor(100, 100, 100);
-                doc.text(`${score} / ${maxPoints} pts`, 160, yPos);
+                doc.text(`${subScoreSum.toFixed(2)} / ${maxPoints} pts`, 160, yPos);
             }
 
             yPos += questionLines.length * lineHeight + 4;
@@ -390,7 +387,8 @@ const StudentDetail: React.FC = () => {
 
                     doc.setFont("helvetica", "normal");
                     doc.setTextColor(0);
-                    const qSubText = sanitizeSymbols(`- ${subQ.question}`);
+                    const qSubScore = manualScores[`${q.id}_${subQ.id}`] || 0;
+                    const qSubText = sanitizeSymbols(`- ${subQ.question} (${qSubScore}/${subQ.points})`);
                     const qSubLines = doc.splitTextToSize(qSubText, 170);
                     doc.text(qSubLines, 25, yPos);
                     yPos += qSubLines.length * 5 + 2;
@@ -666,7 +664,11 @@ const StudentDetail: React.FC = () => {
                                     // Exercise Rendering
                                     const studentAnswers = result.answers[index] || {};
                                     const maxPoints = q.questions?.reduce((sum, subQ) => sum + subQ.points, 0) || 0;
-                                    const currentScore = manualScores[q.id] !== undefined ? manualScores[q.id] : 0;
+
+                                    // Calculate total exercise score from sub-questions
+                                    const currentScore = (q.questions || []).reduce((sum, sq) => {
+                                        return sum + (manualScores[`${q.id}_${sq.id}`] || 0);
+                                    }, 0);
 
                                     return (
                                         <div key={index} className="border border-blue-200 rounded-lg overflow-hidden">
@@ -676,22 +678,9 @@ const StudentDetail: React.FC = () => {
                                                     <div className="flex items-center space-x-2 mt-1">
                                                         <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded border border-blue-200 flex items-center">
                                                             <CheckCircle className="w-3 h-3 mr-1" />
-                                                            Note Auto: {currentScore} / {maxPoints}
+                                                            Total Exercice: {currentScore.toFixed(2)} / {maxPoints}
                                                         </span>
                                                     </div>
-                                                </div>
-                                                <div className="flex items-center space-x-2">
-                                                    <span className="text-sm font-medium text-blue-800">Note:</span>
-                                                    <input
-                                                        type="number"
-                                                        min="0"
-                                                        max={maxPoints}
-                                                        step="0.25"
-                                                        value={currentScore}
-                                                        onChange={(e) => handleScoreChange(q.id, parseFloat(e.target.value))}
-                                                        className="w-20 p-1 border border-blue-300 rounded text-center font-bold"
-                                                    />
-                                                    <span className="text-sm text-blue-800">/ {maxPoints} pts</span>
                                                 </div>
                                             </div>
                                             <div className="p-4 space-y-4">
@@ -717,7 +706,21 @@ const StudentDetail: React.FC = () => {
                                                         <div key={subQ.id} className="border-l-4 border-gray-300 pl-4 py-2">
                                                             <div className="flex justify-between items-start mb-1">
                                                                 <p className="font-semibold text-gray-800">{subQ.question}</p>
-                                                                <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full whitespace-nowrap">{subQ.points} pts</span>
+                                                                <div className="flex items-center space-x-2">
+                                                                    <div className="flex items-center bg-white px-2 py-1 rounded border border-gray-200 shadow-sm">
+                                                                        <span className="text-[10px] font-bold text-gray-400 mr-2 uppercase">Note:</span>
+                                                                        <input
+                                                                            type="number"
+                                                                            min="0"
+                                                                            max={subQ.points}
+                                                                            step="0.1"
+                                                                            value={manualScores[`${q.id}_${subQ.id}`] || 0}
+                                                                            onChange={(e) => handleScoreChange(`${q.id}_${subQ.id}`, parseFloat(e.target.value))}
+                                                                            className="w-12 text-center text-sm font-bold text-military-green border-none focus:ring-0 p-0"
+                                                                        />
+                                                                        <span className="text-[10px] font-bold text-gray-400 ml-1">/ {subQ.points}</span>
+                                                                    </div>
+                                                                </div>
                                                             </div>
 
                                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
