@@ -358,10 +358,12 @@ const StudentDetail: React.FC = () => {
                     yPos += qLines.length * 5;
 
                     const answerText = studentAnswers[subQ.id] || "(Aucune réponse)";
+                    doc.setFont("courier", "normal");
                     const aLines = doc.splitTextToSize(`Rép: ${answerText}`, 160);
                     doc.setTextColor(80, 80, 80);
                     doc.text(aLines, 30, yPos);
                     yPos += aLines.length * 5 + 2;
+                    doc.setFont("helvetica", "normal");
                 });
 
                 // Show Correction Context if available

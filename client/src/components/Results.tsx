@@ -250,7 +250,7 @@ const Results: React.FC = () => {
                     yPos += lineHeight; // Next line for answer
 
                     const answer = studentAnswers[subQ.id] || "Aucune réponse";
-                    doc.setFont("helvetica", "normal");
+                    doc.setFont("courier", "normal");
                     doc.setTextColor(60);
                     const answerLines = doc.splitTextToSize(answer, 160);
                     doc.text(answerLines, 30, yPos);
