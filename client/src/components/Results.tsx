@@ -224,7 +224,7 @@ const Results: React.FC = () => {
                 .replace(/xₑₗ/g, 'x_el')
                 .replace(/xₘₐₓ/g, 'x_max')
                 .replace(/xₘ/g, 'x_max')
-                .replace(/Pₛ₀/g, 'Ps0')
+                .replace(/Pₛ₀/g, 'P_s0')
                 .replace(/p₀/g, 'p0')
                 .replace(/tₐ/g, 'ta')
                 .replace(/t₀/g, 't0')
@@ -234,11 +234,12 @@ const Results: React.FC = () => {
                 .replace(/Zᵦ/g, 'Zb')
                 .replace(/Z\*/g, 'Z*')
                 .replace(/Pᵣ/g, 'Pr')
-                .replace(/Cᵣ/g, 'Cr')
+                .replace(/Cᵣ/g, 'C_r')
                 .replace(/ρ/g, 'rho')
                 .replace(/ξ/g, 'xi')
                 .replace(/³/g, '^3')
-                .replace(/¹\/³/g, '^1/3') // Handle the fraction properly
+                .replace(/m\/kg¹\/³/g, 'm/kg^(1/3)') // Explicit unit fix
+                .replace(/¹\/³/g, '^(1/3)')
                 .replace(/q₀/g, 'q0');
         };
 
@@ -246,7 +247,7 @@ const Results: React.FC = () => {
         if (result.discipline === 'explosions') {
             doc.setFont("helvetica", "bold");
             doc.setTextColor(79, 70, 229); // Indigo
-            const noteText = "NOTE: Une correction interactive détaillée pour les Séquences 1 et 3 est disponible sur la plateforme (OAMA Plateform).";
+            const noteText = "NOTE: Une correction interactive détaillée pour les Séquences 1, 2 et 3 est disponible sur la plateforme (OAMA Plateform).";
             const noteLines = doc.splitTextToSize(noteText, 175);
             doc.text(noteLines, 20, yPos);
             yPos += (noteLines.length * 7) + 2;
@@ -282,20 +283,21 @@ const Results: React.FC = () => {
                     doc.setTextColor(80);
                     const subQLabel = sanitizeSymbols(`• ${subQ.label}: `);
                     doc.text(subQLabel, 25, yPos);
-                    yPos += 6;
+                    yPos += 7;
 
                     const answer = sanitizeSymbols(studentAnswers[subQ.id] || "Aucune réponse");
                     const answerLines = doc.splitTextToSize(answer, 150);
 
-                    // Draw box for answer
-                    const boxHeight = (answerLines.length * lineHeight) + 4;
+                    // Draw box for answer - Corrected height calculation
+                    const boxHeight = (answerLines.length * 7) + 6;
                     doc.setDrawColor(200);
                     doc.setFillColor(245, 247, 250);
-                    doc.rect(28, yPos - 4, 160, boxHeight, 'FD');
+                    doc.rect(28, yPos - 5, 160, boxHeight, 'FD');
 
-                    doc.setFont("courier", "normal");
+                    // Unified Font - Helvetica for consistency
+                    doc.setFont("helvetica", "normal");
                     doc.setTextColor(40);
-                    doc.text(answerLines, 32, yPos);
+                    doc.text(answerLines, 32, yPos); // Padding logic handled by existing coordinates, adjusted slightly
                     yPos += boxHeight + 4;
                 });
 
@@ -306,7 +308,7 @@ const Results: React.FC = () => {
                     const solutionText = sanitizeSymbols(`Correction Suggestion: ${q.detailed_solution}`);
                     const detailLines = doc.splitTextToSize(solutionText, 160);
                     doc.text(detailLines, 30, yPos);
-                    yPos += detailLines.length * 5 + 4;
+                    yPos += detailLines.length * 5 + 6;
                     doc.setFontSize(10);
                 }
             } else {

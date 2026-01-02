@@ -29,7 +29,9 @@ interface Question {
     title?: string;
     options?: string[];
     correctAnswer?: number;
-    questions?: SubQuestion[]; // For exercises
+    subQuestions?: SubQuestion[]; // For exercises - standardized field name
+    questions?: SubQuestion[]; // Deprecated, keep for safety
+
     solution?: string; // For exercises
     detailed_solution?: string; // Detailed steps
     image_url?: string; // Context image
@@ -118,9 +120,9 @@ const StudentDetail: React.FC = () => {
                                                 context: section.context,
                                                 image_url: subQ.image || section.image_url,
                                                 // Map atomic fields to 'questions' with 'question' field for UI
-                                                questions: (subQ.subQuestions || []).map((atomic: any) => ({
+                                                subQuestions: (subQ.subQuestions || []).map((atomic: any) => ({
                                                     ...atomic,
-                                                    question: atomic.label || atomic.question
+                                                    label: atomic.label || atomic.question
                                                 }))
                                             } as any);
                                         });
@@ -345,7 +347,8 @@ const StudentDetail: React.FC = () => {
                 .replace(/ρ/g, 'rho')
                 .replace(/ξ/g, 'xi')
                 .replace(/³/g, '^3')
-                .replace(/¹\/³/g, '^1/3') // Handle the fraction properly
+                .replace(/m\/kg¹\/³/g, 'm/kg^(1/3)')
+                .replace(/¹\/³/g, '^(1/3)')
                 .replace(/q₀/g, 'q0');
         };
 
@@ -353,7 +356,7 @@ const StudentDetail: React.FC = () => {
         if (result.discipline === 'explosions') {
             doc.setFont("helvetica", "bold");
             doc.setTextColor(79, 70, 229); // Indigo
-            const noteText = "NOTE: Une correction interactive détaillée pour les Séquences 1 et 3 est disponible sur la plateforme (OAMA Plateform).";
+            const noteText = "NOTE: Une correction interactive détaillée pour les Séquences 1, 2 et 3 est disponible sur la plateforme (OAMA Plateform).";
             const noteLines = doc.splitTextToSize(noteText, 175);
             doc.text(noteLines, 20, yPos);
             yPos += (noteLines.length * 7) + 2;
@@ -377,8 +380,8 @@ const StudentDetail: React.FC = () => {
             doc.text(questionLines, 20, yPos);
 
             if (isExercise) {
-                const subScoreSum = (q.questions || []).reduce((sum, sq) => sum + (manualScores[`${q.id}_${sq.id}`] || 0), 0);
-                const maxPoints = q.questions?.reduce((sum, sq) => sum + sq.points, 0) || 0;
+                const subScoreSum = (q.subQuestions || []).reduce((sum: number, sq: any) => sum + (manualScores[`${q.id}_${sq.id}`] || 0), 0);
+                const maxPoints = q.subQuestions?.reduce((sum: number, sq: any) => sum + sq.points, 0) || 0;
                 doc.setTextColor(100, 100, 100);
                 doc.text(`${subScoreSum.toFixed(2)} / ${maxPoints} pts`, 160, yPos);
             }
@@ -387,13 +390,13 @@ const StudentDetail: React.FC = () => {
 
             if (isExercise) {
                 const studentAnswers = result.answers[index] || {};
-                q.questions?.forEach(subQ => {
+                (q.subQuestions || []).forEach((subQ: any) => {
                     if (yPos > 260) { doc.addPage(); yPos = 20; }
 
                     doc.setFont("helvetica", "normal");
                     doc.setTextColor(0);
                     const qSubScore = manualScores[`${q.id}_${subQ.id}`] || 0;
-                    const qSubText = sanitizeSymbols(`- ${subQ.question} (${qSubScore}/${subQ.points})`);
+                    const qSubText = sanitizeSymbols(`- ${subQ.label || subQ.question} (${qSubScore}/${subQ.points})`);
                     const qSubLines = doc.splitTextToSize(qSubText, 170);
                     doc.text(qSubLines, 25, yPos);
                     yPos += qSubLines.length * 5 + 2;
@@ -402,12 +405,12 @@ const StudentDetail: React.FC = () => {
                     const aLines = doc.splitTextToSize(answerText, 150);
 
                     // Box for answer
-                    const boxHeight = (aLines.length * 5) + 4;
+                    const boxHeight = (aLines.length * 7) + 6; // Adjusted height logic
                     doc.setDrawColor(200);
                     doc.setFillColor(245, 247, 250);
-                    doc.rect(28, yPos - 4, 160, boxHeight, 'FD');
+                    doc.rect(28, yPos - 5, 160, boxHeight, 'FD');
 
-                    doc.setFont("courier", "normal");
+                    doc.setFont("helvetica", "normal"); // Unified font
                     doc.setTextColor(60, 60, 60);
                     doc.text(aLines, 32, yPos);
                     yPos += boxHeight + 4;

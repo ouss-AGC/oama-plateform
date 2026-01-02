@@ -1297,7 +1297,7 @@ const symbolCategories = [
             { label: "s", value: " s" },
             { label: "m/s", value: " m/s" },
             { label: "kPa.ms", value: " kPa.ms" },
-            { label: "m/kg¹/³", value: " m/kg¹/³" },
+            { label: "m/kg^1/3", value: " m/kg^1/3" },
             { label: "Hz", value: " Hz" }
         ]
     }
