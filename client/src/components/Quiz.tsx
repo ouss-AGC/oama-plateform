@@ -905,6 +905,17 @@ const Quiz: React.FC = () => {
                                 {currentQuestion.parentId === 'part3' ? (
                                     // PART 3 Special Layout: Visuals -> Answers -> PDF
                                     <>
+                                        {/* Open Book Hints Button */}
+                                        <div className="mb-6 flex justify-end">
+                                            <button
+                                                onClick={() => window.open('/resources/Reference_Document_Partie02_Partie03.html', '_blank')}
+                                                className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all shadow-md font-bold text-sm"
+                                            >
+                                                <FileText className="w-4 h-4 mr-2" />
+                                                Open Book Hints (Documents de Référence)
+                                            </button>
+                                        </div>
+
                                         {/* 1. Visual / Graph (Top) */}
                                         {(currentQuestion.image || currentQuestion.images) && (
                                             <div className="space-y-6 pb-6 border-b border-dashed border-gray-200">
@@ -1002,6 +1013,19 @@ const Quiz: React.FC = () => {
                                 ) : (
                                     // PART 2 (and others): PDF -> Answers -> Visuals
                                     <>
+                                        {/* Open Book Hints Button for Part 2 */}
+                                        {currentQuestion.parentId === 'part2' && (
+                                            <div className="mb-6 flex justify-end">
+                                                <button
+                                                    onClick={() => window.open('/resources/Reference_Document_Partie02_Partie03.html', '_blank')}
+                                                    className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all shadow-md font-bold text-sm"
+                                                >
+                                                    <FileText className="w-4 h-4 mr-2" />
+                                                    Open Book Hints (Documents de Référence)
+                                                </button>
+                                            </div>
+                                        )}
+
                                         {/* 1. PDF Viewer (Top) */}
                                         {currentQuestion.parentId === 'part2' && (
                                             <div className="w-full h-full min-h-[600px] flex flex-col mb-8 text-center pt-8 border-t-2 border-gray-100">
