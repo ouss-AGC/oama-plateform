@@ -513,7 +513,8 @@ const Quiz: React.FC = () => {
                 }
 
                 if (q.parentId) {
-                    manualScores[q.parentId] = (manualScores[q.parentId] || 0) + questionScore;
+                    // Save granular score (using unique sub-question ID) for Admin Manual Grading
+                    manualScores[q.id] = questionScore;
                 }
                 earnedPoints += questionScore;
 
