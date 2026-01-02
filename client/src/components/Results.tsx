@@ -41,7 +41,7 @@ const Results: React.FC = () => {
     const [visualCertificate, setVisualCertificate] = useState<string>('');
     const [classStats, setClassStats] = useState({ average: 0, max: 0, min: 0 });
     const [quizQuestions, setQuizQuestions] = useState<Question[]>([]);
-    const [isCorrectionModalOpen, setIsCorrectionModalOpen] = useState(false);
+    const [activeCorrection, setActiveCorrection] = useState<{ url: string; title: string } | null>(null);
 
     useEffect(() => {
         const loadResult = async () => {
@@ -511,15 +511,31 @@ const Results: React.FC = () => {
                             Télécharger Rapport PDF
                         </button>
 
-                        {/* Correction Sequence 3 Button */}
-                        <button
-                            onClick={() => setIsCorrectionModalOpen(true)}
-                            className="px-6 py-3 rounded-lg bg-indigo-600 text-white font-bold hover:bg-indigo-700 flex items-center justify-center shadow-md transition-colors animate-pulse hover:animate-none"
-                        >
-                            <BookOpen className="w-5 h-5 mr-2" />
-                            Correction Séquence 3
-                        </button>
+                        {result.discipline === 'explosions' && (
+                            <div className="flex space-x-3">
+                                <button
+                                    onClick={() => setActiveCorrection({
+                                        url: '/resources/Sequence_1_MCQ_Correction_Interactive.html',
+                                        title: 'Séquence 1 : QCM Détonique'
+                                    })}
+                                    className="flex items-center space-x-2 px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition-colors border border-indigo-200"
+                                >
+                                    <BookOpen className="w-4 h-4" />
+                                    <span>Correction Séquence 1</span>
+                                </button>
 
+                                <button
+                                    onClick={() => setActiveCorrection({
+                                        url: '/resources/SDOF_Correction_Interactive.html',
+                                        title: 'Séquence 3 : Analyse SDOF'
+                                    })}
+                                    className="flex items-center space-x-2 px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition-colors border border-indigo-200"
+                                >
+                                    <BookOpen className="w-4 h-4" />
+                                    <span>Correction Séquence 3</span>
+                                </button>
+                            </div>
+                        )}
                         {/* Download Certificate button only for scores > 15 */}
                         {isPass && canDownloadCertificate && (
                             <button
@@ -542,7 +558,7 @@ const Results: React.FC = () => {
             </div>
 
             {/* Correction Modal */}
-            {isCorrectionModalOpen && (
+            {activeCorrection && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
                     <div className="bg-white rounded-2xl w-full max-w-6xl h-[90vh] flex flex-col overflow-hidden shadow-2xl relative">
                         <div className="bg-slate-900 p-4 text-white flex justify-between items-center">
@@ -552,11 +568,11 @@ const Results: React.FC = () => {
                                 </div>
                                 <div>
                                     <h3 className="font-black uppercase tracking-tighter text-lg leading-none">Correction Interactive</h3>
-                                    <p className="text-[10px] text-indigo-300 font-bold uppercase tracking-widest mt-1">Séquence 3 : Analyse SDOF</p>
+                                    <p className="text-[10px] text-indigo-300 font-bold uppercase tracking-widest mt-1">{activeCorrection.title}</p>
                                 </div>
                             </div>
                             <button
-                                onClick={() => setIsCorrectionModalOpen(false)}
+                                onClick={() => setActiveCorrection(null)}
                                 className="p-2 hover:bg-white/10 rounded-full transition-colors text-white/70 hover:text-white"
                             >
                                 <XCircle className="w-8 h-8" />
@@ -570,9 +586,9 @@ const Results: React.FC = () => {
                                 onContextMenu={(e) => e.preventDefault()}
                             ></div>
                             <iframe
-                                src="/resources/SDOF_Correction_Interactive.html"
+                                src={activeCorrection.url}
                                 className="w-full h-full border-none rounded-xl bg-white shadow-inner"
-                                title="Correction Séquence 3"
+                                title="Correction Interactif"
                             ></iframe>
                         </div>
 
@@ -581,7 +597,7 @@ const Results: React.FC = () => {
                                 <TrendingUp className="w-4 h-4 mr-1 text-indigo-600" />
                                 Document Confidentiel - École de Défense
                             </p>
-                            <p className="italic underline">Accès temporaire restreint aux participants</p>
+                            <p className="italic underline uppercase tracking-tighter">Accès Participant</p>
                         </div>
                     </div>
                 </div>
