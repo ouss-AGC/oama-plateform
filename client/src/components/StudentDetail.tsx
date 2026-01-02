@@ -695,11 +695,39 @@ const StudentDetail: React.FC = () => {
                                     {result.discipline}
                                 </span>
                                 {/* QCM Score Badge for Explosions exam (18 QCMs * 0.5 = 9 pts) */}
-                                {result.discipline === 'explosions' && (
-                                    <span className="text-xs px-2 py-1 bg-yellow-400 text-yellow-900 font-bold rounded shadow-sm border border-yellow-500">
-                                        Note QCM: {(quizQuestions.filter(q => q.type !== 'exercise' && result.answers[quizQuestions.indexOf(q)] === q.correctAnswer).length * 0.5).toFixed(1)}/9
-                                    </span>
-                                )}
+                                {result.discipline === 'explosions' && (() => {
+                                    // Calculate separate scores
+                                    const qcmScore = (quizQuestions.filter(q => q.type !== 'exercise' && result.answers[quizQuestions.indexOf(q)] === q.correctAnswer).length * 0.5);
+
+                                    // Find exercises
+                                    const exercises = quizQuestions.filter(q => q.type === 'exercise');
+                                    const part2 = exercises[0]; // Assumption: Order is P2 then P3
+                                    const part3 = exercises[1];
+
+                                    const part2Score = part2 ? (part2.questions || []).reduce((sum, sq) => sum + (manualScores[`${part2.id}_${sq.id}`] || 0), 0) : 0;
+                                    const part2Max = part2 ? (part2.questions || []).reduce((sum, sq) => sum + sq.points, 0) : 0;
+
+                                    const part3Score = part3 ? (part3.questions || []).reduce((sum, sq) => sum + (manualScores[`${part3.id}_${sq.id}`] || 0), 0) : 0;
+                                    const part3Max = part3 ? (part3.questions || []).reduce((sum, sq) => sum + sq.points, 0) : 0;
+
+                                    return (
+                                        <div className="flex space-x-2">
+                                            <span className="text-xs px-2 py-1 bg-yellow-400 text-yellow-900 font-bold rounded shadow-sm border border-yellow-500">
+                                                Note QCM: {qcmScore.toFixed(1)}/9
+                                            </span>
+                                            {part2 && (
+                                                <span className="text-xs px-2 py-1 bg-blue-400 text-blue-900 font-bold rounded shadow-sm border border-blue-500">
+                                                    Partie 2: {part2Score.toFixed(2)}/{part2Max}
+                                                </span>
+                                            )}
+                                            {part3 && (
+                                                <span className="text-xs px-2 py-1 bg-purple-400 text-purple-900 font-bold rounded shadow-sm border border-purple-500">
+                                                    Partie 3: {part3Score.toFixed(2)}/{part3Max}
+                                                </span>
+                                            )}
+                                        </div>
+                                    );
+                                })()}
                             </div>
                         </div>
                         <div className="text-right">
@@ -816,18 +844,44 @@ const StudentDetail: React.FC = () => {
                                                             <div className="flex justify-between items-start mb-1">
                                                                 <p className="font-semibold text-gray-800">{subQ.question}</p>
                                                                 <div className="flex items-center space-x-2">
-                                                                    <div className="flex items-center bg-white px-2 py-1 rounded border border-gray-200 shadow-sm">
+                                                                    <div className="flex items-center bg-white px-2 py-1 rounded border border-gray-300 shadow-sm hover:shadow-md transition-shadow">
                                                                         <span className="text-[10px] font-bold text-gray-400 mr-2 uppercase">Note:</span>
+
+                                                                        {/* Decrement Button */}
+                                                                        <button
+                                                                            onClick={() => {
+                                                                                const current = manualScores[`${q.id}_${subQ.id}`] || 0;
+                                                                                handleScoreChange(`${q.id}_${subQ.id}`, Math.max(0, current - 0.25));
+                                                                            }}
+                                                                            className="w-6 h-6 flex items-center justify-center bg-gray-100 hover:bg-red-100 text-gray-600 hover:text-red-600 rounded-l border-r border-gray-200 text-xs font-bold transition-colors"
+                                                                            title="-0.25"
+                                                                        >
+                                                                            -
+                                                                        </button>
+
                                                                         <input
                                                                             type="number"
                                                                             min="0"
                                                                             max={subQ.points}
-                                                                            step="0.1"
+                                                                            step="0.25"
                                                                             value={manualScores[`${q.id}_${subQ.id}`] || 0}
                                                                             onChange={(e) => handleScoreChange(`${q.id}_${subQ.id}`, parseFloat(e.target.value))}
-                                                                            className="w-12 text-center text-sm font-bold text-military-green border-none focus:ring-0 p-0"
+                                                                            className="w-14 text-center text-sm font-bold text-military-green border-none focus:ring-0 p-1 mx-1"
                                                                         />
-                                                                        <span className="text-[10px] font-bold text-gray-400 ml-1">/ {subQ.points}</span>
+
+                                                                        {/* Increment Button */}
+                                                                        <button
+                                                                            onClick={() => {
+                                                                                const current = manualScores[`${q.id}_${subQ.id}`] || 0;
+                                                                                handleScoreChange(`${q.id}_${subQ.id}`, Math.min(subQ.points, current + 0.25));
+                                                                            }}
+                                                                            className="w-6 h-6 flex items-center justify-center bg-gray-100 hover:bg-green-100 text-gray-600 hover:text-green-600 rounded-r border-l border-gray-200 text-xs font-bold transition-colors"
+                                                                            title="+0.25"
+                                                                        >
+                                                                            +
+                                                                        </button>
+
+                                                                        <span className="text-[10px] font-bold text-gray-400 ml-2">/ {subQ.points}</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
