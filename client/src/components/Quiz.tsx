@@ -470,7 +470,9 @@ const Quiz: React.FC = () => {
                         questionScore = points;
 
                     } else if (q.validation.type === 'numeric_set' || q.validation.type === 'numeric') {
-                        const tolerance = q.validation.tolerance || 0.02;
+                        // User Request: "Large tolerance". We enforce a minimum of 10% tolerance.
+                        // If JSON specifies higher (e.g. 0.15), we use that. If lower (0.05), we boost it to 0.10.
+                        const tolerance = Math.max(q.validation.tolerance || 0.1, 0.1);
                         const parts = q.validation.parts || (q.validation.value !== undefined ? [{ value: q.validation.value }] : []);
 
                         const sent = subAnswer.replace(/,/g, '.');
