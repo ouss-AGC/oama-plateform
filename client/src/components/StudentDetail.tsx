@@ -536,7 +536,7 @@ const StudentDetail: React.FC = () => {
                     } else {
                         doc.setTextColor(0, 100, 0);
                         doc.setFont("helvetica", "bold");
-                        const correctText = sanitizeSymbols(`Bonne réponse: ${q.options?.[q.correctAnswer] || 'N/A'}`);
+                        const correctText = sanitizeSymbols(`Bonne réponse: ${q.options?.[q.correctAnswer ?? 0] || 'N/A'}`);
                         yPos = drawRichText(correctText, 30, yPos, 145, 10);
                         yPos += 2;
                     }
