@@ -218,110 +218,121 @@ const Results: React.FC = () => {
         doc.text("Détail des réponses", 20, yPos);
         yPos += 12;
 
+        const sanitizeSymbols = (text: string) => {
+            return text
+                .replace(/ωₙ/g, 'omega_n')
+                .replace(/xₑₗ/g, 'x_el')
+                .replace(/xₘₐₓ/g, 'x_max')
+                .replace(/xₘ/g, 'x_max')
+                .replace(/Pₛ₀/g, 'Ps0')
+                .replace(/p₀/g, 'p0')
+                .replace(/tₐ/g, 'ta')
+                .replace(/t₀/g, 't0')
+                .replace(/iₛ/g, 'is')
+                .replace(/μ/g, 'mu')
+                .replace(/Zₐ/g, 'Za')
+                .replace(/Zᵦ/g, 'Zb')
+                .replace(/Z\*/g, 'Z*')
+                .replace(/Pᵣ/g, 'Pr')
+                .replace(/q₀/g, 'q0');
+        };
+
         // Mention Interactive Correction for Sequence 3
         if (result.discipline === 'explosions') {
             doc.setFont("helvetica", "bold");
             doc.setTextColor(79, 70, 229); // Indigo
-            doc.text("NOTE: Une correction interactive détaillée pour la Séquence 3 est disponible sur la plateforme.", 20, yPos);
-            yPos += 8;
+            const noteText = "NOTE: Une correction interactive détaillée pour les Séquences 1 et 3 est disponible sur la plateforme (OAMA Plateform).";
+            const noteLines = doc.splitTextToSize(noteText, 175);
+            doc.text(noteLines, 20, yPos);
+            yPos += (noteLines.length * 7) + 2;
         }
 
         doc.setFontSize(10);
-        const lineHeight = 6; // Height per line of text
+        const lineHeight = 6;
 
         quizQuestions.forEach((q: any, index) => {
-            if (yPos > 270) {
+            if (yPos > 260) {
                 doc.addPage();
                 yPos = 20;
             }
 
-            if (q.type === 'exercise') {
+            const isExercise = q.type === 'exercise';
+            const questionText = sanitizeSymbols(`Q${index + 1}: ${q.question}`);
+            const questionLines = doc.splitTextToSize(questionText, 170);
+
+            doc.setTextColor(0);
+            doc.setFont("helvetica", "bold");
+            doc.text(questionLines, 20, yPos);
+            yPos += questionLines.length * lineHeight + 4;
+
+            if (isExercise) {
                 const studentAnswers = result.answers[index] || {};
-
-                // Question Header
-                doc.setTextColor(0);
-                doc.setFont("helvetica", "bold");
-                const questionText = `Q${index + 1}: ${q.question}`;
-                const questionLines = doc.splitTextToSize(questionText, 170);
-                doc.text(questionLines, 20, yPos);
-                yPos += questionLines.length * lineHeight + 2;
-
-                // Sub-answers for exercise
                 (q.subQuestions || []).forEach((subQ: any) => {
-                    if (yPos > 280) {
+                    if (yPos > 260) {
                         doc.addPage();
                         yPos = 20;
                     }
+
                     doc.setFont("helvetica", "bold");
                     doc.setTextColor(80);
-                    const subQLabel = `• ${subQ.label}: `;
+                    const subQLabel = sanitizeSymbols(`• ${subQ.label}: `);
                     doc.text(subQLabel, 25, yPos);
-                    yPos += lineHeight; // Next line for answer
+                    yPos += 6;
 
-                    const answer = studentAnswers[subQ.id] || "Aucune réponse";
+                    const answer = sanitizeSymbols(studentAnswers[subQ.id] || "Aucune réponse");
+                    const answerLines = doc.splitTextToSize(answer, 150);
+
+                    // Draw box for answer
+                    const boxHeight = (answerLines.length * lineHeight) + 4;
+                    doc.setDrawColor(200);
+                    doc.setFillColor(245, 247, 250);
+                    doc.rect(28, yPos - 4, 160, boxHeight, 'FD');
+
                     doc.setFont("courier", "normal");
-                    doc.setTextColor(60);
-                    const answerLines = doc.splitTextToSize(answer, 160);
-                    doc.text(answerLines, 30, yPos);
-                    yPos += Math.max(1, answerLines.length) * lineHeight + 2;
+                    doc.setTextColor(40);
+                    doc.text(answerLines, 32, yPos);
+                    yPos += boxHeight + 4;
                 });
 
-                // Detailed Solution for exercise
                 if (q.detailed_solution) {
-                    yPos += 2;
                     doc.setTextColor(0, 100, 0);
-                    doc.setFont("courier", "normal");
+                    doc.setFont("helvetica", "italic");
                     doc.setFontSize(9);
-                    const detailLines = doc.splitTextToSize(`Solution: ${q.detailed_solution}`, 160);
-                    doc.text(detailLines, 25, yPos);
-                    yPos += detailLines.length * 4;
-                    doc.setFont("helvetica", "normal");
+                    const solutionText = sanitizeSymbols(`Correction Suggestion: ${q.detailed_solution}`);
+                    const detailLines = doc.splitTextToSize(solutionText, 160);
+                    doc.text(detailLines, 30, yPos);
+                    yPos += detailLines.length * 5 + 4;
                     doc.setFontSize(10);
                 }
             } else {
-                // QCM Rendering
                 const userAnswer = result.answers[index];
                 const isCorrect = userAnswer === q.correctAnswer;
 
-                // Question
-                doc.setTextColor(0);
-                doc.setFont("helvetica", "bold");
-                const questionText = `Q${index + 1}: ${q.question}`;
-                const questionLines = doc.splitTextToSize(questionText, 170);
-                doc.text(questionLines, 20, yPos);
-                yPos += questionLines.length * lineHeight + 2;
+                // Box for QCM answer
+                const optionText = sanitizeSymbols(q.options?.[userAnswer] || 'N/A');
+                const feedbackText = isCorrect ? '(Correct)' : '(Incorrect)';
+                const fullAnswerText = `Votre réponse: ${optionText} ${feedbackText}`;
+                const answerLines = doc.splitTextToSize(fullAnswerText, 150);
 
-                // User's answer
+                const boxHeight = (answerLines.length * lineHeight) + 4;
+                doc.setDrawColor(isCorrect ? 150 : 200, isCorrect ? 200 : 150, isCorrect ? 150 : 150);
+                doc.setFillColor(isCorrect ? 240 : 255, isCorrect ? 250 : 240, isCorrect ? 240 : 240);
+                doc.rect(25, yPos - 4, 160, boxHeight, 'FD');
+
                 doc.setFont("helvetica", "normal");
                 doc.setTextColor(isCorrect ? 0 : 200, isCorrect ? 100 : 0, 0);
-                const answerText = `Réponse: ${q.options?.[userAnswer] || 'N/A'} ${isCorrect ? '(Correct)' : '(Incorrect)'}`;
-                const answerLines = doc.splitTextToSize(answerText, 165);
-                doc.text(answerLines, 25, yPos);
-                yPos += answerLines.length * lineHeight;
+                doc.text(answerLines, 30, yPos);
+                yPos += boxHeight + 4;
 
-                // Correction if incorrect
                 if (!isCorrect) {
-                    yPos += 2;
                     doc.setTextColor(0, 100, 0);
-                    const correctionText = `Correction: ${q.options?.[q.correctAnswer] || 'N/A'}`;
-                    const correctionLines = doc.splitTextToSize(correctionText, 165);
-                    doc.text(correctionLines, 25, yPos);
-                    yPos += correctionLines.length * lineHeight;
-
-                    if (q.detailed_solution) {
-                        yPos += 2;
-                        doc.setFont("courier", "normal");
-                        doc.setFontSize(9);
-                        const detailLines = doc.splitTextToSize(`Détail: ${q.detailed_solution}`, 160);
-                        doc.text(detailLines, 25, yPos);
-                        yPos += detailLines.length * 4;
-                        doc.setFont("helvetica", "normal");
-                        doc.setFontSize(10);
-                    }
+                    doc.setFont("helvetica", "bold");
+                    const correctText = sanitizeSymbols(`Bonne réponse: ${q.options?.[q.correctAnswer] || 'N/A'}`);
+                    doc.text(correctText, 30, yPos);
+                    yPos += lineHeight + 2;
                 }
             }
-
-            yPos += 8; // Space between questions
+            yPos += 6;
         });
 
         doc.save(`Rapport_${result.student.name}.pdf`);
@@ -595,7 +606,7 @@ const Results: React.FC = () => {
                         <div className="bg-slate-50 p-4 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
                             <p className="font-bold flex items-center">
                                 <TrendingUp className="w-4 h-4 mr-1 text-indigo-600" />
-                                Document Confidentiel - École de Défense
+                                Document Confidentiel - OAMA Plateform
                             </p>
                             <p className="italic underline uppercase tracking-tighter">Accès Participant</p>
                         </div>

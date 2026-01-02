@@ -328,94 +328,129 @@ const StudentDetail: React.FC = () => {
         doc.text("Détail des réponses et notation", 20, yPos);
         yPos += 12;
 
+        const sanitizeSymbols = (text: string) => {
+            return text
+                .replace(/ωₙ/g, 'omega_n')
+                .replace(/xₑₗ/g, 'x_el')
+                .replace(/xₘₐₓ/g, 'x_max')
+                .replace(/xₘ/g, 'x_max')
+                .replace(/Pₛ₀/g, 'Ps0')
+                .replace(/p₀/g, 'p0')
+                .replace(/tₐ/g, 'ta')
+                .replace(/t₀/g, 't0')
+                .replace(/iₛ/g, 'is')
+                .replace(/μ/g, 'mu')
+                .replace(/Zₐ/g, 'Za')
+                .replace(/Zᵦ/g, 'Zb')
+                .replace(/Z\*/g, 'Z*')
+                .replace(/Pᵣ/g, 'Pr')
+                .replace(/q₀/g, 'q0');
+        };
+
         // Mention Interactive Correction for Sequence 3
         if (result.discipline === 'explosions') {
             doc.setFont("helvetica", "bold");
             doc.setTextColor(79, 70, 229); // Indigo
-            doc.text("NOTE: Une correction interactive détaillée pour la Séquence 3 est disponible sur la plateforme.", 20, yPos);
-            yPos += 8;
+            const noteText = "NOTE: Une correction interactive détaillée pour les Séquences 1 et 3 est disponible sur la plateforme (OAMA Plateform).";
+            const noteLines = doc.splitTextToSize(noteText, 175);
+            doc.text(noteLines, 20, yPos);
+            yPos += (noteLines.length * 7) + 2;
         }
 
         doc.setFontSize(10);
         const lineHeight = 6;
 
         quizQuestions.forEach((q, index) => {
-            if (yPos > 270) {
+            if (yPos > 260) {
                 doc.addPage();
                 yPos = 20;
             }
 
-            if (q.type === 'exercise') {
-                // Exercise Rendering in PDF
-                doc.setFont("helvetica", "bold");
-                doc.setTextColor(0, 51, 102);
-                const exerciseTitle = `Exercice: ${q.title || 'Question ' + (index + 1)}`;
-                doc.text(exerciseTitle, 20, yPos);
+            const isExercise = q.type === 'exercise';
+            const questionText = sanitizeSymbols(`${isExercise ? ('Exercice: ' + (q.title || 'Partie ' + (index + 1))) : ('Q' + (index + 1) + ': ' + q.question)}`);
+            const questionLines = doc.splitTextToSize(questionText, 170);
 
+            doc.setTextColor(isExercise ? 0 : 0, isExercise ? 51 : 0, isExercise ? 102 : 0);
+            doc.setFont("helvetica", "bold");
+            doc.text(questionLines, 20, yPos);
+
+            if (isExercise) {
                 const score = manualScores[q.id] !== undefined ? manualScores[q.id] : 0;
                 const maxPoints = q.questions?.reduce((sum, sq) => sum + sq.points, 0) || 0;
                 doc.setTextColor(100, 100, 100);
                 doc.text(`${score} / ${maxPoints} pts`, 160, yPos);
-                yPos += 7;
+            }
 
+            yPos += questionLines.length * lineHeight + 4;
+
+            if (isExercise) {
                 const studentAnswers = result.answers[index] || {};
                 q.questions?.forEach(subQ => {
-                    if (yPos > 270) { doc.addPage(); yPos = 20; }
+                    if (yPos > 260) { doc.addPage(); yPos = 20; }
+
                     doc.setFont("helvetica", "normal");
                     doc.setTextColor(0);
-                    const qLines = doc.splitTextToSize(`- ${subQ.question}`, 170);
-                    doc.text(qLines, 25, yPos);
-                    yPos += qLines.length * 5;
+                    const qSubText = sanitizeSymbols(`- ${subQ.question}`);
+                    const qSubLines = doc.splitTextToSize(qSubText, 170);
+                    doc.text(qSubLines, 25, yPos);
+                    yPos += qSubLines.length * 5 + 2;
 
-                    const answerText = studentAnswers[subQ.id] || "(Aucune réponse)";
+                    const answerText = sanitizeSymbols(studentAnswers[subQ.id] || "(Aucune réponse)");
+                    const aLines = doc.splitTextToSize(answerText, 150);
+
+                    // Box for answer
+                    const boxHeight = (aLines.length * 5) + 4;
+                    doc.setDrawColor(200);
+                    doc.setFillColor(245, 247, 250);
+                    doc.rect(28, yPos - 4, 160, boxHeight, 'FD');
+
                     doc.setFont("courier", "normal");
-                    const aLines = doc.splitTextToSize(`Rép: ${answerText}`, 160);
-                    doc.setTextColor(80, 80, 80);
-                    doc.text(aLines, 30, yPos);
-                    yPos += aLines.length * 5 + 2;
-                    doc.setFont("helvetica", "normal");
+                    doc.setTextColor(60, 60, 60);
+                    doc.text(aLines, 32, yPos);
+                    yPos += boxHeight + 4;
                 });
 
-                // Show Correction Context if available
                 if (q.detailed_solution || q.solution) {
                     doc.setTextColor(0, 100, 0);
-                    doc.setFont("courier", "normal");
+                    doc.setFont("helvetica", "italic");
                     doc.setFontSize(9);
-                    const solutionLines = doc.splitTextToSize(`[Correction]: ${q.detailed_solution || q.solution}`, 160);
-                    doc.text(solutionLines, 30, yPos);
-                    yPos += solutionLines.length * 4 + 4;
+                    const solutionText = sanitizeSymbols(`Correction Context: ${q.detailed_solution || q.solution}`);
+                    const solLines = doc.splitTextToSize(solutionText, 160);
+                    doc.text(solLines, 30, yPos);
+                    yPos += solLines.length * 5 + 4;
                     doc.setFontSize(10);
                 }
             } else {
-                // QCM Rendering in PDF
                 const userAnswer = result.answers[index];
                 const isCorrect = userAnswer === q.correctAnswer;
 
-                doc.setFont("helvetica", "bold");
-                doc.setTextColor(0);
-                const qText = `Q${index + 1}: ${q.question}`;
-                const qLines = doc.splitTextToSize(qText, 170);
-                doc.text(qLines, 20, yPos);
-                yPos += qLines.length * lineHeight + 2;
+                const optionText = sanitizeSymbols(q.options?.[userAnswer] || 'N/A');
+                const feedbackText = isCorrect ? '(Correct 0.5/0.5)' : '(Incorrect 0/0.5)';
+                const fullAnswerText = `Réponse: ${optionText} ${feedbackText}`;
+                const aLines = doc.splitTextToSize(fullAnswerText, 150);
+
+                const boxHeight = (aLines.length * lineHeight) + 4;
+                doc.setDrawColor(isCorrect ? 150 : 200, isCorrect ? 200 : 150, isCorrect ? 150 : 150);
+                doc.setFillColor(isCorrect ? 240 : 255, isCorrect ? 250 : 240, isCorrect ? 240 : 240);
+                doc.rect(25, yPos - 4, 160, boxHeight, 'FD');
 
                 doc.setFont("helvetica", "normal");
                 doc.setTextColor(isCorrect ? 0 : 200, isCorrect ? 100 : 0, 0);
-                const answerText = `Réponse: ${q.options?.[userAnswer] || 'N/A'} ${isCorrect ? '(Correct 0.5/0.5)' : '(Incorrect 0/0.5)'}`;
-                const aLines = doc.splitTextToSize(answerText, 165);
-                doc.text(aLines, 25, yPos);
-                yPos += aLines.length * lineHeight;
+                doc.text(aLines, 30, yPos);
+                yPos += boxHeight + 4;
 
                 if (!isCorrect) {
-                    yPos += 1;
                     doc.setTextColor(0, 100, 0);
-                    doc.text(`Correction: ${q.options?.[q.correctAnswer || 0]}`, 25, yPos);
-                    yPos += lineHeight;
+                    doc.setFont("helvetica", "bold");
+                    const correctText = sanitizeSymbols(`Correction: ${q.options?.[q.correctAnswer || 0]}`);
+                    doc.text(correctText, 30, yPos);
+                    yPos += lineHeight + 2;
                 }
             }
             yPos += 6;
         });
 
-        doc.save(`Rapport_Complet_${result.student.name.replace(/\s+/g, '_')}.pdf`);
+        doc.save(`Rapport_Complet_${result.student.grade}_${result.student.name.replace(/\s+/g, '_')}.pdf`);
     };
 
     // Chart Data (Keep existing)
@@ -814,7 +849,7 @@ const StudentDetail: React.FC = () => {
                         <div className="bg-slate-50 p-4 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
                             <p className="font-bold flex items-center">
                                 <TrendingUp className="w-4 h-4 mr-1 text-indigo-600" />
-                                Document Confidentiel - École de Défense
+                                Document Confidentiel - OAMA Plateform
                             </p>
                             <p className="italic underline uppercase tracking-tighter">Accès Administrateur</p>
                         </div>
