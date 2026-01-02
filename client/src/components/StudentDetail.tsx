@@ -63,6 +63,7 @@ const StudentDetail: React.FC = () => {
     const [classStats, setClassStats] = useState({ average: 0, max: 0, min: 0 });
     const [manualScores, setManualScores] = useState<Record<string, number>>({});
     const [isSaving, setIsSaving] = useState(false);
+    const [isCorrectionModalOpen, setIsCorrectionModalOpen] = useState(false);
 
     useEffect(() => {
         const isAuthenticated = localStorage.getItem('adminAuthenticated');
@@ -244,7 +245,8 @@ const StudentDetail: React.FC = () => {
         if (!result) return;
         const doc = new jsPDF();
 
-        // Load images helper
+
+
         const loadImage = (src: string): Promise<string> => {
             return new Promise((resolve, reject) => {
                 const img = new Image();
@@ -325,6 +327,14 @@ const StudentDetail: React.FC = () => {
         doc.setFontSize(16);
         doc.text("Détail des réponses et notation", 20, yPos);
         yPos += 12;
+
+        // Mention Interactive Correction for Sequence 3
+        if (result.discipline === 'explosions') {
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(79, 70, 229); // Indigo
+            doc.text("NOTE: Une correction interactive détaillée pour la Séquence 3 est disponible sur la plateforme.", 20, yPos);
+            yPos += 8;
+        }
 
         doc.setFontSize(10);
         const lineHeight = 6;
@@ -490,11 +500,21 @@ const StudentDetail: React.FC = () => {
                     <div className="flex space-x-3">
                         <button
                             onClick={generateReport}
-                            className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 flex items-center shadow-md transition-colors"
+                            className="flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors border border-gray-300"
                         >
-                            <FileText className="w-5 h-5 mr-2" />
-                            Télécharger Rapport PDF
+                            <FileText className="w-4 h-4" />
+                            <span>Rapport Complet</span>
                         </button>
+
+                        {result.discipline === 'explosions' && (
+                            <button
+                                onClick={() => setIsCorrectionModalOpen(true)}
+                                className="flex items-center space-x-2 px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition-colors border border-indigo-200"
+                            >
+                                <BookOpen className="w-4 h-4" />
+                                <span>Correction Séquence 3</span>
+                            </button>
+                        )}
                         <button
                             onClick={saveGrading}
                             disabled={isSaving}
@@ -739,6 +759,52 @@ const StudentDetail: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Correction Modal */}
+            {isCorrectionModalOpen && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                    <div className="bg-white rounded-2xl w-full max-w-6xl h-[90vh] flex flex-col overflow-hidden shadow-2xl relative">
+                        <div className="bg-slate-900 p-4 text-white flex justify-between items-center">
+                            <div className="flex items-center space-x-3">
+                                <div className="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                                    <BookOpen className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <h3 className="font-black uppercase tracking-tighter text-lg leading-none">Correction Interactive</h3>
+                                    <p className="text-[10px] text-indigo-300 font-bold uppercase tracking-widest mt-1">Séquence 3 : Analyse SDOF</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => setIsCorrectionModalOpen(false)}
+                                className="p-2 hover:bg-white/10 rounded-full transition-colors text-white/70 hover:text-white"
+                            >
+                                <XCircle className="w-8 h-8" />
+                            </button>
+                        </div>
+
+                        <div className="flex-grow bg-slate-100 p-1 relative">
+                            {/* Security Overlay for Right Click (Fallback) */}
+                            <div
+                                className="absolute inset-0 pointer-events-none z-10"
+                                onContextMenu={(e) => e.preventDefault()}
+                            ></div>
+                            <iframe
+                                src="/resources/SDOF_Correction_Interactive.html"
+                                className="w-full h-full border-none rounded-xl bg-white shadow-inner"
+                                title="Correction Séquence 3"
+                            ></iframe>
+                        </div>
+
+                        <div className="bg-slate-50 p-4 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
+                            <p className="font-bold flex items-center">
+                                <TrendingUp className="w-4 h-4 mr-1 text-indigo-600" />
+                                Document Confidentiel - École de Défense
+                            </p>
+                            <p className="italic underline uppercase tracking-tighter">Accès Administrateur</p>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

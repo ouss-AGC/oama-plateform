@@ -41,6 +41,7 @@ const Results: React.FC = () => {
     const [visualCertificate, setVisualCertificate] = useState<string>('');
     const [classStats, setClassStats] = useState({ average: 0, max: 0, min: 0 });
     const [quizQuestions, setQuizQuestions] = useState<Question[]>([]);
+    const [isCorrectionModalOpen, setIsCorrectionModalOpen] = useState(false);
 
     useEffect(() => {
         const loadResult = async () => {
@@ -216,6 +217,14 @@ const Results: React.FC = () => {
         doc.setFontSize(16);
         doc.text("Détail des réponses", 20, yPos);
         yPos += 12;
+
+        // Mention Interactive Correction for Sequence 3
+        if (result.discipline === 'explosions') {
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(79, 70, 229); // Indigo
+            doc.text("NOTE: Une correction interactive détaillée pour la Séquence 3 est disponible sur la plateforme.", 20, yPos);
+            yPos += 8;
+        }
 
         doc.setFontSize(10);
         const lineHeight = 6; // Height per line of text
@@ -502,6 +511,15 @@ const Results: React.FC = () => {
                             Télécharger Rapport PDF
                         </button>
 
+                        {/* Correction Sequence 3 Button */}
+                        <button
+                            onClick={() => setIsCorrectionModalOpen(true)}
+                            className="px-6 py-3 rounded-lg bg-indigo-600 text-white font-bold hover:bg-indigo-700 flex items-center justify-center shadow-md transition-colors animate-pulse hover:animate-none"
+                        >
+                            <BookOpen className="w-5 h-5 mr-2" />
+                            Correction Séquence 3
+                        </button>
+
                         {/* Download Certificate button only for scores > 15 */}
                         {isPass && canDownloadCertificate && (
                             <button
@@ -522,6 +540,52 @@ const Results: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Correction Modal */}
+            {isCorrectionModalOpen && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                    <div className="bg-white rounded-2xl w-full max-w-6xl h-[90vh] flex flex-col overflow-hidden shadow-2xl relative">
+                        <div className="bg-slate-900 p-4 text-white flex justify-between items-center">
+                            <div className="flex items-center space-x-3">
+                                <div className="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                                    <BookOpen className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <h3 className="font-black uppercase tracking-tighter text-lg leading-none">Correction Interactive</h3>
+                                    <p className="text-[10px] text-indigo-300 font-bold uppercase tracking-widest mt-1">Séquence 3 : Analyse SDOF</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => setIsCorrectionModalOpen(false)}
+                                className="p-2 hover:bg-white/10 rounded-full transition-colors text-white/70 hover:text-white"
+                            >
+                                <XCircle className="w-8 h-8" />
+                            </button>
+                        </div>
+
+                        <div className="flex-grow bg-slate-100 p-1 relative">
+                            {/* Security Overlay for Right Click (Fallback) */}
+                            <div
+                                className="absolute inset-0 pointer-events-none z-10"
+                                onContextMenu={(e) => e.preventDefault()}
+                            ></div>
+                            <iframe
+                                src="/resources/SDOF_Correction_Interactive.html"
+                                className="w-full h-full border-none rounded-xl bg-white shadow-inner"
+                                title="Correction Séquence 3"
+                            ></iframe>
+                        </div>
+
+                        <div className="bg-slate-50 p-4 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
+                            <p className="font-bold flex items-center">
+                                <TrendingUp className="w-4 h-4 mr-1 text-indigo-600" />
+                                Document Confidentiel - École de Défense
+                            </p>
+                            <p className="italic underline">Accès temporaire restreint aux participants</p>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

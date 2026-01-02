@@ -553,7 +553,7 @@
         },
         {
             "id": "part3",
-            "title": "Partie 03 : Analyse SDOF (04 pts)",
+            "title": "Partie 03 : Analyse SDOF (05 pts)",
             "description": "La troisième partie de l'examen a pour objectif de tester vos compétences en résolution de problèmes appliqués aux structures soumises aux effets des explosions. Vous devrez effectuer des calculs détaillés, analyser les résultats obtenus et formuler des conclusions fondées. Veillez à suivre scrupuleusement les étapes indiquées dans l'énoncé et à présenter vos calculs de manière organisée. La précision de vos réponses et la clarté de vos explications seront particulièrement valorisées.",
             "type": "exercise",
             "briefingImage": "/scholars/al_jazari_hologram_clean.png",
@@ -588,15 +588,19 @@
                     ],
                     "validation": {
                         "type": "numeric_set",
-                        "tolerance": 0.07,
+                        "tolerance": 0.05,
                         "parts": [
                             {
-                                "label": "Impulsion iₛ",
+                                "label": "Impulsion I (N.s)",
                                 "value": 492
                             },
                             {
                                 "label": "xₘₐₓ (mm)",
                                 "value": 23.44
+                            },
+                            {
+                                "label": "μ",
+                                "value": 0.78
                             }
                         ]
                     }
@@ -604,13 +608,13 @@
                 {
                     "id": "3.2",
                     "question": "Pour le deuxième cas, effectuez un calcul détaillé afin de déterminer si la déformation maximale xₘₐₓ conduit le système dans le domaine plastique.",
-                    "points": 2.5,
+                    "points": 1.75,
                     "image": "/sdof_question_3_2.png",
                     "subQuestions": [
                         {
                             "id": "a",
                             "label": "a) Le calcul de l'impulsion I",
-                            "points": 0.5,
+                            "points": 0.25,
                             "placeholder": "Calculez l'impulsion I..."
                         },
                         {
@@ -628,21 +632,25 @@
                         {
                             "id": "d",
                             "label": "d) Le calcul du facteur de ductilité μ. Concluez si le système reste dans le domaine élastique ou entre dans le domaine plastique",
-                            "points": 1.0,
+                            "points": 0.5,
                             "placeholder": "Calculez μ et concluez..."
                         }
                     ],
                     "validation": {
                         "type": "numeric_set",
-                        "tolerance": 0.07,
+                        "tolerance": 0.05,
                         "parts": [
                             {
-                                "label": "Impulsion iₛ",
+                                "label": "Impulsion I (N.s)",
                                 "value": 2400
                             },
                             {
                                 "label": "xₘₐₓ (mm)",
                                 "value": 114.35
+                            },
+                            {
+                                "label": "μ",
+                                "value": 3.81
                             }
                         ]
                     }
@@ -650,13 +658,13 @@
                 {
                     "id": "3.3",
                     "question": "Pour le troisième cas, effectuez un calcul détaillé afin de déterminer si la déformation maximale xₘₐₓ conduit le système dans le domaine plastique.",
-                    "points": 2.5,
+                    "points": 1.75,
                     "image": "/sdof_question_3_3.png",
                     "subQuestions": [
                         {
                             "id": "a",
                             "label": "a) Le calcul de l'impulsion I",
-                            "points": 0.5,
+                            "points": 0.25,
                             "placeholder": "Calculez l'impulsion I..."
                         },
                         {
@@ -668,27 +676,31 @@
                         {
                             "id": "c",
                             "label": "c) La comparaison entre xₘₐₓ et la déformation élastique xₑₗ",
-                            "points": 1.0,
+                            "points": 0.5,
                             "placeholder": "Comparez xₘₐₓ et xₑₗ..."
                         },
                         {
                             "id": "d",
-                            "label": "d) Expliquez pourquoi le calcul du facteur de ductilité μ est inutile ici",
+                            "label": "d) Le calcul du facteur de ductilité μ. Concluez si le système reste dans le domaine élastique ou entre dans le domaine plastique",
                             "points": 0.5,
-                            "placeholder": "Expliquez..."
+                            "placeholder": "Calculez μ et concluez..."
                         }
                     ],
                     "validation": {
                         "type": "numeric_set",
-                        "tolerance": 0.07,
+                        "tolerance": 0.05,
                         "parts": [
                             {
-                                "label": "Impulsion iₛ",
+                                "label": "Impulsion I (N.s)",
                                 "value": 3000
                             },
                             {
                                 "label": "xₘₐₓ (mm)",
                                 "value": 142.95
+                            },
+                            {
+                                "label": "μ",
+                                "value": 4.77
                             }
                         ]
                     }
