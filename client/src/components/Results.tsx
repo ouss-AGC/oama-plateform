@@ -125,7 +125,11 @@ const Results: React.FC = () => {
     }, [navigate]);
 
     const generateReport = async () => {
-        if (!result) return;
+        if (!result || result.scoreOn20 === undefined || result.scoreOn20 === null) {
+            console.error('Cannot generate report: invalid result data');
+            return;
+        }
+
         const doc = new jsPDF();
 
         // Load signature image
@@ -252,7 +256,8 @@ const Results: React.FC = () => {
             doc.setFont("times", "italic"); // Handwritten style
             doc.setTextColor(200, 0, 0); // Red
             // Position text roughly in the center/left of the circle image (160 + 15, 15 + 25)
-            doc.text(`${result.scoreOn20.toFixed(1)}/20`, 180, 42, { align: "center", angle: 15 }); // Added slight angle for handwritten feel
+            // Explicitly assert result! here as checked above
+            doc.text(`${result!.scoreOn20.toFixed(1)}/20`, 180, 42, { align: "center", angle: 15 });
 
             // Add signature on the left (Reduced size)
             if (signatureDataUrl) {
@@ -273,16 +278,16 @@ const Results: React.FC = () => {
             doc.setFontSize(14);
             doc.setFont("helvetica", "bold");
             doc.setTextColor(200, 0, 0); // Red Name
-            doc.text(`Nom: ${result.student.grade} ${result.student.name}`, 20, 70);
+            doc.text(`Nom: ${result!.student.grade} ${result!.student.name}`, 20, 70);
 
             doc.setTextColor(0); // Reset to black
             doc.setFont("helvetica", "normal");
-            doc.text(`Classe: ${result.student.className}`, 20, 78);
-            doc.text(`Matricule: ${result.student.matricule}`, 20, 86);
+            doc.text(`Classe: ${result!.student.className}`, 20, 78);
+            doc.text(`Matricule: ${result!.student.matricule}`, 20, 86);
 
-            doc.text(`Discipline: ${result.discipline.toUpperCase()}`, 140, 70);
-            doc.text(`Score: ${result.scoreOn20.toFixed(2)}/20`, 140, 78);
-            doc.text(`Date: ${new Date(result.timestamp).toLocaleDateString()}`, 140, 86);
+            doc.text(`Discipline: ${result!.discipline.toUpperCase()}`, 140, 70);
+            doc.text(`Score: ${result!.scoreOn20.toFixed(2)}/20`, 140, 78);
+            doc.text(`Date: ${new Date(result!.timestamp).toLocaleDateString()}`, 140, 86);
 
             let yPos = 100;
             doc.setFontSize(16);
@@ -316,7 +321,7 @@ const Results: React.FC = () => {
             };
 
             // Mention Interactive Correction for Sequence 3
-            if (result.discipline === 'explosions') {
+            if (result!.discipline === 'explosions') {
                 doc.setFont("helvetica", "bold");
                 doc.setTextColor(79, 70, 229); // Indigo
                 const noteText = "NOTE: Une correction interactive détaillée pour les Séquences 1, 2 et 3 est disponible sur la plateforme (OAMA Plateform).";
@@ -343,7 +348,7 @@ const Results: React.FC = () => {
                 yPos += 2;
 
                 if (isExercise) {
-                    const studentAnswers = result.answers[index] || {};
+                    const studentAnswers = result!.answers[index] || {};
                     (q.subQuestions || []).forEach((subQ: any) => {
                         if (yPos > 260) {
                             doc.addPage();
@@ -356,11 +361,6 @@ const Results: React.FC = () => {
                         yPos = drawRichText(subQLabel, 25, yPos, 145, 10);
 
                         const answer = sanitizeSymbols(studentAnswers[subQ.id] || "Aucune réponse");
-
-                        // Box logic is tricky with RichText dynamic height. 
-                        // Use a safe estimate or draw box AFTER?
-                        // Let's assume height from string length for box background mainly
-                        // OR just draw rich text with a background rect per line? No, box style expected.
 
                         // Measure height approx:
                         const estLines = Math.ceil(doc.getStringUnitWidth(answer) * 10 / doc.internal.scaleFactor / 145) || 1;
@@ -379,7 +379,7 @@ const Results: React.FC = () => {
                     });
 
                     if (q.detailed_solution) {
-                        if (result.discipline === 'explosions') {
+                        if (result!.discipline === 'explosions') {
                             // VISUAL BANNER instead of text
                             if (yPos > 250) { doc.addPage(); yPos = 20; }
                             doc.setFillColor(240, 253, 244); // Light Green bg
@@ -406,7 +406,7 @@ const Results: React.FC = () => {
                         }
                     }
                 } else {
-                    const userAnswer = result.answers[index];
+                    const userAnswer = result!.answers[index];
                     const isCorrect = userAnswer === q.correctAnswer;
 
                     // Box for QCM answer
@@ -427,7 +427,7 @@ const Results: React.FC = () => {
                     yPos = finalY + 4;
 
                     if (!isCorrect) {
-                        if (result.discipline === 'explosions') {
+                        if (result!.discipline === 'explosions') {
                             // VISUAL BANNER smaller
                             if (yPos > 260) { doc.addPage(); yPos = 20; }
                             doc.setFillColor(240, 253, 244);
@@ -452,7 +452,7 @@ const Results: React.FC = () => {
             });
 
 
-            doc.save(`Rapport_${result.student.name}.pdf`);
+            doc.save(`Rapport_${result!.student.name}.pdf`);
         };
     };
 
