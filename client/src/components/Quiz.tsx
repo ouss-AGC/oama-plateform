@@ -71,6 +71,7 @@ const Quiz: React.FC = () => {
     // Answers state: number for QCM, string for Exercises
     const [answers, setAnswers] = useState<(number | string | null)[]>([]);
     const [timeLeft, setTimeLeft] = useState(3600);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [loading, setLoading] = useState(true);
     const [studentData, setStudentData] = useState<any>(null);
     const [timeLimit, setTimeLimit] = useState(3600); // Dynamic time limit
@@ -431,6 +432,8 @@ const Quiz: React.FC = () => {
     };
 
     const finishQuiz = async (finalAnswers: any[]) => {
+        if (isSubmitting) return;
+        setIsSubmitting(true);
         if (timerRef.current) clearInterval(timerRef.current);
 
         // Calculate score (Only for QCMs for now, Exercises need manual grading or complex logic)
@@ -1173,9 +1176,14 @@ const Quiz: React.FC = () => {
                             ) : (
                                 <button
                                     onClick={() => finishQuiz(answers)}
-                                    className="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold flex items-center hover:bg-blue-700 transition-all shadow-lg animate-pulse ring-2 ring-blue-400 ring-offset-2"
+                                    disabled={isSubmitting}
+                                    className={`px-8 py-3 rounded-xl font-bold flex items-center transition-all shadow-lg ring-offset-2
+                                        ${isSubmitting
+                                            ? 'bg-gray-400 text-gray-200 cursor-not-allowed animate-none'
+                                            : 'bg-blue-600 text-white hover:bg-blue-700 animate-pulse ring-2 ring-blue-400'
+                                        }`}
                                 >
-                                    Terminer l'Examen
+                                    {isSubmitting ? 'Soumission...' : "Terminer l'Examen"}
                                     <CheckCircle className="w-5 h-5 ml-3" />
                                 </button>
                             )}

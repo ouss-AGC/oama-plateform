@@ -118,6 +118,8 @@ const StudentDetail: React.FC = () => {
                                                 title: subQ.question || section.title, // Use the prompt text as title
                                                 description: section.description,
                                                 context: section.context,
+                                                solution: section.solution,
+                                                detailed_solution: section.detailed_solution,
                                                 image_url: subQ.image || section.image_url,
                                                 // Map atomic fields to 'questions' with 'question' field for UI
                                                 questions: (subQ.subQuestions || []).map((atomic: any) => ({
@@ -949,7 +951,9 @@ const StudentDetail: React.FC = () => {
                                                         Solution Modèle
                                                     </h5>
                                                     <pre className="whitespace-pre-wrap text-sm text-green-900 font-mono bg-white p-3 rounded border border-green-100">
-                                                        {q.detailed_solution || q.solution}
+                                                        {q.detailed_solution || q.solution || (q.validation?.parts ?
+                                                            q.validation.parts.map((p: any) => `${p.label || 'Valeur'}: ${p.value}`).join('\n') :
+                                                            (q.validation?.keywords ? `Mots-clés: ${q.validation.keywords.join(', ')}` : "Détail de correction non disponible"))}
                                                     </pre>
                                                 </div>
                                             </div>
