@@ -35,6 +35,7 @@ interface Question {
     solution?: string; // For exercises
     detailed_solution?: string; // Detailed steps
     image_url?: string; // Context image
+    description?: string; // For exercises
     context?: string; // For exercises
     validation?: any; // For auto-grading reference
 }
