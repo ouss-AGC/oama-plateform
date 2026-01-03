@@ -35,8 +35,8 @@ interface Question {
     solution?: string; // For exercises
     detailed_solution?: string; // Detailed steps
     image_url?: string; // Context image
-    description?: string; // For exercises
     context?: string; // For exercises
+    validation?: any; // For auto-grading reference
 }
 
 interface QuizResult {
@@ -120,6 +120,7 @@ const StudentDetail: React.FC = () => {
                                                 context: section.context,
                                                 solution: section.solution,
                                                 detailed_solution: section.detailed_solution,
+                                                validation: subQ.validation || section.validation,
                                                 image_url: subQ.image || section.image_url,
                                                 // Map atomic fields to 'questions' with 'question' field for UI
                                                 questions: (subQ.subQuestions || []).map((atomic: any) => ({
