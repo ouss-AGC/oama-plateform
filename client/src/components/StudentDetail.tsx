@@ -29,8 +29,8 @@ interface Question {
     title?: string;
     options?: string[];
     correctAnswer?: number;
-    subQuestions?: SubQuestion[]; // For exercises - standardized field name
-    questions?: SubQuestion[]; // Deprecated, keep for safety
+    questions?: SubQuestion[]; // For exercises - standardized field name
+    parentId?: string; // Links sub-question to section
 
     solution?: string; // For exercises
     detailed_solution?: string; // Detailed steps
@@ -120,7 +120,7 @@ const StudentDetail: React.FC = () => {
                                                 context: section.context,
                                                 image_url: subQ.image || section.image_url,
                                                 // Map atomic fields to 'questions' with 'question' field for UI
-                                                subQuestions: (subQ.subQuestions || []).map((atomic: any) => ({
+                                                questions: (subQ.subQuestions || []).map((atomic: any) => ({
                                                     ...atomic,
                                                     label: atomic.label || atomic.question
                                                 }))
@@ -444,8 +444,8 @@ const StudentDetail: React.FC = () => {
             yPos += 2;
 
             if (isExercise) {
-                const subScoreSum = (q.subQuestions || []).reduce((sum: number, sq: any) => sum + (manualScores[`${q.id}_${sq.id}`] || 0), 0);
-                const maxPoints = q.subQuestions?.reduce((sum: number, sq: any) => sum + sq.points, 0) || 0;
+                const subScoreSum = (q.questions || []).reduce((sum: number, sq: any) => sum + (manualScores[`${q.id}_${sq.id}`] || 0), 0);
+                const maxPoints = q.questions?.reduce((sum: number, sq: any) => sum + sq.points, 0) || 0;
                 doc.setTextColor(100, 100, 100);
                 doc.text(`${subScoreSum.toFixed(2)} / ${maxPoints} pts`, 160, yPos);
             }
@@ -454,7 +454,7 @@ const StudentDetail: React.FC = () => {
 
             if (isExercise) {
                 const studentAnswers = result!.answers[index] || {};
-                (q.subQuestions || []).forEach((subQ: any) => {
+                (q.questions || []).forEach((subQ: any) => {
                     if (yPos > 260) { doc.addPage(); yPos = 20; }
 
                     doc.setFont("helvetica", "normal");
@@ -702,28 +702,41 @@ const StudentDetail: React.FC = () => {
                                     // Calculate separate scores
                                     const qcmScore = (quizQuestions.filter(q => q.type !== 'exercise' && result.answers[quizQuestions.indexOf(q)] === q.correctAnswer).length * 0.5);
 
-                                    // Find exercises
-                                    const exercises = quizQuestions.filter(q => q.type === 'exercise');
-                                    const part2 = exercises[0]; // Assumption: Order is P2 then P3
-                                    const part3 = exercises[1];
+                                    // Better logic for Explosion exam sections
+                                    const part2Questions = quizQuestions.filter(q => q.parentId === 'partie2' || (q.parentId === 'exercise_part2'));
+                                    const part3Questions = quizQuestions.filter(q => q.parentId === 'partie3' || (q.parentId === 'exercise_part3') || (q.id && String(q.id).includes('sdof')));
 
-                                    const part2Score = part2 ? (part2.questions || []).reduce((sum, sq) => sum + (manualScores[`${part2.id}_${sq.id}`] || 0), 0) : 0;
-                                    const part2Max = part2 ? (part2.questions || []).reduce((sum, sq) => sum + sq.points, 0) : 0;
+                                    const calculateSectionScore = (questions: any[]) => {
+                                        return questions.reduce((total, q) => {
+                                            const qItems = q.questions || [];
+                                            return total + qItems.reduce((sum: number, sq: any) => sum + (manualScores[`${q.id}_${sq.id}`] || 0), 0);
+                                        }, 0);
+                                    };
 
-                                    const part3Score = part3 ? (part3.questions || []).reduce((sum, sq) => sum + (manualScores[`${part3.id}_${sq.id}`] || 0), 0) : 0;
-                                    const part3Max = part3 ? (part3.questions || []).reduce((sum, sq) => sum + sq.points, 0) : 0;
+                                    const calculateSectionMax = (questions: any[]) => {
+                                        return questions.reduce((total, q) => {
+                                            const qItems = q.questions || [];
+                                            return total + qItems.reduce((sum: number, sq: any) => sum + sq.points, 0);
+                                        }, 0);
+                                    };
+
+                                    const part2Score = calculateSectionScore(part2Questions);
+                                    const part2Max = calculateSectionMax(part2Questions) || 6; // Fallback to 6 if calculation fails
+
+                                    const part3Score = calculateSectionScore(part3Questions);
+                                    const part3Max = calculateSectionMax(part3Questions) || 5; // Fallback to 5 if calculation fails
 
                                     return (
                                         <div className="flex space-x-2">
                                             <span className="text-xs px-2 py-1 bg-yellow-400 text-yellow-900 font-bold rounded shadow-sm border border-yellow-500">
                                                 Note QCM: {qcmScore.toFixed(1)}/9
                                             </span>
-                                            {part2 && (
+                                            {part2Questions.length > 0 && (
                                                 <span className="text-xs px-2 py-1 bg-blue-400 text-blue-900 font-bold rounded shadow-sm border border-blue-500">
                                                     Partie 2: {part2Score.toFixed(2)}/{part2Max}
                                                 </span>
                                             )}
-                                            {part3 && (
+                                            {part3Questions.length > 0 && (
                                                 <span className="text-xs px-2 py-1 bg-purple-400 text-purple-900 font-bold rounded shadow-sm border border-purple-500">
                                                     Partie 3: {part3Score.toFixed(2)}/{part3Max}
                                                 </span>
