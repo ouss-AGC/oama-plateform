@@ -515,8 +515,20 @@ const Quiz: React.FC = () => {
                 }
 
                 if (q.parentId) {
-                    // Save granular score (using unique sub-question ID) for Admin Manual Grading
+                    // Save granular score using the composite key expected by StudentDetail
+                    // We sum the question score and apply it to the main question key.
+                    // StudentDetail iterates manualScores[`${q.id}_${subQ.id}`].
+                    // Since we can't always map precisely, we'll store it at the question level
+                    // and also try to populate the first sub-question if total score is > 0.
                     manualScores[q.id] = questionScore;
+
+                    // If atomic sub questions exist, we try to distribute the score for display
+                    if (q.subQuestions && q.subQuestions.length > 0) {
+                        const pointsPerSub = questionScore / q.subQuestions.length;
+                        q.subQuestions.forEach((sq: any) => {
+                            manualScores[`${q.id}_${sq.id}`] = pointsPerSub;
+                        });
+                    }
                 }
                 earnedPoints += questionScore;
 
@@ -537,7 +549,7 @@ const Quiz: React.FC = () => {
         const resultData = {
             discipline: localStorage.getItem('selectedDiscipline'),
             student: studentData || JSON.parse(localStorage.getItem('studentInfo') || '{}'),
-            answers: finalAnswers,
+            answers: finalAnswers, // finalAnswers already contains the objects for exercises
             score: scorePercentage,
             scoreOn20: finalScoreOn20,
             totalQuestions: flattenedQuestions.length,

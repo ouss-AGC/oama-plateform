@@ -440,7 +440,9 @@ const AdminDashboard: React.FC = () => {
                             <h3 className="text-gray-500 text-sm font-medium">Temps Moyen</h3>
                             <Clock className="w-5 h-5 text-purple-500" />
                         </div>
-                        <p className="text-3xl font-bold text-gray-800">{Math.round(stats.avgTime)}s</p>
+                        <p className="text-3xl font-bold text-gray-800">
+                            {Math.floor(stats.avgTime / 60)}:{(Math.round(stats.avgTime % 60)).toString().padStart(2, '0')}
+                        </p>
                     </div>
                 </div>
 

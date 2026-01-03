@@ -318,7 +318,10 @@ const StudentDetail: React.FC = () => {
 
         doc.text(`Discipline: ${result!.discipline.toUpperCase()}`, 140, 70);
         doc.text(`Score: ${result!.scoreOn20.toFixed(2)}/20`, 140, 78);
-        doc.text(`Date: ${new Date(result!.timestamp).toLocaleDateString()}`, 140, 86);
+        const mins = Math.floor(result!.timeElapsed / 60);
+        const secs = Math.round(result!.timeElapsed % 60);
+        doc.text(`Temps: ${mins}:${secs.toString().padStart(2, '0')}`, 140, 84);
+        doc.text(`Date: ${new Date(result!.timestamp).toLocaleDateString()}`, 140, 90);
 
         let yPos = 110;
         doc.setFontSize(16);
@@ -330,7 +333,7 @@ const StudentDetail: React.FC = () => {
             const words = text.split(' ');
             let line = '';
             let currentY = y;
-            const lineHeight = fontSize * 0.5; // Pdf units approx
+            const lineHeight = fontSize * 0.7; // Increased from 0.5 to prevent overlapping
 
             const lines: string[] = [];
             let currentLineWords: string[] = [];
@@ -374,7 +377,7 @@ const StudentDetail: React.FC = () => {
                     }
 
                     doc.setFontSize(isSuper || isSub ? fontSize * 0.7 : fontSize);
-                    const offsetY = isSuper ? -1.5 : (isSub ? 1.5 : 0);
+                    const offsetY = isSuper ? -2 : (isSub ? 2 : 0); // Adjusted offsets
 
                     doc.text(segment, cursorX, currentY + offsetY);
 
@@ -383,7 +386,7 @@ const StudentDetail: React.FC = () => {
                     doc.setFontSize(fontSize);
                 });
 
-                currentY += lineHeight + 3;
+                currentY += lineHeight + 2;
             });
 
             return currentY;
