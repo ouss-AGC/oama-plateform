@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Clock, CheckCircle, ChevronRight, ChevronLeft, Save, AlertCircle, FileText, FileSearch, X, ZoomIn, LineChart, Terminal, ShieldCheck, Cpu, Volume2, StopCircle } from 'lucide-react';
+import { Clock, CheckCircle, ChevronRight, ChevronLeft, Save, AlertCircle, FileText, FileSearch, X, ZoomIn, LineChart, Terminal, ShieldCheck, Cpu, Volume2, StopCircle, Activity, Locate, Target, Shield } from 'lucide-react';
 import ExamPDFViewer from './ExamPDFViewer';
 import EmbeddedPDFViewer from './EmbeddedPDFViewer';
 import ImageZoom from './ImageZoom';
@@ -81,6 +81,7 @@ const Quiz: React.FC = () => {
 
     // Briefing states
     const [showBriefing, setShowBriefing] = useState(false);
+    const [isInitialBriefing, setIsInitialBriefing] = useState(false);
     const [briefingData, setBriefingData] = useState<{ title: string; message: string; image?: string; scholar?: string; scholarMessage?: string; imageStyle?: string } | null>(null);
     const [viewedBriefings, setViewedBriefings] = useState<Set<string>>(new Set());
     const [isSpeaking, setIsSpeaking] = useState(false);
@@ -322,6 +323,22 @@ const Quiz: React.FC = () => {
                 setFlattenedQuestions(allQuestions);
                 setAnswers(new Array(allQuestions.length).fill(null));
                 setLoading(false);
+
+                // Show FBI Intro if not practice and not already shown
+                const hasShownIntro = localStorage.getItem('fbi_intro_shown');
+                if (!isPractice && !hasShownIntro) {
+                    setBriefingData({
+                        title: "DIRECTIVE OPÉRATIONNELLE : GC31",
+                        message: "RECRUE, BIENVENUE DANS LA SALLE D'OPÉRATIONS. L'examen GC31 commence maintenant. \n\nCONSIGNES DE MISSION :\n1. PRÉCISION : Les QCM demandent une vigilance absolue. Chaque erreur impactera votre score final.\n2. MÉTHODOLOGIE : Pour les exercices, détaillez chaque étape. Le raisonnement est aussi crucial que le résultat.\n3. LOGISTIQUE : Les documents de référence sont accessibles sur votre interface. Exploitez-les.\n4. CHRONO : Vous disposez de 150 minutes. Gérez votre temps avec une discipline de fer.\n\nAucune distraction ne sera tolérée. Votre réussite est l'unique option.",
+                        image: "/scholars/ouss_briefing.jpg",
+                        scholar: "ADMINISTRATEUR - CHEF DES OPÉRATIONS",
+                        scholarMessage: "Restez concentré. La précision est votre meilleure alliée dans cette mission.",
+                        imageStyle: "object-cover object-top"
+                    });
+                    setIsInitialBriefing(true);
+                    setShowBriefing(true);
+                    localStorage.setItem('fbi_intro_shown', 'true');
+                }
 
                 timerRef.current = window.setInterval(() => {
                     setTimeLeft(prev => {
@@ -625,23 +642,27 @@ const Quiz: React.FC = () => {
     if (showBriefing && briefingData) {
         return (
             <div className="fixed inset-0 z-[100] bg-slate-950 flex flex-col items-center justify-center p-8 overflow-hidden">
+                {/* Scanning Line Effect */}
+                {isInitialBriefing && (
+                    <div className="absolute inset-x-0 h-[2px] bg-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.5)] z-20 animate-[scan_4s_linear_infinite] pointer-events-none"></div>
+                )}
                 {/* Background Grid Effect */}
                 <div className="absolute inset-0 opacity-10 pointer-events-none"
-                    style={{ backgroundImage: 'radial-gradient(circle, #06b6d4 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
+                    style={{ backgroundImage: `radial-gradient(circle, ${isInitialBriefing ? '#ef4444' : '#06b6d4'} 1px, transparent 1px)`, backgroundSize: '30px 30px' }}></div>
 
                 {/* Ambient Particles/Glow */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-cyan-900/20 via-slate-950/60 to-slate-950 pointer-events-none"></div>
+                <div className={`absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] ${isInitialBriefing ? 'from-red-900/20' : 'from-cyan-900/20'} via-slate-950/60 to-slate-950 pointer-events-none`}></div>
 
                 <div className="max-w-[90vw] w-full space-y-6 relative z-10 flex flex-col h-[90vh]">
                     {/* Header */}
-                    <div className="flex items-center justify-between border-b border-cyan-500/30 pb-4 shrink-0">
+                    <div className={`flex items-center justify-between border-b ${isInitialBriefing ? 'border-red-500/30' : 'border-cyan-500/30'} pb-4 shrink-0`}>
                         <div className="flex items-center space-x-6">
-                            <div className="p-4 bg-cyan-500/10 rounded-xl border border-cyan-500/50 animate-pulse">
-                                <Terminal className="w-10 h-10 text-cyan-400" />
+                            <div className={`p-4 ${isInitialBriefing ? 'bg-red-500/10 border-red-500/50' : 'bg-cyan-500/10 border-cyan-500/50'} rounded-xl border animate-pulse`}>
+                                {isInitialBriefing ? <Target className="w-10 h-10 text-red-400" /> : <Terminal className="w-10 h-10 text-cyan-400" />}
                             </div>
                             <div>
-                                <h2 className="text-cyan-500 font-mono text-sm tracking-[0.3em] font-black uppercase mb-1">
-                                    Transmission Entrante
+                                <h2 className={`${isInitialBriefing ? 'text-red-500' : 'text-cyan-500'} font-mono text-sm tracking-[0.3em] font-black uppercase mb-1`}>
+                                    {isInitialBriefing ? "ALERTE OPÉRATIONNELLE" : "Transmission Entrante"}
                                 </h2>
                                 <h1 className="text-4xl text-white font-black tracking-tight uppercase shadow-cyan- glow">
                                     {briefingData.title}
@@ -649,8 +670,8 @@ const Quiz: React.FC = () => {
                             </div>
                         </div>
                         <div className="flex space-x-8 text-xs font-mono text-slate-500 uppercase tracking-widest hidden md:flex">
-                            <div className="flex items-center"><ShieldCheck className="w-4 h-4 mr-2 text-green-500" /> Canal Sécurisé</div>
-                            <div className="flex items-center"><Cpu className="w-4 h-4 mr-2 text-cyan-500" /> Liaison Historique</div>
+                            <div className="flex items-center">{isInitialBriefing ? <Shield className="w-4 h-4 mr-2 text-red-500" /> : <ShieldCheck className="w-4 h-4 mr-2 text-green-500" />} {isInitialBriefing ? 'SESSION CLASSIFIÉE' : 'Canal Sécurisé'}</div>
+                            <div className="flex items-center"><Cpu className={`w-4 h-4 mr-2 ${isInitialBriefing ? 'text-red-500' : 'text-cyan-500'}`} /> {isInitialBriefing ? 'CRYPTAGE MILITAIRE' : 'Liaison Historique'}</div>
                         </div>
                     </div>
 
@@ -662,47 +683,47 @@ const Quiz: React.FC = () => {
                             <div className="w-full md:w-1/2 flex flex-col items-center justify-center relative group h-full">
                                 <div className="relative w-full aspect-square max-w-[600px] max-h-[600px] flex items-center justify-center">
                                     {/* Hologram Rings */}
-                                    <div className="absolute inset-0 border-[4px] border-cyan-500/30 rounded-full animate-[spin_10s_linear_infinite] border-t-cyan-400 border-l-transparent border-r-transparent"></div>
-                                    <div className="absolute inset-6 border-[2px] border-cyan-500/20 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
+                                    <div className={`absolute inset-0 border-[4px] ${isInitialBriefing ? 'border-red-500/30 border-t-red-400' : 'border-cyan-500/30 border-t-cyan-400'} rounded-full animate-[spin_10s_linear_infinite] border-l-transparent border-r-transparent`}></div>
+                                    <div className={`absolute inset-6 border-[2px] ${isInitialBriefing ? 'border-red-500/20' : 'border-cyan-500/20'} rounded-full animate-[spin_15s_linear_infinite_reverse]`}></div>
 
                                     {/* Image Container - Zoomed for Head-Only Portrait - GROUP for Hover */}
-                                    <div className="absolute inset-4 rounded-3xl overflow-hidden border-2 border-cyan-500/50 shadow-[0_0_80px_rgba(6,182,212,0.4)] bg-slate-900/80 backdrop-blur-sm group cursor-help">
+                                    <div className={`absolute inset-4 rounded-3xl overflow-hidden border-2 ${isInitialBriefing ? 'border-red-500/50 shadow-[0_0_80px_rgba(239,68,68,0.4)]' : 'border-cyan-500/50 shadow-[0_0_80px_rgba(6,182,212,0.4)]'} bg-slate-900/80 backdrop-blur-sm group cursor-help transition-all duration-300`}>
                                         <img
                                             src={briefingData.image}
                                             alt="Scholar"
-                                            className={`w-full h-full object-cover opacity-90 mix-blend-luminosity filter contrast-125 brightness-110 transition-transform duration-700 group-hover:scale-[1.4] group-hover:brightness-125 ${briefingData.imageStyle || 'object-top scale-[1.35] origin-top translate-y-4'}`}
+                                            className={`w-full h-full object-cover opacity-90 mix-blend-luminosity filter contrast-125 brightness-110 transition-transform duration-700 group-hover:scale-[1.4] group-hover:brightness-125 ${isInitialBriefing ? 'animate-flicker' : ''} ${briefingData.imageStyle || 'object-top scale-[1.35] origin-top translate-y-4'}`}
                                         />
                                         {/* Scanline Overlay on Image */}
-                                        <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(6,182,212,0.1)_50%)] bg-[length:100%_4px] pointer-events-none"></div>
+                                        <div className={`absolute inset-0 ${isInitialBriefing ? 'bg-[linear-gradient(transparent_50%,rgba(239,68,68,0.1)_50%)]' : 'bg-[linear-gradient(transparent_50%,rgba(6,182,212,0.1)_50%)]'} bg-[length:100%_4px] pointer-events-none`}></div>
 
                                         {/* HOVER OVERLAY - Message from Scholar */}
                                         {briefingData.scholarMessage && (
                                             <div className="absolute inset-0 flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 z-10 bg-gradient-to-t from-black/90 via-slate-900/60 to-transparent p-6">
-                                                <div className="bg-slate-950/70 border border-cyan-500/40 backdrop-blur-md rounded-xl p-4 shadow-[0_0_30px_rgba(6,182,212,0.2)] transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 w-full mb-4">
+                                                <div className={`bg-slate-950/70 border ${isInitialBriefing ? 'border-red-500/40 shadow-[0_0_30px_rgba(239,68,68,0.2)]' : 'border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.2)]'} backdrop-blur-md rounded-xl p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 w-full mb-4`}>
                                                     <div className="flex items-center justify-between mb-2">
-                                                        <span className="text-xs font-bold text-cyan-500 uppercase tracking-widest flex items-center">
-                                                            <Terminal className="w-3 h-3 mr-1" /> MESSAGE PRIORITAIRE
+                                                        <span className={`text-xs font-bold ${isInitialBriefing ? 'text-red-500' : 'text-cyan-500'} uppercase tracking-widest flex items-center`}>
+                                                            <Terminal className="w-3 h-3 mr-1" /> {isInitialBriefing ? "PRIORITÉ ABSOLUE" : "MESSAGE PRIORITAIRE"}
                                                         </span>
                                                         <button
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
                                                                 handleSpeak(briefingData.scholarMessage || '');
                                                             }}
-                                                            className={`p-1.5 rounded-full transition-all duration-300 ${isSpeaking ? 'bg-cyan-500/20 text-cyan-400 ring-1 ring-cyan-500 animate-pulse' : 'bg-transparent text-slate-400 hover:text-cyan-400 hover:bg-cyan-500/10'}`}
+                                                            className={`p-1.5 rounded-full transition-all duration-300 ${isSpeaking ? (isInitialBriefing ? 'bg-red-500/20 text-red-400 ring-1 ring-red-500' : 'bg-cyan-500/20 text-cyan-400 ring-1 ring-cyan-500') + ' animate-pulse' : 'bg-transparent text-slate-400 hover:text-cyan-400 hover:bg-cyan-500/10'}`}
                                                             title={isSpeaking ? "Arrêter la transmission" : "Écouter le message"}
                                                         >
                                                             {isSpeaking ? <StopCircle className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
                                                         </button>
                                                     </div>
-                                                    <p className="text-cyan-50 font-mono text-sm leading-relaxed text-shadow-sm">
+                                                    <p className={`${isInitialBriefing ? 'text-red-50' : 'text-cyan-50'} font-mono text-sm leading-relaxed text-shadow-sm`}>
                                                         "{briefingData.scholarMessage}"
                                                     </p>
                                                     {isSpeaking && (
                                                         <div className="flex items-center justify-center gap-1 mt-2 h-2">
-                                                            <div className="w-0.5 h-full bg-cyan-500 animate-[music_1s_ease-in-out_infinite]"></div>
-                                                            <div className="w-0.5 h-full bg-cyan-500 animate-[music_1.1s_ease-in-out_infinite]"></div>
-                                                            <div className="w-0.5 h-full bg-cyan-500 animate-[music_1.2s_ease-in-out_infinite]"></div>
-                                                            <div className="w-0.5 h-full bg-cyan-500 animate-[music_0.9s_ease-in-out_infinite]"></div>
+                                                            <div className={`w-0.5 h-full ${isInitialBriefing ? 'bg-red-500' : 'bg-cyan-500'} animate-[music_1s_ease-in-out_infinite]`}></div>
+                                                            <div className={`w-0.5 h-full ${isInitialBriefing ? 'bg-red-500' : 'bg-cyan-500'} animate-[music_1.1s_ease-in-out_infinite]`}></div>
+                                                            <div className={`w-0.5 h-full ${isInitialBriefing ? 'bg-red-500' : 'bg-cyan-500'} animate-[music_1.2s_ease-in-out_infinite]`}></div>
+                                                            <div className={`w-0.5 h-full ${isInitialBriefing ? 'bg-red-500' : 'bg-cyan-500'} animate-[music_0.9s_ease-in-out_infinite]`}></div>
                                                         </div>
                                                     )}
                                                 </div>
@@ -729,16 +750,16 @@ const Quiz: React.FC = () => {
                         <div className={`bg-slate-900/60 rounded-3xl border border-slate-700 backdrop-blur-2xl shadow-2xl flex flex-col relative overflow-hidden h-full max-h-[70vh] ${briefingData.image ? 'w-full md:w-1/2' : 'w-full'}`}>
                             {/* Decorative corner accents */}
                             <div className="absolute top-0 right-0 p-4">
-                                <div className="w-20 h-20 border-t-4 border-r-4 border-cyan-500/40 rounded-tr-2xl"></div>
+                                <div className={`w-20 h-20 border-t-4 border-r-4 ${isInitialBriefing ? 'border-red-500/40' : 'border-cyan-500/40'} rounded-tr-2xl`}></div>
                             </div>
                             <div className="absolute bottom-0 left-0 p-4">
-                                <div className="w-20 h-20 border-b-4 border-l-4 border-cyan-500/40 rounded-bl-2xl"></div>
+                                <div className={`w-20 h-20 border-b-4 border-l-4 ${isInitialBriefing ? 'border-red-500/40' : 'border-cyan-500/40'} rounded-bl-2xl`}></div>
                             </div>
 
                             <div className="p-10 md:p-14 flex-grow font-mono text-xl md:text-2xl leading-loose text-cyan-50 text-shadow overflow-y-auto custom-scrollbar flex items-center">
                                 <div className="w-full">
-                                    <Typewriter text={briefingData.message} speed={15} />
-                                    <span className="inline-block w-3 h-8 bg-cyan-400 ml-2 animate-pulse align-middle"></span>
+                                    <Typewriter text={briefingData.message} speed={isInitialBriefing ? 10 : 15} />
+                                    <span className={`inline-block w-3 h-8 ${isInitialBriefing ? 'bg-red-400' : 'bg-cyan-400'} ml-2 animate-pulse align-middle`}></span>
                                 </div>
                             </div>
                         </div>
@@ -747,10 +768,13 @@ const Quiz: React.FC = () => {
                     {/* Footer Actions */}
                     <div className="flex justify-end items-center pt-4 shrink-0">
                         <button
-                            onClick={() => setShowBriefing(false)}
-                            className="bg-cyan-600/20 hover:bg-cyan-500/40 border-2 border-cyan-500/60 text-cyan-200 hover:text-white px-16 py-6 rounded-2xl font-black text-xl tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(6,182,212,0.25)] flex items-center group backdrop-blur-md hover:shadow-cyan-500/20"
+                            onClick={() => {
+                                setShowBriefing(false);
+                                setIsInitialBriefing(false);
+                            }}
+                            className={`${isInitialBriefing ? 'bg-red-600/20 hover:bg-red-500/40 border-red-500/60 text-red-200' : 'bg-cyan-600/20 hover:bg-cyan-500/40 border-cyan-500/60 text-cyan-200'} border-2 px-16 py-6 rounded-2xl font-black text-xl tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(6,182,212,0.25)] flex items-center group backdrop-blur-md hover:shadow-cyan-500/20`}
                         >
-                            ACCUSER RÉCEPTION
+                            {isInitialBriefing ? "DÉBUTER LA MISSION" : "ACCUSER RÉCEPTION"}
                             <ChevronRight className="w-8 h-8 ml-4 group-hover:translate-x-2 transition-transform" />
                         </button>
                     </div>
