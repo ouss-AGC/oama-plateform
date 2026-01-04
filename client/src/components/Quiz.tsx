@@ -322,8 +322,6 @@ const Quiz: React.FC = () => {
 
                 setFlattenedQuestions(allQuestions);
                 setAnswers(new Array(allQuestions.length).fill(null));
-                setLoading(false);
-
                 // Show FBI Intro if not practice and not already shown
                 const hasShownIntro = localStorage.getItem('fbi_intro_shown');
                 if (!isPractice && !hasShownIntro) {
@@ -339,6 +337,8 @@ const Quiz: React.FC = () => {
                     setShowBriefing(true);
                     localStorage.setItem('fbi_intro_shown', 'true');
                 }
+
+                setLoading(false);
 
                 timerRef.current = window.setInterval(() => {
                     setTimeLeft(prev => {
@@ -380,7 +380,7 @@ const Quiz: React.FC = () => {
             const currentQ = flattenedQuestions[currentQuestionIndex];
             const currentPart = currentQ.sectionTitle || "";
 
-            if (currentPart && !viewedBriefings.has(currentPart) && !isInitialBriefing) {
+            if (currentPart && !viewedBriefings.has(currentPart) && !isInitialBriefing && !briefingData?.title.includes('DIRECTIVE')) {
                 const description = (currentQ as any).sectionDescription || "";
 
                 // Get scholar info from the section data
