@@ -380,7 +380,7 @@ const Quiz: React.FC = () => {
             const currentQ = flattenedQuestions[currentQuestionIndex];
             const currentPart = currentQ.sectionTitle || "";
 
-            if (currentPart && !viewedBriefings.has(currentPart)) {
+            if (currentPart && !viewedBriefings.has(currentPart) && !isInitialBriefing) {
                 const description = (currentQ as any).sectionDescription || "";
 
                 // Get scholar info from the section data
