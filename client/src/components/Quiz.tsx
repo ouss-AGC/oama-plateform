@@ -411,7 +411,7 @@ const Quiz: React.FC = () => {
                 });
             }
         }
-    }, [currentQuestionIndex, flattenedQuestions, viewedBriefings, quizData]);
+    }, [currentQuestionIndex, flattenedQuestions, viewedBriefings, quizData, isInitialBriefing]);
 
     const formatTime = (seconds: number) => {
         const hours = Math.floor(seconds / 3600);
