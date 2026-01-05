@@ -197,6 +197,9 @@ const Quiz: React.FC = () => {
     };
 
     useEffect(() => {
+        // Cleanup old persistent briefing flag if it exists
+        localStorage.removeItem('fbi_intro_shown');
+
         const urlParams = new URLSearchParams(window.location.search);
         const mode = urlParams.get('mode');
         const urlDiscipline = urlParams.get('discipline');
@@ -322,8 +325,8 @@ const Quiz: React.FC = () => {
 
                 setFlattenedQuestions(allQuestions);
                 setAnswers(new Array(allQuestions.length).fill(null));
-                // Show FBI Intro if not practice and not already shown
-                const hasShownIntro = localStorage.getItem('fbi_intro_shown');
+                // Show FBI Intro if not practice and not already shown in THIS session
+                const hasShownIntro = sessionStorage.getItem('fbi_intro_shown');
                 if (!isPractice && !hasShownIntro) {
                     setBriefingData({
                         title: "DIRECTIVE OPÉRATIONNELLE : GC31",
@@ -335,7 +338,6 @@ const Quiz: React.FC = () => {
                     });
                     setIsInitialBriefing(true);
                     setShowBriefing(true);
-                    localStorage.setItem('fbi_intro_shown', 'true');
                 }
 
                 setLoading(false);
@@ -769,6 +771,9 @@ const Quiz: React.FC = () => {
                     <div className="flex justify-end items-center pt-4 shrink-0">
                         <button
                             onClick={() => {
+                                if (isInitialBriefing) {
+                                    sessionStorage.setItem('fbi_intro_shown', 'true');
+                                }
                                 setShowBriefing(false);
                                 setIsInitialBriefing(false);
                             }}
