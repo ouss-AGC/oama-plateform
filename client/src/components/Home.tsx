@@ -298,16 +298,12 @@ const Home: React.FC = () => {
                         )}
                     </div>
 
-                    {/* Admin Link */}
-                    <div className="text-center">
-                        <button
-                            onClick={() => navigate('/admin/login')}
-                            className="text-gray-500 hover:text-white text-sm flex items-center justify-center mx-auto transition-colors"
-                        >
-                            <Lock className="w-3 h-3 mr-1" />
-                            Accès Administrateur
-                        </button>
-                    </div>
+                    {/* Secret Admin Trigger - Hidden point in bottom-right floor */}
+                    <div
+                        onClick={() => navigate('/admin/login')}
+                        className="fixed bottom-0 right-0 w-4 h-4 cursor-default opacity-[0.01] hover:opacity-10 z-[9999]"
+                        title=""
+                    ></div>
                 </div>
 
                 {/* Copyright Footer */}
