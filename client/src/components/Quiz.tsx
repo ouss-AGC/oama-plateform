@@ -327,7 +327,7 @@ const Quiz: React.FC = () => {
                 if (!isPractice && !hasShownIntro) {
                     setBriefingData({
                         title: "DIRECTIVE OPÉRATIONNELLE : GC31",
-                        message: "RECRUE, BIENVENUE DANS LA SALLE D'OPÉRATIONS. L'examen GC31 commence maintenant. \n\nCONSIGNES DE MISSION :\n1. PRÉCISION : Les QCM demandent une vigilance absolue. Chaque erreur impactera votre score final.\n2. MÉTHODOLOGIE : Pour les exercices, détaillez chaque étape. Le raisonnement est aussi crucial que le résultat.\n3. LOGISTIQUE : Les documents de référence sont accessibles sur votre interface. Exploitez-les.\n4. CHRONO : Vous disposez de 150 minutes. Gérez votre temps avec une discipline de fer.\n\nAucune distraction ne sera tolérée. Votre réussite est l'unique option.",
+                        message: "RECRUE, BIENVENUE DANS LA SALLE D'OPÉRATIONS.\nL'examen GC31 commence maintenant.\n\nCONSIGNES DE MISSION :\n\n1. PRÉCISION : Les QCM demandent une vigilance absolue.\n\n2. MÉTHODOLOGIE : Pour les exercices, détaillez chaque étape.\n\n3. LOGISTIQUE : Les documents de référence sont accessibles.\n\n4. CHRONO : Vous disposez de 150 minutes.\n\nAucune distraction ne sera tolérée.\nVotre réussite est l'unique option.",
                         image: "/scholars/ouss_briefing.jpg",
                         scholar: "ADMINISTRATEUR - CHEF DES OPÉRATIONS",
                         scholarMessage: "Restez concentré. La précision est votre meilleure alliée dans cette mission.",
@@ -757,7 +757,7 @@ const Quiz: React.FC = () => {
                             </div>
 
                             <div className="p-10 md:p-14 flex-grow font-mono text-xl md:text-2xl leading-loose text-cyan-50 text-shadow overflow-y-auto custom-scrollbar flex items-center">
-                                <div className="w-full">
+                                <div className="w-full whitespace-pre-wrap">
                                     <Typewriter text={briefingData.message} speed={isInitialBriefing ? 10 : 15} />
                                     <span className={`inline-block w-3 h-8 ${isInitialBriefing ? 'bg-red-400' : 'bg-cyan-400'} ml-2 animate-pulse align-middle`}></span>
                                 </div>
