@@ -272,7 +272,7 @@ const Quiz: React.FC = () => {
                 let allQuestions: Question[] = [];
                 if (data.sections) {
                     data.sections.forEach(section => {
-                        if (section.type === 'exercise') {
+                        if (section.type === 'exercise' && discipline !== 'munitions') {
                             // Split sub-questions into individual items
                             const subQs = section.questions || [];
                             subQs.forEach((subQ: any) => {
@@ -297,7 +297,7 @@ const Quiz: React.FC = () => {
                                     pdfUrl: (section as any).pdfUrl  // Add section PDF URL
                                 });
                             });
-                        } else {
+                        } else if (section.type !== 'exercise') {
                             // QCM Section: Add individual questions
                             if (section.questions) {
                                 section.questions.forEach(q => {
@@ -1225,8 +1225,8 @@ const Quiz: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Right Sidebar: Symbol Palette - Hidden for Part 1 */}
-                {currentQuestion.parentId !== 'part1' && (
+                {/* Right Sidebar: Symbol Palette - Hidden for Part 1 or Munitions discipline */}
+                {discipline !== 'munitions' && currentQuestion.parentId !== 'part1' && (
                     <div className="hidden lg:block w-80 bg-white rounded-xl shadow-2xl h-fit sticky top-4 overflow-hidden border border-gray-100">
                         <div className="bg-slate-800 p-4 flex items-center justify-between">
                             <h3 className="font-black text-white flex items-center uppercase tracking-widest text-xs">
