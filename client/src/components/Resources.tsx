@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, BookOpen, Video, FileText, ExternalLink, CheckCircle, Play, Award, Zap, Book, Sparkles } from 'lucide-react';
+import { ArrowLeft, BookOpen, Video, FileText, ExternalLink, CheckCircle, Play, Award, Zap, Book, Sparkles, Lock, ShieldAlert } from 'lucide-react';
 
 interface PracticeExam {
     id: number;
@@ -38,6 +38,33 @@ const Resources: React.FC = () => {
     const [resources, setResources] = useState<ResourcesData>({ practiceExams: [], videos: [] });
     const [discipline, setDiscipline] = useState('munitions');
     const [loading, setLoading] = useState(true);
+    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+    const [selectedToolUrl, setSelectedToolUrl] = useState<string | null>(null);
+    const [passwordInput, setPasswordInput] = useState('');
+    const [passwordError, setPasswordError] = useState<string | null>(null);
+
+    const SECRET_CODE = "LASM32025";
+
+    const handleToolClick = (url: string) => {
+        setSelectedToolUrl(url);
+        setIsPasswordModalOpen(true);
+        setPasswordInput('');
+        setPasswordError(null);
+    };
+
+    const handlePasswordSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (passwordInput === SECRET_CODE) {
+            if (selectedToolUrl) {
+                window.open(selectedToolUrl, '_blank', 'noopener,noreferrer');
+            }
+            setIsPasswordModalOpen(false);
+            setSelectedToolUrl(null);
+            setPasswordError(null);
+        } else {
+            setPasswordError("Code d'accès incorrect. Veuillez réessayer.");
+        }
+    };
 
     useEffect(() => {
         const fetchResources = async () => {
@@ -142,15 +169,13 @@ const Resources: React.FC = () => {
                                                 <h3 className="text-xl font-bold text-white">{tool.title}</h3>
                                             </div>
                                             <p className="text-gray-300 mb-6">{tool.description}</p>
-                                            <a
-                                                href={tool.fileUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="flex items-center justify-center w-full px-6 py-3 bg-indigo-600 text-white rounded-lg font-bold hover:bg-indigo-700 transition-all shadow-md group-hover:shadow-indigo-500/20"
+                                            <button
+                                                onClick={() => handleToolClick(tool.fileUrl)}
+                                                className="flex items-center justify-center w-full px-6 py-3 bg-indigo-600 text-white rounded-lg font-bold hover:bg-indigo-700 transition-all shadow-md group-hover:shadow-indigo-500/20 cursor-pointer"
                                             >
                                                 Ouvrir l'Outil
                                                 <ExternalLink className="w-4 h-4 ml-2" />
-                                            </a>
+                                            </button>
                                         </div>
                                     ))}
                                 </div>
@@ -263,6 +288,55 @@ const Resources: React.FC = () => {
                     </div>
                 )}
             </div>
+            {/* Password Protection Modal */}
+            {isPasswordModalOpen && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black bg-opacity-80 backdrop-blur-sm">
+                    <div className="bg-gray-900 border-2 border-indigo-500 rounded-2xl p-8 max-w-md w-full shadow-2xl transform transition-all animate-in fade-in zoom-in duration-300">
+                        <div className="text-center mb-8">
+                            <div className="inline-block p-4 bg-indigo-600 rounded-full mb-4 shadow-lg shadow-indigo-500/20">
+                                <Lock className="w-10 h-10 text-white" />
+                            </div>
+                            <h2 className="text-2xl font-bold text-white mb-2">Accès Sécurisé</h2>
+                            <p className="text-gray-400">Cette ressource est réservée. Veuillez saisir le code d'accès pour continuer.</p>
+                        </div>
+
+                        <form onSubmit={handlePasswordSubmit}>
+                            <div className="relative mb-6">
+                                <input
+                                    type="password"
+                                    value={passwordInput}
+                                    onChange={(e) => setPasswordInput(e.target.value)}
+                                    placeholder="Entrez le code secret..."
+                                    className={`w-full bg-gray-800 border-2 ${passwordError ? 'border-red-500' : 'border-gray-700 focus:border-indigo-500'} text-white rounded-xl px-4 py-4 outline-none transition-all text-center text-xl tracking-widest`}
+                                    autoFocus
+                                />
+                                {passwordError && (
+                                    <div className="flex items-center justify-center mt-3 text-red-500 text-sm font-semibold animate-bounce">
+                                        <ShieldAlert className="w-4 h-4 mr-2" />
+                                        {passwordError}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="flex flex-col gap-3">
+                                <button
+                                    type="submit"
+                                    className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-indigo-500/20 transform active:scale-95"
+                                >
+                                    Valider et Ouvrir
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setIsPasswordModalOpen(false)}
+                                    className="w-full py-3 text-gray-400 hover:text-white transition-colors"
+                                >
+                                    Annuler
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
