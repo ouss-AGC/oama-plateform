@@ -250,7 +250,10 @@ const Home: React.FC = () => {
                             // Three buttons for Munitions: Resources, Practice, and Official
                             <div className="flex flex-col gap-3 justify-center items-center">
                                 <button
-                                    onClick={() => navigate('/resources')}
+                                    onClick={() => {
+                                        localStorage.setItem('selectedDiscipline', 'munitions');
+                                        navigate('/resources', { state: { skipIntro: true } });
+                                    }}
                                     className="px-8 py-3 rounded-full font-bold text-base flex items-center transition-all duration-300 shadow-xl bg-purple-600 text-white hover:bg-purple-700 hover:scale-105 cursor-pointer"
                                 >
                                     <BookOpen className="mr-2 w-5 h-5" />

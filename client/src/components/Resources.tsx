@@ -27,6 +27,7 @@ interface ResourcesData {
 const Resources: React.FC = () => {
     const navigate = useNavigate();
     const [resources, setResources] = useState<ResourcesData>({ practiceExams: [], videos: [] });
+    const [discipline, setDiscipline] = useState('munitions');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -34,6 +35,7 @@ const Resources: React.FC = () => {
             try {
                 // Get the selected discipline from localStorage
                 const selectedDiscipline = localStorage.getItem('selectedDiscipline') || 'munitions';
+                setDiscipline(selectedDiscipline);
 
                 // Map discipline to resource file
                 const resourceFile = `/${selectedDiscipline}_resources.json`;
@@ -70,7 +72,7 @@ const Resources: React.FC = () => {
                     </button>
                     <h1 className="text-3xl md:text-4xl font-bold text-white">
                         <BookOpen className="inline-block w-8 h-8 mr-3 text-military-beige" />
-                        Ressources - Généralités sur les Munitions
+                        Ressources - {discipline === 'munitions' ? 'LASM3 (Généralités Munitions)' : 'GC31 (Explosions)'}
                     </h1>
                 </div>
 
@@ -121,7 +123,9 @@ const Resources: React.FC = () => {
                                 </span>
                             </div>
                             <p className="text-gray-200 mb-6 text-lg">
-                                🎬 Visualisations 3D pour comprendre le fonctionnement des différents types de munitions vus en classe.
+                                🎬 {discipline === 'munitions'
+                                    ? "Visualisations 3D pour comprendre le fonctionnement des différents types de munitions vus en classe."
+                                    : "Vidéos et animations explicatives pour approfondir les concepts du cours."}
                             </p>
 
                             {resources.videos.length > 0 ? (

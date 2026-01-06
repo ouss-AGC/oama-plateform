@@ -328,12 +328,17 @@ const Quiz: React.FC = () => {
                 // Show FBI Intro if not practice and not already shown in THIS session
                 const hasShownIntro = sessionStorage.getItem('fbi_intro_shown');
                 if (!isPractice && !hasShownIntro) {
+                    const isMunitions = discipline === 'munitions';
                     setBriefingData({
-                        title: "DIRECTIVE OPÉRATIONNELLE : GC31",
-                        message: "RECRUE, BIENVENUE DANS LA SALLE D'OPÉRATIONS.\nL'examen GC31 commence maintenant.\n\nCONSIGNES DE MISSION :\n\n1. PRÉCISION : Les QCM demandent une vigilance absolue.\n\n2. MÉTHODOLOGIE : Pour les exercices, détaillez chaque étape.\n\n3. LOGISTIQUE : Les documents de référence sont accessibles.\n\n4. CHRONO : Vous disposez de 150 minutes.\n\nAucune distraction ne sera tolérée.\nVotre réussite est l'unique option.",
+                        title: isMunitions ? "DIRECTIVE OPÉRATIONNELLE : LASM3" : "DIRECTIVE OPÉRATIONNELLE : GC31",
+                        message: isMunitions
+                            ? "RECRUE, BIENVENUE DANS LA SALLE D'OPÉRATIONS.\nL'interrogation LASM3 commence maintenant.\n\nCONSIGNES DE MISSION :\n\n1. DISCIPLINE : Les QCM demandent une concentration totale.\n\n2. RIGUEUR : Répondez avec précision aux questions techniques.\n\n3. LOGISTIQUE : Identifiez correctement chaque type de munition.\n\n4. CHRONO : Gérez votre temps efficacement.\n\nLa maîtrise technique est votre seule arme.\nBonne chance."
+                            : "RECRUE, BIENVENUE DANS LA SALLE D'OPÉRATIONS.\nL'examen GC31 commence maintenant.\n\nCONSIGNES DE MISSION :\n\n1. PRÉCISION : Les QCM demandent une vigilance absolue.\n\n2. MÉTHODOLOGIE : Pour les exercices, détaillez chaque étape.\n\n3. LOGISTIQUE : Les documents de référence sont accessibles.\n\n4. CHRONO : Vous disposez de 150 minutes.\n\nAucune distraction ne sera tolérée.\nVotre réussite est l'unique option.",
                         image: "/scholars/ouss_briefing.jpg",
                         scholar: "ADMINISTRATEUR - CHEF DES OPÉRATIONS",
-                        scholarMessage: "Restez concentré. La précision est votre meilleure alliée dans cette mission.",
+                        scholarMessage: isMunitions
+                            ? "Restez concentré sur la nomenclature. La sécurité dépend de votre expertise."
+                            : "Restez concentré. La précision est votre meilleure alliée dans cette mission.",
                         imageStyle: "object-cover object-top"
                     });
                     setIsInitialBriefing(true);
@@ -1281,7 +1286,7 @@ const Quiz: React.FC = () => {
                     </div>
                     <div className="flex-grow">
                         <ExamPDFViewer
-                            pdfUrl={`/resources/exam_explosions_gc31.pdf`}
+                            pdfUrl={discipline === 'munitions' ? `/resources/DS MUNITION LASM3.pdf` : `/resources/exam_explosions_gc31.pdf`}
                             isOpen={isPdfViewerOpen}
                             onClose={() => setIsPdfViewerOpen(false)}
                             studentName={studentData?.nom}
