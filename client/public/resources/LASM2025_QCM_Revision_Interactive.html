@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LASM 2025 - Révision QCM Interactif</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Roboto:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #0a0a0f;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+            padding: 20px 40px;
+            border-bottom: 3px solid #00d9ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .header-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 28px;
+            font-weight: 700;
+            color: #00d9ff;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+        }
+
+        .header-info {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .progress-bar {
+            background: rgba(0, 217, 255, 0.1);
+            border: 2px solid #00d9ff;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #00d9ff;
+            font-weight: 700;
+        }
+
+        .score-display {
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px solid #4caf50;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #4caf50;
+            font-weight: 700;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            border-right: 2px solid #00d9ff;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #00d9ff;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #00d9ff;
+            padding-bottom: 10px;
+        }
+
+        .question-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .question-btn {
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid #00d9ff;
+            color: #cccccc;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .question-btn:hover {
+            background: rgba(0, 217, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .question-btn.active {
+            background: #00d9ff;
+            color: #1a1a2e;
+            font-weight: 700;
+        }
+
+        .question-btn.answered {
+            background: rgba(76, 175, 80, 0.2);
+            border-color: #4caf50;
+        }
+
+        .question-btn.answered.active {
+            background: #4caf50;
+            color: #ffffff;
+        }
+
+        .content-area {
+            flex: 1;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .content-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(0, 217, 255, 0.03) 25%, rgba(0, 217, 255, 0.03) 26%, transparent 27%, transparent 74%, rgba(0, 217, 255, 0.03) 75%, rgba(0, 217, 255, 0.03) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(0, 217, 255, 0.03) 25%, rgba(0, 217, 255, 0.03) 26%, transparent 27%, transparent 74%, rgba(0, 217, 255, 0.03) 75%, rgba(0, 217, 255, 0.03) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .question-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .question-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: #ffb74d;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #00d9ff;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .option {
+            background: rgba(0, 217, 255, 0.05);
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            padding: 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 18px;
+            color: #cccccc;
+        }
+
+        .option:hover {
+            background: rgba(0, 217, 255, 0.15);
+            border-color: #00d9ff;
+            transform: translateX(10px);
+        }
+
+        .option.selected {
+            background: rgba(0, 217, 255, 0.3);
+            border-color: #00d9ff;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .option.correct {
+            background: rgba(76, 175, 80, 0.2);
+            border-color: #4caf50;
+            color: #4caf50;
+        }
+
+        .option.incorrect {
+            background: rgba(244, 67, 54, 0.2);
+            border-color: #f44336;
+            color: #ff7961;
+        }
+
+        .explanation-box {
+            background: rgba(0, 217, 255, 0.1);
+            border: 2px solid #00d9ff;
+            padding: 20px;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-size: 17px;
+            color: #cccccc;
+            line-height: 1.8;
+            display: none;
+        }
+
+        .explanation-box.show {
+            display: block;
+        }
+
+        .explanation-title {
+            font-weight: 700;
+            color: #00d9ff;
+            margin-bottom: 10px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: space-between;
+        }
+
+        button {
+            background: #00d9ff;
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        button:hover {
+            background: #00b8cc;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        button:disabled {
+            background: #666666;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .stats-box {
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px solid #4caf50;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #4caf50;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(0, 217, 255, 0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #00d9ff;
+            border-radius: 4px;
+        }
+
+        .content-area::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .content-area::-webkit-scrollbar-track {
+            background: rgba(0, 217, 255, 0.1);
+        }
+
+        .content-area::-webkit-scrollbar-thumb {
+            background: #00d9ff;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .content-area {
+                padding: 20px;
+            }
+
+            .question-text {
+                font-size: 20px;
+            }
+
+            .option {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-title">🎯 LASM 2025 - RÉVISION QCM</div>
+            <div class="header-info">
+                <div class="progress-bar">
+                    <span id="progress">1</span> / <span id="total">66</span>
+                </div>
+                <div class="score-display">
+                    Score: <span id="score">0</span> / <span id="total-score">66</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="sidebar-title">📋 Questions</div>
+                <div class="question-list" id="questionList"></div>
+            </div>
+
+            <div class="content-area">
+                <div class="question-content">
+                    <div class="question-number" id="questionNumber"></div>
+                    <div class="question-text" id="questionText"></div>
+                    <div class="options-container" id="optionsContainer"></div>
+                    <div class="explanation-box" id="explanationBox">
+                        <div class="explanation-title">💡 Explication:</div>
+                        <div id="explanationText"></div>
+                    </div>
+                    <div class="stats-box" id="statsBox" style="display: none;"></div>
+                    <div class="controls">
+                        <button onclick="previousQuestion()" id="prevBtn">← Précédent</button>
+                        <button onclick="showExplanation()" id="explainBtn">Voir l'explication</button>
+                        <button onclick="nextQuestion()" id="nextBtn">Suivant →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Questions data
+        const questions = [
+            {
+                id: 1,
+                text: "Quel phénomène est caractérisé par une onde de choc ?",
+                options: ["Combustion vive", "Déflagration", "Décomposition lente", "Détonation"],
+                correct: 3,
+                explanation: "La détonation est caractérisée par une onde de choc qui se propage à une vitesse supersonique (généralement > 1000 m/s). C'est le phénomène le plus violent et le plus rapide."
+            },
+            {
+                id: 2,
+                text: "Quel est le régime normal de décomposition d'une substance propulsive ?",
+                options: ["Détonation", "Déflagration", "Combustion vive", "Auto-inflammation"],
+                correct: 1,
+                explanation: "Les substances propulsives (comme la poudre) se décomposent normalement par déflagration, qui est une combustion vive mais subsonique. La détonation serait dangereuse et indésirable pour les propulseurs."
+            },
+            {
+                id: 3,
+                text: "La poudre noire est constituée de soufre, charbon et :",
+                options: ["Chlorate de potassium", "Azoture de plomb", "Nitrate de potassium (salpêtre)", "Nitroglycérine"],
+                correct: 2,
+                explanation: "La poudre noire est composée de 75% de nitrate de potassium (salpêtre), 15% de charbon et 10% de soufre. Cette formule a été utilisée pendant des siècles."
+            },
+            {
+                id: 4,
+                text: "Les quatre composants d'une cartouche complète sont projectile, douille, poudre et :",
+                options: ["L'enclume", "L'amorce", "Le talon", "Le chemisage"],
+                correct: 1,
+                explanation: "Les quatre composants essentiels d'une cartouche sont: 1) Le projectile (balle), 2) La douille (étui), 3) La poudre (propergol), 4) L'amorce (pour l'allumage)."
+            },
+            {
+                id: 5,
+                text: "Les cartouches d'entraînement sans projectile sont dites :",
+                options: ["Ordinaires", "Perforantes", "À blanc", "Incendiaires"],
+                correct: 2,
+                explanation: "Les cartouches à blanc (ou cartouches d'entraînement) contiennent une amorce et de la poudre mais pas de projectile. Elles sont utilisées pour l'entraînement et les exercices."
+            },
+            {
+                id: 6,
+                text: "Un calibre est généralement noté par :",
+                options: ["Diamètre × longueur de douille", "Masse × énergie", "Type de poudre × flamme", "Pression × vitesse"],
+                correct: 0,
+                explanation: "Le calibre est noté par le diamètre du projectile (en mm ou pouces) multiplié par la longueur de la douille. Par exemple: 7.62×51 NATO signifie 7.62 mm de diamètre et 51 mm de longueur de douille."
+            },
+            {
+                id: 7,
+                text: "Le calibre .308 Winchester correspond au :",
+                options: ["5.56×45 NATO", "7.62×39", "7.62×51 NATO", "12.7×99 NATO"],
+                correct: 2,
+                explanation: "Le .308 Winchester est équivalent au 7.62×51 NATO. C'est un calibre très populaire pour les fusils de précision et les armes de chasse."
+            },
+            {
+                id: 8,
+                text: "En calibre de chasse (Gauge), le facteur déterminant est :",
+                options: ["Le diamètre", "Le poids des sphères de plomb", "La pression maximale", "La force de la poudre"],
+                correct: 1,
+                explanation: "En calibre Gauge (comme 12 Gauge, 20 Gauge), le facteur déterminant est le poids des sphères de plomb. Un calibre 12 Gauge signifie que 12 sphères de plomb de diamètre égal au canon pèsent une livre."
+            },
+            {
+                id: 9,
+                text: "La fonction perforante est désignée par :",
+                options: ["OTM", "BT", "HP", "AP"],
+                correct: 3,
+                explanation: "AP signifie 'Armor Piercing' (perforant). Ces projectiles sont conçus pour traverser les armures et les blindages. OTM = Open Tip Match, BT = Boat Tail, HP = Hollow Point."
+            },
+            {
+                id: 10,
+                text: "La fonction pointe creuse est :",
+                options: ["FMJ", "HP", "SP", "BT"],
+                correct: 1,
+                explanation: "HP signifie 'Hollow Point' (pointe creuse). Ces projectiles se déforment à l'impact pour augmenter les dégâts. Ils sont interdits pour les usages militaires par la Convention de La Haye."
+            },
+            {
+                id: 11,
+                text: "FMJ signifie :",
+                options: ["Full Metal Jacket", "Force Mass Jacket", "Flache Masse Joule", "Firearm Mechanism Joint"],
+                correct: 0,
+                explanation: "FMJ signifie 'Full Metal Jacket' (chemisé intégralement). C'est un projectile dont le noyau de plomb est entièrement recouvert d'une chemise métallique."
+            },
+            {
+                id: 12,
+                text: "BT signifie :",
+                options: ["Ballistic Tip", "Base Truncated", "Boat Tail", "Bullet Target"],
+                correct: 2,
+                explanation: "BT signifie 'Boat Tail' (queue de bateau). C'est une forme de projectile avec une queue effilée pour améliorer la balistique et réduire la traînée aérodynamique."
+            },
+            {
+                id: 13,
+                text: "Le rôle principal de la douille est :",
+                options: ["Transformer l'énergie chimique", "Assurer l'étanchéité de la chambre", "Allumer la poudre", "Résister uniquement à la corrosion"],
+                correct: 1,
+                explanation: "Le rôle principal de la douille est d'assurer l'étanchéité de la chambre de combustion pendant le tir. Elle contient la poudre et l'amorce, et se dilate pour sceller la chambre."
+            },
+            {
+                id: 14,
+                text: "En amorce Berdan, l'enclumette est :",
+                options: ["Dans l'amorce", "Intégrée à la douille", "Absente", "Dans le chargeur"],
+                correct: 1,
+                explanation: "En amorce Berdan, l'enclumette (petit marteau) est intégrée dans la douille elle-même. C'est le contraire de l'amorce Boxer où l'enclume est dans l'amorce."
+            },
+            {
+                id: 15,
+                text: "L'amorce Boxer se caractérise par :",
+                options: ["Plusieurs trous d'évent", "Un seul trou et enclume intégrée", "Usage militaire exclusif", "Rechargement difficile"],
+                correct: 1,
+                explanation: "L'amorce Boxer a un seul trou d'évent et l'enclume est intégrée à l'amorce elle-même. C'est le système le plus courant et le plus facile à recharger."
+            },
+            {
+                id: 16,
+                text: "La déformation de la douille lors du tir :",
+                options: ["Reste élastique", "Dépasse largement l'élasticité", "N'influence pas la balistique", "N'arrive qu'en cas de défaut"],
+                correct: 0,
+                explanation: "La déformation de la douille lors du tir reste élastique. La douille se dilate pour assurer l'étanchéité, puis reprend sa forme initiale. C'est un phénomène normal et nécessaire."
+            },
+            {
+                id: 17,
+                text: "Les deux composants principaux d'une grenade sont le corps et :",
+                options: ["L'éclateur", "Le détonateur unique", "Le bouchon allumeur", "La charge propulsive"],
+                correct: 2,
+                explanation: "Les deux composants principaux d'une grenade sont: 1) Le corps (contenant la charge explosive), 2) Le bouchon allumeur (système de sécurité et d'amorçage)."
+            },
+            {
+                id: 18,
+                text: "Les grenades offensives agissent surtout par :",
+                options: ["Éclats", "Souffle", "Détonation ralentie", "Incendie"],
+                correct: 1,
+                explanation: "Les grenades offensives agissent surtout par le souffle (onde de choc). Elles ont un corps mince pour maximiser l'effet de souffle plutôt que les éclats."
+            },
+            {
+                id: 19,
+                text: "Les grenades défensives ont un corps :",
+                options: ["Paroi mince", "Paroi épaisse", "Effet de souffle", "Usage découvert"],
+                correct: 1,
+                explanation: "Les grenades défensives ont un corps à paroi épaisse qui se fragmente en éclats. Cela augmente l'effet de fragmentation et la zone de danger."
+            },
+            {
+                id: 20,
+                text: "Le rôle du corps de grenade est de :",
+                options: ["Servir de levier", "Contenir la charge", "Assurer la sécurité", "Déclencher la percussion"],
+                correct: 1,
+                explanation: "Le rôle principal du corps de grenade est de contenir la charge explosive et de contrôler la fragmentation. Son épaisseur et sa forme déterminent le type d'effet (souffle ou éclats)."
+            },
+            {
+                id: 21,
+                text: "Le bouchon allumeur comprend sécurité, percussion et :",
+                options: ["Charge propulsive", "Chaîne pyrotechnique", "Percuteur à friction", "Détonateur électrique"],
+                correct: 1,
+                explanation: "Le bouchon allumeur comprend trois éléments principaux: 1) Sécurité (goupille), 2) Percussion (percuteur), 3) Chaîne pyrotechnique (pour l'amorçage de la charge)."
+            },
+            {
+                id: 22,
+                text: "Le dispositif de sécurité comprend :",
+                options: ["Amorce et retard", "Levier et goupille", "Corps et charge", "Percuteur et ressort"],
+                correct: 1,
+                explanation: "Le dispositif de sécurité d'une grenade comprend le levier (maintenu par la main) et la goupille (qui empêche le levier de se libérer). Retirer la goupille et relâcher le levier amorce la grenade."
+            },
+            {
+                id: 23,
+                text: "Le retard pyrotechnique est initié par :",
+                options: ["Détonateur", "Levier", "Amorce", "Goupille"],
+                correct: 2,
+                explanation: "Le retard pyrotechnique (mèche lente) est initié par l'amorce. L'amorce s'enflamme quand le levier est libéré, ce qui allume la mèche de retard (généralement 3-5 secondes)."
+            },
+            {
+                id: 24,
+                text: "Une grenade assourdissante sert à :",
+                options: ["Créer de la fumée", "Paralyser temporairement", "Produire des éclats", "Démolir"],
+                correct: 1,
+                explanation: "Une grenade assourdissante (flash-bang) sert à paralyser temporairement les personnes par un bruit intense et une lumière aveuglante. Elle est utilisée pour les opérations tactiques."
+            },
+            {
+                id: 25,
+                text: "Le niveau sonore d'une grenade assourdissante est ~ :",
+                options: ["120 dB", "140 dB", "160 dB", "200 dB"],
+                correct: 2,
+                explanation: "Une grenade assourdissante produit un niveau sonore d'environ 160 dB, ce qui provoque une désorientation temporaire et une perte auditive temporaire. C'est bien au-delà du seuil de douleur (130 dB)."
+            },
+            {
+                id: 26,
+                text: "Les grenades à emploi particulier incluent les :",
+                options: ["Offensives", "Défensives", "Fumigènes", "Fragmentation"],
+                correct: 2,
+                explanation: "Les grenades fumigènes sont des grenades à emploi particulier. Elles produisent de la fumée pour l'écran de fumée, la signalisation ou la reconnaissance. D'autres grenades particulières incluent les grenades lacrymogènes et incendiaires."
+            },
+            {
+                id: 27,
+                text: "Les grenades incapacitantes incluent :",
+                options: ["Incendiaires", "Fumigènes colorées", "Lacrymogènes", "Perforantes"],
+                correct: 2,
+                explanation: "Les grenades lacrymogènes (CS ou CN) sont des grenades incapacitantes qui dispersent un gaz irritant. Elles sont utilisées pour le contrôle des foules et les opérations de maintien de l'ordre."
+            },
+            {
+                id: 28,
+                text: "Quel est le composant qui initie la détonation d'une grenade ?",
+                options: ["Le corps", "Le détonateur", "La goupille", "Le levier"],
+                correct: 1,
+                explanation: "Le détonateur est le composant qui initie la détonation de la charge explosive. Il est activé par la chaîne pyrotechnique après le délai de retard."
+            },
+            {
+                id: 29,
+                text: "La mèche de retard d'une grenade dure généralement :",
+                options: ["1-2 secondes", "3-5 secondes", "8-10 secondes", "15-20 secondes"],
+                correct: 1,
+                explanation: "La mèche de retard (retard pyrotechnique) d'une grenade à main dure généralement 3-5 secondes. Cela permet au lanceur de s'éloigner avant l'explosion."
+            },
+            {
+                id: 30,
+                text: "Quel type de grenade est utilisé pour les opérations tactiques en milieu urbain ?",
+                options: ["Grenade offensive", "Grenade défensive", "Grenade assourdissante", "Grenade incendiaire"],
+                correct: 2,
+                explanation: "La grenade assourdissante (flash-bang) est préférée pour les opérations tactiques en milieu urbain car elle minimise les dégâts collatéraux tout en neutralisant les menaces."
+            },
+            {
+                id: 31,
+                text: "La portée de lancer d'une grenade à main est généralement :",
+                options: ["10-15 mètres", "20-30 mètres", "40-50 mètres", "60-80 mètres"],
+                correct: 1,
+                explanation: "Un lanceur entraîné peut lancer une grenade à main à une distance de 20-30 mètres. La distance dépend de la force du lanceur et de la technique."
+            },
+            {
+                id: 32,
+                text: "Quel est le rayon de danger approximatif d'une grenade offensive ?",
+                options: ["5 mètres", "10 mètres", "15 mètres", "25 mètres"],
+                correct: 2,
+                explanation: "Le rayon de danger d'une grenade offensive est d'environ 15 mètres. Au-delà de cette distance, l'effet du souffle est généralement non mortel."
+            },
+            {
+                id: 33,
+                text: "Quel est le rayon de danger approximatif d'une grenade défensive ?",
+                options: ["15 mètres", "25 mètres", "50 mètres", "100 mètres"],
+                correct: 2,
+                explanation: "Le rayon de danger d'une grenade défensive est d'environ 50 mètres en raison de la fragmentation. Les éclats peuvent voyager beaucoup plus loin que l'onde de choc."
+            },
+            {
+                id: 34,
+                text: "La composition de l'amorce Boxer comprend :",
+                options: ["Mercure fulminant", "Azoture de plomb", "Styphnate de plomb", "Tous les trois"],
+                correct: 3,
+                explanation: "L'amorce Boxer moderne contient généralement un mélange de styphnate de plomb, azoture de plomb et mercure fulminant pour assurer une amorçage fiable et sûr."
+            },
+            {
+                id: 35,
+                text: "Quel est l'avantage principal de la poudre sans fumée par rapport à la poudre noire ?",
+                options: ["Plus de bruit", "Plus d'énergie avec moins de résidus", "Moins cher", "Plus facile à fabriquer"],
+                correct: 1,
+                explanation: "La poudre sans fumée produit plus d'énergie avec beaucoup moins de résidus de combustion. Elle génère également moins de fumée, d'où son nom."
+            },
+            {
+                id: 36,
+                text: "La vitesse initiale d'une balle dépend principalement de :",
+                options: ["La masse de la balle", "La longueur du canon", "La quantité de poudre", "Le type d'amorce"],
+                correct: 2,
+                explanation: "La vitesse initiale dépend principalement de la quantité de poudre. Plus il y a de poudre, plus il y a d'énergie pour accélérer la balle."
+            },
+            {
+                id: 37,
+                text: "Quel est le rôle du ressort de rappel dans une arme ?",
+                options: ["Éjecter la douille", "Ramener la culasse en avant", "Armer le percuteur", "Tous les trois"],
+                correct: 3,
+                explanation: "Le ressort de rappel (ressort de récupération) remplit plusieurs fonctions: il éjecte la douille, ramène la culasse en avant et aide à l'armement du percuteur."
+            },
+            {
+                id: 38,
+                text: "La pression maximale de tir d'une cartouche est mesurée en :",
+                options: ["PSI", "Bar", "MPa", "Tous les trois"],
+                correct: 3,
+                explanation: "La pression maximale peut être mesurée en PSI (livres par pouce carré), Bar ou MPa (mégapascals). Ces trois unités sont utilisées selon les normes régionales."
+            },
+            {
+                id: 39,
+                text: "Quel est le calibre le plus courant pour les pistolets militaires ?",
+                options: ["9 mm Parabellum", ".45 ACP", ".40 S&W", ".38 Special"],
+                correct: 0,
+                explanation: "Le 9 mm Parabellum (9×19 mm) est le calibre le plus courant pour les pistolets militaires et policiers modernes. C'est un bon compromis entre puissance et capacité de chargeur."
+            },
+            {
+                id: 40,
+                text: "Quel est le calibre le plus courant pour les fusils d'assaut modernes ?",
+                options: ["5.56×45 NATO", "7.62×51 NATO", "7.62×39", ".308 Winchester"],
+                correct: 0,
+                explanation: "Le 5.56×45 NATO est le calibre standard pour les fusils d'assaut de l'OTAN modernes (M16, M4, FAMAS, etc.). C'est un bon compromis entre puissance et contrôle."
+            },
+            {
+                id: 41,
+                text: "Quel est l'avantage du calibre 7.62×51 NATO par rapport au 5.56×45 NATO ?",
+                options: ["Plus léger", "Plus de puissance et portée", "Plus rapide", "Moins cher"],
+                correct: 1,
+                explanation: "Le 7.62×51 NATO a plus de puissance et une plus grande portée que le 5.56×45 NATO. Il est utilisé pour les fusils de précision et les armes de support."
+            },
+            {
+                id: 42,
+                text: "Quel est le rôle du guidon sur une arme ?",
+                options: ["Augmenter la puissance", "Aider à la visée", "Éjecter la douille", "Armer le percuteur"],
+                correct: 1,
+                explanation: "Le guidon (et le cran de mire) aide à la visée en alignant le projectile avec la cible. C'est un élément essentiel de la précision de tir."
+            },
+            {
+                id: 43,
+                text: "Quel est le calibre du fusil de sniper le plus courant ?",
+                options: ["5.56×45 NATO", ".308 Winchester (7.62×51)", "7.62×54R", "12.7×99 NATO"],
+                correct: 1,
+                explanation: "Le .308 Winchester (7.62×51 NATO) est le calibre le plus courant pour les fusils de sniper modernes. Il offre un bon équilibre entre puissance, précision et portée."
+            },
+            {
+                id: 44,
+                text: "Quel est le rôle du compensateur de recul ?",
+                options: ["Augmenter la précision", "Réduire le recul", "Augmenter la vitesse", "Réduire le bruit"],
+                correct: 1,
+                explanation: "Le compensateur de recul (ou frein de bouche) réduit le recul en déviant les gaz d'échappement. Cela aide à maintenir la visée et améliore la précision."
+            },
+            {
+                id: 45,
+                text: "Quel est le rôle du silencieux (suppresseur de son) ?",
+                options: ["Augmenter la puissance", "Réduire le bruit", "Augmenter la précision", "Réduire le recul"],
+                correct: 1,
+                explanation: "Le silencieux réduit le bruit de l'arme en ralentissant et en refroidissant les gaz d'échappement. Il ne l'élimine pas complètement, contrairement aux films."
+            },
+            {
+                id: 46,
+                text: "Quel est le type de poudre le plus courant pour les cartouches civiles ?",
+                options: ["Poudre noire", "Poudre sans fumée monocorps", "Poudre sans fumée à double base", "Poudre composite"],
+                correct: 2,
+                explanation: "La poudre sans fumée à double base (contenant de la nitroglycérine et du nitrocellulose) est la plus courante pour les cartouches civiles. Elle offre un bon équilibre entre performance et sécurité."
+            },
+            {
+                id: 47,
+                text: "Quel est le rôle du chargeur dans une arme ?",
+                options: ["Stocker les cartouches", "Alimenter la chambre", "Éjecter les douilles", "Augmenter la puissance"],
+                correct: 1,
+                explanation: "Le chargeur alimente les cartouches vers la chambre de l'arme. Il utilise généralement un ressort pour pousser les cartouches vers le haut."
+            },
+            {
+                id: 48,
+                text: "Quel est le calibre le plus puissant pour les pistolets commerciaux ?",
+                options: [".44 Magnum", ".50 AE", ".500 S&W Magnum", "10 mm Auto"],
+                correct: 2,
+                explanation: "Le .500 S&W Magnum est l'un des calibres les plus puissants pour les pistolets commerciaux. C'est un calibre de révolver conçu pour la chasse au gros gibier."
+            },
+            {
+                id: 49,
+                text: "Quel est le rôle de l'extracteur dans une arme ?",
+                options: ["Éjecter la douille", "Extraire la douille de la chambre", "Armer le percuteur", "Alimenter la chambre"],
+                correct: 1,
+                explanation: "L'extracteur extrait la douille de la chambre après le tir. L'éjecteur (un ressort) la propulse ensuite hors de l'arme."
+            },
+            {
+                id: 50,
+                text: "Quel est le rôle du cran de sécurité ?",
+                options: ["Augmenter la précision", "Empêcher le tir accidentel", "Réduire le recul", "Augmenter la puissance"],
+                correct: 1,
+                explanation: "Le cran de sécurité empêche le tir accidentel en bloquant le percuteur ou la détente. C'est un élément essentiel de la sécurité des armes."
+            },
+            {
+                id: 51,
+                text: "Quel est le type de grenade le plus ancien ?",
+                options: ["Grenade à main", "Grenade de mortier", "Grenade sphérique en fonte", "Grenade assourdissante"],
+                correct: 2,
+                explanation: "La grenade sphérique en fonte est le type de grenade le plus ancien, utilisée depuis le 16e siècle. Elle était remplie de poudre noire et avait une mèche."
+            },
+            {
+                id: 52,
+                text: "Quel est le rôle du percuteur dans une arme ?",
+                options: ["Stocker l'énergie", "Frapper l'amorce", "Alimenter la chambre", "Éjecter la douille"],
+                correct: 1,
+                explanation: "Le percuteur frappe l'amorce pour l'enflammer. C'est le dernier maillon de la chaîne d'amorçage qui déclenche la combustion de la poudre."
+            },
+            {
+                id: 53,
+                text: "Quel est le rôle de la culasse dans une arme ?",
+                options: ["Contenir la poudre", "Fermer la chambre", "Éjecter la douille", "Tous les trois"],
+                correct: 3,
+                explanation: "La culasse remplit plusieurs fonctions: elle ferme la chambre, contient la pression, éjecte la douille et alimente la chambre avec une nouvelle cartouche."
+            },
+            {
+                id: 54,
+                text: "Quel est le type de système de tir le plus courant ?",
+                options: ["Percussion centrale", "Percussion périphérique", "Percussion annulaire", "Percussion électrique"],
+                correct: 0,
+                explanation: "La percussion centrale (où l'amorce est au centre de la base de la douille) est le système le plus courant pour les cartouches modernes."
+            },
+            {
+                id: 55,
+                text: "Quel est le rôle du ressort du percuteur ?",
+                options: ["Stocker l'énergie", "Ramener le percuteur", "Armer le percuteur", "Tous les trois"],
+                correct: 3,
+                explanation: "Le ressort du percuteur stocke l'énergie, ramène le percuteur après le tir et aide à l'armement du percuteur pour le tir suivant."
+            },
+            {
+                id: 56,
+                text: "Quel est le calibre standard des fusils de chasse ?",
+                options: ["12 Gauge", "20 Gauge", ".410 Bore", "Tous les trois"],
+                correct: 3,
+                explanation: "Les trois calibres (12 Gauge, 20 Gauge et .410 Bore) sont des calibres standards pour les fusils de chasse, avec le 12 Gauge étant le plus populaire."
+            },
+            {
+                id: 57,
+                text: "Quel est l'avantage du 20 Gauge par rapport au 12 Gauge ?",
+                options: ["Plus de puissance", "Moins de recul", "Plus de portée", "Plus de précision"],
+                correct: 1,
+                explanation: "Le 20 Gauge produit moins de recul que le 12 Gauge, ce qui le rend plus facile à tirer pour les tireurs moins expérimentés ou les personnes sensibles au recul."
+            },
+            {
+                id: 58,
+                text: "Quel est le rôle de la chambre dans une arme ?",
+                options: ["Stocker la poudre", "Contenir la cartouche", "Guider le projectile", "Éjecter la douille"],
+                correct: 1,
+                explanation: "La chambre est la partie de l'arme qui contient la cartouche. Elle doit être dimensionnée précisément pour le calibre de l'arme."
+            },
+            {
+                id: 59,
+                text: "Quel est le rôle du canon dans une arme ?",
+                options: ["Contenir la poudre", "Guider le projectile", "Augmenter la précision", "Tous les trois"],
+                correct: 3,
+                explanation: "Le canon guide le projectile, augmente sa vitesse par l'expansion des gaz, et améliore la précision grâce aux rayures qui impriment une rotation au projectile."
+            },
+            {
+                id: 60,
+                text: "Quel est le rôle des rayures dans le canon ?",
+                options: ["Augmenter la vitesse", "Imprimer une rotation au projectile", "Améliorer la précision", "Tous les trois"],
+                correct: 3,
+                explanation: "Les rayures impriment une rotation au projectile (effet gyroscopique), ce qui améliore la stabilité en vol et la précision. Elles augmentent aussi légèrement la vitesse."
+            },
+            {
+                id: 61,
+                text: "Quel est le calibre du fusil de service français ?",
+                options: ["5.56×45 NATO", "7.62×51 NATO", "7.62×39", ".308 Winchester"],
+                correct: 0,
+                explanation: "Le fusil de service français (FAMAS) utilise le calibre 5.56×45 NATO, qui est le standard de l'OTAN depuis les années 1980."
+            },
+            {
+                id: 62,
+                text: "Quel est le rôle du verrou de sécurité ?",
+                options: ["Empêcher le tir accidentel", "Bloquer la culasse", "Bloquer la détente", "Tous les trois"],
+                correct: 3,
+                explanation: "Le verrou de sécurité peut bloquer la détente, bloquer la culasse ou empêcher le percuteur de frapper l'amorce, selon le design de l'arme."
+            },
+            {
+                id: 63,
+                text: "Quel est le rôle de la détente ?",
+                options: ["Armer le percuteur", "Relâcher le percuteur", "Bloquer la culasse", "Éjecter la douille"],
+                correct: 1,
+                explanation: "La détente relâche le percuteur armé, ce qui lui permet de frapper l'amorce et de déclencher le tir."
+            },
+            {
+                id: 64,
+                text: "Quel est le type de projectile le plus courant pour la chasse ?",
+                options: ["Projectile perforant", "Projectile à pointe creuse", "Projectile chemisé", "Projectile en plomb"],
+                correct: 1,
+                explanation: "Le projectile à pointe creuse est le plus courant pour la chasse car il se déforme à l'impact, augmentant les dégâts et l'efficacité de la chasse."
+            },
+            {
+                id: 65,
+                text: "Quel est le rôle de la goupille de sécurité dans une grenade ?",
+                options: ["Maintenir le levier", "Empêcher l'amorçage", "Bloquer le percuteur", "Tous les trois"],
+                correct: 3,
+                explanation: "La goupille de sécurité maintient le levier en place, empêche l'amorçage et bloque le percuteur. Retirer la goupille est la première étape pour amorcer une grenade."
+            },
+            {
+                id: 66,
+                text: "Quel est le délai approximatif avant l'explosion d'une grenade après le retrait de la goupille ?",
+                options: ["1-2 secondes", "3-5 secondes", "8-10 secondes", "15-20 secondes"],
+                correct: 1,
+                explanation: "Après le retrait de la goupille et le relâchement du levier, une grenade explose généralement en 3-5 secondes. C'est le temps du retard pyrotechnique."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = {};
+        let explanationShown = false;
+
+        // Initialize
+        function init() {
+            renderQuestionList();
+            showQuestion(0);
+        }
+
+        function renderQuestionList() {
+            const list = document.getElementById('questionList');
+            list.innerHTML = '';
+            questions.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'question-btn';
+                btn.textContent = `Q${q.id}`;
+                btn.onclick = () => showQuestion(idx);
+                if (idx === currentQuestion) btn.classList.add('active');
+                if (answers[idx] !== undefined) btn.classList.add('answered');
+                list.appendChild(btn);
+            });
+        }
+
+        function showQuestion(idx) {
+            currentQuestion = idx;
+            explanationShown = false;
+            const q = questions[idx];
+            
+            document.getElementById('questionNumber').textContent = `Question ${q.id}`;
+            document.getElementById('questionText').textContent = q.text;
+            document.getElementById('progress').textContent = idx + 1;
+            
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+            
+            q.options.forEach((opt, optIdx) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.textContent = `${String.fromCharCode(97 + optIdx)}) ${opt}`;
+                div.onclick = () => selectAnswer(idx, optIdx);
+                
+                if (answers[idx] === optIdx) {
+                    div.classList.add('selected');
+                    if (optIdx === q.correct) {
+                        div.classList.add('correct');
+                    } else {
+                        div.classList.add('incorrect');
+                    }
+                }
+                
+                container.appendChild(div);
+            });
+            
+            document.getElementById('explanationBox').classList.remove('show');
+            document.getElementById('explainBtn').textContent = 'Voir l\'explication';
+            document.getElementById('prevBtn').disabled = idx === 0;
+            document.getElementById('nextBtn').disabled = idx === questions.length - 1;
+            
+            updateScore();
+            renderQuestionList();
+        }
+
+        function selectAnswer(qIdx, optIdx) {
+            answers[qIdx] = optIdx;
+            showQuestion(qIdx);
+        }
+
+        function showExplanation() {
+            const q = questions[currentQuestion];
+            const box = document.getElementById('explanationBox');
+            const text = document.getElementById('explanationText');
+            
+            if (!explanationShown) {
+                text.innerHTML = `<strong>Réponse correcte: ${String.fromCharCode(97 + q.correct)}) ${q.options[q.correct]}</strong><br><br>${q.explanation}`;
+                box.classList.add('show');
+                document.getElementById('explainBtn').textContent = 'Masquer l\'explication';
+                explanationShown = true;
+            } else {
+                box.classList.remove('show');
+                document.getElementById('explainBtn').textContent = 'Voir l\'explication';
+                explanationShown = false;
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                showQuestion(currentQuestion + 1);
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                showQuestion(currentQuestion - 1);
+            }
+        }
+
+        function updateScore() {
+            let score = 0;
+            Object.keys(answers).forEach(idx => {
+                if (answers[idx] === questions[idx].correct) {
+                    score++;
+                }
+            });
+            document.getElementById('score').textContent = score;
+            document.getElementById('total-score').textContent = questions.length;
+        }
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>
