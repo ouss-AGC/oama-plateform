@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, BookOpen, Video, FileText, ExternalLink, CheckCircle, Play, Award } from 'lucide-react';
+import { ArrowLeft, BookOpen, Video, FileText, ExternalLink, CheckCircle, Play, Award, Zap, Book, Sparkles } from 'lucide-react';
 
 interface PracticeExam {
     id: number;
@@ -19,9 +19,18 @@ interface VideoResource {
     category?: string;
 }
 
+interface InteractiveTool {
+    id: number;
+    title: string;
+    description: string;
+    fileUrl: string;
+    icon?: string;
+}
+
 interface ResourcesData {
     practiceExams: PracticeExam[];
     videos: VideoResource[];
+    interactiveTools?: InteractiveTool[];
 }
 
 const Resources: React.FC = () => {
@@ -110,6 +119,43 @@ const Resources: React.FC = () => {
                                 </div>
                             </div>
                         </div>
+
+                        {/* Interactive Revision Tools - NEW SECTION */}
+                        {resources.interactiveTools && resources.interactiveTools.length > 0 && (
+                            <section className="bg-gradient-to-br from-indigo-900 to-blue-900 bg-opacity-30 backdrop-blur-md rounded-xl p-6 border-2 border-indigo-500 shadow-xl">
+                                <div className="flex items-center justify-between mb-6">
+                                    <h2 className="text-3xl font-bold text-white flex items-center">
+                                        <Sparkles className="w-8 h-8 mr-3 text-indigo-400 animate-pulse" />
+                                        Outils de Révision Interactive
+                                    </h2>
+                                    <span className="bg-indigo-500 text-white px-4 py-2 rounded-full text-sm font-bold">
+                                        NOUVEAU 2025
+                                    </span>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {resources.interactiveTools.map((tool) => (
+                                        <div key={tool.id} className="bg-gray-900 bg-opacity-70 rounded-xl p-6 border-2 border-gray-700 hover:border-indigo-400 transition-all transform hover:scale-105 shadow-lg group">
+                                            <div className="flex items-center mb-4">
+                                                <div className="bg-indigo-600 p-3 rounded-lg mr-4 group-hover:bg-indigo-500 transition-colors">
+                                                    {tool.icon === 'zap' ? <Zap className="w-6 h-6 text-white" /> : <Book className="w-6 h-6 text-white" />}
+                                                </div>
+                                                <h3 className="text-xl font-bold text-white">{tool.title}</h3>
+                                            </div>
+                                            <p className="text-gray-300 mb-6">{tool.description}</p>
+                                            <a
+                                                href={tool.fileUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center justify-center w-full px-6 py-3 bg-indigo-600 text-white rounded-lg font-bold hover:bg-indigo-700 transition-all shadow-md group-hover:shadow-indigo-500/20"
+                                            >
+                                                Ouvrir l'Outil
+                                                <ExternalLink className="w-4 h-4 ml-2" />
+                                            </a>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
 
                         {/* Videos Section - Priority */}
                         <section className="bg-gradient-to-br from-red-900 to-red-700 bg-opacity-20 backdrop-blur-md rounded-xl p-6 border-2 border-red-500 shadow-xl">
