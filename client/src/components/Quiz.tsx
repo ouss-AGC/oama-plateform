@@ -803,13 +803,15 @@ const Quiz: React.FC = () => {
                         <h1 className="font-bold text-lg hidden md:block">{quizData.title}</h1>
                     </div>
                     <div className="flex items-center space-x-6">
-                        <button
-                            onClick={() => setIsPdfViewerOpen(true)}
-                            className={`bg-yellow-500 text-military-green px-6 py-3 rounded-full flex items-center shadow-lg hover:bg-yellow-400 transition-all font-bold text-2xl ${shouldPulseSubject ? 'animate-bounce ring-4 ring-yellow-300 ring-opacity-50' : ''}`}
-                        >
-                            <FileSearch className="w-6 h-6 mr-3" />
-                            Voir Sujet
-                        </button>
+                        {discipline !== 'munitions' && (
+                            <button
+                                onClick={() => setIsPdfViewerOpen(true)}
+                                className={`bg-yellow-500 text-military-green px-6 py-3 rounded-full flex items-center shadow-lg hover:bg-yellow-400 transition-all font-bold text-2xl ${shouldPulseSubject ? 'animate-bounce ring-4 ring-yellow-300 ring-opacity-50' : ''}`}
+                            >
+                                <FileSearch className="w-6 h-6 mr-3" />
+                                Voir Sujet
+                            </button>
+                        )}
                         <div className={`flex items-center px-6 py-3 rounded-full shadow-lg transition-all ${isTimeRunningOut ? 'bg-red-600' : isNearEnd ? 'bg-orange-500' : 'bg-green-800'
                             } ${isBlinking ? 'animate-pulse' : ''}`}>
                             <Clock className="w-6 h-6 mr-3" />
