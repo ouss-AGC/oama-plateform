@@ -229,13 +229,22 @@ const AdminDashboard: React.FC = () => {
         doc.setTextColor(0);
         doc.text(`Participants: ${stats.totalParticipants} | Moyenne: ${stats.averageScore.toFixed(2)}/20 | Réussite: ${Math.round(stats.passRate)}%`, 105, 80, { align: "center" });
 
-        const tableData = filteredResults.map((r) => [
-            r.student.matricule,
-            r.student.grade,
-            r.student.name,
-            r.student.className,
-            r.scoreOn20.toFixed(2)
-        ]);
+        // Debug: Log filtered results
+        console.log('📊 Filtered Results for PDF:', filteredResults);
+        console.log('📊 Total results:', filteredResults.length);
+
+        const tableData = filteredResults.map((r) => {
+            console.log('📋 Mapping result:', r.student);
+            return [
+                r.student.matricule,
+                r.student.grade,
+                r.student.name,
+                r.student.className,
+                r.scoreOn20.toFixed(2)
+            ];
+        });
+
+        console.log('📊 Table Data:', tableData);
 
         autoTable(doc, {
             startY: 90,
