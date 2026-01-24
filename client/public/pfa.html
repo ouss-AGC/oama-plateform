@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAMA-Plateform - Projets de Fin d'Année (PFA) 2025-2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-dark: #0a1628;
+            --primary-navy: #0f2744;
+            --accent-red: #c41e3a;
+            --accent-green: #28a745;
+            --accent-gold: #d4af37;
+            --text-light: #ffffff;
+            --text-gray: #94a3b8;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: var(--primary-navy);
+            padding: 8px 0;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .top-bar span {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo img {
+            height: 50px;
+            border-radius: 8px;
+        }
+
+        .logo-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-light);
+            line-height: 1.2;
+        }
+
+        .logo-text small {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-light);
+        }
+
+        .nav-btn {
+            background: var(--accent-red);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #a01830;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 40px;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-navy) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('academy-bg.jpg') center/cover;
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(196, 30, 58, 0.2);
+            color: var(--accent-red);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+            border: 1px solid var(--accent-red);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 span {
+            color: var(--accent-red);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-gray);
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--accent-red);
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            background: #a01830;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 16px 32px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-secondary:hover {
+            border-color: white;
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 100px 40px;
+        }
+
+        .section-light {
+            background: var(--bg-light);
+            color: var(--primary-dark);
+        }
+
+        .section-dark {
+            background: var(--primary-dark);
+        }
+
+        .section-navy {
+            background: var(--primary-navy);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-label {
+            color: var(--accent-red);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .section-light .section-label {
+            color: var(--accent-red);
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            margin-bottom: 20px;
+        }
+
+        .section-light .section-title {
+            color: var(--primary-dark);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .section-light .section-subtitle {
+            color: #64748b;
+        }
+
+        /* About Section - Two Column */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .about-content h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--primary-dark);
+        }
+
+        .about-content p {
+            color: #64748b;
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+        }
+
+        /* Platform Steps */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .step-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-red);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .step-icon {
+            font-size: 2.5rem;
+            color: var(--primary-navy);
+            margin-bottom: 20px;
+            margin-top: 15px;
+        }
+
+        .step-card h4 {
+            font-size: 1.1rem;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        .step-card p {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        /* Architecture Section */
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .arch-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.3s;
+        }
+
+        .arch-card:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--accent-red);
+        }
+
+        .arch-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(196, 30, 58, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .arch-icon i {
+            font-size: 1.5rem;
+            color: var(--accent-red);
+        }
+
+        .arch-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .arch-card p {
+            font-size: 0.95rem;
+            color: var(--text-gray);
+        }
+
+        /* PFA Projects Section */
+        .pfa-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .pfa-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .pfa-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .pfa-header {
+            background: var(--primary-navy);
+            padding: 25px;
+            position: relative;
+        }
+
+        .pfa-number {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 3rem;
+            font-weight: 800;
+            color: rgba(255,255,255,0.1);
+        }
+
+        .pfa-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .pfa-icon i {
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .pfa-tag {
+            display: inline-block;
+            background: var(--accent-red);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pfa-body {
+            padding: 25px;
+        }
+
+        .pfa-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .pfa-description {
+            font-size: 0.95rem;
+            color: #64748b;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .pfa-meta {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .pfa-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .pfa-meta-item i {
+            color: var(--accent-red);
+        }
+
+        .pfa-btn {
+            width: 100%;
+            background: var(--primary-navy);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .pfa-btn:hover {
+            background: var(--accent-red);
+        }
+
+        /* Encadrants Section */
+        .encadrants-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .encadrant-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .encadrant-card:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--accent-gold);
+        }
+
+        .encadrant-avatar {
+            width: 100px;
+            height: 100px;
+            background: var(--primary-navy);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--accent-gold);
+        }
+
+        .encadrant-avatar i {
+            font-size: 2.5rem;
+            color: var(--accent-gold);
+        }
+
+        .encadrant-role {
+            color: var(--accent-red);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .encadrant-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .encadrant-title {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-dark) 100%);
+            padding: 80px 40px;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .cta-section p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary-dark);
+            padding: 60px 40px 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer-brand img {
+            height: 60px;
+            margin-bottom: 20px;
+        }
+
+        .footer-brand p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .footer-links h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 40px auto 0;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            color: var(--text-gray);
+            font-size: 0.85rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            background: var(--primary-navy);
+            padding: 30px;
+            color: white;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .modal-body {
+            padding: 30px;
+            color: var(--primary-dark);
+        }
+
+        .modal-body h4 {
+            font-size: 1.1rem;
+            color: var(--primary-navy);
+            margin-top: 25px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-body h4 i {
+            color: var(--accent-red);
+        }
+
+        .modal-body p, .modal-body ul {
+            color: #64748b;
+            line-height: 1.7;
+        }
+
+        .modal-body ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .modal-body li {
+            margin-bottom: 8px;
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .pfa-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .architecture-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .pfa-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .architecture-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .encadrants-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Print Styles - Only print modal content */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            
+            .top-bar,
+            .navbar,
+            .hero,
+            .section,
+            .cta-section,
+            .footer,
+            .pfa-card,
+            .modal-close,
+            .modal-footer {
+                display: none !important;
+            }
+            
+            .modal.active,
+            .modal.active * {
+                visibility: visible;
+            }
+            
+            .modal.active {
+                display: block !important;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: auto;
+                background: white !important;
+                padding: 0;
+                margin: 0;
+                overflow: visible;
+            }
+            
+            .modal.active .modal-content {
+                max-width: 100%;
+                width: 100%;
+                max-height: none;
+                overflow: visible;
+                border-radius: 0;
+                box-shadow: none;
+                margin: 0;
+                padding: 0;
+            }
+            
+            .modal.active .modal-header {
+                background: #0f2744 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                color: white !important;
+                padding: 20px 30px;
+                border-radius: 0;
+            }
+            
+            .modal.active .modal-header h2 {
+                color: white !important;
+                font-size: 1.3rem;
+            }
+            
+            .modal.active .modal-header .pfa-tag {
+                background: #c41e3a !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                color: white !important;
+            }
+            
+            .modal.active .modal-body {
+                padding: 20px 30px;
+                color: #1a1a1a !important;
+            }
+            
+            .modal.active .modal-body h4 {
+                color: #0f2744 !important;
+                font-size: 1rem;
+                margin-top: 15px;
+                margin-bottom: 8px;
+                page-break-after: avoid;
+            }
+            
+            .modal.active .modal-body h4 i {
+                color: #c41e3a !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            .modal.active .modal-body p,
+            .modal.active .modal-body ul,
+            .modal.active .modal-body li {
+                color: #333 !important;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            }
+            
+            .modal.active .modal-body ul {
+                margin-left: 15px;
+                margin-top: 5px;
+            }
+            
+            .modal.active .modal-body li {
+                margin-bottom: 4px;
+            }
+            
+            .modal.active .modal-footer {
+                display: none !important;
+            }
+            
+            .modal.active .modal-close {
+                display: none !important;
+            }
+            
+            @page {
+                size: A4;
+                margin: 15mm;
+            }
+            
+            .modal.active .modal-body h4,
+            .modal.active .modal-body p,
+            .modal.active .modal-body ul {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <span>ANNÉE UNIVERSITAIRE 2025-2026</span> • ACADÉMIE MILITAIRE - FONDOUK JÉDID • GÉNIE INFORMATIQUE 2ÈME ANNÉE CYCLE INGÉNIEUR
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="academy-logo.png" alt="Académie Militaire">
+                <div class="logo-text">
+                    OAMA-PLATEFORM
+                    <small>Projets de Fin d'Année</small>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#accueil" class="active">Accueil</a></li>
+                <li><a href="#plateforme">Plateforme</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#projets">Projets PFA</a></li>
+                <li><a href="#encadrants">Encadrants</a></li>
+            </ul>
+            <a href="https://oama-plateform.onrender.com" target="_blank" class="nav-btn">
+                Voir la Plateforme <i class="fas fa-external-link-alt"></i>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="accueil">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-graduation-cap"></i> Projets de Fin d'Année 2025-2026
+            </div>
+            <h1>
+                OAMA<br>
+                <span>PLATEFORM</span>
+            </h1>
+            <p>
+                Plateforme d'évaluation et de quiz pour l'Académie Militaire. 
+                Découvrez les opportunités de projets PFA pour améliorer et sécuriser cette solution innovante.
+            </p>
+            <div class="hero-buttons">
+                <a href="#projets" class="btn-primary">
+                    <i class="fas fa-rocket"></i> Voir les Projets PFA
+                </a>
+                <a href="https://oama-plateform.onrender.com" target="_blank" class="btn-secondary">
+                    <i class="fas fa-play"></i> Tester la Plateforme
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Platform Section -->
+    <section class="section section-light" id="plateforme">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-image">
+                    <img src="golden_stamp.png" alt="OAMA Platform">
+                </div>
+                <div class="about-content">
+                    <div class="section-label">À Propos de la Plateforme</div>
+                    <h3>Une Solution Innovante pour l'Évaluation Académique</h3>
+                    <p>
+                        <strong>OAMA-Plateform</strong> est une application web développée par le <strong>Lt Col Oussama Atoui</strong> 
+                        pour moderniser l'évaluation des élèves officiers à l'Académie Militaire de Fondouk Jédid.
+                    </p>
+                    <p>
+                        La plateforme permet de créer et gérer des sessions de quiz en temps réel, avec un système de PIN 
+                        pour contrôler l'accès, un tableau de bord administrateur pour suivre les résultats, et la génération 
+                        automatique de certificats.
+                    </p>
+                    <p>
+                        Actuellement déployée en ligne sur Render.com, la plateforme nécessite des améliorations pour 
+                        répondre aux exigences de sécurité et de déploiement local de l'institution.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Platform Steps -->
+            <div class="section-header" style="margin-top: 80px;">
+                <div class="section-label">Fonctionnement</div>
+                <h2 class="section-title" style="color: var(--primary-dark);">Comment Fonctionne la Plateforme</h2>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-icon"><i class="fas fa-key"></i></div>
+                    <h4>Génération du PIN</h4>
+                    <p>L'administrateur génère un code PIN à 6 chiffres pour créer une nouvelle session de quiz.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-icon"><i class="fas fa-user-plus"></i></div>
+                    <h4>Inscription Étudiants</h4>
+                    <p>Les étudiants entrent le PIN et renseignent leurs informations (grade, nom, matricule, classe).</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-icon"><i class="fas fa-play-circle"></i></div>
+                    <h4>Lancement du Quiz</h4>
+                    <p>L'administrateur démarre le quiz. Tous les étudiants en salle d'attente sont redirigés automatiquement.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-icon"><i class="fas fa-chart-bar"></i></div>
+                    <h4>Résultats & Analyse</h4>
+                    <p>Les résultats sont collectés en temps réel avec statistiques, export CSV/PDF et certificats.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="section section-dark" id="architecture">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Architecture Technique</div>
+                <h2 class="section-title">Stack Technologique Actuel</h2>
+                <p class="section-subtitle">
+                    Comprendre l'architecture existante pour mieux contribuer aux améliorations.
+                </p>
+            </div>
+
+            <div class="architecture-grid">
+                <div class="arch-card">
+                    <div class="arch-icon"><i class="fab fa-react"></i></div>
+                    <h4>Frontend - React + TypeScript</h4>
+                    <p>Interface utilisateur moderne avec Vite, TailwindCSS, et composants réutilisables pour une expérience fluide.</p>
+                </div>
+                <div class="arch-card">
+                    <div class="arch-icon"><i class="fab fa-node-js"></i></div>
+                    <h4>Backend - Express.js</h4>
+                    <p>Serveur Node.js avec API REST pour la gestion des sessions, validation PIN, et soumission des résultats.</p>
+                </div>
+                <div class="arch-card">
+                    <div class="arch-icon"><i class="fas fa-database"></i></div>
+                    <h4>Stockage - In-Memory</h4>
+                    <p>Données stockées en mémoire (non persistantes). Point d'amélioration majeur pour la production.</p>
+                </div>
+                <div class="arch-card">
+                    <div class="arch-icon"><i class="fas fa-file-pdf"></i></div>
+                    <h4>Génération PDF - jsPDF</h4>
+                    <p>Création de certificats et rapports PDF côté client avec jsPDF et autoTable.</p>
+                </div>
+                <div class="arch-card">
+                    <div class="arch-icon"><i class="fas fa-chart-pie"></i></div>
+                    <h4>Visualisation - Recharts</h4>
+                    <p>Graphiques interactifs pour l'analyse des performances et statistiques de classe.</p>
+                </div>
+                <div class="arch-card">
+                    <div class="arch-icon"><i class="fas fa-cloud"></i></div>
+                    <h4>Déploiement - Render.com</h4>
+                    <p>Hébergement cloud actuel. Objectif: migration vers déploiement local sécurisé.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PFA Projects Section -->
+    <section class="section section-light" id="projets">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Opportunités de Projets</div>
+                <h2 class="section-title" style="color: var(--primary-dark);">Projets de Fin d'Année Proposés</h2>
+                <p class="section-subtitle" style="color: #64748b;">
+                    Six projets diversifiés pour améliorer la plateforme OAMA. Chaque projet est encadré par 
+                    Lt Col Oussama Atoui et Lt Col Mohamed Hechmi Jridi.
+                </p>
+            </div>
+
+            <div class="pfa-grid">
+                <!-- PFA 1: Security -->
+                <div class="pfa-card" onclick="openModal('pfa1')">
+                    <div class="pfa-header">
+                        <div class="pfa-number">01</div>
+                        <div class="pfa-icon"><i class="fas fa-shield-alt"></i></div>
+                        <span class="pfa-tag">Sécurité</span>
+                    </div>
+                    <div class="pfa-body">
+                        <h3 class="pfa-title">Sécurisation Avancée de la Plateforme OAMA</h3>
+                        <p class="pfa-description">
+                            Implémenter un système de sécurité robuste incluant authentification multi-facteurs, 
+                            chiffrement des données, audit logging et protection contre les attaques.
+                        </p>
+                        <div class="pfa-meta">
+                            <span class="pfa-meta-item"><i class="fas fa-users"></i> Binôme</span>
+                            <span class="pfa-meta-item"><i class="fas fa-clock"></i> 4 mois</span>
+                            <span class="pfa-meta-item"><i class="fas fa-code"></i> Développement</span>
+                        </div>
+                        <button class="pfa-btn">
+                            Voir les Détails <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PFA 2: Local Deployment -->
+                <div class="pfa-card" onclick="openModal('pfa2')">
+                    <div class="pfa-header">
+                        <div class="pfa-number">02</div>
+                        <div class="pfa-icon"><i class="fas fa-server"></i></div>
+                        <span class="pfa-tag">Infrastructure</span>
+                    </div>
+                    <div class="pfa-body">
+                        <h3 class="pfa-title">Déploiement Local et Architecture On-Premise</h3>
+                        <p class="pfa-description">
+                            Concevoir et implémenter une solution de déploiement local complète permettant 
+                            le fonctionnement hors-ligne sur le réseau interne de l'académie.
+                        </p>
+                        <div class="pfa-meta">
+                            <span class="pfa-meta-item"><i class="fas fa-users"></i> Binôme</span>
+                            <span class="pfa-meta-item"><i class="fas fa-clock"></i> 4 mois</span>
+                            <span class="pfa-meta-item"><i class="fas fa-cogs"></i> Conception</span>
+                        </div>
+                        <button class="pfa-btn">
+                            Voir les Détails <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PFA 3: AI Integration -->
+                <div class="pfa-card" onclick="openModal('pfa3')">
+                    <div class="pfa-header">
+                        <div class="pfa-number">03</div>
+                        <div class="pfa-icon"><i class="fas fa-brain"></i></div>
+                        <span class="pfa-tag">Intelligence Artificielle</span>
+                    </div>
+                    <div class="pfa-body">
+                        <h3 class="pfa-title">Intégration d'IA pour l'Analyse et la Génération de Quiz</h3>
+                        <p class="pfa-description">
+                            Développer des modules IA pour l'analyse prédictive des performances, 
+                            la génération automatique de questions et les recommandations personnalisées.
+                        </p>
+                        <div class="pfa-meta">
+                            <span class="pfa-meta-item"><i class="fas fa-users"></i> Binôme</span>
+                            <span class="pfa-meta-item"><i class="fas fa-clock"></i> 4 mois</span>
+                            <span class="pfa-meta-item"><i class="fas fa-flask"></i> R&D</span>
+                        </div>
+                        <button class="pfa-btn">
+                            Voir les Détails <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PFA 4: Mobile App -->
+                <div class="pfa-card" onclick="openModal('pfa4')">
+                    <div class="pfa-header">
+                        <div class="pfa-number">04</div>
+                        <div class="pfa-icon"><i class="fas fa-mobile-alt"></i></div>
+                        <span class="pfa-tag">Mobile</span>
+                    </div>
+                    <div class="pfa-body">
+                        <h3 class="pfa-title">Application Mobile Native OAMA</h3>
+                        <p class="pfa-description">
+                            Créer une application mobile cross-platform (iOS/Android) avec fonctionnalités 
+                            offline-first, notifications push et interface optimisée tactile.
+                        </p>
+                        <div class="pfa-meta">
+                            <span class="pfa-meta-item"><i class="fas fa-users"></i> Binôme</span>
+                            <span class="pfa-meta-item"><i class="fas fa-clock"></i> 4 mois</span>
+                            <span class="pfa-meta-item"><i class="fas fa-code"></i> Développement</span>
+                        </div>
+                        <button class="pfa-btn">
+                            Voir les Détails <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PFA 5: Database & Analytics -->
+                <div class="pfa-card" onclick="openModal('pfa5')">
+                    <div class="pfa-header">
+                        <div class="pfa-number">05</div>
+                        <div class="pfa-icon"><i class="fas fa-database"></i></div>
+                        <span class="pfa-tag">Data</span>
+                    </div>
+                    <div class="pfa-body">
+                        <h3 class="pfa-title">Base de Données et Tableau de Bord Analytique Avancé</h3>
+                        <p class="pfa-description">
+                            Implémenter une base de données persistante avec système de backup, 
+                            et créer un dashboard analytique avancé pour le suivi des performances.
+                        </p>
+                        <div class="pfa-meta">
+                            <span class="pfa-meta-item"><i class="fas fa-users"></i> Binôme</span>
+                            <span class="pfa-meta-item"><i class="fas fa-clock"></i> 4 mois</span>
+                            <span class="pfa-meta-item"><i class="fas fa-chart-line"></i> Analyse</span>
+                        </div>
+                        <button class="pfa-btn">
+                            Voir les Détails <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PFA 6: Multi-discipline Extension -->
+                <div class="pfa-card" onclick="openModal('pfa6')">
+                    <div class="pfa-header">
+                        <div class="pfa-number">06</div>
+                        <div class="pfa-icon"><i class="fas fa-puzzle-piece"></i></div>
+                        <span class="pfa-tag">Extension</span>
+                    </div>
+                    <div class="pfa-body">
+                        <h3 class="pfa-title">Extension Multi-Disciplines et Gestion de Contenu</h3>
+                        <p class="pfa-description">
+                            Développer un système CMS pour la gestion dynamique des quiz, 
+                            nouveaux types de questions et support multi-disciplines configurable.
+                        </p>
+                        <div class="pfa-meta">
+                            <span class="pfa-meta-item"><i class="fas fa-users"></i> Binôme</span>
+                            <span class="pfa-meta-item"><i class="fas fa-clock"></i> 4 mois</span>
+                            <span class="pfa-meta-item"><i class="fas fa-code"></i> Développement</span>
+                        </div>
+                        <button class="pfa-btn">
+                            Voir les Détails <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Encadrants Section -->
+    <section class="section section-navy" id="encadrants">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Encadrement</div>
+                <h2 class="section-title">Équipe d'Encadrement</h2>
+                <p class="section-subtitle">
+                    Deux experts en informatique et intelligence artificielle pour guider vos projets.
+                </p>
+            </div>
+
+            <div class="encadrants-grid">
+                <div class="encadrant-card">
+                    <div class="encadrant-avatar">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="encadrant-role">Encadrant Principal</div>
+                    <h3 class="encadrant-name">Lt Col Oussama Atoui</h3>
+                    <p class="encadrant-title">Dr in Engineering Sciences<br>Créateur de la Plateforme OAMA</p>
+                </div>
+                <div class="encadrant-card">
+                    <div class="encadrant-avatar">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="encadrant-role">Co-Encadrant</div>
+                    <h3 class="encadrant-name">Lt Col Mohamed Hechmi Jridi</h3>
+                    <p class="encadrant-title">Dr in Communications Systems<br>Expert en Intelligence Artificielle</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Prêt à Contribuer à l'Avenir de l'Éducation Militaire?</h2>
+        <p>
+            Rejoignez ce projet innovant et mettez vos compétences au service de l'Académie Militaire.
+        </p>
+        <div class="cta-buttons">
+            <a href="https://oama-plateform.onrender.com" target="_blank" class="btn-primary">
+                <i class="fas fa-external-link-alt"></i> Visiter OAMA-Plateform
+            </a>
+            <a href="https://github.com/ouss-AGC/oama-plateform" target="_blank" class="btn-secondary">
+                <i class="fab fa-github"></i> Voir le Code Source
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="golden_stamp.png" alt="OAMA" style="height: 80px;">
+                <p>
+                    OAMA-Plateform est une initiative de l'Académie Militaire de Fondouk Jédid 
+                    pour moderniser l'évaluation académique des élèves officiers.
+                </p>
+            </div>
+            <div class="footer-links">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="#accueil">Accueil</a></li>
+                    <li><a href="#plateforme">Plateforme</a></li>
+                    <li><a href="#architecture">Architecture</a></li>
+                    <li><a href="#projets">Projets PFA</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Ressources</h4>
+                <ul>
+                    <li><a href="https://oama-plateform.onrender.com" target="_blank">Plateforme Live</a></li>
+                    <li><a href="https://github.com/ouss-AGC/oama-plateform" target="_blank">GitHub Repository</a></li>
+                    <li><a href="#">Documentation</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="#">Académie Militaire</a></li>
+                    <li><a href="#">Fondouk Jédid, Tunisie</a></li>
+                    <li><a href="#">Direction de l'Enseignement</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025-2026 Académie Militaire - Fondouk Jédid. Tous droits réservés. | Référence: ENQ-REF-51, Ver:02</p>
+        </div>
+    </footer>
+
+    <!-- Modals for PFA Details -->
+    <!-- PFA 1 Modal -->
+    <div class="modal" id="modal-pfa1">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeModal('pfa1')"><i class="fas fa-times"></i></button>
+                <span class="pfa-tag">Sécurité</span>
+                <h2 style="margin-top: 15px; font-size: 1.5rem;">Sécurisation Avancée de la Plateforme OAMA</h2>
+            </div>
+            <div class="modal-body">
+                <h4><i class="fas fa-bullseye"></i> Objectif</h4>
+                <p>
+                    Concevoir et implémenter un système de sécurité complet pour la plateforme OAMA, 
+                    garantissant la confidentialité des données, l'intégrité des évaluations et la 
+                    conformité aux exigences de sécurité militaire.
+                </p>
+
+                <h4><i class="fas fa-tasks"></i> Démarche / Phases</h4>
+                <ul>
+                    <li><strong>Phase 1:</strong> Audit de sécurité de l'application existante et identification des vulnérabilités</li>
+                    <li><strong>Phase 2:</strong> Conception de l'architecture de sécurité (authentification, autorisation, chiffrement)</li>
+                    <li><strong>Phase 3:</strong> Implémentation de l'authentification multi-facteurs (MFA) pour les administrateurs</li>
+                    <li><strong>Phase 4:</strong> Mise en place du chiffrement des données sensibles (AES-256, TLS 1.3)</li>
+                    <li><strong>Phase 5:</strong> Développement du système d'audit logging et détection d'intrusion</li>
+                    <li><strong>Phase 6:</strong> Tests de pénétration et validation de la sécurité</li>
+                </ul>
+
+                <h4><i class="fas fa-clipboard-check"></i> Type du Travail</h4>
+                <p>Étude + Développement/Réalisation pratique</p>
+
+                <h4><i class="fas fa-trophy"></i> Résultats Attendus</h4>
+                <ul>
+                    <li>Rapport d'audit de sécurité complet</li>
+                    <li>Module d'authentification MFA fonctionnel</li>
+                    <li>Système de chiffrement des données implémenté</li>
+                    <li>Dashboard de monitoring de sécurité</li>
+                    <li>Documentation des procédures de sécurité</li>
+                </ul>
+
+                <h4><i class="fas fa-tools"></i> Besoins (Matériel/Logiciels)</h4>
+                <ul>
+                    <li>Node.js, Express.js, React</li>
+                    <li>Bibliothèques: bcrypt, jsonwebtoken, helmet, crypto</li>
+                    <li>Outils de test: OWASP ZAP, Burp Suite</li>
+                    <li>Serveur de test local</li>
+                </ul>
+
+                <h4><i class="fas fa-graduation-cap"></i> Prérequis</h4>
+                <ul>
+                    <li>Connaissances en développement web (JavaScript, Node.js)</li>
+                    <li>Notions de cryptographie et sécurité informatique</li>
+                    <li>Familiarité avec les protocoles d'authentification (OAuth, JWT)</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('pfa1')">Fermer</button>
+                <a href="PFA_01_Securite.pdf" download class="btn-primary" style="text-decoration:none;"><i class="fas fa-file-pdf"></i> Télécharger PDF</a>
+                <button class="btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Imprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PFA 2 Modal -->
+    <div class="modal" id="modal-pfa2">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeModal('pfa2')"><i class="fas fa-times"></i></button>
+                <span class="pfa-tag">Infrastructure</span>
+                <h2 style="margin-top: 15px; font-size: 1.5rem;">Déploiement Local et Architecture On-Premise</h2>
+            </div>
+            <div class="modal-body">
+                <h4><i class="fas fa-bullseye"></i> Objectif</h4>
+                <p>
+                    Concevoir et mettre en œuvre une solution de déploiement local permettant à la plateforme OAMA 
+                    de fonctionner entièrement sur le réseau interne de l'académie, sans dépendance à Internet, 
+                    tout en garantissant performance et fiabilité.
+                </p>
+
+                <h4><i class="fas fa-tasks"></i> Démarche / Phases</h4>
+                <ul>
+                    <li><strong>Phase 1:</strong> Analyse des besoins infrastructure et contraintes réseau de l'académie</li>
+                    <li><strong>Phase 2:</strong> Conception de l'architecture serveur locale (Docker, reverse proxy)</li>
+                    <li><strong>Phase 3:</strong> Configuration du serveur et installation des dépendances</li>
+                    <li><strong>Phase 4:</strong> Adaptation de l'application pour fonctionnement offline</li>
+                    <li><strong>Phase 5:</strong> Mise en place du système de backup et restauration</li>
+                    <li><strong>Phase 6:</strong> Documentation et formation des administrateurs</li>
+                </ul>
+
+                <h4><i class="fas fa-clipboard-check"></i> Type du Travail</h4>
+                <p>Conception/Modélisation + Développement/Réalisation pratique</p>
+
+                <h4><i class="fas fa-trophy"></i> Résultats Attendus</h4>
+                <ul>
+                    <li>Architecture de déploiement documentée</li>
+                    <li>Scripts d'installation automatisés (Docker Compose)</li>
+                    <li>Plateforme fonctionnelle sur réseau local</li>
+                    <li>Système de backup automatique</li>
+                    <li>Guide d'administration et maintenance</li>
+                </ul>
+
+                <h4><i class="fas fa-tools"></i> Besoins (Matériel/Logiciels)</h4>
+                <ul>
+                    <li>Serveur Linux (Ubuntu Server 22.04 LTS)</li>
+                    <li>Docker et Docker Compose</li>
+                    <li>Nginx (reverse proxy)</li>
+                    <li>Routeur WiFi pour tests en environnement isolé</li>
+                </ul>
+
+                <h4><i class="fas fa-graduation-cap"></i> Prérequis</h4>
+                <ul>
+                    <li>Administration système Linux</li>
+                    <li>Connaissances Docker et containerisation</li>
+                    <li>Notions de réseaux informatiques</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('pfa2')">Fermer</button>
+                <a href="PFA_02_Infrastructure.pdf" download class="btn-primary" style="text-decoration:none;"><i class="fas fa-file-pdf"></i> Télécharger PDF</a>
+                <button class="btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Imprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PFA 3 Modal -->
+    <div class="modal" id="modal-pfa3">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeModal('pfa3')"><i class="fas fa-times"></i></button>
+                <span class="pfa-tag">Intelligence Artificielle</span>
+                <h2 style="margin-top: 15px; font-size: 1.5rem;">Intégration d'IA pour l'Analyse et la Génération de Quiz</h2>
+            </div>
+            <div class="modal-body">
+                <h4><i class="fas fa-bullseye"></i> Objectif</h4>
+                <p>
+                    Développer et intégrer des modules d'intelligence artificielle pour enrichir la plateforme OAMA 
+                    avec des capacités d'analyse prédictive, de génération automatique de questions et de 
+                    recommandations personnalisées pour les étudiants.
+                </p>
+
+                <h4><i class="fas fa-tasks"></i> Démarche / Phases</h4>
+                <ul>
+                    <li><strong>Phase 1:</strong> État de l'art sur l'IA dans l'éducation et les systèmes de quiz adaptatifs</li>
+                    <li><strong>Phase 2:</strong> Collecte et préparation des données d'entraînement</li>
+                    <li><strong>Phase 3:</strong> Développement du module de génération automatique de questions (NLP/LLM)</li>
+                    <li><strong>Phase 4:</strong> Création du système d'analyse prédictive des performances</li>
+                    <li><strong>Phase 5:</strong> Implémentation des recommandations personnalisées</li>
+                    <li><strong>Phase 6:</strong> Intégration avec la plateforme existante et tests</li>
+                </ul>
+
+                <h4><i class="fas fa-clipboard-check"></i> Type du Travail</h4>
+                <p>Étude + Développement/Réalisation pratique</p>
+
+                <h4><i class="fas fa-trophy"></i> Résultats Attendus</h4>
+                <ul>
+                    <li>Module de génération automatique de QCM à partir de documents</li>
+                    <li>Système de prédiction de réussite des étudiants</li>
+                    <li>Recommandations de révision personnalisées</li>
+                    <li>API d'intégration avec la plateforme OAMA</li>
+                    <li>Rapport d'évaluation des performances des modèles</li>
+                </ul>
+
+                <h4><i class="fas fa-tools"></i> Besoins (Matériel/Logiciels)</h4>
+                <ul>
+                    <li>Python, TensorFlow/PyTorch</li>
+                    <li>API OpenAI ou modèles open-source (Llama, Mistral)</li>
+                    <li>Bibliothèques NLP: spaCy, Transformers</li>
+                    <li>GPU pour entraînement (optionnel, cloud possible)</li>
+                </ul>
+
+                <h4><i class="fas fa-graduation-cap"></i> Prérequis</h4>
+                <ul>
+                    <li>Machine Learning et Deep Learning</li>
+                    <li>Traitement du Langage Naturel (NLP)</li>
+                    <li>Python et bibliothèques scientifiques</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('pfa3')">Fermer</button>
+                <a href="PFA_03_IA.pdf" download class="btn-primary" style="text-decoration:none;"><i class="fas fa-file-pdf"></i> Télécharger PDF</a>
+                <button class="btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Imprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PFA 4 Modal -->
+    <div class="modal" id="modal-pfa4">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeModal('pfa4')"><i class="fas fa-times"></i></button>
+                <span class="pfa-tag">Mobile</span>
+                <h2 style="margin-top: 15px; font-size: 1.5rem;">Application Mobile Native OAMA</h2>
+            </div>
+            <div class="modal-body">
+                <h4><i class="fas fa-bullseye"></i> Objectif</h4>
+                <p>
+                    Développer une application mobile cross-platform (iOS et Android) offrant une expérience 
+                    optimisée pour les étudiants, avec fonctionnalités offline, notifications push et 
+                    interface tactile intuitive.
+                </p>
+
+                <h4><i class="fas fa-tasks"></i> Démarche / Phases</h4>
+                <ul>
+                    <li><strong>Phase 1:</strong> Analyse UX/UI et conception des maquettes mobile</li>
+                    <li><strong>Phase 2:</strong> Choix du framework (React Native / Flutter) et setup projet</li>
+                    <li><strong>Phase 3:</strong> Développement des écrans principaux (authentification, quiz, résultats)</li>
+                    <li><strong>Phase 4:</strong> Implémentation du mode offline avec synchronisation</li>
+                    <li><strong>Phase 5:</strong> Intégration des notifications push</li>
+                    <li><strong>Phase 6:</strong> Tests sur appareils réels et optimisation performances</li>
+                </ul>
+
+                <h4><i class="fas fa-clipboard-check"></i> Type du Travail</h4>
+                <p>Conception/Modélisation + Développement/Réalisation pratique</p>
+
+                <h4><i class="fas fa-trophy"></i> Résultats Attendus</h4>
+                <ul>
+                    <li>Application mobile fonctionnelle iOS/Android</li>
+                    <li>Mode offline avec synchronisation automatique</li>
+                    <li>Système de notifications push</li>
+                    <li>Interface optimisée pour écrans tactiles</li>
+                    <li>Documentation technique et guide utilisateur</li>
+                </ul>
+
+                <h4><i class="fas fa-tools"></i> Besoins (Matériel/Logiciels)</h4>
+                <ul>
+                    <li>React Native ou Flutter</li>
+                    <li>Android Studio / Xcode</li>
+                    <li>Smartphones de test (Android et iOS)</li>
+                    <li>Firebase pour notifications push</li>
+                </ul>
+
+                <h4><i class="fas fa-graduation-cap"></i> Prérequis</h4>
+                <ul>
+                    <li>Développement mobile (React Native ou Flutter)</li>
+                    <li>JavaScript/TypeScript ou Dart</li>
+                    <li>Notions de design UI/UX mobile</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('pfa4')">Fermer</button>
+                <a href="PFA_04_Mobile.pdf" download class="btn-primary" style="text-decoration:none;"><i class="fas fa-file-pdf"></i> Télécharger PDF</a>
+                <button class="btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Imprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PFA 5 Modal -->
+    <div class="modal" id="modal-pfa5">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeModal('pfa5')"><i class="fas fa-times"></i></button>
+                <span class="pfa-tag">Data</span>
+                <h2 style="margin-top: 15px; font-size: 1.5rem;">Base de Données et Tableau de Bord Analytique Avancé</h2>
+            </div>
+            <div class="modal-body">
+                <h4><i class="fas fa-bullseye"></i> Objectif</h4>
+                <p>
+                    Remplacer le stockage en mémoire par une base de données persistante robuste et développer 
+                    un tableau de bord analytique avancé permettant le suivi longitudinal des performances 
+                    des étudiants et des statistiques détaillées.
+                </p>
+
+                <h4><i class="fas fa-tasks"></i> Démarche / Phases</h4>
+                <ul>
+                    <li><strong>Phase 1:</strong> Conception du schéma de base de données (modèle relationnel)</li>
+                    <li><strong>Phase 2:</strong> Migration vers PostgreSQL/SQLite avec ORM (Prisma/Sequelize)</li>
+                    <li><strong>Phase 3:</strong> Implémentation du système de backup automatique</li>
+                    <li><strong>Phase 4:</strong> Développement du dashboard analytique (graphiques, KPIs)</li>
+                    <li><strong>Phase 5:</strong> Création des rapports exportables (PDF, Excel)</li>
+                    <li><strong>Phase 6:</strong> Tests de performance et optimisation des requêtes</li>
+                </ul>
+
+                <h4><i class="fas fa-clipboard-check"></i> Type du Travail</h4>
+                <p>Conception/Modélisation + Développement/Réalisation pratique</p>
+
+                <h4><i class="fas fa-trophy"></i> Résultats Attendus</h4>
+                <ul>
+                    <li>Base de données PostgreSQL/SQLite opérationnelle</li>
+                    <li>Système de backup et restauration automatique</li>
+                    <li>Dashboard analytique avec visualisations interactives</li>
+                    <li>Suivi historique des performances par étudiant</li>
+                    <li>Exports automatisés (rapports PDF/Excel)</li>
+                </ul>
+
+                <h4><i class="fas fa-tools"></i> Besoins (Matériel/Logiciels)</h4>
+                <ul>
+                    <li>PostgreSQL ou SQLite</li>
+                    <li>Prisma ou Sequelize (ORM)</li>
+                    <li>Chart.js, Recharts ou D3.js</li>
+                    <li>jsPDF, ExcelJS pour exports</li>
+                </ul>
+
+                <h4><i class="fas fa-graduation-cap"></i> Prérequis</h4>
+                <ul>
+                    <li>Bases de données relationnelles (SQL)</li>
+                    <li>Développement backend Node.js</li>
+                    <li>Visualisation de données</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('pfa5')">Fermer</button>
+                <a href="PFA_05_Data.pdf" download class="btn-primary" style="text-decoration:none;"><i class="fas fa-file-pdf"></i> Télécharger PDF</a>
+                <button class="btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Imprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PFA 6 Modal -->
+    <div class="modal" id="modal-pfa6">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeModal('pfa6')"><i class="fas fa-times"></i></button>
+                <span class="pfa-tag">Extension</span>
+                <h2 style="margin-top: 15px; font-size: 1.5rem;">Extension Multi-Disciplines et Gestion de Contenu</h2>
+            </div>
+            <div class="modal-body">
+                <h4><i class="fas fa-bullseye"></i> Objectif</h4>
+                <p>
+                    Développer un système de gestion de contenu (CMS) permettant aux instructeurs de créer, 
+                    modifier et organiser les quiz de manière autonome, avec support pour de nouveaux types 
+                    de questions et une architecture multi-disciplines extensible.
+                </p>
+
+                <h4><i class="fas fa-tasks"></i> Démarche / Phases</h4>
+                <ul>
+                    <li><strong>Phase 1:</strong> Analyse des besoins des instructeurs et types de questions souhaités</li>
+                    <li><strong>Phase 2:</strong> Conception de l'interface CMS (création/édition de quiz)</li>
+                    <li><strong>Phase 3:</strong> Développement de l'éditeur de questions (QCM, vrai/faux, appariement, etc.)</li>
+                    <li><strong>Phase 4:</strong> Implémentation du système de gestion des disciplines</li>
+                    <li><strong>Phase 5:</strong> Création du système d'import/export de quiz (JSON, CSV)</li>
+                    <li><strong>Phase 6:</strong> Tests utilisateurs et documentation</li>
+                </ul>
+
+                <h4><i class="fas fa-clipboard-check"></i> Type du Travail</h4>
+                <p>Conception/Modélisation + Développement/Réalisation pratique</p>
+
+                <h4><i class="fas fa-trophy"></i> Résultats Attendus</h4>
+                <ul>
+                    <li>Interface CMS complète pour gestion des quiz</li>
+                    <li>Support de nouveaux types de questions (drag-drop, appariement, texte à trous)</li>
+                    <li>Système de catégorisation par discipline/module</li>
+                    <li>Import/Export de banques de questions</li>
+                    <li>Guide utilisateur pour les instructeurs</li>
+                </ul>
+
+                <h4><i class="fas fa-tools"></i> Besoins (Matériel/Logiciels)</h4>
+                <ul>
+                    <li>React, TypeScript</li>
+                    <li>Éditeur WYSIWYG (TipTap, Slate)</li>
+                    <li>Drag-and-drop library (react-beautiful-dnd)</li>
+                    <li>JSON Schema pour validation</li>
+                </ul>
+
+                <h4><i class="fas fa-graduation-cap"></i> Prérequis</h4>
+                <ul>
+                    <li>Développement frontend React avancé</li>
+                    <li>Design d'interfaces utilisateur</li>
+                    <li>Gestion d'état (Redux, Zustand)</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('pfa6')">Fermer</button>
+                <a href="PFA_06_Extension.pdf" download class="btn-primary" style="text-decoration:none;"><i class="fas fa-file-pdf"></i> Télécharger PDF</a>
+                <button class="btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Imprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal Functions
+        function openModal(pfaId) {
+            document.getElementById('modal-' + pfaId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(pfaId) {
+            document.getElementById('modal-' + pfaId).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on outside click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(10, 22, 40, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(10, 22, 40, 0.95)';
+            }
+        });
+    </script>
+</body>
+</html>
