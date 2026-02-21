@@ -329,16 +329,23 @@ const Quiz: React.FC = () => {
                 const hasShownIntro = sessionStorage.getItem('fbi_intro_shown');
                 if (!isPractice && !hasShownIntro) {
                     const isMunitions = discipline === 'munitions';
+                    const isGenie = discipline === 'genie';
                     setBriefingData({
-                        title: isMunitions ? "DIRECTIVE OPÉRATIONNELLE : LASM3" : "DIRECTIVE OPÉRATIONNELLE : GC31",
+                        title: isMunitions ? "DIRECTIVE OPÉRATIONNELLE : LASM3"
+                            : isGenie ? "DIRECTIVE OPÉRATIONNELLE : LASM2 - GENIE MILITAIRE"
+                                : "DIRECTIVE OPÉRATIONNELLE : GC31",
                         message: isMunitions
                             ? "RECRUE, BIENVENUE DANS LA SALLE D'OPÉRATIONS.\nL'interrogation LASM3 commence maintenant.\n\nCONSIGNES DE MISSION :\n\n1. DISCIPLINE : Les QCM demandent une concentration totale.\n\n2. RIGUEUR : Répondez avec précision aux questions techniques.\n\n3. LOGISTIQUE : Identifiez correctement chaque type de munition.\n\n4. CHRONO : Gérez votre temps efficacement.\n\nLa maîtrise technique est votre seule arme.\nBonne chance."
-                            : "RECRUE, BIENVENUE DANS LA SALLE D'OPÉRATIONS.\nL'examen GC31 commence maintenant.\n\nCONSIGNES DE MISSION :\n\n1. PRÉCISION : Les QCM demandent une vigilance absolue.\n\n2. MÉTHODOLOGIE : Pour les exercices, détaillez chaque étape.\n\n3. LOGISTIQUE : Les documents de référence sont accessibles.\n\n4. CHRONO : Vous disposez de 150 minutes.\n\nAucune distraction ne sera tolérée.\nVotre réussite est l'unique option.",
+                            : isGenie
+                                ? "RECRUE, BIENVENUE DANS LA SALLE D'OPÉRATIONS.\nL'évaluation Genie Militaire LASM2 commence maintenant.\n\nCONSIGNES DE MISSION :\n\n1. DISCIPLINE : Les QCM demandent une concentration totale.\n\n2. RIGUEUR : Répondez avec précision aux questions techniques.\n\n3. BARÈME : Chaque question vaut 0.5 point.\n\n4. CHRONO : Vous disposez de 60 minutes.\n\nLa maîtrise technique est votre seule arme.\nBonne chance."
+                                : "RECRUE, BIENVENUE DANS LA SALLE D'OPÉRATIONS.\nL'examen GC31 commence maintenant.\n\nCONSIGNES DE MISSION :\n\n1. PRÉCISION : Les QCM demandent une vigilance absolue.\n\n2. MÉTHODOLOGIE : Pour les exercices, détaillez chaque étape.\n\n3. LOGISTIQUE : Les documents de référence sont accessibles.\n\n4. CHRONO : Vous disposez de 150 minutes.\n\nAucune distraction ne sera tolérée.\nVotre réussite est l'unique option.",
                         image: "/scholars/ouss_briefing.jpg",
                         scholar: "ADMINISTRATEUR - CHEF DES OPÉRATIONS",
                         scholarMessage: isMunitions
                             ? "Restez concentré sur la nomenclature. La sécurité dépend de votre expertise."
-                            : "Restez concentré. La précision est votre meilleure alliée dans cette mission.",
+                            : isGenie
+                                ? "Concentrez-vous sur chaque question. La précision est votre meilleure alliée."
+                                : "Restez concentré. La précision est votre meilleure alliée dans cette mission.",
                         imageStyle: "object-cover object-top"
                     });
                     setIsInitialBriefing(true);
@@ -803,7 +810,7 @@ const Quiz: React.FC = () => {
                         <h1 className="font-bold text-lg hidden md:block">{quizData.title}</h1>
                     </div>
                     <div className="flex items-center space-x-6">
-                        {discipline !== 'munitions' && (
+                        {discipline !== 'munitions' && discipline !== 'genie' && (
                             <button
                                 onClick={() => setIsPdfViewerOpen(true)}
                                 className={`bg-yellow-500 text-military-green px-6 py-3 rounded-full flex items-center shadow-lg hover:bg-yellow-400 transition-all font-bold text-2xl ${shouldPulseSubject ? 'animate-bounce ring-4 ring-yellow-300 ring-opacity-50' : ''}`}
@@ -881,57 +888,61 @@ const Quiz: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Part 2: Calculs */}
-                        <div>
-                            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 border-b pb-1">Partie 2 : Problème</h4>
-                            <div className="grid grid-cols-5 gap-2">
-                                {flattenedQuestions.filter(q => q.parentId === 'part2').map((q) => {
-                                    const index = flattenedQuestions.indexOf(q);
-                                    return (
-                                        <button
-                                            key={index}
-                                            onClick={() => goToQuestion(index)}
-                                            className={`w-10 h-10 rounded-lg font-bold text-xs transition-all flex items-center justify-center
+                        {/* Part 2: Calculs - Only show if discipline has Part 2 questions */}
+                        {flattenedQuestions.some(q => q.parentId === 'part2') && (
+                            <div>
+                                <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 border-b pb-1">Partie 2 : Problème</h4>
+                                <div className="grid grid-cols-5 gap-2">
+                                    {flattenedQuestions.filter(q => q.parentId === 'part2').map((q) => {
+                                        const index = flattenedQuestions.indexOf(q);
+                                        return (
+                                            <button
+                                                key={index}
+                                                onClick={() => goToQuestion(index)}
+                                                className={`w-10 h-10 rounded-lg font-bold text-xs transition-all flex items-center justify-center
                                                 ${index === currentQuestionIndex
-                                                    ? 'bg-blue-600 text-white ring-2 ring-offset-2 ring-blue-600 shadow-md'
-                                                    : answers[index] !== null && answers[index] !== ''
-                                                        ? 'bg-green-100 text-green-700 border-2 border-green-200'
-                                                        : 'bg-gray-100 text-gray-500 border-2 border-transparent hover:bg-gray-200'
-                                                }`}
-                                            title={`Question ${q.subId}`}
-                                        >
-                                            {q.subId}
-                                        </button>
-                                    );
-                                })}
+                                                        ? 'bg-blue-600 text-white ring-2 ring-offset-2 ring-blue-600 shadow-md'
+                                                        : answers[index] !== null && answers[index] !== ''
+                                                            ? 'bg-green-100 text-green-700 border-2 border-green-200'
+                                                            : 'bg-gray-100 text-gray-500 border-2 border-transparent hover:bg-gray-200'
+                                                    }`}
+                                                title={`Question ${q.subId}`}
+                                            >
+                                                {q.subId}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
                             </div>
-                        </div>
+                        )}
 
-                        {/* Part 3: SDOF */}
-                        <div>
-                            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 border-b pb-1">Partie 3 : Analyse SDOF</h4>
-                            <div className="grid grid-cols-5 gap-2">
-                                {flattenedQuestions.filter(q => q.parentId === 'part3').map((q) => {
-                                    const index = flattenedQuestions.indexOf(q);
-                                    return (
-                                        <button
-                                            key={index}
-                                            onClick={() => goToQuestion(index)}
-                                            className={`w-10 h-10 rounded-lg font-bold text-xs transition-all flex items-center justify-center
+                        {/* Part 3: SDOF - Only show if discipline has Part 3 questions */}
+                        {flattenedQuestions.some(q => q.parentId === 'part3') && (
+                            <div>
+                                <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 border-b pb-1">Partie 3 : Analyse SDOF</h4>
+                                <div className="grid grid-cols-5 gap-2">
+                                    {flattenedQuestions.filter(q => q.parentId === 'part3').map((q) => {
+                                        const index = flattenedQuestions.indexOf(q);
+                                        return (
+                                            <button
+                                                key={index}
+                                                onClick={() => goToQuestion(index)}
+                                                className={`w-10 h-10 rounded-lg font-bold text-xs transition-all flex items-center justify-center
                                                 ${index === currentQuestionIndex
-                                                    ? 'bg-purple-600 text-white ring-2 ring-offset-2 ring-purple-600 shadow-md'
-                                                    : answers[index] !== null && answers[index] !== ''
-                                                        ? 'bg-green-100 text-green-700 border-2 border-green-200'
-                                                        : 'bg-gray-100 text-gray-500 border-2 border-transparent hover:bg-gray-200'
-                                                }`}
-                                            title={`Question ${q.subId}`}
-                                        >
-                                            {q.subId}
-                                        </button>
-                                    );
-                                })}
+                                                        ? 'bg-purple-600 text-white ring-2 ring-offset-2 ring-purple-600 shadow-md'
+                                                        : answers[index] !== null && answers[index] !== ''
+                                                            ? 'bg-green-100 text-green-700 border-2 border-green-200'
+                                                            : 'bg-gray-100 text-gray-500 border-2 border-transparent hover:bg-gray-200'
+                                                    }`}
+                                                title={`Question ${q.subId}`}
+                                            >
+                                                {q.subId}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
 
@@ -1228,7 +1239,7 @@ const Quiz: React.FC = () => {
                 </div>
 
                 {/* Right Sidebar: Symbol Palette - Hidden for Part 1 or Munitions discipline */}
-                {discipline !== 'munitions' && currentQuestion.parentId !== 'part1' && (
+                {discipline !== 'munitions' && discipline !== 'genie' && currentQuestion.parentId !== 'part1' && (
                     <div className="hidden lg:block w-80 bg-white rounded-xl shadow-2xl h-fit sticky top-4 overflow-hidden border border-gray-100">
                         <div className="bg-slate-800 p-4 flex items-center justify-between">
                             <h3 className="font-black text-white flex items-center uppercase tracking-widest text-xs">

@@ -40,26 +40,46 @@ const Resources: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     const [selectedToolUrl, setSelectedToolUrl] = useState<string | null>(null);
+    const [selectedToolTitle, setSelectedToolTitle] = useState<string | null>(null);
     const [passwordInput, setPasswordInput] = useState('');
     const [passwordError, setPasswordError] = useState<string | null>(null);
+    const [isUnlocked, setIsUnlocked] = useState(false);
 
     const SECRET_CODE = "LASM32025";
+    const UNLOCK_KEY = "interactiveToolsUnlocked";
 
-    const handleToolClick = (url: string) => {
-        setSelectedToolUrl(url);
-        setIsPasswordModalOpen(true);
-        setPasswordInput('');
-        setPasswordError(null);
+    // Check if tools are already unlocked on component mount
+    useEffect(() => {
+        const unlocked = localStorage.getItem(UNLOCK_KEY) === 'true';
+        setIsUnlocked(unlocked);
+    }, []);
+
+    const handleToolClick = (url: string, title: string) => {
+        // Check if already unlocked
+        if (isUnlocked) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+        } else {
+            setSelectedToolUrl(url);
+            setSelectedToolTitle(title);
+            setIsPasswordModalOpen(true);
+            setPasswordInput('');
+            setPasswordError(null);
+        }
     };
 
     const handlePasswordSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (passwordInput === SECRET_CODE) {
+            // Unlock for all participants by setting localStorage
+            localStorage.setItem(UNLOCK_KEY, 'true');
+            setIsUnlocked(true);
+
             if (selectedToolUrl) {
                 window.open(selectedToolUrl, '_blank', 'noopener,noreferrer');
             }
             setIsPasswordModalOpen(false);
             setSelectedToolUrl(null);
+            setSelectedToolTitle(null);
             setPasswordError(null);
         } else {
             setPasswordError("Code d'accès incorrect. Veuillez réessayer.");

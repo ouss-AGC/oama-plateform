@@ -188,11 +188,11 @@ const StudentDetail: React.FC = () => {
                 });
                 earnedPoints += exerciseEarned;
                 totalPoints += exerciseMax; // Add to total possible points for the exercise
-            } else {
                 // QCM scoring
-                totalPoints += 0.5; // Assuming 0.5 per QCM as per JSON
+                const points = q.points || 0.5;
+                totalPoints += points;
                 if (result.answers[index] === q.correctAnswer) {
-                    earnedPoints += 0.5;
+                    earnedPoints += points;
                 }
             }
         });
