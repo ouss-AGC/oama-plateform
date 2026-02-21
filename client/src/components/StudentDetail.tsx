@@ -38,6 +38,7 @@ interface Question {
     description?: string; // For exercises
     context?: string; // For exercises
     validation?: any; // For auto-grading reference
+    points?: number; // Added for QCM point weight
 }
 
 interface QuizResult {
@@ -188,6 +189,7 @@ const StudentDetail: React.FC = () => {
                 });
                 earnedPoints += exerciseEarned;
                 totalPoints += exerciseMax; // Add to total possible points for the exercise
+            } else {
                 // QCM scoring
                 const points = q.points || 0.5;
                 totalPoints += points;

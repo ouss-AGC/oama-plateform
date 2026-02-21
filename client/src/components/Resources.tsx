@@ -190,7 +190,7 @@ const Resources: React.FC = () => {
                                             </div>
                                             <p className="text-gray-300 mb-6">{tool.description}</p>
                                             <button
-                                                onClick={() => handleToolClick(tool.fileUrl)}
+                                                onClick={() => handleToolClick(tool.fileUrl, tool.title)}
                                                 className="flex items-center justify-center w-full px-6 py-3 bg-indigo-600 text-white rounded-lg font-bold hover:bg-indigo-700 transition-all shadow-md group-hover:shadow-indigo-500/20 cursor-pointer"
                                             >
                                                 Ouvrir l'Outil
