@@ -669,39 +669,39 @@ const Quiz: React.FC = () => {
 
                 <div className="max-w-[90vw] w-full space-y-6 relative z-10 flex flex-col h-[90vh]">
                     {/* Header */}
-                    <div className={`flex items-center justify-between border-b ${isInitialBriefing ? 'border-red-500/30' : 'border-cyan-500/30'} pb-4 shrink-0`}>
-                        <div className="flex items-center space-x-6">
-                            <div className={`p-4 ${isInitialBriefing ? 'bg-red-500/10 border-red-500/50' : 'bg-cyan-500/10 border-cyan-500/50'} rounded-xl border animate-pulse`}>
-                                {isInitialBriefing ? <Target className="w-10 h-10 text-red-400" /> : <Terminal className="w-10 h-10 text-cyan-400" />}
+                    <div className={`flex items-center justify-between border-b ${isInitialBriefing ? 'border-red-500/30' : 'border-cyan-500/30'} pb-2 md:pb-4 shrink-0`}>
+                        <div className="flex items-center space-x-3 md:space-x-6">
+                            <div className={`p-2 md:p-4 ${isInitialBriefing ? 'bg-red-500/10 border-red-500/50' : 'bg-cyan-500/10 border-cyan-500/50'} rounded-lg md:rounded-xl border animate-pulse`}>
+                                {isInitialBriefing ? <Target className="w-6 h-6 md:w-10 md:h-10 text-red-400" /> : <Terminal className="w-6 h-6 md:w-10 md:h-10 text-cyan-400" />}
                             </div>
                             <div>
-                                <h2 className={`${isInitialBriefing ? 'text-red-500' : 'text-cyan-500'} font-mono text-sm tracking-[0.3em] font-black uppercase mb-1`}>
+                                <h2 className={`${isInitialBriefing ? 'text-red-500' : 'text-cyan-500'} font-mono text-[10px] md:text-sm tracking-[0.2em] md:tracking-[0.3em] font-black uppercase mb-0.5 md:mb-1`}>
                                     {isInitialBriefing ? "ALERTE OPÉRATIONNELLE" : "Transmission Entrante"}
                                 </h2>
-                                <h1 className="text-4xl text-white font-black tracking-tight uppercase shadow-cyan- glow">
+                                <h1 className="text-xl md:text-4xl text-white font-black tracking-tight uppercase shadow-cyan-glow">
                                     {briefingData.title}
                                 </h1>
                             </div>
                         </div>
-                        <div className="flex space-x-8 text-xs font-mono text-slate-500 uppercase tracking-widest hidden md:flex">
+                        <div className="flex space-x-8 text-xs font-mono text-slate-500 uppercase tracking-widest hidden lg:flex">
                             <div className="flex items-center">{isInitialBriefing ? <Shield className="w-4 h-4 mr-2 text-red-500" /> : <ShieldCheck className="w-4 h-4 mr-2 text-green-500" />} {isInitialBriefing ? 'SESSION CLASSIFIÉE' : 'Canal Sécurisé'}</div>
                             <div className="flex items-center"><Cpu className={`w-4 h-4 mr-2 ${isInitialBriefing ? 'text-red-500' : 'text-cyan-500'}`} /> {isInitialBriefing ? 'CRYPTAGE MILITAIRE' : 'Liaison Historique'}</div>
                         </div>
                     </div>
 
                     {/* Main Content Area - Split View */}
-                    <div className="flex-grow flex flex-col md:flex-row gap-12 overflow-hidden items-center justify-center">
+                    <div className="flex-grow flex flex-col md:flex-row gap-4 md:gap-12 overflow-hidden items-center justify-center">
 
                         {/* LEFT: Scholar Hologram */}
                         {briefingData.image && (
-                            <div className="w-full md:w-1/2 flex flex-col items-center justify-center relative group h-full">
-                                <div className="relative w-full aspect-square max-w-[600px] max-h-[600px] flex items-center justify-center">
+                            <div className="w-full md:w-1/2 flex flex-col items-center justify-center relative group h-[40%] md:h-full">
+                                <div className="relative w-full aspect-square max-w-[280px] md:max-w-[600px] flex items-center justify-center">
                                     {/* Hologram Rings */}
-                                    <div className={`absolute inset-0 border-[4px] ${isInitialBriefing ? 'border-red-500/30 border-t-red-400' : 'border-cyan-500/30 border-t-cyan-400'} rounded-full animate-[spin_10s_linear_infinite] border-l-transparent border-r-transparent`}></div>
-                                    <div className={`absolute inset-6 border-[2px] ${isInitialBriefing ? 'border-red-500/20' : 'border-cyan-500/20'} rounded-full animate-[spin_15s_linear_infinite_reverse]`}></div>
+                                    <div className={`absolute inset-0 border-[2px] md:border-[4px] ${isInitialBriefing ? 'border-red-500/30 border-t-red-400' : 'border-cyan-500/30 border-t-cyan-400'} rounded-full animate-[spin_10s_linear_infinite] border-l-transparent border-r-transparent`}></div>
+                                    <div className={`absolute inset-4 md:inset-6 border-[1px] md:border-[2px] ${isInitialBriefing ? 'border-red-500/20' : 'border-cyan-500/20'} rounded-full animate-[scan_15s_linear_infinite_reverse]`}></div>
 
-                                    {/* Image Container - Zoomed for Head-Only Portrait - GROUP for Hover */}
-                                    <div className={`absolute inset-4 rounded-3xl overflow-hidden border-2 ${isInitialBriefing ? 'border-red-500/50 shadow-[0_0_80px_rgba(239,68,68,0.4)]' : 'border-cyan-500/50 shadow-[0_0_80px_rgba(6,182,212,0.4)]'} bg-slate-900/80 backdrop-blur-sm group cursor-help transition-all duration-300`}>
+                                    {/* Image Container */}
+                                    <div className={`absolute inset-2 md:inset-4 rounded-2xl md:rounded-3xl overflow-hidden border ${isInitialBriefing ? 'border-red-500/50 shadow-[0_0_40px_rgba(239,68,68,0.3)]' : 'border-cyan-500/50 shadow-[0_0_40px_rgba(6,182,212,0.3)]'} bg-slate-900/80 backdrop-blur-sm group cursor-help transition-all duration-300`}>
                                         <img
                                             src={briefingData.image}
                                             alt="Scholar"
@@ -712,34 +712,25 @@ const Quiz: React.FC = () => {
 
                                         {/* HOVER OVERLAY - Message from Scholar */}
                                         {briefingData.scholarMessage && (
-                                            <div className="absolute inset-0 flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 z-10 bg-gradient-to-t from-black/90 via-slate-900/60 to-transparent p-6">
-                                                <div className={`bg-slate-950/70 border ${isInitialBriefing ? 'border-red-500/40 shadow-[0_0_30px_rgba(239,68,68,0.2)]' : 'border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.2)]'} backdrop-blur-md rounded-xl p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 w-full mb-4`}>
-                                                    <div className="flex items-center justify-between mb-2">
-                                                        <span className={`text-xs font-bold ${isInitialBriefing ? 'text-red-500' : 'text-cyan-500'} uppercase tracking-widest flex items-center`}>
-                                                            <Terminal className="w-3 h-3 mr-1" /> {isInitialBriefing ? "PRIORITÉ ABSOLUE" : "MESSAGE PRIORITAIRE"}
+                                            <div className="absolute inset-0 flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 z-10 bg-gradient-to-t from-black/90 via-slate-900/60 to-transparent p-4 md:p-6">
+                                                <div className={`bg-slate-950/70 border ${isInitialBriefing ? 'border-red-500/40 shadow-[0_0_30px_rgba(239,68,68,0.2)]' : 'border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.2)]'} backdrop-blur-md rounded-lg md:rounded-xl p-3 md:p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 w-full mb-2 md:mb-4`}>
+                                                    <div className="flex items-center justify-between mb-1 md:mb-2">
+                                                        <span className={`text-[8px] md:text-xs font-bold ${isInitialBriefing ? 'text-red-500' : 'text-cyan-500'} uppercase tracking-widest flex items-center`}>
+                                                            <Terminal className="w-2 md:w-3 h-2 md:h-3 mr-1" /> {isInitialBriefing ? "PRIORITÉ ABSOLUE" : "MESSAGE PRIORITAIRE"}
                                                         </span>
                                                         <button
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
                                                                 handleSpeak(briefingData.scholarMessage || '');
                                                             }}
-                                                            className={`p-1.5 rounded-full transition-all duration-300 ${isSpeaking ? (isInitialBriefing ? 'bg-red-500/20 text-red-400 ring-1 ring-red-500' : 'bg-cyan-500/20 text-cyan-400 ring-1 ring-cyan-500') + ' animate-pulse' : 'bg-transparent text-slate-400 hover:text-cyan-400 hover:bg-cyan-500/10'}`}
-                                                            title={isSpeaking ? "Arrêter la transmission" : "Écouter le message"}
+                                                            className={`p-1 rounded-full transition-all duration-300 ${isSpeaking ? (isInitialBriefing ? 'bg-red-500/20 text-red-400 ring-1 ring-red-500' : 'bg-cyan-500/20 text-cyan-400 ring-1 ring-cyan-500') + ' animate-pulse' : 'bg-transparent text-slate-400 hover:text-cyan-400 hover:bg-cyan-500/10'}`}
                                                         >
-                                                            {isSpeaking ? <StopCircle className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                                                            {isSpeaking ? <StopCircle className="w-3 md:w-4 h-3 md:h-4" /> : <Volume2 className="w-3 md:w-4 h-3 md:h-4" />}
                                                         </button>
                                                     </div>
-                                                    <p className={`${isInitialBriefing ? 'text-red-50' : 'text-cyan-50'} font-mono text-sm leading-relaxed text-shadow-sm`}>
+                                                    <p className={`${isInitialBriefing ? 'text-red-50' : 'text-cyan-50'} font-mono text-[10px] md:text-sm leading-relaxed text-shadow-sm line-clamp-3 md:line-clamp-none`}>
                                                         "{briefingData.scholarMessage}"
                                                     </p>
-                                                    {isSpeaking && (
-                                                        <div className="flex items-center justify-center gap-1 mt-2 h-2">
-                                                            <div className={`w-0.5 h-full ${isInitialBriefing ? 'bg-red-500' : 'bg-cyan-500'} animate-[music_1s_ease-in-out_infinite]`}></div>
-                                                            <div className={`w-0.5 h-full ${isInitialBriefing ? 'bg-red-500' : 'bg-cyan-500'} animate-[music_1.1s_ease-in-out_infinite]`}></div>
-                                                            <div className={`w-0.5 h-full ${isInitialBriefing ? 'bg-red-500' : 'bg-cyan-500'} animate-[music_1.2s_ease-in-out_infinite]`}></div>
-                                                            <div className={`w-0.5 h-full ${isInitialBriefing ? 'bg-red-500' : 'bg-cyan-500'} animate-[music_0.9s_ease-in-out_infinite]`}></div>
-                                                        </div>
-                                                    )}
                                                 </div>
                                             </div>
                                         )}
@@ -748,11 +739,11 @@ const Quiz: React.FC = () => {
 
                                 {/* Scholar Identification */}
                                 {briefingData.scholar && (
-                                    <div className="mt-8 text-center animate-fade-in-up z-20 bg-slate-950/50 px-6 py-2 rounded-full border border-cyan-500/30 backdrop-blur-md">
-                                        <h3 className="text-cyan-300 font-bold text-3xl tracking-wide font-mono shadow-black drop-shadow-xl">
+                                    <div className="mt-4 md:mt-8 text-center animate-fade-in-up z-20 bg-slate-950/50 px-4 md:px-6 py-1 md:py-2 rounded-full border border-cyan-500/30 backdrop-blur-md">
+                                        <h3 className="text-cyan-300 font-bold text-xl md:text-3xl tracking-wide font-mono shadow-black drop-shadow-xl">
                                             {briefingData.scholar.split(' - ')[0]}
                                         </h3>
-                                        <p className="text-cyan-500/90 text-sm font-bold tracking-[0.2em] uppercase mt-2">
+                                        <p className="text-cyan-500/90 text-[8px] md:text-sm font-bold tracking-[0.1em] md:tracking-[0.2em] uppercase mt-1 md:mt-2">
                                             {briefingData.scholar.split(' - ')[1]}
                                         </p>
                                     </div>
@@ -761,26 +752,26 @@ const Quiz: React.FC = () => {
                         )}
 
                         {/* RIGHT: Text Content */}
-                        <div className={`bg-slate-900/60 rounded-3xl border border-slate-700 backdrop-blur-2xl shadow-2xl flex flex-col relative overflow-hidden h-full max-h-[70vh] ${briefingData.image ? 'w-full md:w-1/2' : 'w-full'}`}>
+                        <div className={`bg-slate-900/60 rounded-2xl md:rounded-3xl border border-slate-700 backdrop-blur-2xl shadow-2xl flex flex-col relative overflow-hidden h-[50%] md:h-full max-h-[50vh] md:max-h-[70vh] ${briefingData.image ? 'w-full md:w-1/2' : 'w-full'}`}>
                             {/* Decorative corner accents */}
-                            <div className="absolute top-0 right-0 p-4">
-                                <div className={`w-20 h-20 border-t-4 border-r-4 ${isInitialBriefing ? 'border-red-500/40' : 'border-cyan-500/40'} rounded-tr-2xl`}></div>
+                            <div className="absolute top-0 right-0 p-2 md:p-4">
+                                <div className={`w-10 md:w-20 h-10 md:h-20 border-t-2 md:border-t-4 border-r-2 md:border-r-4 ${isInitialBriefing ? 'border-red-500/40' : 'border-cyan-500/40'} rounded-tr-lg md:rounded-tr-2xl`}></div>
                             </div>
-                            <div className="absolute bottom-0 left-0 p-4">
-                                <div className={`w-20 h-20 border-b-4 border-l-4 ${isInitialBriefing ? 'border-red-500/40' : 'border-cyan-500/40'} rounded-bl-2xl`}></div>
+                            <div className="absolute bottom-0 left-0 p-2 md:p-4">
+                                <div className={`w-10 md:w-20 h-10 md:h-20 border-b-2 md:border-b-4 border-l-2 md:border-l-4 ${isInitialBriefing ? 'border-red-500/40' : 'border-cyan-500/40'} rounded-bl-lg md:rounded-bl-2xl`}></div>
                             </div>
 
-                            <div className="p-10 md:p-14 flex-grow font-mono text-xl md:text-2xl leading-loose text-cyan-50 text-shadow overflow-y-auto custom-scrollbar flex items-center">
+                            <div className="p-6 md:p-14 flex-grow font-mono text-sm md:text-2xl leading-relaxed md:leading-loose text-cyan-50 text-shadow overflow-y-auto custom-scrollbar flex items-start md:items-center">
                                 <div className="w-full whitespace-pre-wrap">
                                     <Typewriter text={briefingData.message} speed={isInitialBriefing ? 10 : 15} />
-                                    <span className={`inline-block w-3 h-8 ${isInitialBriefing ? 'bg-red-400' : 'bg-cyan-400'} ml-2 animate-pulse align-middle`}></span>
+                                    <span className={`inline-block w-2 md:w-3 h-4 md:h-8 ${isInitialBriefing ? 'bg-red-400' : 'bg-cyan-400'} ml-1 md:ml-2 animate-pulse align-middle`}></span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     {/* Footer Actions */}
-                    <div className="flex justify-end items-center pt-4 shrink-0">
+                    <div className="flex justify-center md:justify-end items-center pt-2 md:pt-4 shrink-0">
                         <button
                             onClick={() => {
                                 if (isInitialBriefing) {
@@ -789,10 +780,10 @@ const Quiz: React.FC = () => {
                                 setShowBriefing(false);
                                 setIsInitialBriefing(false);
                             }}
-                            className={`${isInitialBriefing ? 'bg-red-600/20 hover:bg-red-500/40 border-red-500/60 text-red-200' : 'bg-cyan-600/20 hover:bg-cyan-500/40 border-cyan-500/60 text-cyan-200'} border-2 px-16 py-6 rounded-2xl font-black text-xl tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(6,182,212,0.25)] flex items-center group backdrop-blur-md hover:shadow-cyan-500/20`}
+                            className={`${isInitialBriefing ? 'bg-red-600/20 hover:bg-red-500/40 border-red-500/60 text-red-200' : 'bg-cyan-600/20 hover:bg-cyan-500/40 border-cyan-500/60 text-cyan-200'} border-2 px-8 py-4 md:px-16 md:py-6 rounded-xl md:rounded-2xl font-black text-base md:text-xl tracking-[0.1em] md:tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(6,182,212,0.2)] flex items-center group backdrop-blur-md`}
                         >
                             {isInitialBriefing ? "DÉBUTER LA MISSION" : "ACCUSER RÉCEPTION"}
-                            <ChevronRight className="w-8 h-8 ml-4 group-hover:translate-x-2 transition-transform" />
+                            <ChevronRight className="w-6 h-6 md:w-8 md:h-8 ml-2 md:ml-4 group-hover:translate-x-2 transition-transform" />
                         </button>
                     </div>
                 </div>
@@ -803,41 +794,45 @@ const Quiz: React.FC = () => {
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col">
             {/* Header */}
-            <header className="bg-military-green text-white p-4 shadow-md">
-                <div className="max-w-[98%] mx-auto flex justify-between items-center">
+            <header className={`${discipline === 'genie' ? 'bg-slate-900 border-b border-cyan-500/30' : 'bg-military-green'} text-white p-3 md:p-4 shadow-md sticky top-0 z-40`}>
+                <div className="max-w-[98%] mx-auto flex justify-between items-center gap-2">
                     <div className="flex items-center">
-                        <img src="/academy-logo.png" alt="Logo" className="h-10 w-10 mr-3" />
-                        <h1 className="font-bold text-lg hidden md:block">{quizData.title}</h1>
+                        <img src="/academy-logo.png" alt="Logo" className="h-8 w-8 md:h-10 md:w-10 mr-2 md:mr-3" />
+                        <h1 className="font-bold text-base md:text-lg hidden sm:block truncate max-w-[150px] md:max-w-none">
+                            {discipline === 'genie' ? 'GENIE MILITAIRE' : quizData.title}
+                        </h1>
                     </div>
-                    <div className="flex items-center space-x-6">
+
+                    <div className="flex items-center space-x-2 md:space-x-6">
                         {discipline !== 'munitions' && discipline !== 'genie' && (
                             <button
                                 onClick={() => setIsPdfViewerOpen(true)}
-                                className={`bg-yellow-500 text-military-green px-6 py-3 rounded-full flex items-center shadow-lg hover:bg-yellow-400 transition-all font-bold text-2xl ${shouldPulseSubject ? 'animate-bounce ring-4 ring-yellow-300 ring-opacity-50' : ''}`}
+                                className={`bg-yellow-500 text-military-green px-4 py-2 md:px-6 md:py-3 rounded-full flex items-center shadow-lg hover:bg-yellow-400 transition-all font-bold text-lg md:text-2xl ${shouldPulseSubject ? 'animate-bounce ring-4 ring-yellow-300 ring-opacity-50' : ''}`}
                             >
-                                <FileSearch className="w-6 h-6 mr-3" />
-                                Voir Sujet
+                                <FileSearch className="w-5 h-5 md:w-6 md:h-6 mr-1 md:mr-3" />
+                                <span className="hidden xs:block">Voir Sujet</span>
                             </button>
                         )}
-                        <div className={`flex items-center px-6 py-3 rounded-full shadow-lg transition-all ${isTimeRunningOut ? 'bg-red-600' : isNearEnd ? 'bg-orange-500' : 'bg-green-800'
+                        <div className={`flex items-center px-4 py-2 md:px-6 md:py-3 rounded-full shadow-lg transition-all ${isTimeRunningOut ? 'bg-red-600' : isNearEnd ? 'bg-orange-500' : (discipline === 'genie' ? 'bg-cyan-900/50 border border-cyan-500/50' : 'bg-green-800')
                             } ${isBlinking ? 'animate-pulse' : ''}`}>
-                            <Clock className="w-6 h-6 mr-3" />
-                            <span className="font-mono font-bold text-2xl">{formatTime(timeLeft)}</span>
+                            <Clock className={`w-5 h-5 md:w-6 md:h-6 mr-2 md:mr-3 ${discipline === 'genie' ? 'text-cyan-400' : ''}`} />
+                            <span className={`font-mono font-black text-xl md:text-2xl ${discipline === 'genie' ? 'text-cyan-50' : ''}`}>{formatTime(timeLeft)}</span>
                         </div>
                     </div>
-                    <div className="text-sm font-medium">
-                        {answeredCount} / {flattenedQuestions.length} étapes
+
+                    <div className={`text-[10px] md:text-sm font-bold uppercase tracking-tighter md:tracking-normal px-2 py-1 rounded ${discipline === 'genie' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' : 'bg-white/10'}`}>
+                        {answeredCount}/{flattenedQuestions.length} <span className="hidden md:inline">questions</span>
                     </div>
                 </div>
             </header>
 
             {/* Progress Bar */}
-            < div className="w-full bg-gray-300 h-2" >
+            <div className={`w-full ${discipline === 'genie' ? 'bg-slate-800' : 'bg-gray-300'} h-1.5 md:h-2`}>
                 <div
-                    className="bg-military-beige h-2 transition-all duration-300 ease-out"
+                    className={`${discipline === 'genie' ? 'bg-gradient-to-r from-cyan-600 to-blue-500' : 'bg-military-beige'} h-full transition-all duration-300 ease-out shadow-[0_0_10px_rgba(6,182,212,0.5)]`}
                     style={{ width: `${progressPercentage}%` }}
                 ></div>
-            </div >
+            </div>
 
             {/* Time Warning */}
             {
@@ -854,7 +849,7 @@ const Quiz: React.FC = () => {
             }
 
             {/* Main Content */}
-            <main className="flex-grow flex p-4 gap-4 max-w-[98%] mx-auto w-full items-start">
+            <main className={`flex-grow flex p-2 md:p-4 gap-2 md:gap-4 max-w-full md:max-w-[98%] mx-auto w-full items-start ${discipline === 'genie' ? 'bg-slate-950/95' : ''}`}>
                 {/* Question Grid Sidebar */}
                 <div className="hidden lg:block w-80 bg-white rounded-xl shadow-lg p-5 h-fit sticky top-4 overflow-hidden">
                     <h3 className="font-bold text-gray-800 mb-4 flex items-center">
@@ -947,20 +942,20 @@ const Quiz: React.FC = () => {
                 </div>
 
                 {/* Question Card */}
-                <div className="flex-grow bg-white rounded-xl shadow-lg overflow-hidden flex flex-col">
-                    <div className="p-8 flex-grow overflow-y-auto max-h-[70vh]">
-                        <div className="flex justify-between items-start mb-4">
-                            <div className="flex-grow">
-                                <h2 className="text-2xl font-bold text-gray-800">
+                <div className={`flex-grow rounded-xl shadow-lg overflow-hidden flex flex-col ${discipline === 'genie' ? 'bg-slate-900 border border-cyan-500/20 shadow-cyan-900/10' : 'bg-white'}`}>
+                    <div className="p-4 md:p-8 flex-grow overflow-y-auto max-h-[75vh] md:max-h-[70vh] custom-scrollbar">
+                        <div className="flex flex-col md:flex-row justify-between items-start mb-6 md:mb-8 gap-4">
+                            <div className="flex-grow w-full">
+                                <h2 className={`text-xl md:text-3xl font-black leading-tight ${discipline === 'genie' ? 'text-white' : 'text-gray-800'}`}>
                                     {currentQuestion.question}
                                 </h2>
                             </div>
-                            <div className="flex flex-col items-end ml-4 gap-2">
-                                <span className="px-3 py-1 bg-red-600 text-white rounded-full text-sm font-black whitespace-nowrap shadow-sm">
-                                    {currentQuestion.points} pts
+                            <div className="flex flex-row md:flex-col items-center md:items-end justify-between w-full md:w-auto gap-2">
+                                <span className={`px-4 py-1.5 rounded-full text-xs md:text-sm font-black whitespace-nowrap shadow-sm ${discipline === 'genie' ? 'bg-cyan-600 text-white shadow-cyan-500/20' : 'bg-red-600 text-white'}`}>
+                                    {currentQuestion.points} PTS
                                 </span>
-                                <span className="px-3 py-1 bg-gray-100 rounded-full text-sm font-semibold text-gray-600 whitespace-nowrap">
-                                    {currentQuestion.subId ? `Question ${currentQuestion.subId}` : `Q${currentQuestionIndex + 1}`}
+                                <span className={`px-4 py-1.5 rounded-full text-xs md:text-sm font-bold whitespace-nowrap ${discipline === 'genie' ? 'bg-slate-800 text-cyan-400 border border-cyan-500/30' : 'bg-gray-100 text-gray-600'}`}>
+                                    {currentQuestion.subId ? `QUESTION ${currentQuestion.subId}` : `Q${currentQuestionIndex + 1}`}
                                 </span>
                             </div>
                         </div>
@@ -1175,20 +1170,32 @@ const Quiz: React.FC = () => {
                             </div>
                         ) : (
                             // Standard QCM View
-                            <div className="space-y-4">
+                            <div className="space-y-4 md:space-y-6">
                                 {currentQuestion.options?.map((option, index) => (
                                     <button
                                         key={index}
                                         onClick={() => handleOptionSelect(index)}
-                                        className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-200 flex items-center justify-between group
+                                        className={`w-full text-left p-5 md:p-6 rounded-xl border-2 transition-all duration-300 flex items-center justify-between group relative overflow-hidden active:scale-[0.98]
                                             ${answers[currentQuestionIndex] === index
-                                                ? 'border-military-green bg-green-50 text-military-green shadow-md'
-                                                : 'border-gray-200 hover:border-gray-400 hover:bg-gray-50'
+                                                ? (discipline === 'genie' ? 'border-cyan-500 bg-cyan-500/10 text-white shadow-[0_0_20px_rgba(6,182,212,0.2)]' : 'border-military-green bg-green-50 text-military-green shadow-md')
+                                                : (discipline === 'genie' ? 'border-slate-700 bg-slate-800/50 text-slate-300 hover:border-cyan-500/50 hover:bg-slate-800' : 'border-gray-200 hover:border-gray-400 hover:bg-gray-50')
                                             }`}
                                     >
-                                        <span className="font-medium text-lg">{option}</span>
+                                        <div className="flex items-center gap-4">
+                                            <span className={`flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-lg border-2 font-black text-sm md:text-base transition-all
+                                                ${answers[currentQuestionIndex] === index
+                                                    ? (discipline === 'genie' ? 'bg-cyan-500 border-cyan-400 text-slate-900' : 'bg-military-green border-military-green text-white')
+                                                    : (discipline === 'genie' ? 'bg-slate-900 border-slate-600 text-slate-400' : 'bg-gray-100 border-gray-200 text-gray-500')
+                                                }`}>
+                                                {String.fromCharCode(65 + index)}
+                                            </span>
+                                            <span className="font-bold text-lg md:text-xl leading-snug">{option}</span>
+                                        </div>
                                         {answers[currentQuestionIndex] === index && (
-                                            <CheckCircle className="w-6 h-6 text-military-green" />
+                                            <div className="flex items-center">
+                                                <div className={`w-3 h-3 md:w-4 md:h-4 rounded-full mr-3 animate-pulse ${discipline === 'genie' ? 'bg-cyan-400' : 'bg-military-green'}`}></div>
+                                                <CheckCircle className={`w-6 h-6 md:w-8 md:h-8 ${discipline === 'genie' ? 'text-cyan-400' : 'text-military-green'}`} />
+                                            </div>
                                         )}
                                     </button>
                                 ))}
@@ -1197,41 +1204,47 @@ const Quiz: React.FC = () => {
                     </div>
 
                     {/* Footer / Navigation Buttons */}
-                    <div className="bg-gray-50 border-t p-6 flex justify-between items-center group">
+                    <div className={`border-t p-4 md:p-6 flex justify-between items-center group shadow-inner ${discipline === 'genie' ? 'bg-slate-900 border-slate-800' : 'bg-gray-50'}`}>
                         <button
                             onClick={handlePrevious}
                             disabled={currentQuestionIndex === 0}
-                            className={`flex items-center px-6 py-3 rounded-xl font-bold transition-all
+                            className={`flex items-center px-5 py-3 md:px-8 md:py-4 rounded-xl font-black transition-all text-sm md:text-base active:scale-95
                                 ${currentQuestionIndex === 0
-                                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                                    : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-military-green hover:text-military-green shadow-sm'
+                                    ? (discipline === 'genie' ? 'bg-slate-800 text-slate-600 border-transparent cursor-not-allowed' : 'bg-gray-200 text-gray-400 cursor-not-allowed')
+                                    : (discipline === 'genie' ? 'bg-slate-800 text-cyan-400 border-2 border-slate-700 hover:border-cyan-500 shadow-lg' : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-military-green hover:text-military-green shadow-sm')
                                 }`}
                         >
-                            <ChevronLeft className="w-5 h-5 mr-3" />
-                            Précédent
+                            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 mr-2 md:mr-3" />
+                            <span className="hidden xs:inline">Précédent</span>
                         </button>
 
-                        <div className="flex gap-3">
+                        <div className="flex gap-2 md:gap-4 items-center">
+                            <span className={`font-mono text-xs md:text-sm font-bold md:mr-4 hidden sm:block ${discipline === 'genie' ? 'text-slate-500' : 'text-gray-400'}`}>
+                                STEP {currentQuestionIndex + 1} / {flattenedQuestions.length}
+                            </span>
+
                             {currentQuestionIndex < flattenedQuestions.length - 1 ? (
                                 <button
                                     onClick={handleNext}
-                                    className="bg-military-green text-white px-8 py-3 rounded-xl font-bold flex items-center hover:bg-green-800 transition-all shadow-md active:scale-95"
+                                    className={`px-8 py-3 md:px-12 md:py-4 rounded-xl font-black flex items-center transition-all shadow-lg active:scale-95 text-base md:text-xl
+                                        ${discipline === 'genie' ? 'bg-cyan-600 text-white hover:bg-cyan-500 shadow-cyan-900/40' : 'bg-military-green text-white hover:bg-green-800'}
+                                    `}
                                 >
                                     Suivant
-                                    <ChevronRight className="w-5 h-5 ml-3" />
+                                    <ChevronRight className="w-5 h-5 md:w-6 md:h-6 ml-2 md:ml-3" />
                                 </button>
                             ) : (
                                 <button
                                     onClick={() => finishQuiz(answers)}
                                     disabled={isSubmitting}
-                                    className={`px-8 py-3 rounded-xl font-bold flex items-center transition-all shadow-lg ring-offset-2
+                                    className={`px-8 py-3 md:px-12 md:py-4 rounded-xl font-black flex items-center transition-all shadow-xl ring-offset-2 text-base md:text-xl
                                         ${isSubmitting
-                                            ? 'bg-gray-400 text-gray-200 cursor-not-allowed animate-none'
-                                            : 'bg-blue-600 text-white hover:bg-blue-700 animate-pulse ring-2 ring-blue-400'
+                                            ? (discipline === 'genie' ? 'bg-slate-800 text-slate-600' : 'bg-gray-400 text-gray-200') + ' cursor-not-allowed'
+                                            : (discipline === 'genie' ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-500 hover:to-cyan-500 shadow-cyan-500/20' : 'bg-blue-600 text-white hover:bg-blue-700') + ' animate-pulse ring-2 ring-blue-400'
                                         }`}
                                 >
-                                    {isSubmitting ? 'Soumission...' : "Terminer l'Examen"}
-                                    <CheckCircle className="w-5 h-5 ml-3" />
+                                    {isSubmitting ? 'ENVOI...' : "TERMINER"}
+                                    <CheckCircle className="w-5 h-5 md:w-6 md:h-6 ml-2 md:ml-3" />
                                 </button>
                             )}
                         </div>
