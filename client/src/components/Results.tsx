@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Download, Home, Award, Trophy, AlertTriangle, BarChart as BarChartIcon, FileText, BookOpen, CheckCircle, XCircle, TrendingUp } from 'lucide-react';
+import { Download, Home, Award, Trophy, AlertTriangle, BarChart as BarChartIcon, FileText, BookOpen, CheckCircle, XCircle, TrendingUp, Lock } from 'lucide-react';
 import { generateCertificate, generateVisualCertificate } from '../utils/certificateGenerator';
 import jsPDF from 'jspdf';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
@@ -36,6 +36,10 @@ const Results: React.FC = () => {
     const [visualCertificate, setVisualCertificate] = useState<string>('');
     const [classStats, setClassStats] = useState({ average: 0, max: 0, min: 0 });
     const [quizQuestions, setQuizQuestions] = useState<Question[]>([]);
+    const [showPinPrompt, setShowPinPrompt] = useState(false);
+    const [enteredPin, setEnteredPin] = useState('');
+    const [pinError, setPinError] = useState('');
+    const [pendingAction, setPendingAction] = useState<() => void>(() => { });
 
     useEffect(() => {
         const loadResult = async () => {
@@ -78,6 +82,33 @@ const Results: React.FC = () => {
 
         loadResult();
     }, [navigate]);
+
+    const handleVerifyAndDownload = (action: () => void) => {
+        setPendingAction(() => action);
+        setShowPinPrompt(true);
+        setPinError('');
+        setEnteredPin('');
+    };
+
+    const confirmPin = async () => {
+        try {
+            const response = await fetch('/api/verify-report-pin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pin: enteredPin }),
+            });
+
+            const data = await response.json();
+            if (data.valid) {
+                setShowPinPrompt(false);
+                pendingAction();
+            } else {
+                setPinError("Code PIN incorrect. Veuillez demander à l'instructeur.");
+            }
+        } catch (err) {
+            setPinError("Erreur de connexion.");
+        }
+    };
 
     const generateReport = async () => {
         if (!result) return;
@@ -241,6 +272,51 @@ const Results: React.FC = () => {
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4"
             style={{ backgroundImage: "url('/academy-bg.png')", backgroundSize: 'cover', backgroundBlendMode: 'overlay', backgroundColor: 'rgba(255,255,255,0.9)' }}>
 
+            {/* PIN Prompt Modal */}
+            {showPinPrompt && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4">
+                    <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-sm border border-gray-200 animate-in fade-in zoom-in duration-300">
+                        <div className="flex flex-col items-center mb-6">
+                            <div className="bg-orange-100 p-3 rounded-full mb-4">
+                                <Lock className="w-8 h-8 text-orange-600" />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-800">Sécurité du Rapport</h3>
+                            <p className="text-gray-500 text-sm text-center mt-2">Veuillez entrer le PIN fourni par l'instructeur pour télécharger votre document.</p>
+                        </div>
+
+                        <input
+                            type="text"
+                            value={enteredPin}
+                            onChange={(e) => setEnteredPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                            onKeyPress={(e) => e.key === 'Enter' && confirmPin()}
+                            placeholder="PIN"
+                            autoFocus
+                            className="w-full bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-3 text-center text-2xl font-bold tracking-widest focus:outline-none focus:border-orange-500 transition-colors mb-4"
+                        />
+
+                        {pinError && (
+                            <p className="text-red-500 text-sm text-center mb-4 font-medium">{pinError}</p>
+                        )}
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <button
+                                onClick={() => setShowPinPrompt(false)}
+                                className="py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-100 transition-colors"
+                            >
+                                Annuler
+                            </button>
+                            <button
+                                onClick={confirmPin}
+                                disabled={!enteredPin}
+                                className={`py-3 rounded-xl font-bold text-white shadow-lg transition-all ${enteredPin ? 'bg-orange-600 hover:bg-orange-700 active:scale-95' : 'bg-gray-300 cursor-not-allowed'}`}
+                            >
+                                Valider
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden transform transition-all hover:scale-[1.01]">
                 {/* Practice Badge */}
                 {result?.isPractice && (
@@ -394,7 +470,7 @@ const Results: React.FC = () => {
                         </button>
 
                         <button
-                            onClick={generateReport}
+                            onClick={() => handleVerifyAndDownload(generateReport)}
                             className="px-6 py-3 rounded-lg bg-gray-800 text-white font-bold hover:bg-gray-900 flex items-center justify-center shadow-md transition-colors"
                         >
                             <FileText className="w-5 h-5 mr-2" />
@@ -404,14 +480,14 @@ const Results: React.FC = () => {
                         {/* Download Certificate button only for scores > 15 */}
                         {isPass && canDownloadCertificate && (
                             <button
-                                onClick={async () => {
+                                onClick={() => handleVerifyAndDownload(async () => {
                                     try {
                                         await generateCertificate(result);
                                     } catch (error) {
                                         console.error("Certificate generation failed:", error);
                                         alert("Erreur lors de la génération du certificat. Veuillez réessayer.");
                                     }
-                                }}
+                                })}
                                 className="px-6 py-3 rounded-lg bg-military-beige text-military-green font-bold hover:bg-yellow-200 flex items-center justify-center shadow-md transition-colors"
                             >
                                 <Download className="w-5 h-5 mr-2" />

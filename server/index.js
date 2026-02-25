@@ -12,6 +12,7 @@ app.use(express.json());
 // --- Session State (In-Memory) ---
 let sessionState = {
     currentPin: null,
+    reportPin: "123456", // Default report PIN
     isQuizStarted: false,
     participants: [],
     results: [] // Store quiz results here
@@ -31,15 +32,34 @@ app.post('/api/admin/generate-pin', (req, res) => {
     res.json({ pin: newPin });
 });
 
+// Admin: Set Report PIN
+app.post('/api/admin/set-report-pin', (req, res) => {
+    const { pin } = req.body;
+    if (!pin) return res.status(400).json({ error: "PIN required" });
+    sessionState.reportPin = pin;
+    res.json({ success: true, reportPin: pin });
+});
+
 // Admin: Get Session Info (including results)
 app.get('/api/admin/session', (req, res) => {
     res.json({
         pin: sessionState.currentPin,
+        reportPin: sessionState.reportPin,
         connectedCount: sessionState.participants.length,
         participants: sessionState.participants,
         status: sessionState.isQuizStarted ? 'started' : (sessionState.currentPin ? 'waiting' : 'idle'),
         results: sessionState.results
     });
+});
+
+// Student: Verify Report PIN
+app.post('/api/verify-report-pin', (req, res) => {
+    const { pin } = req.body;
+    if (pin === sessionState.reportPin) {
+        res.json({ valid: true });
+    } else {
+        res.status(401).json({ valid: false, error: "Code PIN du rapport incorrect." });
+    }
 });
 
 // Admin: Start Quiz

@@ -57,14 +57,51 @@ const Quiz: React.FC = () => {
 
         const fetchQuizData = async () => {
             try {
-                // Load practice questions if mode=practice, otherwise load official questions
-                const fileName = isPractice ? `${discipline}_practice.json` : `quiz_data_${discipline}.json`;
+                // Determine file name – check for Genie version 2
+                let fileName = isPractice ? `${discipline}_practice.json` : `quiz_data_${discipline}.json`;
+                if (discipline === 'genie' && !isPractice) {
+                    fileName = 'quiz_data_genie_v2.json';
+                }
+
                 const response = await fetch(`/${fileName}`);
                 if (!response.ok) throw new Error('Failed to load quiz data');
                 const data = await response.json();
-                setQuizData(data);
+
+                // RANDOMIZATION ENGINE
+                let processedQuestions = [...data.questions];
+
+                // 1. Shuffle Questions
+                for (let i = processedQuestions.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [processedQuestions[i], processedQuestions[j]] = [processedQuestions[j], processedQuestions[i]];
+                }
+
+                // 2. Shuffle Options for each question
+                processedQuestions = processedQuestions.map(q => {
+                    const originalOptions = [...q.options];
+                    const correctAnswerText = originalOptions[q.correctAnswer];
+
+                    // Fisher-Yates shuffle for options
+                    const shuffledOptions = [...originalOptions];
+                    for (let i = shuffledOptions.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [shuffledOptions[i], shuffledOptions[j]] = [shuffledOptions[j], shuffledOptions[i]];
+                    }
+
+                    return {
+                        ...q,
+                        options: shuffledOptions,
+                        correctAnswer: shuffledOptions.indexOf(correctAnswerText)
+                    };
+                });
+
+                setQuizData({
+                    ...data,
+                    questions: processedQuestions
+                });
+
                 // Initialize answers array with nulls
-                setAnswers(new Array(data.questions.length).fill(null));
+                setAnswers(new Array(processedQuestions.length).fill(null));
                 setLoading(false);
 
                 // Start countdown timer

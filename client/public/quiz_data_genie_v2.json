@@ -1,0 +1,595 @@
+{
+    "title": "Génie Militaire 4 - LASM 2 (Final v2)",
+    "questions": [
+        {
+            "id": 1,
+            "question": "Quelle est la définition d'une explosion ?",
+            "options": [
+                "Une transformation lente d'un système matériel",
+                "Une transformation rapide d'un système matériel avec fort dégagement de gaz",
+                "Une réaction chimique sans dégagement de chaleur",
+                "Une compression lente de gaz"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 2,
+            "question": "Quels sont les trois phénomènes provoqués par une explosion ?",
+            "options": [
+                "Libération d'énergie, dégagement de chaleur, destruction de structures",
+                "Pluie, vent, neige",
+                "Lumière, son, odeur",
+                "Vibration, électricité, magnétisme"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 3,
+            "question": "L'onde de choc est caractérisée par une augmentation brutale de la pression.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 4,
+            "question": "Qu'est-ce que le 'blast injury' ?",
+            "options": [
+                "Une blessure causée par une chute",
+                "Une lésion due à l'onde de choc d'une explosion",
+                "Une brûlure chimique",
+                "Une intoxication alimentaire"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 5,
+            "question": "Le blast primaire est causé par :",
+            "options": [
+                "L'onde de choc (variation de pression)",
+                "Les projectiles",
+                "La projection de la victime",
+                "La chaleur"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 6,
+            "question": "Le blast secondaire est lié à :",
+            "options": [
+                "L'onde de choc",
+                "La projection d'objets (débris, éclats)",
+                "La projection de la victime",
+                "L'inhalation de fumées"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 7,
+            "question": "Le blast tertiaire correspond à :",
+            "options": [
+                "La projection de la victime contre une structure",
+                "L'onde de choc",
+                "Les brûlures",
+                "Les lésions auditives"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 8,
+            "question": "Le blast quaternaire inclut les brûlures et l'inhalation de fumées.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 9,
+            "question": "L'onde de souffle est constituée par le déplacement des produits de l'explosion (débris).",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 10,
+            "question": "La phase négative d'une onde de choc correspond à une surpression.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 11,
+            "question": "Une explosion 'air-burst' se produit au contact du sol.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 12,
+            "question": "Les lésions de blast primaire affectent principalement les organes creux contenant du gaz.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 13,
+            "question": "Quel organe est le plus sensible au blast primaire ?",
+            "options": [
+                "L'oreille (tympan)",
+                "Le foie",
+                "Les os",
+                "Les muscles"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 14,
+            "question": "Les brûlures thermiques sont classées dans le blast :",
+            "options": [
+                "Quaternaire",
+                "Primaire",
+                "Secondaire",
+                "Tertiaire"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 15,
+            "question": "Une victime d'explosion peut être à la fois blessée, brûlée et bouleversée.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 16,
+            "question": "Quelle est la première étape de la procédure à suivre suite à une explosion ?",
+            "options": [
+                "Sécuriser la zone (éviter le sur-accident)",
+                "Soigner les blessés",
+                "Appeler la presse",
+                "Prendre des photos"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 17,
+            "question": "Le blast auditif peut entraîner une surdité définitive.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 18,
+            "question": "L'effet de souffle peut projeter une personne à plusieurs mètres.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 19,
+            "question": "La prise en charge psychologique des victimes est inutile.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 20,
+            "question": "La surpression incidente diminue avec la distance à l'explosion.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 21,
+            "question": "Quelle est la température approximative de l'air ambiant lors d'une explosion ?",
+            "options": [
+                "100 °C à 200 °C",
+                "500 °C à 1000 °C",
+                "3000 °C à 4000 °C",
+                "10000 °C à 15000 °C"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 22,
+            "question": "Quel type d'explosion est causé par l'éclatement d'un récipient contenant du gaz sous haute pression ?",
+            "options": [
+                "Explosion chimique",
+                "Explosion nucléaire",
+                "Explosion pneumatique",
+                "Explosion électrique"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 23,
+            "question": "L'explosion nucléaire libère une énergie exprimée en :",
+            "options": [
+                "Joules uniquement",
+                "Kilotonnes ou mégatonnes de TNT",
+                "Watts",
+                "Newtons"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 24,
+            "question": "Quelle est la vitesse de propagation de la zone de réaction lors d'une déflagration ?",
+            "options": [
+                "Supersonique (1 à 9 km/s)",
+                "Subsonique (quelques cm/s à quelques dizaines de m/s)",
+                "Égale à la vitesse de la lumière",
+                "Nulle"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 25,
+            "question": "Quelle est la vitesse de propagation de la zone de réaction lors d'une détonation ?",
+            "options": [
+                "Supersonique (1 à 9 km/s)",
+                "Subsonique (quelques cm/s à quelques dizaines de m/s)",
+                "Très lente",
+                "Variable selon la température"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 26,
+            "question": "L'équivalent TNT est une grandeur absolue mesurée en Joules.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 27,
+            "question": "Quel est le facteur de conversion en équivalent TNT for le C4 ?",
+            "options": [
+                "1.00",
+                "1.37",
+                "0.82",
+                "1.66"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 28,
+            "question": "Quel paramètre n'influence PAS la magnitude d'une onde de choc ?",
+            "options": [
+                "La masse d'explosif",
+                "La distance à l'objectif",
+                "La couleur de l'explosif",
+                "La forme de la charge"
+            ],
+            "correctAnswer": 2
+        },
+        {
+            "id": 29,
+            "question": "Une explosion en 'free-air-burst' signifie que l'onde de choc atteint directement la structure sans réflexion préalable au sol.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 30,
+            "question": "Une explosion de surface ('surface-burst') voit ses effets amplifiés par la réflexion au sol.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 31,
+            "question": "Dans une explosion confinée totalement ventilée, l'onde de choc reste piégée à l'intérieur.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 32,
+            "question": "Quelle est l'énergie spécifique du TNT ?",
+            "options": [
+                "4520 kJ/kg",
+                "6192 kJ/kg",
+                "3706 kJ/kg",
+                "5800 kJ/kg"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 33,
+            "question": "Le phénomène de Mach se produit lors de la réflexion d'une onde de choc sur une paroi.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 34,
+            "question": "La pression réfléchie est toujours inférieure à la pression incidente.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 35,
+            "question": "Quelle est la durée typique de la phase positive d'une onde de choc ?",
+            "options": [
+                "Quelques secondes",
+                "Quelques millisecondes",
+                "Quelques minutes",
+                "Quelques heures"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 36,
+            "question": "L'impulsion spécifique est définie comme l'intégrale de la pression par rapport au temps.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 37,
+            "question": "Les explosions chimiques peuvent être subdivisées en explosions en phase condensée et en phase gazeuse.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 38,
+            "question": "L'ANFO a un équivalent TNT supérieur à 1.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 39,
+            "question": "La pression dynamique est liée au vent de l'explosion.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 40,
+            "question": "La distance réduite Z est calculée en fonction de :",
+            "options": [
+                "La distance et la racine cubique de la masse de la charge",
+                "La distance et la masse de la charge au carré",
+                "La distance seule",
+                "La masse de la charge seule"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 41,
+            "question": "Les fragments primaires proviennent de :",
+            "options": [
+                "L'enveloppe de la munition",
+                "Des objets environnants (verre, pierres)",
+                "Du corps humain",
+                "Du sol uniquement"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 42,
+            "question": "Les fragments secondaires proviennent de :",
+            "options": [
+                "L'enveloppe de la munition",
+                "Des objets environnants (verre, pierres, mobilier)",
+                "De la charge explosive elle-même",
+                "De l'air comprimé"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 43,
+            "question": "La loi de Hopkinson-Cranz permet de mettre à l'échelle les effets des explosions.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 44,
+            "question": "Le temps d'arrivée de l'onde de choc augmente avec la distance.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 45,
+            "question": "Il faut toujours retirer immédiatement les fragments d'une victime de blast secondaire.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 46,
+            "question": "La rupture du tympan survient généralement à une surpression de :",
+            "options": [
+                "35 kPa",
+                "100 kPa",
+                "5 kPa",
+                "200 kPa"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 47,
+            "question": "Les lésions pulmonaires (blast pulmonaire) sont une cause majeure de mortalité immédiate.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 48,
+            "question": "Le blast tertiaire est un traumatisme cinétique.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 49,
+            "question": "Les lésions digestives sont plus fréquentes que les lésions auditives lors d'un blast primaire.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 1
+        },
+        {
+            "id": 50,
+            "question": "Le blast quaternaire peut inclure l'exposition à des agents toxiques ou radioactifs.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 51,
+            "question": "Les lésions oculaires peuvent être causées par le blast secondaire (éclats).",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 52,
+            "question": "Une hémorragie pulmonaire est une conséquence possible du blast primaire.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 53,
+            "question": "Le seuil de létalité (50% de décès) pour une surpression pulmonaire est d'environ :",
+            "options": [
+                "400-500 kPa",
+                "50-100 kPa",
+                "10-20 kPa",
+                "1000-2000 kPa"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 54,
+            "question": "Les embolies gazeuses sont une complication grave du blast primaire.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 55,
+            "question": "Les lésions abdominales par blast sont souvent associées à des perforations intestinales.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 56,
+            "question": "La distance de sécurité pour éviter les lésions tympaniques (10 kg TNT) est d'environ :",
+            "options": [
+                "15 mètres",
+                "50 mètres",
+                "100 mètres",
+                "5 mètres"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 57,
+            "question": "Le blast tertiaire peut causer des fractures osseuses et des traumatismes crâniens.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 58,
+            "question": "L'onde de choc se propage plus vite dans l'eau que dans l'air, aggravant les lésions.",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 59,
+            "question": "Le 'blast lung' (poumon de blast) se manifeste par :",
+            "options": [
+                "Dyspnée, toux, hémoptysie",
+                "Douleur abdominale",
+                "Perte d'audition",
+                "Brûlures cutanées"
+            ],
+            "correctAnswer": 0
+        },
+        {
+            "id": 60,
+            "question": "Les lésions cérébrales traumatiques (TBI) peuvent survenir sans impact direct sur la tête (blast primaire).",
+            "options": [
+                "Vrai",
+                "Faux"
+            ],
+            "correctAnswer": 0
+        }
+    ]
+}

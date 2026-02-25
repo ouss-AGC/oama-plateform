@@ -31,6 +31,7 @@ const AdminDashboard: React.FC = () => {
 
     // Session Management State
     const [pin, setPin] = useState<string | null>(null);
+    const [reportPin, setReportPin] = useState<string>('123456');
     const [connectedCount, setConnectedCount] = useState(0);
     const [participants, setParticipants] = useState<any[]>([]);
     const [quizStatus, setQuizStatus] = useState('idle');
@@ -58,6 +59,7 @@ const AdminDashboard: React.FC = () => {
             .then(res => res.json())
             .then(data => {
                 setPin(data.pin);
+                setReportPin(data.reportPin || '123456');
                 setConnectedCount(data.connectedCount);
                 setParticipants(data.participants || []);
                 setQuizStatus(data.status);
@@ -87,6 +89,23 @@ const AdminDashboard: React.FC = () => {
             console.log('✅ Nouveau PIN généré. Toutes les données de test ont été effacées.');
         } catch (err) {
             console.error("Failed to generate PIN:", err);
+        }
+    };
+
+    const updateReportPin = async () => {
+        const newPin = prompt("Entrez le nouveau PIN pour le téléchargement des rapports :", reportPin);
+        if (newPin && newPin.length >= 4) {
+            try {
+                await fetch('/api/admin/set-report-pin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pin: newPin })
+                });
+                setReportPin(newPin);
+                alert("PIN du rapport mis à jour !");
+            } catch (err) {
+                console.error("Failed to set report PIN:", err);
+            }
         }
     };
 
@@ -315,26 +334,49 @@ const AdminDashboard: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                         {/* PIN Display */}
-                        <div className="bg-gray-50 p-4 rounded-lg flex flex-col items-center justify-center border border-gray-200">
+                        <div className="bg-gray-50 p-4 rounded-lg flex flex-col items-center justify-center border border-gray-200 relative group">
                             <span className="text-gray-500 text-sm mb-1">PIN de Session</span>
-                            <div className="text-4xl font-mono font-bold text-military-green tracking-widest mb-4">
+                            <div className="text-4xl font-mono font-bold text-military-green tracking-widest mb-4 transition-all duration-300 group-hover:blur-0 blur-md">
                                 {pin || '----'}
                             </div>
 
-                            {/* QR Code */}
+                            {/* QR Code (also blurred) */}
                             {pin && (
-                                <div className="mb-4 p-2 bg-white rounded shadow-sm border border-gray-100">
+                                <div className="mb-4 p-2 bg-white rounded shadow-sm border border-gray-100 transition-all duration-300 group-hover:blur-0 blur-md">
                                     <QRCodeCanvas value={`${window.location.origin}/?pin=${pin}`} size={128} />
                                 </div>
                             )}
+                            <div className="absolute inset-0 flex items-center justify-center opacity-100 group-hover:opacity-0 transition-opacity">
+                                <span className="bg-white/80 px-2 py-1 rounded text-xs font-bold text-gray-500 border border-gray-200 shadow-sm">Survolez pour voir</span>
+                            </div>
+
                             <button
                                 onClick={generatePin}
                                 className="mt-3 text-sm text-blue-600 hover:text-blue-800 flex items-center"
                             >
                                 <RefreshCw className="w-3 h-3 mr-1" />
                                 Générer un nouveau PIN
+                            </button>
+                        </div>
+
+                        {/* Report Download PIN */}
+                        <div className="bg-gray-50 p-4 rounded-lg flex flex-col items-center justify-center border border-gray-200 relative group">
+                            <span className="text-gray-500 text-sm mb-1">PIN Rapport Individual</span>
+                            <div className="text-4xl font-mono font-bold text-orange-600 tracking-widest mb-4 transition-all duration-300 group-hover:blur-0 blur-md">
+                                {reportPin}
+                            </div>
+                            <div className="absolute inset-0 flex items-center justify-center opacity-100 group-hover:opacity-0 transition-opacity">
+                                <span className="bg-white/80 px-2 py-1 rounded text-xs font-bold text-gray-500 border border-gray-200 shadow-sm">Survolez pour voir</span>
+                            </div>
+
+                            <button
+                                onClick={updateReportPin}
+                                className="mt-3 text-sm text-blue-600 hover:text-blue-800 flex items-center"
+                            >
+                                <RefreshCw className="w-3 h-3 mr-1" />
+                                Modifier le PIN Rapport
                             </button>
                         </div>
 
