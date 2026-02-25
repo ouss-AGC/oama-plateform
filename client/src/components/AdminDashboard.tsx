@@ -358,7 +358,7 @@ const AdminDashboard: React.FC = () => {
                                     <QRCodeCanvas value={`${window.location.origin}/?pin=${pin}`} size={128} />
                                 </div>
                             )}
-                            <div className="absolute inset-0 flex items-center justify-center opacity-100 group-hover:opacity-0 transition-opacity">
+                            <div className="absolute inset-0 flex items-center justify-center opacity-100 group-hover:opacity-0 transition-opacity pointer-events-none">
                                 <span className="bg-white/80 px-2 py-1 rounded text-xs font-bold text-gray-500 border border-gray-200 shadow-sm">Survolez pour voir</span>
                             </div>
 
@@ -377,7 +377,7 @@ const AdminDashboard: React.FC = () => {
                             <div className="text-4xl font-mono font-bold text-orange-600 tracking-widest mb-4 transition-all duration-300 group-hover:blur-0 blur-md">
                                 {reportPin}
                             </div>
-                            <div className="absolute inset-0 flex items-center justify-center opacity-100 group-hover:opacity-0 transition-opacity">
+                            <div className="absolute inset-0 flex items-center justify-center opacity-100 group-hover:opacity-0 transition-opacity pointer-events-none">
                                 <span className="bg-white/80 px-2 py-1 rounded text-xs font-bold text-gray-500 border border-gray-200 shadow-sm">Survolez pour voir</span>
                             </div>
 
