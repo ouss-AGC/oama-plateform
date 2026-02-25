@@ -13,7 +13,8 @@ const CertificatePreview: React.FC = () => {
             const disciplines = [
                 { code: 'munitions', name: 'Généralités Munitions' },
                 { code: 'agc', name: 'Armement Gros Calibre' },
-                { code: 'genie', name: 'Génie Militaire' }
+                { code: 'genie', name: 'Génie Militaire' },
+                { code: 'explosions', name: 'Calcul des effets des explosions' }
             ];
 
             const images: { [key: string]: string } = {};
@@ -79,6 +80,12 @@ const CertificatePreview: React.FC = () => {
                         <div className="bg-white p-6 rounded-xl shadow-lg">
                             <h2 className="text-xl font-bold text-military-green mb-4 border-b pb-2">3. Génie Militaire (Fallback / Munitions Style)</h2>
                             <img src={certImages['genie']} alt="Certificat Génie" className="w-full shadow-md border border-gray-200" />
+                        </div>
+
+                        {/* Explosions */}
+                        <div className="bg-white p-6 rounded-xl shadow-lg">
+                            <h2 className="text-xl font-bold text-military-green mb-4 border-b pb-2">4. Calcul des effets des explosions</h2>
+                            <img src={certImages['explosions']} alt="Certificat Explosions" className="w-full shadow-md border border-gray-200" />
                         </div>
                     </div>
                 )}

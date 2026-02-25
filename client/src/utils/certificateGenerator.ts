@@ -19,13 +19,15 @@ interface QuizResult {
 const disciplineColors = {
     munitions: { primary: [45, 80, 22] as [number, number, number], secondary: [212, 175, 55] as [number, number, number] },
     agc: { primary: [74, 85, 104] as [number, number, number], secondary: [212, 175, 55] as [number, number, number] },
-    genie: { primary: [192, 86, 33] as [number, number, number], secondary: [212, 175, 55] as [number, number, number] }
+    genie: { primary: [192, 86, 33] as [number, number, number], secondary: [212, 175, 55] as [number, number, number] },
+    explosions: { primary: [20, 50, 90] as [number, number, number], secondary: [212, 175, 55] as [number, number, number] }
 };
 
 const disciplineNames = {
     munitions: 'GENERALITES SUR LES MUNITIONS LASM 3',
     agc: 'ARMEMENT GROS CALIBRE (AGC) POUR LASM 2',
-    genie: 'GENIE MILITAIRE 4 LASM 2'
+    genie: 'GENIE MILITAIRE 4 LASM 2',
+    explosions: 'EXAMEN CALCUL DES EFFETS DES EXPLOSIONS SUR LES STRUCTURES'
 };
 
 export const generateCertificate = async (result: QuizResult) => {
@@ -145,12 +147,23 @@ export const generateCertificate = async (result: QuizResult) => {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(24);
     doc.setTextColor(...colors.primary);
-    doc.text(disciplineName, 148.5, 135, { align: "center" });
+
+    // Dynamic text wrapping for discipline name
+    const maxWidth = 220; // Maximum allowed width in mm
+    const splitTitle = doc.splitTextToSize(disciplineName, maxWidth);
+    const titleLines = splitTitle.length;
+    const lineHeight = 10;
+    const startY = 135;
+
+    doc.text(splitTitle, 148.5, startY, { align: "center" });
+
+    // Dynamic vertical shift for score and other elements below
+    const verticalShift = (titleLines - 1) * lineHeight;
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(18);
     doc.setTextColor(0, 0, 0);
-    doc.text(`Score obtenu : ${result.scoreOn20.toFixed(1)}/20`, 148.5, 150, { align: "center" });
+    doc.text(`Score obtenu : ${result.scoreOn20.toFixed(1)}/20`, 148.5, startY + 15 + verticalShift, { align: "center" });
 
     const date = new Date(result.timestamp).toLocaleDateString('fr-FR');
     doc.setFont("helvetica", "bold");
@@ -183,6 +196,31 @@ export const generateCertificate = async (result: QuizResult) => {
 };
 
 export const generateVisualCertificate = async (result: QuizResult): Promise<string> => {
+    // Helper function for canvas text wrapping
+    const wrapText = (context: CanvasRenderingContext2D, text: string, x: number, y: number, maxWidth: number, lineHeight: number) => {
+        const words = text.split(' ');
+        let line = '';
+        const lines = [];
+
+        for (let n = 0; n < words.length; n++) {
+            const testLine = line + words[n] + ' ';
+            const metrics = context.measureText(testLine);
+            const testWidth = metrics.width;
+            if (testWidth > maxWidth && n > 0) {
+                lines.push(line);
+                line = words[n] + ' ';
+            } else {
+                line = testLine;
+            }
+        }
+        lines.push(line);
+
+        for (let i = 0; i < lines.length; i++) {
+            context.fillText(lines[i], x, y + (i * lineHeight));
+        }
+        return lines.length;
+    };
+
     const canvas = document.createElement('canvas');
     canvas.width = 1122;
     canvas.height = 794;
@@ -193,7 +231,8 @@ export const generateVisualCertificate = async (result: QuizResult): Promise<str
     const colorMap = {
         munitions: { primary: '#2D5016', secondary: '#D4AF37' },
         agc: { primary: '#4A5568', secondary: '#D4AF37' },
-        genie: { primary: '#C05621', secondary: '#D4AF37' }
+        genie: { primary: '#C05621', secondary: '#D4AF37' },
+        explosions: { primary: '#14325A', secondary: '#D4AF37' }
     };
     const colors = colorMap[result.discipline as keyof typeof colorMap] || colorMap.munitions;
     const disciplineName = disciplineNames[result.discipline as keyof typeof disciplineNames] || 'DISCIPLINE INCONNUE';
@@ -296,11 +335,14 @@ export const generateVisualCertificate = async (result: QuizResult): Promise<str
 
     ctx.fillStyle = colors.primary;
     ctx.font = 'bold 32px Arial';
-    ctx.fillText(disciplineName, canvas.width / 2, 440);
+    ctx.textAlign = 'center';
+
+    const visualLinesCount = wrapText(ctx, disciplineName, canvas.width / 2, 440, 900, 38);
+    const visualShift = (visualLinesCount - 1) * 38;
 
     ctx.fillStyle = '#000';
     ctx.font = 'bold 24px Arial';
-    ctx.fillText(`Score obtenu : ${result.scoreOn20.toFixed(1)}/20`, canvas.width / 2, 500);
+    ctx.fillText(`Score obtenu : ${result.scoreOn20.toFixed(1)}/20`, canvas.width / 2, 500 + visualShift);
 
     const date = new Date(result.timestamp).toLocaleDateString('fr-FR');
     ctx.fillStyle = '#444';

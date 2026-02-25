@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document de Référence - Partie 02 & 03 - Open Book</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Roboto:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #0a0a0f;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            position: relative;
+            display: none;
+            flex-direction: column;
+            padding: 60px;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(0, 217, 255, 0.03) 25%, rgba(0, 217, 255, 0.03) 26%, transparent 27%, transparent 74%, rgba(0, 217, 255, 0.03) 75%, rgba(0, 217, 255, 0.03) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(0, 217, 255, 0.03) 25%, rgba(0, 217, 255, 0.03) 26%, transparent 27%, transparent 74%, rgba(0, 217, 255, 0.03) 75%, rgba(0, 217, 255, 0.03) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .title-slide {
+            justify-content: center;
+            align-items: center;
+        }
+
+        .title-slide .slide-content {
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 52px;
+            font-weight: 700;
+            color: #00d9ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+            border-bottom: 3px solid #00d9ff;
+            padding-bottom: 20px;
+        }
+
+        .slide-body {
+            font-size: 18px;
+            color: #cccccc;
+            line-height: 1.8;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding-right: 20px;
+        }
+
+        .slide-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .slide-body::-webkit-scrollbar-track {
+            background: rgba(0, 217, 255, 0.1);
+        }
+
+        .slide-body::-webkit-scrollbar-thumb {
+            background: #00d9ff;
+            border-radius: 4px;
+        }
+
+        .formula-box {
+            background: rgba(255, 152, 0, 0.1);
+            border: 2px solid #ffb74d;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 18px;
+            color: #ffb74d;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .explanation-box {
+            background: rgba(0, 217, 255, 0.1);
+            border: 2px solid #00d9ff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 17px;
+            color: #cccccc;
+            line-height: 1.8;
+        }
+
+        .important-box {
+            background: rgba(244, 67, 54, 0.1);
+            border: 2px solid #f44336;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 18px;
+            color: #ff7961;
+            font-weight: 700;
+        }
+
+        .section-header {
+            font-size: 24px;
+            font-weight: 700;
+            color: #00d9ff;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00d9ff;
+            padding-left: 15px;
+        }
+
+        .subsection-header {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffb74d;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            padding-left: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 16px;
+        }
+
+        table th {
+            background: rgba(0, 217, 255, 0.2);
+            color: #00d9ff;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #00d9ff;
+            font-weight: 700;
+        }
+
+        table td {
+            padding: 10px 12px;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            color: #cccccc;
+        }
+
+        table tr:nth-child(even) {
+            background: rgba(0, 217, 255, 0.05);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        button {
+            background: #00d9ff;
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        button:hover {
+            background: #00b8cc;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            color: #00d9ff;
+            background: rgba(0, 217, 255, 0.1);
+            padding: 10px 20px;
+            border: 2px solid #00d9ff;
+            border-radius: 4px;
+            z-index: 100;
+        }
+
+        .open-book-badge {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(244, 67, 54, 0.2);
+            border: 2px solid #f44336;
+            color: #ff7961;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 16px;
+            z-index: 100;
+        }
+
+        .mjx-chtml {
+            font-size: 1.1em !important;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        @media (max-width: 1024px) {
+            .slide {
+                padding: 40px;
+            }
+
+            .slide-title {
+                font-size: 40px;
+            }
+
+            .slide-body {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="open-book-badge">📖 OPEN BOOK - DOCUMENT DE RÉFÉRENCE</div>
+
+    <div class="presentation-container">
+        <!-- SLIDE 1: TITLE -->
+        <div class="slide active title-slide">
+            <div class="slide-content">
+                <div style="text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <div class="slide-title" style="border: none; text-shadow: 0 0 30px rgba(0, 217, 255, 0.5); margin-bottom: 40px;">DOCUMENT DE RÉFÉRENCE</div>
+                    <div style="font-size: 48px; font-weight: 700; color: #ffffff; margin-bottom: 30px;">GC31 - Partie 02 & 03</div>
+                    <div style="font-size: 32px; color: #00d9ff; margin-bottom: 50px;">Formules Essentielles & Explications</div>
+                    <div style="font-size: 24px; color: #ff7961; font-weight: 700;">📖 EXAMEN OPEN BOOK</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: PARTIE 02 - INTRODUCTION -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Partie 02: Problème Pratique - Introduction</div>
+                <div class="slide-body">
+                    <div class="section-header">Objectif de la Partie 02:</div>
+                    <div class="explanation-box">
+                        Analyser les paramètres de l'onde de choc générée par une explosion en utilisant:
+                        <ul>
+                            <li>Les formules empiriques de Kingery-Bulmash</li>
+                            <li>Les abaques de Baker (Figure 3)</li>
+                            <li>Les données expérimentales fournies</li>
+                        </ul>
+                    </div>
+
+                    <div class="section-header">Étapes Principales:</div>
+                    <div class="explanation-box">
+                        <strong>1. Calcul des distances réduites (Z)</strong><br>
+                        <strong>2. Lecture des paramètres réduits sur Figure 3</strong><br>
+                        <strong>3. Conversion en paramètres physiques</strong><br>
+                        <strong>4. Comparaison avec les données expérimentales</strong><br>
+                        <strong>5. Proposer des solutions de renforcement</strong>
+                    </div>
+
+                    <div class="important-box">
+                        ⚠️ IMPORTANT: Tous les calculs doivent être détaillés étape par étape. Les résultats numériques doivent être accompagnés des unités correctes.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: FORMULE MISE À L'ÉCHELLE CUBIQUE -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Formule 1: Mise à l'Échelle Cubique</div>
+                <div class="slide-body">
+                    <div class="section-header">Distance Réduite Z:</div>
+                    <div class="formula-box">
+                        $$Z = \frac{R}{W^{1/3}}$$
+                    </div>
+
+                    <div class="section-header">Définitions:</div>
+                    <div class="explanation-box">
+                        <strong>Z</strong> = Distance réduite (m/kg<sup>1/3</sup>)<br>
+                        <strong>R</strong> = Distance à la source (m)<br>
+                        <strong>W</strong> = Masse d'explosif équivalent TNT (kg)<br>
+                        <strong>W<sup>1/3</sup></strong> = Racine cubique de la masse
+                    </div>
+
+                    <div class="section-header">Utilité:</div>
+                    <div class="explanation-box">
+                        La mise à l'échelle cubique permet de normaliser les effets de l'explosion en fonction de la masse. Elle est utilisée pour consulter les abaques de Baker (Figure 3) qui donnent les paramètres réduits de l'onde de choc en fonction de Z.
+                    </div>
+
+                    <div class="section-header">Exemple de Calcul:</div>
+                    <div class="formula-box">
+                        Si R = 2,0 m et W = 0,026 kg:<br>
+                        W<sup>1/3</sup> = (0,026)<sup>1/3</sup> = 0,29625 m/kg<sup>1/3</sup><br>
+                        Z = 2,0 / 0,29625 = <strong>6,751 m/kg<sup>1/3</sup></strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: KINGERY-BULMASH EQUATIONS -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Formules 2-5: Équations de Kingery-Bulmash</div>
+                <div class="slide-body">
+                    <div class="section-header">Pression Incidente P<sub>s0</sub>:</div>
+                    <div class="formula-box">
+                        $$P_{s0} = P_{s0,red} \times 101,3 \text{ kPa}$$
+                        où P<sub>s0,red</sub> est lue sur Figure 3 (axe Y gauche)
+                    </div>
+
+                    <div class="section-header">Impulsion Incidente i<sub>s</sub>:</div>
+                    <div class="formula-box">
+                        $$i_s = i_{s,red} \times W^{1/3}$$
+                        où i<sub>s,red</sub> est lue sur Figure 3 (axe Y droite)
+                    </div>
+
+                    <div class="section-header">Durée Positive t<sub>0f</sub>:</div>
+                    <div class="formula-box">
+                        $$t_{0f} = t_{d,red} \times W^{1/3}$$
+                        où t<sub>d,red</sub> est lue sur Figure 3 (axe Y droite)
+                    </div>
+
+                    <div class="section-header">Coefficient de Réflexion C<sub>r</sub>:</div>
+                    <div class="formula-box">
+                        $$C_r = 1 + \frac{2 \sin^2(\theta)}{(1 + \cos(\theta))} \times \frac{P_{s0}}{P_{atm}}$$
+                        Pour une surface perpendiculaire à l'onde (θ = 0°): C<sub>r</sub> ≈ 2,0
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: REFLECTED PARAMETERS -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Formules 6-7: Paramètres Réfléchis</div>
+                <div class="slide-body">
+                    <div class="section-header">Pression Réfléchie P<sub>r</sub>:</div>
+                    <div class="formula-box">
+                        $$P_r = P_{s0} \times C_r$$
+                    </div>
+
+                    <div class="explanation-box">
+                        La pression réfléchie est l'amplification de la pression incidente due à la réflexion de l'onde sur une surface rigide. Le coefficient de réflexion C<sub>r</sub> dépend de la pression incidente et de l'angle d'incidence.
+                    </div>
+
+                    <div class="section-header">Impulsion Réfléchie i<sub>r</sub>:</div>
+                    <div class="formula-box">
+                        $$i_r = i_s \times C_r$$
+                    </div>
+
+                    <div class="explanation-box">
+                        L'impulsion réfléchie est l'intégrale temporelle de la pression réfléchie. Elle représente la quantité de mouvement transmise à la structure par l'onde de choc réfléchie.
+                    </div>
+
+                    <div class="important-box">
+                        ⚠️ ATTENTION: Les paramètres réfléchis sont toujours plus importants que les paramètres incidents (P<sub>r</sub> > P<sub>s0</sub> et i<sub>r</sub> > i<sub>s</sub>).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: BAKER'S CHART METHODOLOGY -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Méthodologie: Lecture des Abaques de Baker</div>
+                <div class="slide-body">
+                    <div class="section-header">Les 5 Étapes de Lecture:</div>
+                    <div class="explanation-box">
+                        <strong>Étape 1:</strong> Calculer la distance réduite Z = R / W<sup>1/3</sup><br><br>
+                        <strong>Étape 2:</strong> Localiser Z sur l'axe horizontal (SCALED DISTANCE)<br><br>
+                        <strong>Étape 3:</strong> Tracer une ligne verticale jusqu'aux courbes de paramètres<br><br>
+                        <strong>Étape 4:</strong> Lire les valeurs réduits sur les axes Y (gauche et droite)<br><br>
+                        <strong>Étape 5:</strong> Convertir en paramètres physiques en multipliant par les facteurs appropriés
+                    </div>
+
+                    <div class="section-header">Paramètres Disponibles sur Figure 3:</div>
+                    <table>
+                        <tr>
+                            <th>Paramètre</th>
+                            <th>Axe Y</th>
+                            <th>Facteur de Conversion</th>
+                        </tr>
+                        <tr>
+                            <td>P<sub>s0</sub> (réduit)</td>
+                            <td>Gauche</td>
+                            <td>× 101,3 kPa</td>
+                        </tr>
+                        <tr>
+                            <td>i<sub>s</sub> (réduit)</td>
+                            <td>Droite</td>
+                            <td>× W<sup>1/3</sup></td>
+                        </tr>
+                        <tr>
+                            <td>t<sub>d</sub> (réduit)</td>
+                            <td>Droite</td>
+                            <td>× W<sup>1/3</sup></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: PARTIE 03 - SDOF INTRODUCTION -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Partie 03: Analyse SDOF - Introduction</div>
+                <div class="slide-body">
+                    <div class="section-header">Qu'est-ce qu'un Système SDOF?</div>
+                    <div class="explanation-box">
+                        Un système SDOF (Single Degree of Freedom) est un système mécanique simplifié avec:
+                        <ul>
+                            <li><strong>Une seule masse (M)</strong> concentrée</li>
+                            <li><strong>Une seule rigidité (K)</strong> de ressort</li>
+                            <li><strong>Un seul amortissement (C)</strong> (généralement négligé)</li>
+                        </ul>
+                    </div>
+
+                    <div class="section-header">Équation du Mouvement:</div>
+                    <div class="formula-box">
+                        $$M \ddot{x} + C \dot{x} + K x = P(t)$$
+                    </div>
+
+                    <div class="section-header">Paramètres Clés:</div>
+                    <div class="explanation-box">
+                        <strong>Fréquence naturelle:</strong> ω<sub>n</sub> = √(K/M) (rad/s)<br>
+                        <strong>Période naturelle:</strong> τ = 2π/ω<sub>n</sub> (s)<br>
+                        <strong>Résistance plastique:</strong> R<sub>m</sub> = σ<sub>y</sub> × A (N)<br>
+                        <strong>Ductilité:</strong> μ = x<sub>max</sub> / x<sub>y</sub>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: SDOF FORMULAS - ELASTIC RESPONSE -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Formules SDOF: Réponse Élastique</div>
+                <div class="slide-body">
+                    <div class="section-header">Cas d'une Charge Impulsionnelle Triangulaire:</div>
+                    <div class="explanation-box">
+                        Pour une charge de la forme: P(t) = P<sub>0</sub> × (1 - t/t<sub>0</sub>) pour 0 ≤ t ≤ t<sub>0</sub>
+                    </div>
+
+                    <div class="section-header">Impulsion Totale:</div>
+                    <div class="formula-box">
+                        $$I = \int_0^{t_0} P(t) dt = \frac{P_0 \times t_0}{2}$$
+                    </div>
+
+                    <div class="section-header">Vitesse Maximale (Immédiatement Après la Charge):</div>
+                    <div class="formula-box">
+                        $$v_{max} = \frac{I}{M} = \frac{P_0 \times t_0}{2M}$$
+                    </div>
+
+                    <div class="section-header">Déformation Maximale (Réponse Élastique):</div>
+                    <div class="formula-box">
+                        $$x_{max} = \frac{v_{max}}{\omega_n} = \frac{P_0 \times t_0}{2M \omega_n}$$
+                    </div>
+
+                    <div class="section-header">Vérification du Domaine Élastique:</div>
+                    <div class="formula-box">
+                        Vérifier que: P<sub>0</sub> ≤ R<sub>m</sub> (la charge ne dépasse pas la résistance plastique)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: SDOF FORMULAS - PLASTIC RESPONSE -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Formules SDOF: Réponse Plastique</div>
+                <div class="slide-body">
+                    <div class="section-header">Quand la Charge Dépasse la Résistance Plastique:</div>
+                    <div class="explanation-box">
+                        Si P<sub>0</sub> > R<sub>m</sub>, le système entre en régime plastique. La déformation maximale est plus importante que dans le cas élastique.
+                    </div>
+
+                    <div class="section-header">Déformation Maximale (Réponse Plastique):</div>
+                    <div class="formula-box">
+                        $$x_{max} = \frac{I}{R_m} - \frac{t_0}{2}$$
+                        où I est l'impulsion totale et R<sub>m</sub> est la résistance plastique
+                    </div>
+
+                    <div class="section-header">Facteur de Ductilité μ:</div>
+                    <div class="formula-box">
+                        $$\mu = \frac{x_{max}}{x_y}$$
+                        où x<sub>y</sub> = R<sub>m</sub> / K est la déformation au seuil de plasticité
+                    </div>
+
+                    <div class="section-header">Interprétation du Facteur de Ductilité:</div>
+                    <div class="explanation-box">
+                        <strong>μ < 1:</strong> Réponse élastique (pas de déformation permanente)<br>
+                        <strong>1 < μ < 3:</strong> Déformation plastique modérée (acceptable)<br>
+                        <strong>μ > 3:</strong> Déformation plastique sévère (risque de rupture)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: SDOF CALCULATION PROCEDURE -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Procédure de Calcul SDOF: Étapes</div>
+                <div class="slide-body">
+                    <div class="section-header">Étape 1: Calculer les Paramètres du Système</div>
+                    <div class="explanation-box">
+                        ω<sub>n</sub> = √(K/M)<br>
+                        τ = 2π/ω<sub>n</sub><br>
+                        x<sub>y</sub> = R<sub>m</sub> / K
+                    </div>
+
+                    <div class="section-header">Étape 2: Calculer l'Impulsion Totale</div>
+                    <div class="explanation-box">
+                        Pour une charge triangulaire: I = P<sub>0</sub> × t<sub>0</sub> / 2
+                    </div>
+
+                    <div class="section-header">Étape 3: Vérifier le Domaine de Réponse</div>
+                    <div class="explanation-box">
+                        Si P<sub>0</sub> ≤ R<sub>m</sub> → Réponse élastique<br>
+                        Si P<sub>0</sub> > R<sub>m</sub> → Réponse plastique
+                    </div>
+
+                    <div class="section-header">Étape 4: Calculer la Déformation Maximale</div>
+                    <div class="explanation-box">
+                        Utiliser la formule appropriée (élastique ou plastique)
+                    </div>
+
+                    <div class="section-header">Étape 5: Calculer le Facteur de Ductilité (si plastique)</div>
+                    <div class="explanation-box">
+                        μ = x<sub>max</sub> / x<sub>y</sub>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 11: SUMMARY TABLE -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Tableau Récapitulatif: Formules Essentielles</div>
+                <div class="slide-body">
+                    <table>
+                        <tr>
+                            <th>Concept</th>
+                            <th>Formule</th>
+                            <th>Unités</th>
+                        </tr>
+                        <tr>
+                            <td>Distance réduite</td>
+                            <td>Z = R / W<sup>1/3</sup></td>
+                            <td>m/kg<sup>1/3</sup></td>
+                        </tr>
+                        <tr>
+                            <td>Pression incidente</td>
+                            <td>P<sub>s0</sub> = P<sub>s0,red</sub> × 101,3</td>
+                            <td>kPa</td>
+                        </tr>
+                        <tr>
+                            <td>Pression réfléchie</td>
+                            <td>P<sub>r</sub> = P<sub>s0</sub> × C<sub>r</sub></td>
+                            <td>kPa</td>
+                        </tr>
+                        <tr>
+                            <td>Impulsion (triangulaire)</td>
+                            <td>I = P<sub>0</sub> × t<sub>0</sub> / 2</td>
+                            <td>kPa·ms</td>
+                        </tr>
+                        <tr>
+                            <td>Fréquence naturelle</td>
+                            <td>ω<sub>n</sub> = √(K/M)</td>
+                            <td>rad/s</td>
+                        </tr>
+                        <tr>
+                            <td>Déformation élastique</td>
+                            <td>x<sub>max</sub> = I / (M × ω<sub>n</sub>)</td>
+                            <td>m</td>
+                        </tr>
+                        <tr>
+                            <td>Déformation plastique</td>
+                            <td>x<sub>max</sub> = I / R<sub>m</sub> - t<sub>0</sub> / 2</td>
+                            <td>m</td>
+                        </tr>
+                        <tr>
+                            <td>Facteur de ductilité</td>
+                            <td>μ = x<sub>max</sub> / x<sub>y</sub></td>
+                            <td>-</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 12: IMPORTANT NOTES -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Points Importants à Retenir</div>
+                <div class="slide-body">
+                    <div class="important-box">
+                        ✓ TOUJOURS détailler les calculs étape par étape
+                    </div>
+
+                    <div class="important-box">
+                        ✓ TOUJOURS inclure les unités dans les résultats
+                    </div>
+
+                    <div class="important-box">
+                        ✓ TOUJOURS vérifier la cohérence des résultats (ex: P<sub>r</sub> > P<sub>s0</sub>)
+                    </div>
+
+                    <div class="important-box">
+                        ✓ TOUJOURS consulter Figure 3 (Abaques de Baker) pour les paramètres réduits
+                    </div>
+
+                    <div class="important-box">
+                        ✓ TOUJOURS distinguer les cas élastique et plastique en SDOF
+                    </div>
+
+                    <div class="important-box">
+                        ✓ TOUJOURS justifier vos réponses avec des explications physiques
+                    </div>
+
+                    <div class="important-box">
+                        ✓ TOUJOURS arrondir les résultats à 2-3 chiffres significatifs
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">12</span>
+    </div>
+
+    <div class="controls">
+        <button onclick="previousSlide()">← Précédent</button>
+        <button onclick="nextSlide()">Suivant →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+            if (e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>

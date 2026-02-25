@@ -4,12 +4,17 @@ import { Download, Home, Award, Trophy, AlertTriangle, BarChart as BarChartIcon,
 import { generateCertificate, generateVisualCertificate } from '../utils/certificateGenerator';
 import jsPDF from 'jspdf';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
+import ImageZoom from './ImageZoom';
 
 interface Question {
     id: number;
     question: string;
     options: string[];
     correctAnswer: number;
+    detailed_solution?: string;
+    solution?: string;
+    image_url?: string;
+    type?: string;
 }
 
 interface QuizResult {
@@ -26,7 +31,7 @@ interface QuizResult {
     timeElapsed: number;
     discipline: string;
     timestamp: number;
-    answers: number[];
+    answers: any[];
     isPractice?: boolean; // Flag for practice quiz
 }
 
@@ -40,6 +45,7 @@ const Results: React.FC = () => {
     const [enteredPin, setEnteredPin] = useState('');
     const [pinError, setPinError] = useState('');
     const [pendingAction, setPendingAction] = useState<() => void>(() => { });
+    const [activeCorrection, setActiveCorrection] = useState<{ url: string; title: string } | null>(null);
 
     useEffect(() => {
         const loadResult = async () => {
@@ -65,10 +71,49 @@ const Results: React.FC = () => {
                 // Load practice questions if this is a practice quiz
                 const fileName = parsedResult.isPractice
                     ? `${parsedResult.discipline}_practice.json`
-                    : `quiz_data_${parsedResult.discipline}.json`;
+                    : `quiz_data_${parsedResult.discipline === 'explosions' ? 'explosions_v2' : parsedResult.discipline}.json`;
                 const questionsRes = await fetch(`/${fileName}`);
                 const questionsData = await questionsRes.json();
-                setQuizQuestions(questionsData.questions);
+
+                if (questionsData.sections) {
+                    let flat: any[] = [];
+                    questionsData.sections.forEach((section: any) => {
+                        if (section.type === 'exercise') {
+                            // Split sub-questions into individual items (Source: Quiz.tsx line 271)
+                            const subQs = section.questions || [];
+                            subQs.forEach((subQ: any) => {
+                                flat.push({
+                                    ...subQ,
+                                    id: `${section.id}_${subQ.id}`,
+                                    parentId: section.id,
+                                    type: 'exercise',
+                                    question: subQ.question || section.title,
+                                    options: ["(Exercice de calcul)"],
+                                    correctAnswer: -1,
+                                    subQuestions: (subQ.subQuestions || []).map((atomic: any) => ({
+                                        ...atomic,
+                                        label: atomic.label || atomic.question
+                                    })),
+                                    detailed_solution: subQ.detailed_solution || subQ.solution || section.detailed_solution || section.solution
+                                });
+                            });
+                        } else {
+                            // QCM section
+                            if (section.questions) {
+                                section.questions.forEach((q: any) => {
+                                    flat.push({
+                                        ...q,
+                                        type: 'qcm',
+                                        parentId: section.id
+                                    });
+                                });
+                            }
+                        }
+                    });
+                    setQuizQuestions(flat);
+                } else {
+                    setQuizQuestions(questionsData.questions);
+                }
             } catch (error) {
                 console.error("Failed to load questions:", error);
             }
@@ -110,8 +155,11 @@ const Results: React.FC = () => {
         }
     };
 
-    const generateReport = async () => {
-        if (!result) return;
+    const generateReport = () => {
+        if (!result || result.scoreOn20 === undefined || result.scoreOn20 === null) {
+            console.error('Cannot generate report: invalid result data');
+            return;
+        }
         const doc = new jsPDF();
 
         // Load signature image
@@ -135,117 +183,298 @@ const Results: React.FC = () => {
                 img.src = src;
             });
         };
+        // Helper for Rich Text (Superscript/Subscript)
+        const drawRichText = (text: string, x: number, y: number, maxWidth: number, fontSize: number) => {
+            const words = text.split(' ');
+            let line = '';
+            let currentY = y;
+            const lineHeight = fontSize * 0.5; // Pdf units approx
 
-        let signatureDataUrl = '';
-        try {
-            signatureDataUrl = await loadImage('/signature.png');
-        } catch (err) {
-            console.error('Failed to load signature:', err);
-        }
+            // Simple word wrap based on rough char count or measureText if possible
+            // jsPDF measureText is accurate.
+            const lines: string[] = [];
+            let currentLineWords: string[] = [];
+            let currentLineWidth = 0;
 
-        // Load score circle image
-        let scoreCircleDataUrl = '';
-        let stampDataUrl = '';
-        try {
-            scoreCircleDataUrl = await loadImage('/score_circle.png');
-            stampDataUrl = await loadImage('/golden_stamp_pdf.png'); // PDF-specific stamp
-        } catch (err) {
-            console.error('Failed to load assets:', err);
-        }
+            words.forEach(word => {
+                // Approximate width calculation including checks for ^ and _ (which reduce width slightly but we ignore for safety)
+                const cleanWord = word.replace(/\^|\_/g, '').replace(/[(){}]/g, '');
+                const wordWidth = doc.getStringUnitWidth(cleanWord) * fontSize / doc.internal.scaleFactor;
 
-        // Header with handwritten score circle and signature
-        doc.setFontSize(22);
-        doc.setTextColor(45, 80, 22);
-        doc.text("RAPPORT INDIVIDUEL", 105, 20, { align: "center" });
+                if (currentLineWidth + wordWidth + 2 > maxWidth) { // +2 for space
+                    lines.push(currentLineWords.join(' '));
+                    currentLineWords = [word];
+                    currentLineWidth = wordWidth;
+                } else {
+                    currentLineWords.push(word);
+                    currentLineWidth += wordWidth + 2;
+                }
+            });
+            if (currentLineWords.length > 0) lines.push(currentLineWords.join(' '));
 
-        // Large RED handwritten score at TOP RIGHT with Circle Image
-        if (scoreCircleDataUrl) {
-            doc.addImage(scoreCircleDataUrl, 'PNG', 160, 15, 40, 40);
-        }
+            lines.forEach(lineStr => {
+                if (currentY > 270) {
+                    doc.addPage();
+                    currentY = 20;
+                }
 
-        doc.setFontSize(22); // Slightly smaller to fit in circle
-        doc.setFont("times", "italic"); // Handwritten style
-        doc.setTextColor(200, 0, 0); // Red
-        // Position text roughly in the center/left of the circle image (160 + 15, 15 + 25)
-        doc.text(`${result.scoreOn20.toFixed(1)}/20`, 180, 42, { align: "center", angle: 15 }); // Added slight angle for handwritten feel
+                let cursorX = x;
+                // Parse and draw per line
+                // Simple parser: split by tokens including ^(content) or _(content)
+                // Regex: Match generic text, or ^(...), or _(...)
+                // We will manually split by chars for simplest "rendering" ensuring baseline alignment
+                // Actually, word by word is safer for spacing.
 
-        // Add signature on the left (Reduced size)
-        if (signatureDataUrl) {
-            doc.addImage(signatureDataUrl, 'PNG', 20, 25, 60, 30); // Smaller signature
-        }
+                const tokens = lineStr.split(/(\^[(][^)]+[)]|\^.|\_[(][^)]+[)]|\_.)/g).filter(t => t);
 
-        doc.setFontSize(8);
-        doc.setTextColor(100);
-        doc.text("Lt Col Oussama Atoui", 50, 58, { align: "center" }); // Closer to signature
-        doc.text("Instructeur Armes et Munitions", 50, 62, { align: "center" }); // Closer to signature
+                tokens.forEach(token => {
+                    let segment = token;
+                    let isSuper = false;
+                    let isSub = false;
 
-        // Add Golden Stamp (Right side, below score circle)
-        if (stampDataUrl) {
-            doc.addImage(stampDataUrl, 'PNG', 155, 60, 50, 50); // Right side, larger, below score
-        }
+                    if (token.startsWith('^')) {
+                        isSuper = true;
+                        segment = token.startsWith('^(') ? token.slice(2, -1) : token.slice(1);
+                    } else if (token.startsWith('_')) {
+                        isSub = true;
+                        segment = token.startsWith('_(') ? token.slice(2, -1) : token.slice(1);
+                    }
 
-        // Student information
-        doc.setFontSize(14);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(200, 0, 0); // Red Name
-        doc.text(`Nom: ${result.student.grade} ${result.student.name}`, 20, 70);
+                    doc.setFontSize(isSuper || isSub ? fontSize * 0.7 : fontSize);
+                    const offsetY = isSuper ? -1.5 : (isSub ? 1.5 : 0);
 
-        doc.setTextColor(0); // Reset to black
-        doc.setFont("helvetica", "normal");
-        doc.text(`Classe: ${result.student.className}`, 20, 78);
-        doc.text(`Matricule: ${result.student.matricule}`, 20, 86);
+                    doc.text(segment, cursorX, currentY + offsetY);
 
-        doc.text(`Discipline: ${result.discipline.toUpperCase()}`, 140, 70);
-        doc.text(`Score: ${result.scoreOn20.toFixed(2)}/20`, 140, 78);
-        doc.text(`Date: ${new Date(result.timestamp).toLocaleDateString()}`, 140, 86);
+                    const segWidth = doc.getStringUnitWidth(segment) * doc.getFontSize() / doc.internal.scaleFactor;
+                    cursorX += segWidth;
+                    doc.setFontSize(fontSize); // Restore
+                });
 
-        let yPos = 100;
-        doc.setFontSize(16);
-        doc.text("Détail des réponses", 20, yPos);
-        yPos += 12;
+                currentY += lineHeight + 3;
+            });
 
-        doc.setFontSize(10);
-        const lineHeight = 6; // Height per line of text
+            return currentY; // Return new Y position
+        };
 
-        quizQuestions.forEach((q, index) => {
-            if (yPos > 270) {
-                doc.addPage();
-                yPos = 20;
+        // Load all assets first
+        Promise.all([
+            loadImage('/signature.png').catch(err => { console.error('Failed to load signature:', err); return ''; }),
+            loadImage('/score_circle.png').catch(err => { console.error('Failed to load score circle:', err); return ''; }),
+            loadImage('/golden_stamp_pdf.png').catch(err => { console.error('Failed to load stamp:', err); return ''; })
+        ]).then(([signatureDataUrl, scoreCircleDataUrl, stampDataUrl]) => {
+
+            // Header with handwritten score circle and signature
+            doc.setFontSize(22);
+            doc.setTextColor(45, 80, 22);
+            doc.text("RAPPORT INDIVIDUEL", 105, 20, { align: "center" });
+
+            // Large RED handwritten score at TOP RIGHT with Circle Image
+            if (scoreCircleDataUrl) {
+                doc.addImage(scoreCircleDataUrl, 'PNG', 160, 15, 40, 40);
             }
 
-            const userAnswer = result.answers[index];
-            const isCorrect = userAnswer === q.correctAnswer;
+            doc.setFontSize(22); // Slightly smaller to fit in circle
+            doc.setFont("times", "italic"); // Handwritten style
+            doc.setTextColor(200, 0, 0); // Red
+            // Position text roughly in the center/left of the circle image (160 + 15, 15 + 25)
+            // Explicitly assert result! here as checked above
+            doc.text(`${result!.scoreOn20.toFixed(1)}/20`, 180, 42, { align: "center", angle: 15 });
 
-            // Question
-            doc.setTextColor(0);
+            // Add signature on the left (Reduced size)
+            if (signatureDataUrl) {
+                doc.addImage(signatureDataUrl, 'PNG', 20, 25, 60, 30); // Smaller signature
+            }
+
+            doc.setFontSize(8);
+            doc.setTextColor(100);
+            doc.text("Lt Col Oussama Atoui", 50, 58, { align: "center" }); // Closer to signature
+            doc.text("Instructeur Armes et Munitions", 50, 62, { align: "center" }); // Closer to signature
+
+            // Add Golden Stamp (Right side, below score circle)
+            if (stampDataUrl) {
+                doc.addImage(stampDataUrl, 'PNG', 155, 60, 50, 50); // Right side, larger, below score
+            }
+
+            // Student information
+            doc.setFontSize(14);
             doc.setFont("helvetica", "bold");
-            const questionText = `Q${index + 1}: ${q.question}`;
-            const questionLines = doc.splitTextToSize(questionText, 170);
-            doc.text(questionLines, 20, yPos);
-            yPos += questionLines.length * lineHeight + 2;
+            doc.setTextColor(200, 0, 0); // Red Name
+            doc.text(`Nom: ${result!.student.grade} ${result!.student.name}`, 20, 70);
 
-            // User's answer
+            doc.setTextColor(0); // Reset to black
             doc.setFont("helvetica", "normal");
-            doc.setTextColor(isCorrect ? 0 : 200, isCorrect ? 100 : 0, 0);
-            const answerText = `Réponse: ${q.options[userAnswer]} ${isCorrect ? '(Correct)' : '(Incorrect)'}`;
-            const answerLines = doc.splitTextToSize(answerText, 165);
-            doc.text(answerLines, 25, yPos);
-            yPos += answerLines.length * lineHeight;
+            doc.text(`Classe: ${result!.student.className}`, 20, 78);
+            doc.text(`Matricule: ${result!.student.matricule}`, 20, 86);
 
-            // Correction if incorrect
-            if (!isCorrect) {
-                yPos += 2;
-                doc.setTextColor(0, 100, 0);
-                const correctionText = `Correction: ${q.options[q.correctAnswer]}`;
-                const correctionLines = doc.splitTextToSize(correctionText, 165);
-                doc.text(correctionLines, 25, yPos);
-                yPos += correctionLines.length * lineHeight;
+            doc.text(`Discipline: ${result!.discipline.toUpperCase()}`, 140, 70);
+            doc.text(`Score: ${result!.scoreOn20.toFixed(2)}/20`, 140, 78);
+            doc.text(`Date: ${new Date(result!.timestamp).toLocaleDateString()}`, 140, 86);
+
+            let yPos = 100;
+            doc.setFontSize(16);
+            doc.text("Détail des réponses", 20, yPos);
+            yPos += 12;
+
+
+            const sanitizeSymbols = (text: string) => {
+                return text
+                    .replace(/ωₙ/g, 'omega_n')
+                    .replace(/xₑₗ/g, 'x_(el)')
+                    .replace(/xₘₐₓ/g, 'x_(max)')
+                    .replace(/xₘ/g, 'x_(max)')
+                    .replace(/Pₛ₀/g, 'P_(s0)')
+                    .replace(/p₀/g, 'p0')
+                    .replace(/tₐ/g, 'ta')
+                    .replace(/t₀/g, 't0')
+                    .replace(/iₛ/g, 'is')
+                    .replace(/μ/g, 'mu')
+                    .replace(/Zₐ/g, 'Za')
+                    .replace(/Zᵦ/g, 'Zb')
+                    .replace(/Z\*/g, 'Z*')
+                    .replace(/Pᵣ/g, 'Pr')
+                    .replace(/Cᵣ/g, 'C_r')
+                    .replace(/ρ/g, 'rho')
+                    .replace(/ξ/g, 'xi')
+                    .replace(/³/g, '^3')
+                    .replace(/m\/kg¹\/³/g, 'm/kg^(1/3)') // Explicit unit fix
+                    .replace(/¹\/³/g, '^(1/3)')
+                    .replace(/q₀/g, 'q0');
+            };
+
+            // Mention Interactive Correction for Sequence 3
+            if (result!.discipline === 'explosions') {
+                doc.setFont("helvetica", "bold");
+                doc.setTextColor(79, 70, 229); // Indigo
+                const noteText = "NOTE: Une correction interactive détaillée pour les Séquences 1, 2 et 3 est disponible sur la plateforme (OAMA Plateform).";
+                yPos = drawRichText(noteText, 20, yPos, 145, 10);
+                yPos += 4;
             }
 
-            yPos += 8; // Space between questions
-        });
+            doc.setFontSize(10);
+            // line height managed by drawRichText
 
-        doc.save(`Rapport_${result.student.name}.pdf`);
+            quizQuestions.forEach((q: any, index: number) => {
+                if (yPos > 260) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+
+                const isExercise = q.type === 'exercise';
+                const questionText = sanitizeSymbols(`Q${index + 1}: ${q.question}`);
+
+                doc.setTextColor(0);
+                doc.setFont("helvetica", "bold");
+                // Use RichText for Questions too
+                yPos = drawRichText(questionText, 20, yPos, 160, 10);
+                yPos += 2;
+
+                if (isExercise) {
+                    const studentAnswers = result!.answers[index] || {};
+                    (q.subQuestions || []).forEach((subQ: any) => {
+                        if (yPos > 260) {
+                            doc.addPage();
+                            yPos = 20;
+                        }
+
+                        doc.setFont("helvetica", "bold");
+                        doc.setTextColor(80);
+                        const subQLabel = sanitizeSymbols(`• ${subQ.label}: `);
+                        yPos = drawRichText(subQLabel, 25, yPos, 145, 10);
+
+                        const answer = sanitizeSymbols(studentAnswers[subQ.id] || "Aucune réponse");
+
+                        // Measure height approx:
+                        const estLines = Math.ceil(doc.getStringUnitWidth(answer) * 10 / doc.internal.scaleFactor / 145) || 1;
+                        const boxHeight = (estLines * 7) + 6;
+
+                        doc.setDrawColor(200);
+                        doc.setFillColor(245, 247, 250);
+                        doc.rect(28, yPos + 2, 145, boxHeight, 'FD'); // Width reduced to 145
+
+                        doc.setFont("helvetica", "normal");
+                        doc.setTextColor(40);
+
+                        // Draw text INSIDE box
+                        const finalY = drawRichText(answer, 32, yPos + 7, 135, 10); // Width 135 inside box
+                        yPos = finalY + 8;
+                    });
+
+                    if (q.detailed_solution) {
+                        if (result!.discipline === 'explosions') {
+                            // VISUAL BANNER instead of text
+                            if (yPos > 250) { doc.addPage(); yPos = 20; }
+                            doc.setFillColor(240, 253, 244); // Light Green bg
+                            doc.setDrawColor(22, 163, 74); // Green border
+                            doc.rect(30, yPos, 140, 25, 'FD');
+
+                            doc.setTextColor(21, 128, 61); // Green text
+                            doc.setFont("helvetica", "bold");
+                            doc.text("CORRECTION INTERACTIVE DISPONIBLE", 100, yPos + 10, { align: "center" });
+                            doc.setFont("helvetica", "normal");
+                            doc.setFontSize(9);
+                            doc.text("(Voir plateforme OAMA: Séquences 1, 2 & 3)", 100, yPos + 18, { align: "center" });
+                            doc.setFontSize(10);
+
+                            yPos += 35;
+                        } else {
+                            doc.setTextColor(0, 100, 0);
+                            doc.setFont("helvetica", "italic");
+                            doc.setFontSize(9);
+                            const solutionText = sanitizeSymbols(`Correction Suggestion: ${q.detailed_solution}`);
+                            yPos = drawRichText(solutionText, 30, yPos, 145, 9);
+                            yPos += 4;
+                            doc.setFontSize(10);
+                        }
+                    }
+                } else {
+                    const userAnswer = result!.answers[index];
+                    const isCorrect = userAnswer === q.correctAnswer;
+
+                    // Box for QCM answer
+                    const optionText = sanitizeSymbols(q.options?.[userAnswer] || 'N/A');
+                    const feedbackText = isCorrect ? '(Correct)' : '(Incorrect)';
+                    const fullAnswerText = `Votre réponse: ${optionText} ${feedbackText}`;
+
+                    const estLines = Math.ceil(doc.getStringUnitWidth(fullAnswerText) * 10 / doc.internal.scaleFactor / 145) || 1;
+                    const boxHeight = (estLines * 7) + 6;
+
+                    doc.setDrawColor(isCorrect ? 150 : 200, isCorrect ? 200 : 150, isCorrect ? 150 : 150);
+                    doc.setFillColor(isCorrect ? 240 : 255, isCorrect ? 250 : 240, isCorrect ? 240 : 240);
+                    doc.rect(25, yPos, 145, boxHeight, 'FD'); // Width 145
+
+                    doc.setFont("helvetica", "normal");
+                    doc.setTextColor(isCorrect ? 0 : 200, isCorrect ? 100 : 0, 0);
+                    const finalY = drawRichText(fullAnswerText, 30, yPos + 5, 135, 10); // Inside box
+                    yPos = finalY + 4;
+
+                    if (!isCorrect) {
+                        if (result!.discipline === 'explosions') {
+                            // VISUAL BANNER smaller
+                            if (yPos > 260) { doc.addPage(); yPos = 20; }
+                            doc.setFillColor(240, 253, 244);
+                            doc.setDrawColor(22, 163, 74);
+                            doc.rect(30, yPos, 140, 15, 'FD');
+                            doc.setTextColor(21, 128, 61);
+                            doc.setFont("helvetica", "bold");
+                            doc.setFontSize(9);
+                            doc.text("Voir Correction Interactive (Plateforme)", 100, yPos + 10, { align: "center" });
+                            doc.setFontSize(10);
+                            yPos += 20;
+                        } else {
+                            doc.setTextColor(0, 100, 0);
+                            doc.setFont("helvetica", "bold");
+                            const correctText = sanitizeSymbols(`Bonne réponse: ${q.options?.[q.correctAnswer] || 'N/A'}`);
+                            yPos = drawRichText(correctText, 30, yPos, 145, 10);
+                            yPos += 2;
+                        }
+                    }
+                }
+                yPos += 6;
+            });
+
+
+            doc.save(`Rapport_${result!.student.name}.pdf`);
+        });
     };
 
     if (!result) return null;
@@ -477,6 +706,42 @@ const Results: React.FC = () => {
                             Télécharger Rapport PDF
                         </button>
 
+                        {result.discipline === 'explosions' && (
+                            <div className="flex flex-col sm:flex-row gap-4 mb-4">
+                                <button
+                                    onClick={() => setActiveCorrection({
+                                        url: '/resources/Sequence_1_MCQ_Correction_Interactive.html',
+                                        title: 'Séquence 1 : QCM Détonique'
+                                    })}
+                                    className="px-6 py-3 rounded-lg bg-indigo-600 text-white font-bold hover:bg-indigo-700 flex items-center justify-center shadow-md transition-colors"
+                                >
+                                    <BookOpen className="w-5 h-5 mr-2" />
+                                    Correction Séquence 1
+                                </button>
+
+                                <button
+                                    onClick={() => setActiveCorrection({
+                                        url: '/resources/Sequence_2_Partie02_Correction_Interactive.html',
+                                        title: 'Séquence 2 : Partie 02 - Problème Pratique'
+                                    })}
+                                    className="px-6 py-3 rounded-lg bg-indigo-600 text-white font-bold hover:bg-indigo-700 flex items-center justify-center shadow-md transition-colors"
+                                >
+                                    <BookOpen className="w-5 h-5 mr-2" />
+                                    Correction Séquence 2
+                                </button>
+
+                                <button
+                                    onClick={() => setActiveCorrection({
+                                        url: '/resources/SDOF_Correction_Interactive.html',
+                                        title: 'Séquence 3 : Analyse SDOF'
+                                    })}
+                                    className="px-6 py-3 rounded-lg bg-indigo-600 text-white font-bold hover:bg-indigo-700 flex items-center justify-center shadow-md transition-colors"
+                                >
+                                    <BookOpen className="w-5 h-5 mr-2" />
+                                    Correction Séquence 3
+                                </button>
+                            </div>
+                        )}
                         {/* Download Certificate button only for scores > 15 */}
                         {isPass && canDownloadCertificate && (
                             <button
@@ -497,6 +762,52 @@ const Results: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Correction Modal */}
+            {activeCorrection && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                    <div className="bg-white rounded-2xl w-full max-w-6xl h-[90vh] flex flex-col overflow-hidden shadow-2xl relative">
+                        <div className="bg-slate-900 p-4 text-white flex justify-between items-center">
+                            <div className="flex items-center space-x-3">
+                                <div className="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                                    <BookOpen className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <h3 className="font-black uppercase tracking-tighter text-lg leading-none">Correction Interactive</h3>
+                                    <p className="text-[10px] text-indigo-300 font-bold uppercase tracking-widest mt-1">{activeCorrection.title}</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => setActiveCorrection(null)}
+                                className="p-2 hover:bg-white/10 rounded-full transition-colors text-white/70 hover:text-white"
+                            >
+                                <XCircle className="w-8 h-8" />
+                            </button>
+                        </div>
+
+                        <div className="flex-grow bg-slate-100 p-1 relative">
+                            {/* Security Overlay for Right Click (Fallback) */}
+                            <div
+                                className="absolute inset-0 pointer-events-none z-10"
+                                onContextMenu={(e) => e.preventDefault()}
+                            ></div>
+                            <iframe
+                                src={activeCorrection.url}
+                                className="w-full h-full border-none rounded-xl bg-white shadow-inner"
+                                title="Correction Interactif"
+                            ></iframe>
+                        </div>
+
+                        <div className="bg-slate-50 p-4 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
+                            <p className="font-bold flex items-center">
+                                <TrendingUp className="w-4 h-4 mr-1 text-indigo-600" />
+                                Document Confidentiel - OAMA Plateform
+                            </p>
+                            <p className="italic underline uppercase tracking-tighter">Accès Participant</p>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

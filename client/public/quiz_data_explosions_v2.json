@@ -1,0 +1,713 @@
+{
+    "quizTitle": "Examen - Calcul des effets des explosions sur les structures GC31",
+    "creator": "Lt Col Oussama Atoui",
+    "module": "Explosions GC31",
+    "version": "1.1",
+    "sections": [
+        {
+            "id": "part1",
+            "title": "Partie 01 : Questions à choix multiple",
+            "description": "La première partie de l'examen est conçue pour évaluer votre compréhension des phénomènes physiques et des concepts fondamentaux abordés dans le module « Calcul des structures sous l'effet des explosions ». Lisez attentivement chaque question et choisissez la réponse la plus appropriée. Notez qu'il n'existe qu'une seule réponse correcte par question. Soyez vigilants, certaines questions peuvent contenir des subtilités.",
+            "briefingImage": "/scholars/ibn_al_haytham_v2.png",
+            "briefingScholar": "Ibn al-Haytham (Alhazen) - Père de l'Optique Moderne",
+            "scholarMessage": "Je suis Ibn al-Haytham. La vérité se révèle par l'observation et la preuve. Concentrez-vous pour maîtriser ces concepts fondamentaux et gagner les points de l'Assistant Professor Atoui Oussama.",
+            "questions": [
+                {
+                    "id": 1,
+                    "question": "Quelle est la principale différence entre une déflagration et une détonation dans le cadre des explosions chimiques ?",
+                    "options": [
+                        "La déflagration se propage à une vitesse subsonique, tandis que la détonation se propage à une vitesse supersonique.",
+                        "La déflagration nécessite un front de choc, tandis que la détonation ne le nécessite pas.",
+                        "La détonation est plus lente que la déflagration.",
+                        "Il n'existe aucune différence fondamentale entre les deux phénomènes."
+                    ],
+                    "correctAnswer": 0,
+                    "points": 0.5
+                },
+                {
+                    "id": 2,
+                    "question": "Qu'est-ce qui distingue principalement un explosif primaire d'un explosif secondaire ?",
+                    "options": [
+                        "Les explosifs primaires sont plus puissants que les explosifs secondaires.",
+                        "Les explosifs primaires sont plus sensibles et détonent plus facilement que les explosifs secondaires.",
+                        "Les explosifs secondaires ne peuvent pas détonner sans un initiateur primaire.",
+                        "Il n'existe aucune différence chimique entre les deux catégories."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 3,
+                    "question": "Quel mécanisme explique la formation d'un front de choc à partir d'une onde de pression initiale lors d'une explosion ?",
+                    "options": [
+                        "L'accumulation de gaz à haute température derrière l'onde de pression.",
+                        "La superposition des fronts d'onde causée par la variation locale de la vitesse du son.",
+                        "La réflexion de l'onde de pression sur les obstacles environnants.",
+                        "La dissipation progressive de l'énergie de l'onde initiale."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 4,
+                    "question": "Parmi les affirmations suivantes concernant le phénomène de souffle et son interaction avec les structures, laquelle est correcte ?",
+                    "options": [
+                        "Le souffle est uniquement la pression de l'onde de choc incidente.",
+                        "Le souffle est un vent provoqué par le déplacement des molécules d'air suite au passage de l'onde de choc.",
+                        "Le souffle n'a aucun effet sur les structures légères.",
+                        "Le souffle est un phénomène purement statique."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 5,
+                    "question": "Parmi les affirmations suivantes concernant l'utilisation du TNT comme référence pour les explosifs, laquelle est correcte ?",
+                    "options": [
+                        "Le TNT est le plus puissant de tous les explosifs.",
+                        "Le TNT est le moins sensible de tous les explosifs.",
+                        "Le TNT est utilisé comme référence car ses propriétés énergétiques sont bien documentées et stables.",
+                        "Le TNT est utilisé uniquement pour les applications militaires."
+                    ],
+                    "correctAnswer": 2,
+                    "points": 0.5
+                },
+                {
+                    "id": 6,
+                    "question": "Quels sont les facteurs qui influencent directement la propagation des ondes de choc ?",
+                    "options": [
+                        "Uniquement la masse de l'explosif.",
+                        "Uniquement la distance à la source.",
+                        "La forme de la charge, l'hétérogénéité du milieu transmetteur, et la nature de la source d'énergie.",
+                        "Uniquement les conditions météorologiques."
+                    ],
+                    "correctAnswer": 2,
+                    "points": 0.5
+                },
+                {
+                    "id": 7,
+                    "question": "Parmi les facteurs suivants, lequel n'influence pas de manière significative la magnitude de l'onde de choc ?",
+                    "options": [
+                        "La distance à la source.",
+                        "La masse de l'explosif.",
+                        "La forme de la charge.",
+                        "La masse de l'explosif utilisé, indépendamment de sa forme."
+                    ],
+                    "correctAnswer": 3,
+                    "points": 0.5
+                },
+                {
+                    "id": 8,
+                    "question": "Dans le cas d'une structure non ventilée remplie d'un mélange air-gaz stœchiométrique, quel facteur influence directement le pic de pression Pmax ?",
+                    "options": [
+                        "La viscosité du gaz.",
+                        "La capacité calorifique Cv du gaz.",
+                        "La densité initiale du gaz.",
+                        "La conductivité thermique du gaz."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 9,
+                    "question": "Quelle affirmation est correcte concernant la mesure de la violence d'une explosion dans une structure non ventilée ?",
+                    "options": [
+                        "La violence est mesurée par le pic de pression Pmax.",
+                        "La violence est mesurée par l'impulsion totale.",
+                        "La violence est mesurée par le maximum de la vitesse de montée de pression (dp/dt)max.",
+                        "La violence est mesurée par la température maximale."
+                    ],
+                    "correctAnswer": 2,
+                    "points": 0.5
+                },
+                {
+                    "id": 10,
+                    "question": "Quelle est la fonction principale du module piézoélectrique K dans un capteur de pression ?",
+                    "options": [
+                        "Amplifier le signal de pression.",
+                        "Filtrer les hautes fréquences.",
+                        "Convertir la pression en chaleur.",
+                        "Générer une charge électrique en réponse à une force ou une pression appliquée."
+                    ],
+                    "correctAnswer": 3,
+                    "points": 0.5
+                },
+                {
+                    "id": 11,
+                    "question": "Quelle est la différence essentielle entre les capteurs « side-on » et « face-on » dans la mesure de pression ?",
+                    "options": [
+                        "Les capteurs « side-on » sont plus sensibles que les capteurs « face-on ».",
+                        "Les capteurs « side-on » mesurent l'onde de choc incidente, tandis que les capteurs « face-on » mesurent la pression réfléchie.",
+                        "Les capteurs « side-on » sont utilisés uniquement en laboratoire.",
+                        "Il n'existe aucune différence fonctionnelle entre les deux types."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 12,
+                    "question": "Quelle est la caractéristique principale du design d'un capteur « side-on » qui le rend adapté pour mesurer la pression en champ libre ?",
+                    "options": [
+                        "Un design robuste et épais pour résister aux chocs.",
+                        "Un design avec une grande surface de mesure.",
+                        "Le design en forme d'aiguille mince et allongée pour minimiser l'interférence avec la propagation de l'onde.",
+                        "Un design avec plusieurs éléments de mesure en parallèle."
+                    ],
+                    "correctAnswer": 2,
+                    "points": 0.5
+                },
+                {
+                    "id": 13,
+                    "question": "Pourquoi utilise-t-on généralement une pièce auxiliaire (« interface ») avec les capteurs « face-on » ?",
+                    "options": [
+                        "Pour augmenter la sensibilité du capteur.",
+                        "Pour fixer le capteur au ras de la surface et mesurer la pression réfléchie avec précision.",
+                        "Pour réduire le bruit électrique du capteur.",
+                        "Pour amplifier le signal de pression."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 14,
+                    "question": "Dans la méthode d'intégration temporelle directe, quelle est la différence clé entre les procédures explicites et implicites ?",
+                    "options": [
+                        "Les procédures explicites sont plus précises que les procédures implicites.",
+                        "Les procédures explicites dépendent uniquement des informations jusqu'à l'instant tn, tandis que les procédures implicites utilisent également des informations à l'instant tn+1.",
+                        "Les procédures implicites sont toujours plus rapides que les procédures explicites.",
+                        "Il n'existe aucune différence fondamentale entre les deux approches."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 15,
+                    "question": "Quel est l'avantage principal des procédures implicites par rapport aux procédures explicites dans la méthode d'intégration temporelle directe ?",
+                    "options": [
+                        "Elles sont plus faciles à implémenter.",
+                        "Elles nécessitent moins de calculs par pas de temps.",
+                        "Elles sont plus stables pour des systèmes rigides ou des phénomènes rapides nécessitant un petit Δt.",
+                        "Elles donnent toujours une meilleure précision."
+                    ],
+                    "correctAnswer": 2,
+                    "points": 0.5
+                },
+                {
+                    "id": 16,
+                    "question": "Dans un spectre de réponse, que représente le facteur de chargement dynamique (Dynamic Load Factor, DLF) ?",
+                    "options": [
+                        "Le rapport entre la force appliquée et la résistance maximale de la structure.",
+                        "Le rapport entre la déformation dynamique maximale et la déformation statique maximale.",
+                        "Le rapport entre l'impulsion appliquée et la masse de la structure.",
+                        "Le rapport entre la période propre et la durée de la charge."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 17,
+                    "question": "Que permet d'évaluer principalement le spectre de réponse d'un système mécanique ?",
+                    "options": [
+                        "La stabilité du système en régime permanent.",
+                        "La réponse maximale du système en fonction des paramètres caractéristiques du système ou de la force extérieure.",
+                        "L'amortissement du système.",
+                        "La fréquence naturelle du système."
+                    ],
+                    "correctAnswer": 1,
+                    "points": 0.5
+                },
+                {
+                    "id": 18,
+                    "question": "Dans le cas d'une sollicitation impulsionnelle due à une explosion, quelle conclusion est correcte concernant la déformation maximale xmax d'un système SDOF ?",
+                    "options": [
+                        "La déformation maximale dépend uniquement de la durée de la charge.",
+                        "La déformation maximale dépend uniquement de la forme de la charge (triangulaire, rectangulaire, etc.).",
+                        "La déformation maximale xmax dépend uniquement de l'impulsion I et non de la forme de la sollicitation.",
+                        "La déformation maximale ne dépend que de la période propre du système."
+                    ],
+                    "correctAnswer": 2,
+                    "points": 0.5
+                }
+            ]
+        },
+        {
+            "id": "part2",
+            "title": "Partie 02 : Problème (07 pts)",
+            "description": "Cette deuxième partie évalue votre capacité à appliquer les concepts du module à un cas pratique d'analyse des effets d'une explosion sur une structure. Vous devrez effectuer des calculs analytiques, comparer vos résultats aux données expérimentales et proposer des solutions pour renforcer la protection de la structure. Soyez précis et méthodiques dans vos réponses.",
+            "type": "exercise",
+            "pdfUrl": "/resources/sequence_2.pdf",
+            "briefingImage": "/scholars/jabir_ibn_hayyan_v2.png",
+            "briefingScholar": "Jabir ibn Hayyan (Geber) - Père de la Chimie",
+            "scholarMessage": "Je suis Jabir ibn Hayyan. La science exige patience et exactitude. Calculez avec précision pour déchiffrer les mystères des explosions et obtenir les points de l'Assistant Professor Atoui Oussama.",
+            "context": "Charge: 26g TNT. Distance Rₐ=2m, Rᵦ=2.25m. Pression atmosphérique P₀=101.3 kPa.",
+            "data": {
+                "W_TNT": "26 g",
+                "Rₐ": "2 m",
+                "Rᵦ": "2.25 m",
+                "a₀": "343 m/s",
+                "P₀": "101.3 kPa"
+            },
+            "questions": [
+                {
+                    "id": "3.1",
+                    "question": "Calcul analytique - Distances réduites Zₐ et Zᵦ.",
+                    "points": 1.0,
+                    "image": "/explosions_fig3.png",
+                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
+                    "subQuestions": [
+                        {
+                            "id": "za",
+                            "label": "Distance réduite Zₐ",
+                            "points": 0.5,
+                            "placeholder": "Entrez Zₐ..."
+                        },
+                        {
+                            "id": "zb",
+                            "label": "Distance réduite Zᵦ",
+                            "points": 0.5,
+                            "placeholder": "Entrez Zᵦ..."
+                        }
+                    ],
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.07,
+                        "parts": [
+                            {
+                                "label": "Zₐ",
+                                "value": 6.751
+                            },
+                            {
+                                "label": "Zᵦ",
+                                "value": 7.595
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "3.2",
+                    "question": "Calcul analytique - Pressions incidentes Pₛ₀ et réfléchies Pᵣ.",
+                    "points": 1.0,
+                    "image": "/explosions_fig3.png",
+                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
+                    "subQuestions": [
+                        {
+                            "id": "pso_a",
+                            "label": "Pression incidente Pₛ₀ (Face A)",
+                            "points": 0.25,
+                            "placeholder": "Entrez Pₛ₀ (A)..."
+                        },
+                        {
+                            "id": "pso_b",
+                            "label": "Pression incidente Pₛ₀ (Face B)",
+                            "points": 0.25,
+                            "placeholder": "Entrez Pₛ₀ (B)..."
+                        },
+                        {
+                            "id": "pr_a",
+                            "label": "Pression réfléchie Pᵣ (Face A)",
+                            "points": 0.25,
+                            "placeholder": "Entrez Pᵣ (A)..."
+                        },
+                        {
+                            "id": "pr_b",
+                            "label": "Pression réfléchie Pᵣ (Face B)",
+                            "points": 0.25,
+                            "placeholder": "Entrez Pᵣ (B)..."
+                        }
+                    ],
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.07,
+                        "parts": [
+                            {
+                                "label": "Pₛ₀ (A)",
+                                "value": 1.534
+                            },
+                            {
+                                "label": "Pₛ₀ (B)",
+                                "value": 1.180
+                            },
+                            {
+                                "label": "Pᵣ (A)",
+                                "value": 3.085
+                            },
+                            {
+                                "label": "Pᵣ (B)",
+                                "value": 2.369
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "3.3",
+                    "question": "Calcul analytique - Paramètres t₀բ, tᵣբ, iₛ et impulsions iᵣ.",
+                    "points": 1.0,
+                    "image": "/explosions_fig3.png",
+                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
+                    "subQuestions": [
+                        {
+                            "id": "t0_a",
+                            "label": "Durée t₀բ (Face A)",
+                            "points": 0.125,
+                            "placeholder": "Entrez t₀բ (A)..."
+                        },
+                        {
+                            "id": "t0_b",
+                            "label": "Durée t₀բ (Face B)",
+                            "points": 0.125,
+                            "placeholder": "Entrez t₀բ (B)..."
+                        },
+                        {
+                            "id": "trf_a",
+                            "label": "Durée tᵣբ (Face A)",
+                            "points": 0.125,
+                            "placeholder": "Entrez tᵣբ (A)..."
+                        },
+                        {
+                            "id": "trf_b",
+                            "label": "Durée tᵣբ (Face B)",
+                            "points": 0.125,
+                            "placeholder": "Entrez tᵣբ (B)..."
+                        },
+                        {
+                            "id": "is_a",
+                            "label": "Impulsion iₛ (Face A)",
+                            "points": 0.125,
+                            "placeholder": "Entrez iₛ (A)..."
+                        },
+                        {
+                            "id": "is_b",
+                            "label": "Impulsion iₛ (Face B)",
+                            "points": 0.125,
+                            "placeholder": "Entrez iₛ (B)..."
+                        },
+                        {
+                            "id": "ir_a",
+                            "label": "Impulsion iᵣ (Face A)",
+                            "points": 0.125,
+                            "placeholder": "Entrez iᵣ (A)..."
+                        },
+                        {
+                            "id": "ir_b",
+                            "label": "Impulsion iᵣ (Face B)",
+                            "points": 0.125,
+                            "placeholder": "Entrez iᵣ (B)..."
+                        }
+                    ],
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.07,
+                        "parts": [
+                            {
+                                "label": "t₀բ (A)",
+                                "value": 6.861
+                            },
+                            {
+                                "label": "iₛ (A)",
+                                "value": 5.261
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "3.4",
+                    "question": "Calcul analytique - Vitesses des ondes de choc u₀_DC.",
+                    "points": 1.0,
+                    "image": "/explosions_fig3.png",
+                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
+                    "subQuestions": [
+                        {
+                            "id": "u_a",
+                            "label": "Vitesse du choc U (Face A)",
+                            "points": 0.5,
+                            "placeholder": "Entrez U (A)..."
+                        },
+                        {
+                            "id": "u_b",
+                            "label": "Vitesse du choc U (Face B)",
+                            "points": 0.5,
+                            "placeholder": "Entrez U (B)..."
+                        }
+                    ],
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.07,
+                        "parts": [
+                            {
+                                "label": "U (A)",
+                                "value": 345.2
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "3.5",
+                    "question": "Calcul analytique - Temps d'arrivée tₐ.",
+                    "points": 1.0,
+                    "image": "/explosions_fig3.png",
+                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
+                    "subQuestions": [
+                        {
+                            "id": "ta_a",
+                            "label": "Temps d'arrivée tₐ (Face A)",
+                            "points": 0.5,
+                            "placeholder": "Entrez tₐ (A)..."
+                        },
+                        {
+                            "id": "ta_b",
+                            "label": "Temps d'arrivée tₐ (Face B)",
+                            "points": 0.5,
+                            "placeholder": "Entrez tₐ (B)..."
+                        }
+                    ],
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.07,
+                        "parts": [
+                            {
+                                "label": "tₐ (A)",
+                                "value": 5.8
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "3.6",
+                    "question": "Calcul analytique - Pressions dynamiques q₀.",
+                    "points": 1.0,
+                    "image": "/explosions_fig3.png",
+                    "caption": "Figure 3 : Un des abaques de BAKER (BAKER et al., 1983 ; TM 5-855-1, 1987). Caractéristiques de l’onde de choc incidente : Pₛ₀, iₛ réduit, tₐ réduit et t₀ réduit en fonction de la distance R réduite.",
+                    "subQuestions": [
+                        {
+                            "id": "q0_a",
+                            "label": "Pression dynamique q₀ (Face A)",
+                            "points": 0.5,
+                            "placeholder": "Entrez q₀ (A)..."
+                        },
+                        {
+                            "id": "q0_b",
+                            "label": "Pression dynamique q₀ (Face B)",
+                            "points": 0.5,
+                            "placeholder": "Entrez q₀ (B)..."
+                        }
+                    ],
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.07,
+                        "parts": [
+                            {
+                                "label": "q₀ (A)",
+                                "value": 0.00827
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "4.a",
+                    "question": "Partie 4.a - Comparaison Analytique vs Expérimental.",
+                    "points": 0.5,
+                    "subQuestions": [
+                        {
+                            "id": "discussion_a",
+                            "label": "Synthèse et Analyse comparative",
+                            "points": 0.5,
+                            "placeholder": "Analysez les écarts entre les résultats analytiques et expérimentaux..."
+                        }
+                    ],
+                    "validation": {
+                        "type": "split_criteria",
+                        "keywords": [
+                            "diffraction",
+                            "clearing"
+                        ],
+                        "partial": true
+                    }
+                },
+                {
+                    "id": "4.b",
+                    "question": "Partie 4.b - Propositions de renforcement.",
+                    "points": 0.5,
+                    "subQuestions": [
+                        {
+                            "id": "discussion_b",
+                            "label": "Recommandations techniques",
+                            "points": 0.5,
+                            "placeholder": "Proposez des solutions pour renforcer le bâtiment (ex: rigidité, masse)..."
+                        }
+                    ],
+                    "validation": {
+                        "type": "split_criteria",
+                        "keywords": [
+                            "rigidité",
+                            "masse"
+                        ],
+                        "partial": true
+                    }
+                }
+            ],
+            "solution": "Zₐ=6.751. Pₛ₀(A)=1.534 kPa, Pᵣ(A)=3.085 kPa.",
+            "detailed_solution": "Calculs des paramètres de souffle et comparaison expérimental.",
+            "images": [
+                "/explosions_fig3.png"
+            ]
+        },
+        {
+            "id": "part3",
+            "title": "Partie 03 : Analyse SDOF (05 pts)",
+            "description": "La troisième partie de l'examen a pour objectif de tester vos compétences en résolution de problèmes appliqués aux structures soumises aux effets des explosions. Vous devrez effectuer des calculs détaillés, analyser les résultats obtenus et formuler des conclusions fondées. Veillez à suivre scrupuleusement les étapes indiquées dans l'énoncé et à présenter vos calculs de manière organisée. La précision de vos réponses et la clarté de vos explications seront particulièrement valorisées.",
+            "type": "exercise",
+            "briefingImage": "/scholars/al_jazari_hologram_clean.png",
+            "briefingScholar": "Al-Jazari - Maître Ingénieur Mécanicien",
+            "scholarMessage": "Je suis Al-Jazari. L'ingéniosité réside dans le mouvement et la précision. Analysez la dynamique des structures avec rigueur pour honorer l'ingénierie et mériter les points de l'Assistant Professor Atoui Oussama.",
+            "context": "M=84.8 kg, K=5200 kN/m, Rₘ=156 kN, Tₙ=25 ms.",
+            "questions": [
+                {
+                    "id": "3.1",
+                    "question": "Pour le premier cas, effectuez un calcul détaillé afin de démontrer que la déformation maximale xₘₐₓ reste toujours dans le domaine élastique.",
+                    "points": 1.5,
+                    "image": "/sdof_table.png",
+                    "subQuestions": [
+                        {
+                            "id": "a",
+                            "label": "a) Le calcul de l'impulsion I",
+                            "points": 0.5,
+                            "placeholder": "Calculez l'impulsion I..."
+                        },
+                        {
+                            "id": "b",
+                            "label": "b) La détermination de la déformation élastique xₑₗ",
+                            "points": 0.5,
+                            "placeholder": "Déterminez xₑₗ..."
+                        },
+                        {
+                            "id": "c",
+                            "label": "c) La vérification que xₘₐₓ reste inférieure à la limite élastique xₑₗ",
+                            "points": 0.5,
+                            "placeholder": "Vérifiez que xₘₐₓ < xₑₗ..."
+                        }
+                    ],
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.05,
+                        "parts": [
+                            {
+                                "label": "Impulsion I (N.s)",
+                                "value": 492
+                            },
+                            {
+                                "label": "xₘₐₓ (mm)",
+                                "value": 23.44
+                            },
+                            {
+                                "label": "μ",
+                                "value": 0.78
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "3.2",
+                    "question": "Pour le deuxième cas, effectuez un calcul détaillé afin de déterminer si la déformation maximale xₘₐₓ conduit le système dans le domaine plastique.",
+                    "points": 1.75,
+                    "image": "/sdof_question_3_2.png",
+                    "subQuestions": [
+                        {
+                            "id": "a",
+                            "label": "a) Le calcul de l'impulsion I",
+                            "points": 0.25,
+                            "placeholder": "Calculez l'impulsion I..."
+                        },
+                        {
+                            "id": "b",
+                            "label": "b) La détermination de la déformation maximale xₘₐₓ",
+                            "points": 0.5,
+                            "placeholder": "Déterminez xₘₐₓ..."
+                        },
+                        {
+                            "id": "c",
+                            "label": "c) La comparaison entre xₘₐₓ et la déformation élastique xₑₗ",
+                            "points": 0.5,
+                            "placeholder": "Comparez xₘₐₓ et xₑₗ..."
+                        },
+                        {
+                            "id": "d",
+                            "label": "d) Le calcul du facteur de ductilité μ. Concluez si le système reste dans le domaine élastique ou entre dans le domaine plastique",
+                            "points": 0.5,
+                            "placeholder": "Calculez μ et concluez..."
+                        }
+                    ],
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.05,
+                        "parts": [
+                            {
+                                "label": "Impulsion I (N.s)",
+                                "value": 2400
+                            },
+                            {
+                                "label": "xₘₐₓ (mm)",
+                                "value": 114.35
+                            },
+                            {
+                                "label": "μ",
+                                "value": 3.81
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "3.3",
+                    "question": "Pour le troisième cas, effectuez un calcul détaillé afin de déterminer si la déformation maximale xₘₐₓ conduit le système dans le domaine plastique.",
+                    "points": 1.75,
+                    "image": "/sdof_question_3_3.png",
+                    "subQuestions": [
+                        {
+                            "id": "a",
+                            "label": "a) Le calcul de l'impulsion I",
+                            "points": 0.25,
+                            "placeholder": "Calculez l'impulsion I..."
+                        },
+                        {
+                            "id": "b",
+                            "label": "b) La détermination de la déformation maximale xₘₐₓ",
+                            "points": 0.5,
+                            "placeholder": "Déterminez xₘₐₓ..."
+                        },
+                        {
+                            "id": "c",
+                            "label": "c) La comparaison entre xₘₐₓ et la déformation élastique xₑₗ",
+                            "points": 0.5,
+                            "placeholder": "Comparez xₘₐₓ et xₑₗ..."
+                        },
+                        {
+                            "id": "d",
+                            "label": "d) Le calcul du facteur de ductilité μ. Concluez si le système reste dans le domaine élastique ou entre dans le domaine plastique",
+                            "points": 0.5,
+                            "placeholder": "Calculez μ et concluez..."
+                        }
+                    ],
+                    "validation": {
+                        "type": "numeric_set",
+                        "tolerance": 0.05,
+                        "parts": [
+                            {
+                                "label": "Impulsion I (N.s)",
+                                "value": 3000
+                            },
+                            {
+                                "label": "xₘₐₓ (mm)",
+                                "value": 142.95
+                            },
+                            {
+                                "label": "μ",
+                                "value": 4.77
+                            }
+                        ]
+                    }
+                }
+            ],
+            "solution": "Cas 1: iₛ=492, xₘₐₓ=23.44mm (Élastique). Cas 2: iₛ=2400, xₘₐₓ=114.35mm (Plastique). Cas 3: iₛ=3000, xₘₐₓ=142.95mm (Plastique).",
+            "detailed_solution": "1. ** Propriétés du Système **:\n   - Période propre $T_n = 25$ ms\n   - Résistance max $R_m = 156$ kN\n   - Déplacement élastique limite $x_{el} = R_m / K = 156 / 5200 = 0.03$ m = 30 mm\n\n2. **Cas 1 (Impulsif)**:\n   - $t_d / T_n = 4.8 / 25 = 0.192 < 0.4$ (Régime Impulsif)\n   - $i_ₛ = 0.5 * P₀ * t₀ = 0.5 * 205 * 0.0048 = 0.492$ kN.s\n   - Énergie cinétique $E_c = i_ₛ^2 / 2M$\n   - $x_{max} = i_ₛ / \\sqrt{KM} = 492 / \\sqrt{5.2e6 * 84.8} = 0.02344$ m = **23.44 mm**\n   - $x_{max} < 30$ mm $\\rightarrow$ **Domaine Élastique**\n\n3. **Cas 2 (Dyanmique)**:\n   - $t_d / T_n \\approx 1$ (Régime Dynamique)\n   - Calcul complet requis ou utilisation abaque de réponse.\n   - $x_{max} = 114.35$ mm > 30 mm $\\rightarrow$ **Domaine Plastique**\n\n4. **Cas 3 (Quasi-Statique)**:\n   - $t_d / T_n > 1.6$ (Régime Quasi-statique)\n   - $x_{max} = P_{eq} / K$... (Calcul plastique)\n   - $x_{max} = 142.95$ mm $\\rightarrow$ **Domaine Plastique**"
+        }
+    ]
+}

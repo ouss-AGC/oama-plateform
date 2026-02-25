@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Shield, Target, Flame, ChevronRight, Lock, BookOpen } from 'lucide-react';
+import { Shield, Target, Flame, ChevronRight, Lock, BookOpen, Bomb } from 'lucide-react';
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
@@ -31,9 +31,9 @@ const Home: React.FC = () => {
         },
         {
             id: 'explosions',
-            title: 'Calcul des effets des explosions sur les structures GC31',
-            icon: <Flame className="w-8 h-8" />,
-            description: 'Calcul des effets des explosions et analyse structurelle.',
+            title: 'Examen Calcul des effets des explosions sur les structures',
+            icon: <Bomb className="w-8 h-8" />,
+            description: 'Phénomènes physiques, ondes de choc et réponse des structures.',
             color: 'bg-red-600'
         }
     ];
@@ -250,7 +250,10 @@ const Home: React.FC = () => {
                             // Three buttons for Munitions: Resources, Practice, and Official
                             <div className="flex flex-col gap-3 justify-center items-center">
                                 <button
-                                    onClick={() => navigate('/resources')}
+                                    onClick={() => {
+                                        localStorage.setItem('selectedDiscipline', 'munitions');
+                                        navigate('/resources', { state: { skipIntro: true } });
+                                    }}
                                     className="px-8 py-3 rounded-full font-bold text-base flex items-center transition-all duration-300 shadow-xl bg-purple-600 text-white hover:bg-purple-700 hover:scale-105 cursor-pointer"
                                 >
                                     <BookOpen className="mr-2 w-5 h-5" />
@@ -298,16 +301,12 @@ const Home: React.FC = () => {
                         )}
                     </div>
 
-                    {/* Admin Link */}
-                    <div className="text-center">
-                        <button
-                            onClick={() => navigate('/admin/login')}
-                            className="text-gray-500 hover:text-white text-sm flex items-center justify-center mx-auto transition-colors"
-                        >
-                            <Lock className="w-3 h-3 mr-1" />
-                            Accès Administrateur
-                        </button>
-                    </div>
+                    {/* Secret Admin Trigger - Hidden point in bottom-right floor */}
+                    <div
+                        onClick={() => navigate('/admin/login')}
+                        className="fixed bottom-0 right-0 w-4 h-4 cursor-default opacity-[0.01] hover:opacity-10 z-[9999]"
+                        title=""
+                    ></div>
                 </div>
 
                 {/* Copyright Footer */}

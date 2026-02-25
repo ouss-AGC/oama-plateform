@@ -220,7 +220,8 @@ const AdminDashboard: React.FC = () => {
             'all': 'TOUTES',
             'munitions': 'Généralités sur les munitions',
             'agc': 'Armement Gros Calibre AGC',
-            'genie': 'Génie Militaire 4 LASM 2'
+            'genie': 'Génie Militaire 4 LASM 2',
+            'explosions': 'Examen Calcul des effets des explosions sur les structures'
         };
         const disciplineDisplay = disciplineNames[selectedDiscipline] || selectedDiscipline.toUpperCase();
 
@@ -247,13 +248,22 @@ const AdminDashboard: React.FC = () => {
         doc.setTextColor(0);
         doc.text(`Participants: ${stats.totalParticipants} | Moyenne: ${stats.averageScore.toFixed(2)}/20 | Réussite: ${Math.round(stats.passRate)}%`, 105, 80, { align: "center" });
 
-        const tableData = filteredResults.map((r) => [
-            r.student.matricule,
-            r.student.grade,
-            r.student.name,
-            r.student.className,
-            r.scoreOn20.toFixed(2)
-        ]);
+        // Debug: Log filtered results
+        console.log('📊 Filtered Results for PDF:', filteredResults);
+        console.log('📊 Total results:', filteredResults.length);
+
+        const tableData = filteredResults.map((r) => {
+            console.log('📋 Mapping result:', r.student);
+            return [
+                r.student.matricule,
+                r.student.grade,
+                r.student.name,
+                r.student.className,
+                r.scoreOn20.toFixed(2)
+            ];
+        });
+
+        console.log('📊 Table Data:', tableData);
 
         autoTable(doc, {
             startY: 90,
@@ -434,6 +444,7 @@ const AdminDashboard: React.FC = () => {
                             <option value="munitions">Generalites sur les Munitions LASM 3</option>
                             <option value="agc">Armement Gros Calibre (AGC) pour LASM 2</option>
                             <option value="genie">Genie Militaire 4 LASM 2</option>
+                            <option value="explosions">Examen Calcul des effets des explosions sur les structures</option>
                         </select>
                     </div>
 
@@ -480,7 +491,9 @@ const AdminDashboard: React.FC = () => {
                             <h3 className="text-gray-500 text-sm font-medium">Temps Moyen</h3>
                             <Clock className="w-5 h-5 text-purple-500" />
                         </div>
-                        <p className="text-3xl font-bold text-gray-800">{Math.round(stats.avgTime)}s</p>
+                        <p className="text-3xl font-bold text-gray-800">
+                            {Math.floor(stats.avgTime / 60)}:{(Math.round(stats.avgTime % 60)).toString().padStart(2, '0')}
+                        </p>
                     </div>
                 </div>
 

@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LASM 2025 - Document de Référence Open Book</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Roboto:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #0a0a0f;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            position: relative;
+            display: none;
+            flex-direction: column;
+            padding: 60px;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(0, 217, 255, 0.03) 25%, rgba(0, 217, 255, 0.03) 26%, transparent 27%, transparent 74%, rgba(0, 217, 255, 0.03) 75%, rgba(0, 217, 255, 0.03) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(0, 217, 255, 0.03) 25%, rgba(0, 217, 255, 0.03) 26%, transparent 27%, transparent 74%, rgba(0, 217, 255, 0.03) 75%, rgba(0, 217, 255, 0.03) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .title-slide {
+            justify-content: center;
+            align-items: center;
+        }
+
+        .title-slide .slide-content {
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 52px;
+            font-weight: 700;
+            color: #00d9ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+            border-bottom: 3px solid #00d9ff;
+            padding-bottom: 20px;
+        }
+
+        .slide-body {
+            font-size: 18px;
+            color: #cccccc;
+            line-height: 1.8;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding-right: 20px;
+        }
+
+        .slide-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .slide-body::-webkit-scrollbar-track {
+            background: rgba(0, 217, 255, 0.1);
+        }
+
+        .slide-body::-webkit-scrollbar-thumb {
+            background: #00d9ff;
+            border-radius: 4px;
+        }
+
+        .section-header {
+            font-size: 26px;
+            font-weight: 700;
+            color: #00d9ff;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00d9ff;
+            padding-left: 15px;
+        }
+
+        .subsection-header {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffb74d;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            padding-left: 10px;
+        }
+
+        .formula-box {
+            background: rgba(255, 152, 0, 0.1);
+            border: 2px solid #ffb74d;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 18px;
+            color: #ffb74d;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .explanation-box {
+            background: rgba(0, 217, 255, 0.1);
+            border: 2px solid #00d9ff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 17px;
+            color: #cccccc;
+            line-height: 1.8;
+        }
+
+        .key-point-box {
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px solid #4caf50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 17px;
+            color: #4caf50;
+            font-weight: 700;
+        }
+
+        .important-box {
+            background: rgba(244, 67, 54, 0.1);
+            border: 2px solid #f44336;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 18px;
+            color: #ff7961;
+            font-weight: 700;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 16px;
+        }
+
+        table th {
+            background: rgba(0, 217, 255, 0.2);
+            color: #00d9ff;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #00d9ff;
+            font-weight: 700;
+        }
+
+        table td {
+            padding: 10px 12px;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            color: #cccccc;
+        }
+
+        table tr:nth-child(even) {
+            background: rgba(0, 217, 255, 0.05);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        button {
+            background: #00d9ff;
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        button:hover {
+            background: #00b8cc;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            color: #00d9ff;
+            background: rgba(0, 217, 255, 0.1);
+            padding: 10px 20px;
+            border: 2px solid #00d9ff;
+            border-radius: 4px;
+            z-index: 100;
+        }
+
+        .open-book-badge {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(244, 67, 54, 0.2);
+            border: 2px solid #f44336;
+            color: #ff7961;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 16px;
+            z-index: 100;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .mjx-chtml {
+            font-size: 1.1em !important;
+        }
+
+        @media (max-width: 1024px) {
+            .slide {
+                padding: 40px;
+            }
+
+            .slide-title {
+                font-size: 40px;
+            }
+
+            .slide-body {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="open-book-badge">📖 OPEN BOOK - LASM 2025</div>
+
+    <div class="presentation-container">
+        <!-- SLIDE 1: TITLE -->
+        <div class="slide active title-slide">
+            <div class="slide-content">
+                <div style="text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <div class="slide-title" style="border: none; text-shadow: 0 0 30px rgba(0, 217, 255, 0.5); margin-bottom: 40px;">LASM 2025</div>
+                    <div style="font-size: 48px; font-weight: 700; color: #ffffff; margin-bottom: 30px;">Document de Référence Open Book</div>
+                    <div style="font-size: 32px; color: #00d9ff; margin-bottom: 50px;">Formules Clés & Explications Essentielles</div>
+                    <div style="font-size: 24px; color: #cccccc;">Résumé des 66 Questions QCM</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: CARTRIDGES BASICS -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Cartouches: Concepts Fondamentaux</div>
+                <div class="slide-body">
+                    <div class="section-header">Quatre Composants Essentiels:</div>
+                    <div class="key-point-box">
+                        1. <strong>Projectile (Balle)</strong> - Élément propulsé<br>
+                        2. <strong>Douille (Étui)</strong> - Contient les autres composants<br>
+                        3. <strong>Poudre (Propergol)</strong> - Source d'énergie<br>
+                        4. <strong>Amorce</strong> - Système d'allumage
+                    </div>
+
+                    <div class="section-header">Types de Poudre:</div>
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>Caractéristiques</th>
+                            <th>Usage</th>
+                        </tr>
+                        <tr>
+                            <td>Poudre Noire</td>
+                            <td>Ancienne, beaucoup de résidus</td>
+                            <td>Historique, reconstitution</td>
+                        </tr>
+                        <tr>
+                            <td>Poudre Sans Fumée Monocorps</td>
+                            <td>Nitrocellulose seule</td>
+                            <td>Cartouches légères</td>
+                        </tr>
+                        <tr>
+                            <td>Poudre Sans Fumée Double Base</td>
+                            <td>Nitrocellulose + Nitroglycérine</td>
+                            <td>Cartouches civiles (plus courant)</td>
+                        </tr>
+                    </table>
+
+                    <div class="section-header">Notation des Calibres:</div>
+                    <div class="explanation-box">
+                        <strong>Format Standard:</strong> Diamètre × Longueur de douille<br>
+                        Exemple: 7.62×51 NATO = 7.62 mm de diamètre, 51 mm de longueur de douille
+                    </div>
+
+                    <div class="section-header">Calibres Militaires Courants:</div>
+                    <div class="key-point-box">
+                        • <strong>Pistolets:</strong> 9 mm Parabellum (9×19 mm)<br>
+                        • <strong>Fusils d'assaut:</strong> 5.56×45 NATO<br>
+                        • <strong>Fusils de précision:</strong> .308 Winchester (7.62×51 NATO)<br>
+                        • <strong>Armes de support:</strong> 7.62×51 NATO
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: PROJECTILE TYPES -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Types de Projectiles & Désignations</div>
+                <div class="slide-body">
+                    <div class="section-header">Désignations Principales:</div>
+                    <table>
+                        <tr>
+                            <th>Acronyme</th>
+                            <th>Signification</th>
+                            <th>Fonction</th>
+                        </tr>
+                        <tr>
+                            <td>FMJ</td>
+                            <td>Full Metal Jacket</td>
+                            <td>Chemisé intégralement</td>
+                        </tr>
+                        <tr>
+                            <td>HP</td>
+                            <td>Hollow Point</td>
+                            <td>Pointe creuse (se déforme)</td>
+                        </tr>
+                        <tr>
+                            <td>AP</td>
+                            <td>Armor Piercing</td>
+                            <td>Perforant (traverse armures)</td>
+                        </tr>
+                        <tr>
+                            <td>BT</td>
+                            <td>Boat Tail</td>
+                            <td>Queue de bateau (aérodynamique)</td>
+                        </tr>
+                        <tr>
+                            <td>OTM</td>
+                            <td>Open Tip Match</td>
+                            <td>Pointe ouverte (précision)</td>
+                        </tr>
+                        <tr>
+                            <td>SP</td>
+                            <td>Soft Point</td>
+                            <td>Pointe tendre</td>
+                        </tr>
+                    </table>
+
+                    <div class="section-header">Projectiles pour la Chasse:</div>
+                    <div class="explanation-box">
+                        <strong>Pointe Creuse (HP):</strong> Se déforme à l'impact, augmente les dégâts<br>
+                        <strong>Avantage:</strong> Efficacité maximale pour la chasse<br>
+                        <strong>Restriction:</strong> Interdite pour usage militaire (Convention de La Haye)
+                    </div>
+
+                    <div class="section-header">Vitesse Initiale:</div>
+                    <div class="key-point-box">
+                        La vitesse initiale dépend principalement de la <strong>quantité de poudre</strong>.<br>
+                        Plus il y a de poudre → Plus d'énergie → Vitesse plus élevée
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: CARTRIDGE COMPONENTS -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Composants de la Cartouche</div>
+                <div class="slide-body">
+                    <div class="section-header">La Douille (Étui):</div>
+                    <div class="explanation-box">
+                        <strong>Rôle Principal:</strong> Assurer l'étanchéité de la chambre de combustion<br>
+                        <strong>Fonctionnement:</strong> Se dilate lors du tir pour sceller la chambre, puis reprend sa forme initiale (déformation élastique)<br>
+                        <strong>Importance:</strong> Contient la poudre, l'amorce et le projectile
+                    </div>
+
+                    <div class="section-header">Les Amorces:</div>
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>Caractéristique</th>
+                            <th>Avantage</th>
+                        </tr>
+                        <tr>
+                            <td>Amorce Boxer</td>
+                            <td>Un seul trou, enclume intégrée</td>
+                            <td>Facile à recharger</td>
+                        </tr>
+                        <tr>
+                            <td>Amorce Berdan</td>
+                            <td>Enclumette intégrée à la douille</td>
+                            <td>Plus robuste militairement</td>
+                        </tr>
+                    </table>
+
+                    <div class="section-header">Composition de l'Amorce Boxer:</div>
+                    <div class="key-point-box">
+                        • Styphnate de plomb<br>
+                        • Azoture de plomb<br>
+                        • Mercure fulminant<br>
+                        (Mélange pour amorçage fiable et sûr)
+                    </div>
+
+                    <div class="section-header">Cartouches Spéciales:</div>
+                    <div class="explanation-box">
+                        <strong>Cartouches à Blanc:</strong> Amorce + poudre, SANS projectile<br>
+                        <strong>Usage:</strong> Entraînement, exercices, signalisation
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: FIREARM COMPONENTS -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Composants des Armes à Feu</div>
+                <div class="slide-body">
+                    <div class="section-header">Éléments Critiques:</div>
+                    <table>
+                        <tr>
+                            <th>Composant</th>
+                            <th>Fonction</th>
+                        </tr>
+                        <tr>
+                            <td>Chambre</td>
+                            <td>Contient la cartouche</td>
+                        </tr>
+                        <tr>
+                            <td>Canon</td>
+                            <td>Guide le projectile, améliore précision</td>
+                        </tr>
+                        <tr>
+                            <td>Rayures</td>
+                            <td>Impriment rotation au projectile (effet gyroscopique)</td>
+                        </tr>
+                        <tr>
+                            <td>Percuteur</td>
+                            <td>Frappe l'amorce pour l'enflammer</td>
+                        </tr>
+                        <tr>
+                            <td>Détente</td>
+                            <td>Relâche le percuteur armé</td>
+                        </tr>
+                        <tr>
+                            <td>Culasse</td>
+                            <td>Ferme la chambre, éjecte douille, alimente nouvelle cartouche</td>
+                        </tr>
+                        <tr>
+                            <td>Extracteur</td>
+                            <td>Extrait la douille de la chambre</td>
+                        </tr>
+                        <tr>
+                            <td>Éjecteur</td>
+                            <td>Propulse la douille hors de l'arme</td>
+                        </tr>
+                    </table>
+
+                    <div class="section-header">Systèmes de Sécurité:</div>
+                    <div class="key-point-box">
+                        • <strong>Cran de sécurité:</strong> Bloque le percuteur ou la détente<br>
+                        • <strong>Verrou de sécurité:</strong> Peut bloquer détente, culasse ou percuteur<br>
+                        • <strong>Guidon & Cran de mire:</strong> Aident à la visée
+                    </div>
+
+                    <div class="section-header">Accessoires Courants:</div>
+                    <div class="explanation-box">
+                        <strong>Compensateur de Recul:</strong> Réduit le recul en déviant les gaz<br>
+                        <strong>Silencieux:</strong> Réduit le bruit (ne l'élimine pas complètement)<br>
+                        <strong>Chargeur:</strong> Alimente les cartouches vers la chambre
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: GRENADES BASICS -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Grenades: Concepts Fondamentaux</div>
+                <div class="slide-body">
+                    <div class="section-header">Deux Composants Principaux:</div>
+                    <div class="key-point-box">
+                        1. <strong>Corps</strong> - Contient la charge explosive<br>
+                        2. <strong>Bouchon Allumeur</strong> - Système de sécurité et d'amorçage
+                    </div>
+
+                    <div class="section-header">Bouchon Allumeur - Trois Éléments:</div>
+                    <div class="explanation-box">
+                        1. <strong>Sécurité (Goupille):</strong> Empêche l'amorçage<br>
+                        2. <strong>Percussion (Percuteur):</strong> Frappe l'amorce<br>
+                        3. <strong>Chaîne Pyrotechnique:</strong> Allume la charge explosive
+                    </div>
+
+                    <div class="section-header">Dispositif de Sécurité:</div>
+                    <div class="key-point-box">
+                        • <strong>Levier:</strong> Maintenu par la main du lanceur<br>
+                        • <strong>Goupille:</strong> Empêche le levier de se libérer<br>
+                        • <strong>Procédure:</strong> Retirer goupille → Relâcher levier → Amorçage
+                    </div>
+
+                    <div class="section-header">Retard Pyrotechnique:</div>
+                    <div class="key-point-box">
+                        <strong>Durée Typique:</strong> 3-5 secondes<br>
+                        <strong>Initié par:</strong> L'amorce (quand levier est libéré)<br>
+                        <strong>Utilité:</strong> Permet au lanceur de s'éloigner avant explosion
+                    </div>
+
+                    <div class="section-header">Rayon de Danger:</div>
+                    <table>
+                        <tr>
+                            <th>Type de Grenade</th>
+                            <th>Rayon de Danger</th>
+                            <th>Mécanisme</th>
+                        </tr>
+                        <tr>
+                            <td>Offensive</td>
+                            <td>~15 mètres</td>
+                            <td>Souffle (onde de choc)</td>
+                        </tr>
+                        <tr>
+                            <td>Défensive</td>
+                            <td>~50 mètres</td>
+                            <td>Fragmentation (éclats)</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: GRENADE TYPES -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Types de Grenades & Leurs Usages</div>
+                <div class="slide-body">
+                    <div class="section-header">Grenades Offensives:</div>
+                    <div class="explanation-box">
+                        <strong>Caractéristique:</strong> Corps à paroi mince<br>
+                        <strong>Effet Principal:</strong> Souffle (onde de choc)<br>
+                        <strong>Rayon de Danger:</strong> ~15 mètres<br>
+                        <strong>Usage:</strong> Opérations offensives, destruction
+                    </div>
+
+                    <div class="section-header">Grenades Défensives:</div>
+                    <div class="explanation-box">
+                        <strong>Caractéristique:</strong> Corps à paroi épaisse<br>
+                        <strong>Effet Principal:</strong> Fragmentation (éclats)<br>
+                        <strong>Rayon de Danger:</strong> ~50 mètres<br>
+                        <strong>Usage:</strong> Défense, positions fortifiées
+                    </div>
+
+                    <div class="section-header">Grenades Assourdissantes (Flash-Bang):</div>
+                    <div class="key-point-box">
+                        • <strong>Effet:</strong> Bruit intense (~160 dB) + lumière aveuglante<br>
+                        • <strong>Résultat:</strong> Paralysie temporaire, désorientation<br>
+                        • <strong>Usage:</strong> Opérations tactiques en milieu urbain<br>
+                        • <strong>Avantage:</strong> Minimise dégâts collatéraux
+                    </div>
+
+                    <div class="section-header">Grenades à Emploi Particulier:</div>
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>Fonction</th>
+                            <th>Usage</th>
+                        </tr>
+                        <tr>
+                            <td>Fumigènes</td>
+                            <td>Produisent de la fumée</td>
+                            <td>Écran, signalisation, reconnaissance</td>
+                        </tr>
+                        <tr>
+                            <td>Lacrymogènes</td>
+                            <td>Gaz irritant (CS/CN)</td>
+                            <td>Contrôle des foules, maintien de l'ordre</td>
+                        </tr>
+                        <tr>
+                            <td>Incendiaires</td>
+                            <td>Produisent du feu</td>
+                            <td>Destruction, illumination</td>
+                        </tr>
+                    </table>
+
+                    <div class="section-header">Portée de Lancer:</div>
+                    <div class="key-point-box">
+                        <strong>Distance Typique:</strong> 20-30 mètres (lanceur entraîné)<br>
+                        <strong>Facteurs:</strong> Force du lanceur, technique, conditions météorologiques
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: CALIBERS & STANDARDS -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Calibres Standards & Notations</div>
+                <div class="slide-body">
+                    <div class="section-header">Calibres Militaires Modernes:</div>
+                    <table>
+                        <tr>
+                            <th>Calibre</th>
+                            <th>Désignation</th>
+                            <th>Usage Principal</th>
+                        </tr>
+                        <tr>
+                            <td>9 mm Parabellum</td>
+                            <td>9×19 mm</td>
+                            <td>Pistolets militaires/policiers</td>
+                        </tr>
+                        <tr>
+                            <td>5.56×45 NATO</td>
+                            <td>5.56 mm</td>
+                            <td>Fusils d'assaut (M16, M4, FAMAS)</td>
+                        </tr>
+                        <tr>
+                            <td>.308 Winchester</td>
+                            <td>7.62×51 NATO</td>
+                            <td>Fusils de précision, support</td>
+                        </tr>
+                        <tr>
+                            <td>7.62×39</td>
+                            <td>AK-47 caliber</td>
+                            <td>Fusils d'assaut (Bloc de l'Est)</td>
+                        </tr>
+                        <tr>
+                            <td>12.7×99 NATO</td>
+                            <td>.50 BMG</td>
+                            <td>Armes anti-matériel</td>
+                        </tr>
+                    </table>
+
+                    <div class="section-header">Comparaison 5.56×45 vs 7.62×51:</div>
+                    <table>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>5.56×45 NATO</th>
+                            <th>7.62×51 NATO</th>
+                        </tr>
+                        <tr>
+                            <td>Puissance</td>
+                            <td>Modérée</td>
+                            <td>Élevée</td>
+                        </tr>
+                        <tr>
+                            <td>Portée</td>
+                            <td>Courte-moyenne</td>
+                            <td>Longue</td>
+                        </tr>
+                        <tr>
+                            <td>Recul</td>
+                            <td>Faible</td>
+                            <td>Modéré</td>
+                        </tr>
+                        <tr>
+                            <td>Précision</td>
+                            <td>Bonne</td>
+                            <td>Excellente</td>
+                        </tr>
+                        <tr>
+                            <td>Usage</td>
+                            <td>Fusils d'assaut</td>
+                            <td>Fusils de précision</td>
+                        </tr>
+                    </table>
+
+                    <div class="section-header">Calibres de Chasse (Gauge):</div>
+                    <div class="explanation-box">
+                        <strong>Notation:</strong> 12 Gauge, 20 Gauge, .410 Bore<br>
+                        <strong>Facteur Déterminant:</strong> Poids des sphères de plomb<br>
+                        <strong>Exemple:</strong> 12 Gauge = 12 sphères de plomb de diamètre égal au canon pèsent 1 livre<br>
+                        <strong>Plus Courant:</strong> 12 Gauge (meilleur compromis puissance/recul)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: KEY FORMULAS -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Formules Clés & Calculs</div>
+                <div class="slide-body">
+                    <div class="section-header">Pression Maximale de Tir:</div>
+                    <div class="explanation-box">
+                        <strong>Unités de Mesure:</strong> PSI, Bar, ou MPa<br>
+                        <strong>Importance:</strong> Détermine la résistance requise de l'arme<br>
+                        <strong>Variation:</strong> Dépend du calibre et du type de poudre
+                    </div>
+
+                    <div class="section-header">Vitesse Initiale:</div>
+                    <div class="formula-box">
+                        v<sub>0</sub> ∝ √(Quantité de poudre)<br>
+                        <br>
+                        <strong>Facteurs Influençant:</strong><br>
+                        • Quantité de poudre (principal)<br>
+                        • Longueur du canon<br>
+                        • Type de poudre<br>
+                        • Masse du projectile
+                    </div>
+
+                    <div class="section-header">Énergie du Projectile:</div>
+                    <div class="formula-box">
+                        E = ½ × m × v²<br>
+                        <br>
+                        où:<br>
+                        m = masse du projectile<br>
+                        v = vitesse du projectile
+                    </div>
+
+                    <div class="section-header">Rayures du Canon:</div>
+                    <div class="explanation-box">
+                        <strong>Fonction:</strong> Impriment une rotation au projectile<br>
+                        <strong>Effet:</strong> Stabilité en vol (gyroscope) → Meilleure précision<br>
+                        <strong>Résultat Secondaire:</strong> Légère augmentation de la vitesse
+                    </div>
+
+                    <div class="section-header">Ressort de Rappel:</div>
+                    <div class="key-point-box">
+                        <strong>Fonctions Multiples:</strong><br>
+                        1. Éjecte la douille<br>
+                        2. Ramène la culasse en avant<br>
+                        3. Aide à l'armement du percuteur
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: SUMMARY & TIPS -->
+        <div class="slide">
+            <div class="slide-content">
+                <div class="slide-title">Résumé & Conseils pour l'Examen</div>
+                <div class="slide-body">
+                    <div class="section-header">Points Clés à Retenir:</div>
+                    <div class="important-box">
+                        ✓ Les 4 composants d'une cartouche: projectile, douille, poudre, amorce<br>
+                        ✓ Les 2 composants d'une grenade: corps, bouchon allumeur<br>
+                        ✓ Retard pyrotechnique: 3-5 secondes<br>
+                        ✓ Rayons de danger: 15m (offensive), 50m (défensive)<br>
+                        ✓ Calibre standard OTAN: 5.56×45 NATO<br>
+                        ✓ Pistolet standard: 9 mm Parabellum
+                    </div>
+
+                    <div class="section-header">Distinctions Importantes:</div>
+                    <table>
+                        <tr>
+                            <th>Concept</th>
+                            <th>À Distinguer</th>
+                        </tr>
+                        <tr>
+                            <td>Déflagration vs Détonation</td>
+                            <td>Déflagration = subsonique; Détonation = supersonique</td>
+                        </tr>
+                        <tr>
+                            <td>Amorce Boxer vs Berdan</td>
+                            <td>Boxer = facile à recharger; Berdan = militaire</td>
+                        </tr>
+                        <tr>
+                            <td>Grenade Offensive vs Défensive</td>
+                            <td>Offensive = souffle; Défensive = fragmentation</td>
+                        </tr>
+                        <tr>
+                            <td>FMJ vs HP</td>
+                            <td>FMJ = traverse; HP = se déforme</td>
+                        </tr>
+                    </table>
+
+                    <div class="section-header">Conseils pour l'Examen Open Book:</div>
+                    <div class="key-point-box">
+                        1. Consultez ce document pour les définitions exactes<br>
+                        2. Mémorisez les chiffres clés (3-5s, 15m, 50m, 20-30m)<br>
+                        3. Comprenez les principes physiques (pas juste les faits)<br>
+                        4. Lisez attentivement chaque question<br>
+                        5. Utilisez la terminologie correcte dans vos réponses
+                    </div>
+
+                    <div class="section-header">Ressources Recommandées:</div>
+                    <div class="explanation-box">
+                        • Page de révision QCM interactive (66 questions)<br>
+                        • Ce document de référence (formules clés)<br>
+                        • Vos notes de cours<br>
+                        • Manuels techniques sur les munitions et grenades
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">10</span>
+    </div>
+
+    <div class="controls">
+        <button onclick="previousSlide()">← Précédent</button>
+        <button onclick="nextSlide()">Suivant →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+            if (e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>

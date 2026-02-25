@@ -11,9 +11,10 @@ app.use(express.json());
 
 // --- Session State (In-Memory) ---
 let sessionState = {
-    currentPin: null,
-    reportPin: "123456", // Default report PIN
-    isQuizStarted: false,
+    currentPin: '123456', // Default PIN for Dev/Testing
+    reportPin: '123456', // Default report PIN
+    isQuizStarted: true,
+    quizStartTime: null, // Store when the quiz was officially started
     participants: [],
     results: [] // Store quiz results here
 };
@@ -26,6 +27,7 @@ app.post('/api/admin/generate-pin', (req, res) => {
     const newPin = Math.floor(100000 + Math.random() * 900000).toString();
     sessionState.currentPin = newPin;
     sessionState.isQuizStarted = false;
+    sessionState.quizStartTime = null; // Reset start time
     sessionState.participants = []; // Reset participants
     sessionState.results = []; // Reset results
     console.log(`New Session Started. PIN: ${newPin}`);
@@ -68,8 +70,9 @@ app.post('/api/admin/start-quiz', (req, res) => {
         return res.status(400).json({ error: "No active session" });
     }
     sessionState.isQuizStarted = true;
-    console.log("Quiz Started!");
-    res.json({ success: true });
+    sessionState.quizStartTime = Date.now(); // Set global start time
+    console.log(`Quiz Started at ${new Date(sessionState.quizStartTime).toLocaleTimeString()}!`);
+    res.json({ success: true, startTime: sessionState.quizStartTime });
 });
 
 // Student: Validate PIN
@@ -102,14 +105,32 @@ app.post('/api/join-session', (req, res) => {
 // Student: Submit Quiz Result
 app.post('/api/submit-quiz', (req, res) => {
     const result = req.body;
-    sessionState.results.push(result);
-    console.log(`Result received for ${result.student.name}`);
+
+    // Check if result already exists (upsert logic for manual grading or re-submissions)
+    const existingIndex = sessionState.results.findIndex(r =>
+        r.student.matricule === result.student.matricule &&
+        r.timestamp === result.timestamp
+    );
+
+    if (existingIndex !== -1) {
+        // Update existing result
+        sessionState.results[existingIndex] = result;
+        console.log(`Result UPDATED for ${result.student.name}`);
+    } else {
+        // Add new result
+        sessionState.results.push(result);
+        console.log(`Result RECEIVED for ${result.student.name}`);
+    }
+
     res.json({ success: true });
 });
 
 // Student: Check Quiz Status (Polling)
 app.get('/api/quiz-status', (req, res) => {
-    res.json({ started: sessionState.isQuizStarted });
+    res.json({
+        started: sessionState.isQuizStarted,
+        startTime: sessionState.quizStartTime
+    });
 });
 
 // Admin: Generate Test Data (for production testing)

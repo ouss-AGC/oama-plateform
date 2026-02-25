@@ -41,5 +41,28 @@
             "duration": "12:00",
             "category": "Animation 3D"
         }
+    ],
+    "interactiveTools": [
+        {
+            "id": 1,
+            "title": "Révision Interactive - QCM LASM 2025",
+            "description": "Outil d'entraînement interactif pour maîtriser les QCM du module.",
+            "fileUrl": "/resources/LASM2025_QCM_Revision_Interactive.html",
+            "icon": "zap"
+        },
+        {
+            "id": 2,
+            "title": "Document de Référence - Open Book 2025",
+            "description": "Support de référence interactif pour la consultation rapide des documents.",
+            "fileUrl": "/resources/LASM2025_OpenBook_Reference.html",
+            "icon": "book"
+        },
+        {
+            "id": 3,
+            "title": "Cours Préparatif - Généralités sur les Munitions",
+            "description": "Support de cours interactif complet pour préparer l'examen officiel.",
+            "fileUrl": "/resources/Generalites_Munitions_Final.html",
+            "icon": "zap"
+        }
     ]
 }
