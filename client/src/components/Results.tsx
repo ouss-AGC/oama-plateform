@@ -68,10 +68,14 @@ const Results: React.FC = () => {
 
             // Fetch Questions for Report
             try {
-                // Load practice questions if this is a practice quiz
-                const fileName = parsedResult.isPractice
+                // Determine file name – check for Genie version 2
+                let fileName = parsedResult.isPractice
                     ? `${parsedResult.discipline}_practice.json`
                     : `quiz_data_${parsedResult.discipline === 'explosions' ? 'explosions_v2' : parsedResult.discipline}.json`;
+
+                if (parsedResult.discipline === 'genie' && !parsedResult.isPractice) {
+                    fileName = 'quiz_data_genie_v2.json';
+                }
                 const questionsRes = await fetch(`/${fileName}`);
                 const questionsData = await questionsRes.json();
 

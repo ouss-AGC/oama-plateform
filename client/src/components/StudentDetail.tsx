@@ -98,9 +98,13 @@ const StudentDetail: React.FC = () => {
                     setClassStats({ average, max, min });
 
                     // Fetch questions - load practice questions if this is a practice quiz
-                    const fileName = foundResult.isPractice
+                    let fileName = foundResult.isPractice
                         ? `${foundResult.discipline}_practice.json`
                         : `quiz_data_${foundResult.discipline === 'explosions' ? 'explosions_v2' : foundResult.discipline}.json`;
+
+                    if (foundResult.discipline === 'genie' && !foundResult.isPractice) {
+                        fileName = 'quiz_data_genie_v2.json';
+                    }
                     fetch(`/${fileName}`)
                         .then(res => res.json())
                         .then(data => {
