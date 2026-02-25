@@ -5,6 +5,8 @@ import AdvancedAnalytics from './AdvancedAnalytics';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { QRCodeCanvas } from 'qrcode.react';
+import JSZip from 'jszip';
+import { generateIndividualReport } from '../utils/reportGenerator';
 
 
 interface QuizResult {
@@ -28,6 +30,8 @@ const AdminDashboard: React.FC = () => {
     const [selectedDiscipline, setSelectedDiscipline] = useState<string>('all');
     const [quizTypeFilter, setQuizTypeFilter] = useState<'all' | 'official' | 'practice'>('all'); // New filter
     const [showAdvancedAnalytics, setShowAdvancedAnalytics] = useState(false);
+    const [isExportingBatch, setIsExportingBatch] = useState(false);
+    const [exportProgress, setExportProgress] = useState({ current: 0, total: 0 });
 
     // Session Management State
     const [pin, setPin] = useState<string | null>(null);
@@ -289,6 +293,90 @@ const AdminDashboard: React.FC = () => {
         doc.save('liste_complete_resultats.pdf');
     };
 
+    const downloadAllReports = async () => {
+        if (filteredResults.length === 0) return;
+
+        setIsExportingBatch(true);
+        setExportProgress({ current: 0, total: filteredResults.length });
+
+        const zip = new JSZip();
+
+        // Cache for quiz questions to avoid redundant fetches
+        const questionsCache: Record<string, any[]> = {};
+
+        try {
+            for (let i = 0; i < filteredResults.length; i++) {
+                const result = filteredResults[i];
+                setExportProgress({ current: i + 1, total: filteredResults.length });
+
+                // Determine which questions file to fetch
+                const isPractice = result.isPractice;
+                const discipline = result.discipline;
+                let fileName = isPractice
+                    ? `${discipline}_practice.json`
+                    : `quiz_data_${discipline === 'explosions' ? 'explosions_v2' : discipline}.json`;
+
+                if (discipline === 'genie' && !isPractice) {
+                    fileName = 'quiz_data_genie_v2.json';
+                }
+
+                if (!questionsCache[fileName]) {
+                    const res = await fetch(`/${fileName}`);
+                    const data = await res.json();
+
+                    let flat: any[] = [];
+                    if (data.sections) {
+                        data.sections.forEach((section: any) => {
+                            if (section.type === 'exercise') {
+                                const subQs = section.questions || [];
+                                subQs.forEach((subQ: any) => {
+                                    flat.push({
+                                        ...subQ,
+                                        id: `${section.id}_${subQ.id}`,
+                                        parentId: section.id,
+                                        type: 'exercise',
+                                        question: subQ.question || section.title,
+                                        options: ["(Exercice de calcul)"],
+                                        correctAnswer: -1
+                                    });
+                                });
+                            } else {
+                                if (section.questions) {
+                                    section.questions.forEach((q: any) => {
+                                        flat.push({ ...q, type: 'qcm', parentId: section.id });
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        flat = data.questions.map((q: any) => ({ ...q, type: 'qcm' }));
+                    }
+                    questionsCache[fileName] = flat;
+                }
+
+                const questions = questionsCache[fileName];
+                const doc = await generateIndividualReport(result as any, questions as any);
+                const pdfBlob = doc.output('blob');
+
+                const safeName = result.student.name.replace(/[\\/:*?"<>|]/g, '_');
+                const fileNameInZip = `${result.student.matricule}_${safeName}.pdf`;
+                zip.file(fileNameInZip, pdfBlob);
+            }
+
+            const content = await zip.generateAsync({ type: "blob" });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(content);
+            link.download = `rapports_oama_${selectedDiscipline}_${Date.now()}.zip`;
+            link.click();
+
+        } catch (error) {
+            console.error("Bulk download failed:", error);
+            alert("Erreur lors du téléchargement groupé.");
+        } finally {
+            setIsExportingBatch(false);
+        }
+    };
+
     // Show Advanced Analytics if requested
     if (showAdvancedAnalytics) {
         // Pass quizType to allow fetching correct questions
@@ -476,6 +564,24 @@ const AdminDashboard: React.FC = () => {
                         <button onClick={exportFullList} className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg shadow-sm hover:bg-green-700 font-medium">
                             <List className="w-4 h-4 mr-2" />
                             Liste Complète
+                        </button>
+                        <button
+                            onClick={downloadAllReports}
+                            disabled={isExportingBatch || filteredResults.length === 0}
+                            className={`flex items-center px-4 py-2 bg-military-green text-white rounded-lg shadow-sm font-medium transition-all
+                                ${isExportingBatch ? 'opacity-70 cursor-wait' : 'hover:bg-opacity-90'}`}
+                        >
+                            {isExportingBatch ? (
+                                <>
+                                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                                    {exportProgress.current}/{exportProgress.total}...
+                                </>
+                            ) : (
+                                <>
+                                    <Download className="w-4 h-4 mr-2" />
+                                    Individuels (ZIP)
+                                </>
+                            )}
                         </button>
                     </div>
                 </div>
