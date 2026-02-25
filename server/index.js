@@ -47,7 +47,8 @@ app.get('/api/admin/session', (req, res) => {
     res.json({
         pin: sessionState.currentPin,
         reportPin: sessionState.reportPin,
-        connectedCount: sessionState.participants.length,
+        participantCount: sessionState.participants.length,
+        resultCount: sessionState.results.length,
         participants: sessionState.participants,
         status: sessionState.isQuizStarted ? 'started' : (sessionState.currentPin ? 'waiting' : 'idle'),
         results: sessionState.results
@@ -106,10 +107,9 @@ app.post('/api/join-session', (req, res) => {
 app.post('/api/submit-quiz', (req, res) => {
     const result = req.body;
 
-    // Check if result already exists (upsert logic for manual grading or re-submissions)
+    // Check if result already exists (upsert logic per matricule)
     const existingIndex = sessionState.results.findIndex(r =>
-        r.student.matricule === result.student.matricule &&
-        r.timestamp === result.timestamp
+        r.student.matricule === result.student.matricule
     );
 
     if (existingIndex !== -1) {

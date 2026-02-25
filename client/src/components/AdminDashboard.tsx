@@ -33,6 +33,7 @@ const AdminDashboard: React.FC = () => {
     const [pin, setPin] = useState<string | null>(null);
     const [reportPin, setReportPin] = useState<string>('123456');
     const [connectedCount, setConnectedCount] = useState(0);
+    const [resultCount, setResultCount] = useState(0);
     const [participants, setParticipants] = useState<any[]>([]);
     const [quizStatus, setQuizStatus] = useState('idle');
 
@@ -60,9 +61,11 @@ const AdminDashboard: React.FC = () => {
             .then(data => {
                 setPin(data.pin);
                 setReportPin(data.reportPin || '123456');
-                setConnectedCount(data.connectedCount);
+                setQuizStatus(data.isQuizStarted ? 'started' : 'waiting'); // Updated logic for quizStatus
+                setConnectedCount(data.participantCount); // Updated to participantCount
+                setResultCount(data.resultCount); // New line
                 setParticipants(data.participants || []);
-                setQuizStatus(data.status);
+                // The original `setQuizStatus(data.status);` is replaced by the more specific `setQuizStatus(data.isQuizStarted ? 'started' : 'waiting');`
                 if (data.results) {
                     setResults(data.results);
                 }
@@ -390,23 +393,32 @@ const AdminDashboard: React.FC = () => {
                             </button>
                         </div>
 
-                        {/* Connected Students */}
-                        <div className="bg-gray-50 p-4 rounded-lg flex flex-col items-center justify-center border border-gray-200 relative group">
-                            <span className="text-gray-500 text-sm mb-1">Étudiants Connectés</span>
-                            <div className="text-4xl font-bold text-gray-800">
-                                {connectedCount}
+                        {/* Participation tracking */}
+                        <div className="bg-gray-50 p-4 rounded-lg flex flex-col items-center justify-center border border-gray-200 relative group min-w-[200px]">
+                            <span className="text-gray-500 text-sm mb-2 font-bold uppercase tracking-wider">Participation</span>
+                            <div className="flex gap-8">
+                                <div className="flex flex-col items-center">
+                                    <span className="text-3xl font-bold text-military-green">{connectedCount}</span>
+                                    <span className="text-[10px] text-gray-400 uppercase font-black">Connectés</span>
+                                </div>
+                                <div className="flex flex-col items-center border-l border-gray-200 pl-8">
+                                    <span className="text-3xl font-bold text-orange-600">{resultCount}</span>
+                                    <span className="text-[10px] text-gray-400 uppercase font-black">Rapports</span>
+                                </div>
                             </div>
-                            <span className="text-xs text-gray-400 mt-1">En salle d'attente</span>
+                            <span className="text-[10px] text-gray-400 mt-2 font-medium">
+                                {quizStatus === 'started' ? '● Quiz en cours' : '🕒 En salle d\'attente'}
+                            </span>
 
                             {/* Tooltip / Dropdown for Student List */}
                             {participants.length > 0 && (
-                                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl z-20 max-h-60 overflow-y-auto hidden group-hover:block">
+                                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl z-20 max-h-60 overflow-y-auto hidden group-hover:block transition-all duration-300">
                                     <div className="p-2">
-                                        <p className="text-xs font-bold text-gray-500 mb-2 px-2">Liste des participants :</p>
+                                        <p className="text-[10px] font-black text-gray-400 mb-2 px-2 uppercase tracking-tighter">Liste des présences :</p>
                                         {participants.map((p, idx) => (
-                                            <div key={idx} className="text-sm text-gray-700 px-2 py-1 hover:bg-gray-50 rounded flex justify-between">
-                                                <span>{p.grade} {p.name || p.fullName}</span>
-                                                <span className="text-gray-400 text-xs">{p.className}</span>
+                                            <div key={idx} className="text-xs text-gray-700 px-2 py-1.5 hover:bg-gray-50 rounded flex justify-between border-b border-gray-50 last:border-0">
+                                                <span className="font-medium">{p.grade} {p.name || p.fullName}</span>
+                                                <span className="text-gray-400 text-[10px] font-mono">{p.className}</span>
                                             </div>
                                         ))}
                                     </div>
