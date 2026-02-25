@@ -177,6 +177,11 @@ const StudentDetail: React.FC = () => {
         let earnedPoints = 0;
 
         quizQuestions.forEach((q, index) => {
+            const answerObj = Array.isArray(result.answers)
+                ? result.answers.find((a: any) => a && (a.questionId === q.id || a.id === q.id))
+                : null;
+            const currentAnswer = answerObj ? answerObj.answer : result.answers[index];
+
             if (q.type === 'exercise') {
                 // Exercise scoring - sum up granular manual scores
                 const subQuestions = q.questions || [];
@@ -193,7 +198,7 @@ const StudentDetail: React.FC = () => {
                 // QCM scoring
                 const points = q.points || 0.5;
                 totalPoints += points;
-                if (result.answers[index] === q.correctAnswer) {
+                if (currentAnswer === q.correctAnswer) {
                     earnedPoints += points;
                 }
             }
@@ -441,6 +446,11 @@ const StudentDetail: React.FC = () => {
                 yPos = 20;
             }
 
+            // Support both new record format and legacy index format
+            const answerObj = Array.isArray(result!.answers)
+                ? result!.answers.find((a: any) => a && (a.questionId === q.id || a.id === q.id))
+                : null;
+
             const isExercise = q.type === 'exercise';
             const questionText = sanitizeSymbols(`${isExercise ? ('Exercice: ' + (q.title || 'Partie ' + (index + 1))) : ('Q' + (index + 1) + ': ' + q.question)}`);
 
@@ -459,7 +469,7 @@ const StudentDetail: React.FC = () => {
             yPos += 4;
 
             if (isExercise) {
-                const studentAnswers = result!.answers[index] || {};
+                const studentAnswers = answerObj ? answerObj.answer : (result!.answers[index] || {});
                 (q.questions || []).forEach((subQ: any) => {
                     if (yPos > 260) { doc.addPage(); yPos = 20; }
 
@@ -511,7 +521,7 @@ const StudentDetail: React.FC = () => {
                     }
                 }
             } else {
-                const userAnswer = result!.answers[index];
+                const userAnswer = answerObj ? answerObj.answer : result!.answers[index];
                 const isCorrect = userAnswer === q.correctAnswer;
 
                 const optionText = sanitizeSymbols(q.options?.[userAnswer] || 'N/A');
@@ -819,9 +829,14 @@ const StudentDetail: React.FC = () => {
                     <div className="p-6">
                         <div className="space-y-6">
                             {quizQuestions.map((q, index) => {
+                                // Support both new record format and legacy index format
+                                const answerObj = Array.isArray(result.answers)
+                                    ? result.answers.find((a: any) => a && (a.questionId === q.id || a.id === q.id))
+                                    : null;
+
                                 if (q.type === 'exercise') {
                                     // Exercise Rendering
-                                    const studentAnswers = result.answers[index] || {};
+                                    const studentAnswers = answerObj ? answerObj.answer : (result.answers[index] || {});
                                     const maxPoints = q.questions?.reduce((sum, subQ) => sum + subQ.points, 0) || 0;
 
                                     // Calculate total exercise score from sub-questions
@@ -965,7 +980,7 @@ const StudentDetail: React.FC = () => {
                                     );
                                 } else {
                                     // QCM Rendering
-                                    const userAnswer = result.answers[index];
+                                    const userAnswer = answerObj ? answerObj.answer : result.answers[index];
                                     const isCorrect = userAnswer === q.correctAnswer;
 
                                     return (

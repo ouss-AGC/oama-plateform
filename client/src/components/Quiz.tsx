@@ -617,7 +617,10 @@ const Quiz: React.FC = () => {
         const resultData = {
             discipline: localStorage.getItem('selectedDiscipline'),
             student: studentData || JSON.parse(localStorage.getItem('studentInfo') || '{}'),
-            answers: finalAnswers, // finalAnswers already contains the objects for exercises
+            answers: flattenedQuestions.map((q, idx) => ({
+                questionId: q.id,
+                answer: finalAnswers[idx]
+            })),
             score: scorePercentage,
             scoreOn20: finalScoreOn20,
             totalQuestions: flattenedQuestions.length,

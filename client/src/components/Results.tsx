@@ -359,6 +359,11 @@ const Results: React.FC = () => {
                     yPos = 20;
                 }
 
+                // Support both new record format and legacy index format
+                const answerObj = Array.isArray(result!.answers)
+                    ? result!.answers.find((a: any) => a && (a.questionId === q.id || a.id === q.id))
+                    : null;
+
                 const isExercise = q.type === 'exercise';
                 const questionText = sanitizeSymbols(`Q${index + 1}: ${q.question}`);
 
@@ -369,7 +374,7 @@ const Results: React.FC = () => {
                 yPos += 2;
 
                 if (isExercise) {
-                    const studentAnswers = result!.answers[index] || {};
+                    const studentAnswers = answerObj ? answerObj.answer : (result!.answers[index] || {});
                     (q.subQuestions || []).forEach((subQ: any) => {
                         if (yPos > 260) {
                             doc.addPage();
@@ -427,7 +432,7 @@ const Results: React.FC = () => {
                         }
                     }
                 } else {
-                    const userAnswer = result!.answers[index];
+                    const userAnswer = answerObj ? answerObj.answer : result!.answers[index];
                     const isCorrect = userAnswer === q.correctAnswer;
 
                     // Box for QCM answer
