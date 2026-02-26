@@ -44,6 +44,7 @@ interface Question {
     subQuestions?: Array<{ id: string; label: string; placeholder: string }>; // For structured sub-questions
     pdfUrl?: string; // For embedded PDF viewer
     caption?: string; // For figure captions
+    optionMapping?: number[]; // To map shuffled options back to original indices
 }
 
 interface Section {
@@ -343,16 +344,23 @@ const Quiz: React.FC = () => {
                         const originalOptions = [...q.options];
                         const correctAnswerText = originalOptions[q.correctAnswer];
 
-                        const shuffledOptions = [...originalOptions];
-                        for (let i = shuffledOptions.length - 1; i > 0; i--) {
+                        // Create an array of indices [0, 1, 2, ...]
+                        const indices = originalOptions.map((_, i) => i);
+
+                        // Shuffle indices
+                        for (let i = indices.length - 1; i > 0; i--) {
                             const j = Math.floor(Math.random() * (i + 1));
-                            [shuffledOptions[i], shuffledOptions[j]] = [shuffledOptions[j], shuffledOptions[i]];
+                            [indices[i], indices[j]] = [indices[j], indices[i]];
                         }
+
+                        // Reconstruct options based on shuffled indices
+                        const shuffledOptions = indices.map(i => originalOptions[i]);
 
                         return {
                             ...q,
                             options: shuffledOptions,
-                            correctAnswer: shuffledOptions.indexOf(correctAnswerText)
+                            correctAnswer: shuffledOptions.indexOf(correctAnswerText),
+                            optionMapping: indices // This maps shuffled index -> original index
                         };
                     });
                 }
@@ -504,6 +512,7 @@ const Quiz: React.FC = () => {
         // Calculate score (Only for QCMs for now, Exercises need manual grading or complex logic)
         let earnedPoints = 0;
         let totalPoints = 0;
+        let correctCount = 0;
         let manualScores: Record<string, number> = {};
 
         flattenedQuestions.forEach((q, index) => {
@@ -599,10 +608,14 @@ const Quiz: React.FC = () => {
                     }
                 }
                 earnedPoints += questionScore;
+                if (questionScore >= (q.validation?.points || maxPoints)) {
+                    correctCount++;
+                }
 
             } else if (q.type === 'qcm') {
                 if (studentAnswer === q.correctAnswer) {
                     earnedPoints += maxPoints;
+                    correctCount++;
                 }
             }
         });
@@ -617,14 +630,20 @@ const Quiz: React.FC = () => {
         const resultData = {
             discipline: localStorage.getItem('selectedDiscipline'),
             student: studentData || JSON.parse(localStorage.getItem('studentInfo') || '{}'),
-            answers: flattenedQuestions.map((q, idx) => ({
-                questionId: q.id,
-                answer: finalAnswers[idx]
-            })),
+            answers: flattenedQuestions.map((q, idx) => {
+                let answer = finalAnswers[idx];
+                if (q.type === 'qcm' && q.optionMapping && answer !== null) {
+                    answer = q.optionMapping[answer]; // Map shuffled index -> original index
+                }
+                return {
+                    questionId: q.id,
+                    answer: answer
+                };
+            }),
             score: scorePercentage,
             scoreOn20: finalScoreOn20,
             totalQuestions: flattenedQuestions.length,
-            correctCount: 0,
+            correctCount: correctCount,
             timeElapsed: timeElapsed,
             timestamp: Date.now(),
             isPractice: isPractice,
